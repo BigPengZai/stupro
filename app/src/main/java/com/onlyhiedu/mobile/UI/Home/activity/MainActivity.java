@@ -40,6 +40,7 @@ public class MainActivity extends SimpleActivity implements RadioGroup.OnChecked
         loadMultipleRootFragment(R.id.fl_main_content, 0, m1Fragment, m2Fragment, m3Fragment);
         mHomeRadio.setOnCheckedChangeListener(this);
         showHideFragment(getTargetFragment(showFragment));
+        //peng 第一次提交
     }
 
 
