@@ -26,6 +26,12 @@ android {
 
 }
 
+apt {
+    arguments {
+        eventBusIndex "com.onlyhiedu.mobile.eventbus.MyEventBusIndex"
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -36,6 +42,8 @@ dependencies {
     //插件
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
     apt 'com.google.dagger:dagger-compiler:2.9'
+    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+
     //UI
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
@@ -54,7 +62,12 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.orhanobut:logger:1.15'
     compile 'me.yokeyword:fragmentation:0.10.1'
+    //EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+
+
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile 'org.greenrobot:eventbus:3.0.0'
+
 }
