@@ -90,9 +90,8 @@ public class RetrofitHelper {
 //            }
 //        };
         builder.addNetworkInterceptor(cacheInterceptor);
-        builder.addInterceptor(cacheInterceptor);
 //        builder.addInterceptor(apikey);
-        builder.cache(cache);
+        builder.cache(cache).addInterceptor(cacheInterceptor);
         //设置超时
         builder.connectTimeout(10, TimeUnit.SECONDS);
         builder.readTimeout(20, TimeUnit.SECONDS);
@@ -115,16 +114,14 @@ public class RetrofitHelper {
 
     /**
      * 初始化通用的观察者
+     *
      * @param observable 观察者
      */
     public ResourceSubscriber startObservable(Flowable observable, ResourceSubscriber subscriber) {
-        return (ResourceSubscriber)observable.subscribeOn(Schedulers.io())
+        return (ResourceSubscriber) observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(subscriber);
     }
-
-
-
 
 
 }
