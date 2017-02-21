@@ -5,4 +5,5 @@ package com.onlyhiedu.mobile.Model.event;
  */
 
 public class a {
+
 }
