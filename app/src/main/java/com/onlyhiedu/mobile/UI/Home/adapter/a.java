@@ -5,4 +5,5 @@ package com.onlyhiedu.mobile.UI.Home.adapter;
  */
 
 public class a {
+
 }
