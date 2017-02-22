@@ -13,6 +13,7 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
+import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -55,6 +56,7 @@ public class App extends Application {
         LeakCanary.install(this);
 
         initGlide();
+        DaoUtil.getInstance(this);
     }
     private void initGlide(){
         Glide.get(this).register(GlideUrl.class,InputStream.class,new OkHttpUrlLoader.Factory(new OkHttpClient()));
