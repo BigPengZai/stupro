@@ -1,14 +1,22 @@
 package com.onlyhiedu.mobile.UI.Home.activity;
 
+import android.content.DialogInterface;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioGroup;
 
 import com.onlyhiedu.mobile.App.Constants;
+import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.Fragment1;
 import com.onlyhiedu.mobile.UI.Home.fragment.Fragment2;
 import com.onlyhiedu.mobile.UI.Home.fragment.Fragment3;
+import com.onlyhiedu.mobile.Utils.DialogListener;
+import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.squareup.haha.perflib.Main;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -21,6 +29,7 @@ public class MainActivity extends SimpleActivity implements RadioGroup.OnChecked
 
     private int showFragment = Constants.TYPE_A;
 
+    public static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.home_radio)
@@ -42,6 +51,7 @@ public class MainActivity extends SimpleActivity implements RadioGroup.OnChecked
         showHideFragment(getTargetFragment(showFragment));
         //peng 第一次提交
     }
+
 
 
     @Override
