@@ -29,6 +29,8 @@ public abstract class SimpleActivity  extends SupportActivity {
         mContext = this;
         AppManager.getAppManager().addActivity(this);
         initEventAndData();
+
+
     }
 
     protected void setToolBar(Toolbar toolbar, String title) {

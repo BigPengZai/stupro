@@ -1,6 +1,8 @@
 package com.onlyhiedu.mobile.Utils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 /**
@@ -40,5 +42,33 @@ public class AppUtil {
             e.printStackTrace();
         }
         return verName;
+    }
+
+
+   /* public String getApplicationName(Context context) {
+        PackageManager packageManager = null;
+        ApplicationInfo applicationInfo = null;
+        try {
+            packageManager = context.getPackageManager();
+            applicationInfo = packageManager.getApplicationInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            applicationInfo = null;
+        }
+        String applicationName =
+                (String) packageManager.getApplicationLabel(applicationInfo);
+        return applicationName;
+    }*/
+
+    public static PackageInfo getPackageInfo(Context context) {
+        PackageInfo info = null;
+        try {
+            info = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace(System.err);
+        }
+        if (info == null)
+            info = new PackageInfo();
+        return info;
     }
 }

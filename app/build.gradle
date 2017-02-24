@@ -7,10 +7,11 @@ android {
     defaultConfig {
         applicationId "com.onlyhiedu.mobile"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -23,6 +24,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
 
 }
 
@@ -63,7 +66,6 @@ dependencies {
     compile 'me.yokeyword:fragmentation:0.10.1'
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
-
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
