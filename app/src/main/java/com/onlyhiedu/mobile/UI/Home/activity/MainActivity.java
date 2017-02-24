@@ -1,49 +1,35 @@
 package com.onlyhiedu.mobile.UI.Home.activity;
 
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.widget.RadioGroup;
+import android.view.MenuItem;
 
-
-import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.Fragment1;
 import com.onlyhiedu.mobile.UI.Home.fragment.Fragment2;
 import com.onlyhiedu.mobile.UI.Home.fragment.Fragment3;
-import com.onlyhiedu.mobile.Utils.AppUtil;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
 
-public class MainActivity extends SimpleActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends SimpleActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
 
     private Fragment1 m1Fragment;
     private Fragment2 m2Fragment;
     private Fragment3 m3Fragment;
 
-    private int showFragment = Constants.TYPE_A;
 
-    public static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.home_radio)
-    RadioGroup mHomeRadio;
+    @BindView(R.id.navigation)
+    BottomNavigationView mNavigation;
 
     @Override
     protected int getLayout() {
         return R.layout.activity_main;
     }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
 
     @Override
     protected void initEventAndData() {
@@ -52,41 +38,22 @@ public class MainActivity extends SimpleActivity implements RadioGroup.OnChecked
         m2Fragment = new Fragment2();
         m3Fragment = new Fragment3();
         loadMultipleRootFragment(R.id.fl_main_content, 0, m1Fragment, m2Fragment, m3Fragment);
-        mHomeRadio.setOnCheckedChangeListener(this);
-        showHideFragment(getTargetFragment(showFragment));
-        //peng 第一次提交
-        String packageName = AppUtil.getPackageInfo(this).packageName;
-        Log.d(TAG, "packageName:" + packageName);
+        mNavigation.setOnNavigationItemSelectedListener(this);
+        showHideFragment(m1Fragment);
     }
-
 
 
     @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.rb_1:
-                showFragment = Constants.TYPE_A;
-                break;
-            case R.id.rb_2:
-                showFragment = Constants.TYPE_B;
-                break;
-            case R.id.rb_3:
-                showFragment = Constants.TYPE_C;
-                break;
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.one){
+            showHideFragment(m1Fragment);
         }
-        showHideFragment(getTargetFragment(showFragment));
-    }
-
-
-    private SupportFragment getTargetFragment(int item) {
-        switch (item) {
-            case Constants.TYPE_A:
-                return m1Fragment;
-            case Constants.TYPE_B:
-                return m2Fragment;
-            case Constants.TYPE_C:
-                return m3Fragment;
+        if(item.getItemId() == R.id.tow){
+            showHideFragment(m2Fragment);
         }
-        return m1Fragment;
+        if(item.getItemId() == R.id.three){
+            showHideFragment(m3Fragment);
+        }
+        return true;
     }
 }
