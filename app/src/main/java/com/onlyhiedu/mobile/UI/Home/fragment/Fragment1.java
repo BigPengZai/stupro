@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.onlyhiedu.mobile.R;
+
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -15,6 +17,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 public class Fragment1 extends SupportFragment {
 
     public static final String TAG = Fragment1.class.getSimpleName();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,10 +27,7 @@ public class Fragment1 extends SupportFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-}
+    }
 
 
 }

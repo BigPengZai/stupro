@@ -62,8 +62,8 @@ public class RetrofitHelper {
                 }
                 Response response = chain.proceed(request);
                 if (SystemUtil.isNetworkConnected()) {
-                    int maxAge = 0;
-                    // 有网络时, 不缓存, 最大保存时长为0
+                    int maxAge = 10;
+                    // 正常访问同一请求接口（多次访问同一接口），给10秒缓存，超过时间重新发送请求，否则取缓存数据
                     response.newBuilder()
                             .header("Cache-Control", "public, max-age=" + maxAge)
                             .removeHeader("Pragma")
