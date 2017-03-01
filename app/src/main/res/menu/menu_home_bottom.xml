@@ -3,15 +3,10 @@
     <item
         android:id="@+id/one"
         android:icon="@drawable/main_radio_button"
-        android:title="@string/app_name"/>
+        android:title="上课"/>
     <item
         android:id="@+id/tow"
         android:icon="@drawable/main_radio_button"
-        android:title="@string/app_name"/>
-    <item
-        android:id="@+id/three"
-        android:icon="@drawable/main_radio_button"
-        android:title="@string/app_name"/>
-
+        android:title="我的"/>
 
 </menu>

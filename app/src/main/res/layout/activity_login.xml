@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.onlyhiedu.mobile.UI.User.activity.LoginActivity">
+
+
+    <TextView
+        style="@style/base_text"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="80dp"
+        android:text="嗨课堂"/>
+
+
+    <EditText
+        android:id="@+id/edit_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:hint="手机"/>
+
+    <EditText
+        android:id="@+id/edit_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:layout_marginTop="@dimen/size_10"
+        android:hint="密码"/>
+
+
+    <RelativeLayout
+        style="@style/match_wrap"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:layout_marginTop="@dimen/size_10"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_sms_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="短信验证码登录"/>
+
+        <TextView
+            android:id="@+id/tv_find_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="忘记密码"/>
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/btn_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/size_10"
+        android:text="登录"/>
+
+    <Button
+        android:id="@+id/btn_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="注册"/>
+</LinearLayout>

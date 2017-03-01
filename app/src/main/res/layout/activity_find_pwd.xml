@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_find_pwd"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity">
+
+    <EditText
+        android:id="@+id/edit_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:layout_marginTop="100dp"
+        android:hint="手机"/>
+
+    <LinearLayout
+        style="@style/match_wrap"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:layout_marginTop="@dimen/size_10"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="验证码"/>
+
+
+        <TextView
+            android:id="@+id/tv_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="获取验证码"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:layout_marginTop="@dimen/size_10"
+        android:hint="密码"/>
+
+    <EditText
+        android:id="@+id/edit_confirm_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
+        android:layout_marginTop="@dimen/size_10"
+        android:hint="再次输入密码"/>
+
+    <Button
+        android:id="@+id/btn_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/size_10"
+        android:text="注册"/>
+</LinearLayout>

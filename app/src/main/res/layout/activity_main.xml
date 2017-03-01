@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/activity_main"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
@@ -22,33 +21,5 @@
         android:layout_height="56dp"
         android:layout_gravity="start"
         app:menu="@menu/menu_home_bottom"/>
-
-    <!--<RadioGroup-->
-    <!--android:id="@+id/home_radio"-->
-    <!--style="@style/match_wrap"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@color/white"-->
-    <!--android:gravity="bottom"-->
-    <!--android:paddingTop="5dp"-->
-    <!--android:paddingBottom="5dp"-->
-    <!--android:orientation="horizontal" >-->
-    <!--<RadioButton-->
-    <!--android:id="@+id/rb_1"-->
-    <!--style="@style/RadioButtonBottomTab"-->
-    <!--android:checked="true"-->
-    <!--android:drawableTop="@drawable/main_radio_button"-->
-    <!--android:text="一个" />-->
-    <!--<RadioButton-->
-    <!--android:id="@+id/rb_2"-->
-    <!--style="@style/RadioButtonBottomTab"-->
-    <!--android:drawableTop="@drawable/main_radio_button"-->
-    <!--android:text="两个" />-->
-    <!--<RadioButton-->
-    <!--android:id="@+id/rb_3"-->
-    <!--style="@style/RadioButtonBottomTab"-->
-    <!--android:drawableTop="@drawable/main_radio_button"-->
-    <!--android:text="三个" />-->
-    <!--</RadioGroup>-->
-
 
 </LinearLayout>

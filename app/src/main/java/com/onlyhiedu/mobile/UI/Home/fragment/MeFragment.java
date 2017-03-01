@@ -14,7 +14,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Created by xuwc on 2017/2/18.
  */
 
-public class Fragment2 extends SupportFragment {
+public class MeFragment extends SupportFragment {
 
     @Nullable
     @Override

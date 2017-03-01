@@ -2,15 +2,14 @@
 
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-
-       <item name="android:windowBackground">@color/window_bg</item>
-        <!--  <item name="android:textColor">#FF515151</item>-->
+        <item name="android:windowBackground">@color/window_bg</item>
+        <item name="android:textColor">#FF515151</item>
 
     </style>
 
@@ -43,6 +42,9 @@
 
     </style>
 
+
+
+
     <!--settingItem -->
     <style name="CCPFontPreferenceLarge">
         <item name="android:textAppearance">@style/CCPPreferenceTextLarge</item>
@@ -52,16 +54,19 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
     </style>
+
     <style name="CCPPreferenceTextLarge">
         <item name="android:textSize">16dip</item>
         <item name="android:textColor">@color/ccp_pref_title</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
     </style>
+
     <style name="CCPFontPreferenceSummary" parent="@style/CCPFontPreferenceSmall">
         <item name="android:textAppearance">@style/CCPPreferenceTextSmall</item>
         <item name="android:textSize">@dimen/SmallTextSize</item>
     </style>
+
     <style name="CCPFontPreferenceSmall">
         <item name="android:textAppearance">@style/CCPPreferenceTextSmall</item>
         <item name="android:ellipsize">end</item>
@@ -74,6 +79,7 @@
         <item name="android:shadowDy">1.2</item>
         <item name="android:shadowRadius">1.0</item>
     </style>
+
     <style name="CCPPreferenceTextSmall">
         <item name="android:textSize">@dimen/SmallTextSize</item>
         <item name="android:textColor">@color/ccp_pref_summary</item>

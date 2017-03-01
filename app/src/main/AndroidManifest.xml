@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.onlyhiedu.mobile">
-
-
-
-
-
+          package="com.onlyhiedu.mobile">
 
     <application
         android:name=".App.App"
@@ -15,16 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".UI.Home.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".UI.Home.activity.MainActivity"></activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+
+        <!-- User -->
+        <activity android:name=".UI.User.activity.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-
-
+        <activity android:name=".UI.User.activity.RegActivity"/>
+        <activity android:name=".UI.User.activity.FindPwdActivity"/>
+        <activity android:name=".UI.User.activity.SmsLoginActivity">
+        </activity>
     </application>
 
 </manifest>
