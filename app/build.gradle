@@ -13,6 +13,17 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
+    signingConfigs {
+        release {
+            keyAlias 'onlyedu123'
+            keyPassword 'onlyedu123'
+            storeFile file('../../onlyedu.jks')
+            storePassword 'onlyedu123'
+        }
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
