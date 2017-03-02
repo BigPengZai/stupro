@@ -36,6 +36,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
     @Override
     protected void initEventAndData() {
         mToolbar.setTitle("");
+        mTitle.setText("上课");
         setSupportActionBar(mToolbar);
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
