@@ -27,6 +27,7 @@ import butterknife.OnClick;
 
 public class ChooseAddressWheel implements MyOnWheelChangedListener {
 
+
     @BindView(R.id.province_wheel)
     MyWheelView provinceWheel;
     @BindView(R.id.city_wheel)
