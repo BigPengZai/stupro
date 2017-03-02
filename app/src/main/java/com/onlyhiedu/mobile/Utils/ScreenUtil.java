@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.DisplayMetrics;
+import android.view.inputmethod.InputMethodManager;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
 
 /**
@@ -89,5 +91,33 @@ public class ScreenUtil {
         styledAttributes.recycle();
 
         return toolbarHeight;
+    }
+
+
+    public static void hideKeyBoard(Activity context) {
+        if (context != null && context.getCurrentFocus() != null) {
+            ((InputMethodManager) context
+                    .getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(context.getCurrentFocus()
+                                    .getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+
+    public static String readAssert(Context context,  String fileName){
+        String jsonString="";
+        String resultString="";
+        try {
+            //=context.getClass().getClassLoader().getResourceAsStream("assets/"+names[i]);
+//            InputStream inputStream=context.getResources().getAssets().open(fileName);
+            InputStream inputStream=context.getClass().getClassLoader().getResourceAsStream("assets/"+fileName);
+            byte[] buffer=new byte[inputStream.available()];
+            inputStream.read(buffer);
+            resultString=new String(buffer,"utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultString;
     }
 }
