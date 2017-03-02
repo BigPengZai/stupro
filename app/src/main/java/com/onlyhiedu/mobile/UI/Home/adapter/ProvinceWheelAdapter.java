@@ -18,8 +18,8 @@ package com.onlyhiedu.mobile.UI.Home.adapter;
 import android.content.Context;
 
 
-import com.onlyhiedu.mobile.UI.Home.view.wheelview.AddressDtailsEntity;
-import com.onlyhiedu.mobile.UI.Home.view.wheelview.BaseWheelAdapter;
+import com.onlyhiedu.mobile.Widget.wheelview.AddressDtailsEntity;
+import com.onlyhiedu.mobile.Widget.wheelview.BaseWheelAdapter;
 
 import java.util.List;
 

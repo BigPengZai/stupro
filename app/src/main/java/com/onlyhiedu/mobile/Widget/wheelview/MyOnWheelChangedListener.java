@@ -14,19 +14,20 @@
  *  limitations under the License.
  */
 
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 /**
- * Wheel clicked listener interface.
- * <p>The onItemClicked() method is called whenever a wheel item is clicked
+ * Wheel changed listener interface.
+ * <p>The onChanged() method is called whenever current wheel positions is changed:
  * <li> New Wheel position is set
  * <li> Wheel view is scrolled
  */
-public interface MyOnWheelClickedListener {
-    /**
-     * Callback method to be invoked when current item clicked
-     * @param wheel the wheel view
-     * @param itemIndex the index of clicked item
-     */
-    void onItemClicked(MyWheelView wheel, int itemIndex);
+public interface MyOnWheelChangedListener {
+	/**
+	 * Callback method to be invoked when current item changed
+	 * @param wheel the wheel view whose state has changed
+	 * @param oldValue the old value of current item
+	 * @param newValue the new value of current item
+	 */
+	void onChanged(MyWheelView wheel, int oldValue, int newValue);
 }

@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 import android.view.View;
 import android.widget.LinearLayout;

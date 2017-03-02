@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 import android.content.Context;
 import android.database.DataSetObserver;

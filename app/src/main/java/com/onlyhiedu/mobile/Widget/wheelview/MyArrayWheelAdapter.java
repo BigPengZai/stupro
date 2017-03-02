@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 import android.content.Context;
 

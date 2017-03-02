@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 /**
  * Wheel scrolled listener interface.

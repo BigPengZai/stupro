@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 import java.util.List;
 

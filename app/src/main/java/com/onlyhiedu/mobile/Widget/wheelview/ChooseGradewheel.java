@@ -1,8 +1,7 @@
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +51,7 @@ public class ChooseGradewheel implements MyOnWheelChangedListener {
     private void initView() {
         parentView = layoutInflater.inflate(R.layout.choose_grade_layout, null);
         ButterKnife.bind(this, parentView);
-        provinceWheel.setVisibleItems(7);
+        provinceWheel.setVisibleItems(5);
         provinceWheel.addChangingListener(this);
     }
 
@@ -71,7 +70,10 @@ public class ChooseGradewheel implements MyOnWheelChangedListener {
             }
         });
     }
-
+    public void setProvince(List<AddressDtailsEntity.ProvinceEntity> province) {
+        this.province = province;
+        bindData();
+    }
     private void bindData() {
         provinceWheel.setViewAdapter(new ProvinceWheelAdapter(context, province));
     }
@@ -107,6 +109,17 @@ public class ChooseGradewheel implements MyOnWheelChangedListener {
 
     @Override
     public void onChanged(MyWheelView wheel, int oldValue, int newValue) {
-
+        if (wheel == provinceWheel) {
+            updateCitiy();//省份改变后城市和地区联动
+        }
     }
+    private void updateCitiy() {
+//        int index = provinceWheel.getCurrentItem();
+//        List<AddressDtailsEntity.ProvinceEntity.CityEntity> citys = province.get(index).City;
+//        if (citys != null && citys.size() > 0) {
+//            provinceWheel.setViewAdapter(new ProvinceWheelAdapter(context, province));
+//            provinceWheel.setCurrentItem(0);
+//        }
+    }
+
 }

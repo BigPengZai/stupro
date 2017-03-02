@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.onlyhiedu.mobile.UI.Home.view.wheelview;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -23,8 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.onlyhiedu.mobile.UI.Home.view.wheelview.AbstractWheelAdapter;
 
 /**
  * Abstract wheel adapter provides common functionality for adapters.
