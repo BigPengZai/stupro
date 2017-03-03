@@ -13,7 +13,6 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.AreaWheelAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.CityWheelAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.ProvinceWheelAdapter;
-import com.onlyhiedu.mobile.UI.Home.view.listener.OnAddressChangeListener;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 
 import java.util.List;

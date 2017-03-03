@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.UI.Home.view.listener;
+package com.onlyhiedu.mobile.Widget.wheelview;
 
 public interface OnAddressChangeListener {
 	void onAddressChange(String province, String city, String district);

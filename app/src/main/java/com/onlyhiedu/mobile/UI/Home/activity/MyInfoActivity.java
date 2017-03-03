@@ -9,7 +9,7 @@ import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Widget.SexView;
-import com.onlyhiedu.mobile.UI.Home.view.listener.OnAddressChangeListener;
+import com.onlyhiedu.mobile.Widget.wheelview.OnAddressChangeListener;
 import com.onlyhiedu.mobile.Widget.wheelview.AddressDtailsEntity;
 import com.onlyhiedu.mobile.Widget.wheelview.AddressModel;
 import com.onlyhiedu.mobile.Widget.wheelview.ChooseAddressWheel;
