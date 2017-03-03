@@ -105,19 +105,5 @@ public class ScreenUtil {
     }
 
 
-    public static String readAssert(Context context,  String fileName){
-        String jsonString="";
-        String resultString="";
-        try {
-            //=context.getClass().getClassLoader().getResourceAsStream("assets/"+names[i]);
-//            InputStream inputStream=context.getResources().getAssets().open(fileName);
-            InputStream inputStream=context.getClass().getClassLoader().getResourceAsStream("assets/"+fileName);
-            byte[] buffer=new byte[inputStream.available()];
-            inputStream.read(buffer);
-            resultString=new String(buffer,"utf-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resultString;
-    }
+
 }

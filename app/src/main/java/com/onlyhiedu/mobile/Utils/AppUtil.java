@@ -1,9 +1,10 @@
 package com.onlyhiedu.mobile.Utils;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+
+import java.io.InputStream;
 
 /**
  * Created by pengpeng on 2017/2/22.
@@ -71,4 +72,21 @@ public class AppUtil {
             info = new PackageInfo();
         return info;
     }
+
+    public static String readAssert(Context context,  String fileName){
+        String jsonString="";
+        String resultString="";
+        try {
+            //=context.getClass().getClassLoader().getResourceAsStream("assets/"+names[i]);
+//            InputStream inputStream=context.getResources().getAssets().open(fileName);
+            InputStream inputStream=context.getClass().getClassLoader().getResourceAsStream("assets/"+fileName);
+            byte[] buffer=new byte[inputStream.available()];
+            inputStream.read(buffer);
+            resultString=new String(buffer,"utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultString;
+    }
+
 }

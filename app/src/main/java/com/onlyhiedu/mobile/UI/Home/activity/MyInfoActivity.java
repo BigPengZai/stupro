@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Widget.SexView;
 import com.onlyhiedu.mobile.UI.Home.view.listener.OnAddressChangeListener;
 import com.onlyhiedu.mobile.Widget.wheelview.AddressDtailsEntity;
@@ -14,7 +15,6 @@ import com.onlyhiedu.mobile.Widget.wheelview.AddressModel;
 import com.onlyhiedu.mobile.Widget.wheelview.ChooseAddressWheel;
 import com.onlyhiedu.mobile.Widget.wheelview.ChooseGradewheel;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
-import com.onlyhiedu.mobile.Utils.ScreenUtil;
 
 import butterknife.BindView;
 
@@ -99,7 +99,7 @@ public class MyInfoActivity extends SimpleActivity implements View.OnClickListen
 
     };
     private void initData() {
-        String address = ScreenUtil.readAssert(this, "address.txt");
+        String address = AppUtil.readAssert(this, "address.txt");
         AddressModel model = JsonUtil.parseJson(address, AddressModel.class);
         if (model != null) {
             AddressDtailsEntity data = model.Result;
@@ -113,7 +113,7 @@ public class MyInfoActivity extends SimpleActivity implements View.OnClickListen
     }
 
     private void initGradeData() {
-        String address = ScreenUtil.readAssert(this, "grade.txt");
+        String address = AppUtil.readAssert(this, "grade.txt");
         AddressModel model = JsonUtil.parseJson(address, AddressModel.class);
         if (model != null) {
             AddressDtailsEntity data = model.Result;
