@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_reg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.onlyhiedu.mobile.UI.User.activity.RegActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edit_old_pw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_45"
+            android:layout_marginRight="@dimen/size_45"
+            android:layout_marginTop="100dp"
+            android:hint="原密码"/>
+
+        <LinearLayout
+            style="@style/match_wrap"
+            android:layout_marginLeft="@dimen/size_45"
+            android:layout_marginRight="@dimen/size_45"
+            android:layout_marginTop="@dimen/size_10"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_new_pw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="新密码"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_confirm_pw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_45"
+            android:layout_marginRight="@dimen/size_45"
+            android:layout_marginTop="@dimen/size_10"
+            android:hint="确认新密码"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="25dp"
+        android:text="确认修改"/>
+
+</RelativeLayout>

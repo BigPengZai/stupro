@@ -30,6 +30,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def oldFile = output.outputFile
+                if (variant.buildType.name.equals('release')) {
+                    def releaseApkName = 'android_app_' + variant.productFlavors.get(0).versionName + '_vcode_' + variant.productFlavors.get(0).versionCode + '_release' + '.apk'
+                    output.outputFile = new File(oldFile.parent, releaseApkName)
+                } else if (variant.buildType.name.equals('debug')) {
+                    def debugApkName = 'android_app_' + variant.productFlavors.get(0).versionName + '_vcode_' + variant.productFlavors.get(0).versionCode + '_debug' + '.apk'
+                    output.outputFile = new File(oldFile.parent, debugApkName)
+                }
+            }
+        }
+
+        productFlavors {
+            onlyEdu {
+                applicationId "com.onlyhiedu.mobile"
+                minSdkVersion 16
+                targetSdkVersion 22
+                versionCode 1
+                versionName "1.0"
+            }
+        }
     }
 
     compileOptions {

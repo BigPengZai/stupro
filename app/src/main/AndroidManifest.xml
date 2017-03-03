@@ -28,6 +28,8 @@
         <activity android:name=".UI.Home.activity.AboutActivity"/>
         <activity android:name=".UI.Home.activity.MyInfoActivity"/>
         <activity android:name=".UI.Home.activity.SettingActivity"/>
+        <activity android:name=".UI.Home.activity.ModifyPwActivity"/>
+        <activity android:name=".UI.Home.activity.FeedBackActivity"/>
     </application>
 
 </manifest>
