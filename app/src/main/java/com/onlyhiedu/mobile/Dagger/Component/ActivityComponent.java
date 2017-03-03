@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
+import com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity;
 
 import dagger.Component;
 
@@ -15,5 +16,7 @@ import dagger.Component;
 public interface ActivityComponent {
 
     Activity getActivity();
+
+    void inject(SmsLoginActivity activity);
 
 }

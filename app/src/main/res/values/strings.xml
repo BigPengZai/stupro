@@ -17,7 +17,8 @@
     <string name="tip_network_error">没有可用的网络</string>
 
 
-
-
+    <!--Login-->
+    <string name="text_get_verification_code">获取验证码</string>
+    <string name="text_get_verification_code_again">重新获取(%1$s)</string>
 
 </resources>

@@ -209,4 +209,6 @@ public class ErrorLayout extends LinearLayout implements
             mErrorState = HIDE_LAYOUT;
         super.setVisibility(visibility);
     }
+
+
 }

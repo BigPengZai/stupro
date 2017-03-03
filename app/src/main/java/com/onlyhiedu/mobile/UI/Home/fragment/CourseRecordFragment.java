@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
@@ -13,7 +14,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/3/1.
  */
 
-public class CourseRecordFragment extends SimpleFragment {
+public class CourseRecordFragment extends SimpleFragment implements View.OnClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -29,6 +30,12 @@ public class CourseRecordFragment extends SimpleFragment {
 
     @Override
     protected void initEventAndData() {
+        mErrorLayout.setState(ErrorLayout.NODATA);
+        mErrorLayout.setOnLayoutClickListener(this);
+    }
 
+    @Override
+    public void onClick(View view) {
+        mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
     }
 }

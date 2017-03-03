@@ -7,6 +7,7 @@ import android.widget.EditText;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.Utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -40,11 +41,19 @@ public class LoginActivity extends SimpleActivity {
                 startActivity(new Intent(this, FindPwdActivity.class));
                 break;
             case R.id.btn_sign:
-                startActivity(new Intent(this, MainActivity.class));
+                toLogin();
                 break;
             case R.id.btn_sign_in:
                 startActivity(new Intent(this, RegActivity.class));
                 break;
+        }
+    }
+
+    private void toLogin() {
+        String number = mEditNumber.getText().toString();
+        String pwd = mEditPwd.getText().toString();
+        if(StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)){
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 }
