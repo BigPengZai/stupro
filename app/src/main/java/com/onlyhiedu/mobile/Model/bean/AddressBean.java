@@ -1,8 +1,8 @@
-package com.onlyhiedu.mobile.Widget.wheelview;
+package com.onlyhiedu.mobile.Model.bean;
 
 import java.util.List;
 
-public class AddressDtailsEntity {
+public class AddressBean {
     public int SellerId;
     public int OrderId;
     public String RecipientName;
