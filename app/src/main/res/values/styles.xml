@@ -43,50 +43,6 @@
     </style>
 
 
-
-
-    <!--settingItem -->
-    <style name="CCPFontPreferenceLarge">
-        <item name="android:textAppearance">@style/CCPPreferenceTextLarge</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
-    <style name="CCPPreferenceTextLarge">
-        <item name="android:textSize">16dip</item>
-        <item name="android:textColor">@color/ccp_pref_title</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
-    <style name="CCPFontPreferenceSummary" parent="@style/CCPFontPreferenceSmall">
-        <item name="android:textAppearance">@style/CCPPreferenceTextSmall</item>
-        <item name="android:textSize">@dimen/SmallTextSize</item>
-    </style>
-
-    <style name="CCPFontPreferenceSmall">
-        <item name="android:textAppearance">@style/CCPPreferenceTextSmall</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:shadowColor">#a0ffffff</item>
-        <item name="android:shadowDx">1.2</item>
-        <item name="android:shadowDy">1.2</item>
-        <item name="android:shadowRadius">1.0</item>
-    </style>
-
-    <style name="CCPPreferenceTextSmall">
-        <item name="android:textSize">@dimen/SmallTextSize</item>
-        <item name="android:textColor">@color/ccp_pref_summary</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
     <!--首页radiobutton  自定义效果-->
     <style name="RadioButtonBottomTab">
         <item name="android:layout_weight">1</item>
@@ -98,7 +54,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@color/white</item>
     </style>
-<!--wheelview-->
+    <!--wheelview-->
     <style name="horizontal_line">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>

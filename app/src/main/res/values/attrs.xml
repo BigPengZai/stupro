@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--SettingItem-->
-    <declare-styleable name="setting_info">
-        <attr name="item_titleText" format="string" />
-        <attr name="item_detailText" format="string" />
-        <attr name="item_accessoryType">
-            <enum name="none" value="0" />
-            <enum name="arrow" value="1" />
-            <enum name="switchbutton" value="2" />
-            <enum name="radio" value="3" />
-        </attr>
-        <attr name="item_showDivider" format="boolean" />
-        <attr name="item_icon" format="reference|color" />
+    <declare-styleable name="setting_view">
+        <attr name="item_titleText" format="string"/>
+        <attr name="item_detailText" format="string"/>
+        <attr name="item_showDivider" format="boolean"/>
+        <attr name="item_icon" format="reference|color"/>
     </declare-styleable>
-
-
 </resources>

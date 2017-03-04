@@ -54,9 +54,4 @@
     <dimen name="size_45">45dp</dimen>
     <dimen name="size_46">46dp</dimen>
 
-    <!--SertingItem-->
-    <dimen name="SmallListHeight">52.0dip</dimen>
-    <dimen name="SmallPadding">8.0dip</dimen>
-    <dimen name="SmallTextSize">14.0dip</dimen>
-
 </resources>

@@ -23,8 +23,7 @@
         </activity>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
-        <activity android:name=".UI.User.activity.SmsLoginActivity">
-        </activity>
+        <activity android:name=".UI.User.activity.SmsLoginActivity"/>
         <activity android:name=".UI.Home.activity.AboutActivity"/>
         <activity android:name=".UI.Home.activity.MyInfoActivity"/>
         <activity android:name=".UI.Home.activity.SettingActivity"/>
