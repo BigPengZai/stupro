@@ -1,9 +1,8 @@
-package com.onlyhiedu.mobile.UI.Home.activity;
+package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
@@ -16,21 +15,12 @@ import butterknife.BindView;
  * Created by pengpeng on 2017/3/3.
  */
 
-public class ModifyPwActivity extends SimpleActivity implements View.OnClickListener {
-
-    @BindView(R.id.edit_old_pw)
-    EditText mEdit_Old_Number;
-    @BindView(R.id.edit_new_pw)
-    EditText mEdit_New_Pw;
-    @BindView(R.id.edit_confirm_pw)
-    EditText mEdit_Confirm_Pw;
-
-    @BindView(R.id.btn_confirm)
-    Button mBtn_Confirm;
+public class FeedBackActivity extends SimpleActivity implements View.OnClickListener {
+    @BindView(R.id.btn_submit)
+    Button mBtn_Submit;
     @Override
     protected int getLayout() {
-
-        return R.layout.activity_modify;
+        return R.layout.activity_feed;
     }
 
     @Override
@@ -39,16 +29,16 @@ public class ModifyPwActivity extends SimpleActivity implements View.OnClickList
     }
 
     private void initListener() {
-        mBtn_Confirm.setOnClickListener(this);
+        mBtn_Submit.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_confirm:
+            case R.id.btn_submit:
                 DialogUtil.showOnlyAlert(this,
                         "提示"
-                        , "修改成功"
+                        , "提交成功"
                         , ""
                         , ""
                         , true, true, new DialogListener() {

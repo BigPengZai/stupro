@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.UI.Home.activity;
+package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;

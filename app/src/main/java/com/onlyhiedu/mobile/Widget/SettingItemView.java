@@ -36,9 +36,9 @@ public class SettingItemView extends RelativeLayout {
         mDividerView = findViewById(R.id.item_bottom_divider);
 
         TypedArray localTypedArray = context.obtainStyledAttributes(attrs, R.styleable.setting_view);
-        setTitleText(localTypedArray.getString(R.styleable.setting_info_item_titleText));
-        setDetailText(localTypedArray.getString(R.styleable.setting_info_item_detailText));
-        setShowDivider(localTypedArray.getBoolean(R.styleable.setting_info_item_showDivider, true));
+        setTitleText(localTypedArray.getString(R.styleable.setting_view_item_titleText));
+        setDetailText(localTypedArray.getString(R.styleable.setting_view_item_detailText));
+        setShowDivider(localTypedArray.getBoolean(R.styleable.setting_view_item_showDivider, true));
     }
 
     public String getDetailText() {

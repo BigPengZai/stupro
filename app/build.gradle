@@ -81,6 +81,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    //picker
+    //Widget
     compile 'com.contrarywind:Android-PickerView:3.0.4'
 }

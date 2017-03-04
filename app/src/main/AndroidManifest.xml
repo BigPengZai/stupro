@@ -24,11 +24,10 @@
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
         <activity android:name=".UI.User.activity.SmsLoginActivity"/>
-        <activity android:name=".UI.Home.activity.AboutActivity"/>
-        <activity android:name=".UI.Home.activity.MyInfoActivity"/>
-        <activity android:name=".UI.Home.activity.SettingActivity"/>
-        <activity android:name=".UI.Home.activity.ModifyPwActivity"/>
-        <activity android:name=".UI.Home.activity.FeedBackActivity"/>
+        <activity android:name=".UI.Setting.activity.AboutActivity"/>
+        <activity android:name=".UI.Setting.activity.SettingActivity"/>
+        <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
+        <activity android:name=".UI.Setting.activity.FeedBackActivity"/>
     </application>
 
 </manifest>

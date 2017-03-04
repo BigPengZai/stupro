@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -11,6 +12,8 @@ import java.io.InputStream;
  */
 
 public class AppUtil {
+
+
     /**
      * 得到软件版本号
      *
@@ -73,18 +76,26 @@ public class AppUtil {
         return info;
     }
 
-    public static String readAssert(Context context,  String fileName){
-        String jsonString="";
-        String resultString="";
+    public static String readAssert(Context context, String fileName) {
+        String resultString = "";
+        InputStream inputStream = null;
         try {
             //=context.getClass().getClassLoader().getResourceAsStream("assets/"+names[i]);
 //            InputStream inputStream=context.getResources().getAssets().open(fileName);
-            InputStream inputStream=context.getClass().getClassLoader().getResourceAsStream("assets/"+fileName);
-            byte[] buffer=new byte[inputStream.available()];
+            inputStream = context.getClass().getClassLoader().getResourceAsStream("assets/" + fileName);
+            byte[] buffer = new byte[inputStream.available()];
             inputStream.read(buffer);
-            resultString=new String(buffer,"utf-8");
+            resultString = new String(buffer, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return resultString;
     }
