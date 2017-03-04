@@ -83,4 +83,5 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     //Widget
     compile 'com.contrarywind:Android-PickerView:3.0.4'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
 }

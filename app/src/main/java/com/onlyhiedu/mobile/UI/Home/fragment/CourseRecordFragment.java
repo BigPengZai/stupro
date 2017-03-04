@@ -5,6 +5,8 @@ import android.view.View;
 
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
 
@@ -15,6 +17,9 @@ import butterknife.BindView;
  */
 
 public class CourseRecordFragment extends SimpleFragment implements View.OnClickListener {
+
+    private CourseFragmentAdapter mAdapter;
+
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -30,8 +35,15 @@ public class CourseRecordFragment extends SimpleFragment implements View.OnClick
 
     @Override
     protected void initEventAndData() {
-        mErrorLayout.setState(ErrorLayout.NODATA);
+        mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         mErrorLayout.setOnLayoutClickListener(this);
+
+        mAdapter = new CourseFragmentAdapter(mContext);
+        UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
+        mAdapter.addItem("");
+        mAdapter.addItem("");
+        mAdapter.addItem("");
+
     }
 
     @Override

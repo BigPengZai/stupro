@@ -51,7 +51,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
 
     protected void setToolBar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView tvTitle = (TextView) findViewById(R.id.title);
+        TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
         tvTitle.setText(title);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);

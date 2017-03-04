@@ -2,11 +2,11 @@ package com.onlyhiedu.mobile.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
 
-import java.io.InputStream;
 import java.lang.reflect.Field;
 
 /**
@@ -14,11 +14,10 @@ import java.lang.reflect.Field;
  */
 
 public class ScreenUtil {
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    public static int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
-
 
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -48,11 +47,10 @@ public class ScreenUtil {
     }
 
     /**
-     * @deprecated  use {@link #getScreenHeight(Context)} instead
-     * get screen size height in pixels
-     *
      * @param context
      * @return the pixels of the screen height
+     * @deprecated use {@link #getScreenHeight(Context)} instead
+     * get screen size height in pixels
      */
     public static int getHeight(Activity context) {
         DisplayMetrics dm = new DisplayMetrics();
@@ -60,7 +58,7 @@ public class ScreenUtil {
         return dm.heightPixels;
     }
 
-    public static int getStatusBarHeight(Context context){
+    public static int getStatusBarHeight(Context context) {
         Class<?> c = null;
         Object obj = null;
         Field field = null;
@@ -103,7 +101,6 @@ public class ScreenUtil {
                             InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
-
 
 
 }

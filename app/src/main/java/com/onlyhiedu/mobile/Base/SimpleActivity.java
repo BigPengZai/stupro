@@ -36,10 +36,9 @@ public abstract class SimpleActivity extends SupportActivity {
     }
 
 
-
     protected void setToolBar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView tvTitle = (TextView) findViewById(R.id.title);
+        TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
         tvTitle.setText(title);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -53,7 +52,6 @@ public abstract class SimpleActivity extends SupportActivity {
             }
         });
     }
-
 
 
     @Override

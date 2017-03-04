@@ -32,8 +32,8 @@ public class ClassFragment extends SimpleFragment {
     @Override
     protected void initEventAndData() {
         mAdapter = new ViewPagerAdapterFragment(getChildFragmentManager(), mContext);
-        mAdapter.addTab("我的课程", "CourseFragment", CourseFragment.class, null);
-        mAdapter.addTab("课程记录", "CourseRecordFragment", CourseRecordFragment.class, null);
+        mAdapter.addTab("待上课程", "CourseFragment", CourseFragment.class, null);
+        mAdapter.addTab("完成课程", "CourseRecordFragment", CourseRecordFragment.class, null);
         mViewpager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewpager);
     }

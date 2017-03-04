@@ -12,7 +12,7 @@ import butterknife.OnClick;
  * Created by pengpeng on 2017/3/2.
  */
 
-public class SettingActivity extends SimpleActivity implements View.OnClickListener {
+public class SettingActivity extends SimpleActivity  {
 
 
     @Override
@@ -22,6 +22,7 @@ public class SettingActivity extends SimpleActivity implements View.OnClickListe
 
     @Override
     protected void initEventAndData() {
+        setToolBar("设置");
     }
 
 

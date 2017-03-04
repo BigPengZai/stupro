@@ -7,6 +7,9 @@
 
     <include layout="@layout/layout_toolbar"/>
 
+    <TextView
+        style="@style/horizontal_line"/>
+
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_pwd"
         android:layout_width="match_parent"
