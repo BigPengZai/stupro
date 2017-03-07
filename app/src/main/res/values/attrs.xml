@@ -6,4 +6,11 @@
         <attr name="item_showDivider" format="boolean"/>
         <attr name="item_icon" format="reference|color"/>
     </declare-styleable>
+
+
+    <declare-styleable name="input_text">
+        <attr name="item_showIcon" format="boolean"/>
+        <attr name="item_close_icon" format="reference|color"/>
+        <attr name="item_hint_text" format="string"/>
+    </declare-styleable>
 </resources>

@@ -28,7 +28,7 @@ public class SettingItemView extends RelativeLayout {
 
     public SettingItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.setting_item_view, this, true);
+        LayoutInflater.from(context).inflate(R.layout.view_setting_item, this, true);
 
         mTitle = (TextView) findViewById(R.id.title);
         mTvDetail = (TextView) findViewById(R.id.content);

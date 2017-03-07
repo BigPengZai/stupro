@@ -1,7 +1,9 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
@@ -27,6 +29,10 @@ public class LoginActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
 
     }
 
@@ -52,7 +58,7 @@ public class LoginActivity extends SimpleActivity {
     private void toLogin() {
         String number = mEditNumber.getText().toString();
         String pwd = mEditPwd.getText().toString();
-        if(StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)){
+        if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
             startActivity(new Intent(this, MainActivity.class));
         }
     }

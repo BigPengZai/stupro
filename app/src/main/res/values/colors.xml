@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="white">#FFFFFF</color>
@@ -11,15 +11,17 @@
     <color name="transparent">#00000000</color>
     <color name="list_divider_color">#fff2f2f2</color>
     <color name="list_divider">#ECEAEA</color>
-
+    <color name="text_color_hint">#C9C8C8</color>
 
 
     <color name="c_F42440">#F42440</color>
-
-
+    <color name="c_929292">#929292</color>
+    <color name="c_262626">#262626</color>
+    <color name="c_F74D64">#F74D64</color>
 
 <!--wheelview-->
     <color name="c3">#dedede</color>
     <color name="c7">#383838</color>
     <color name="c9">#cc3333</color>
+
 </resources>

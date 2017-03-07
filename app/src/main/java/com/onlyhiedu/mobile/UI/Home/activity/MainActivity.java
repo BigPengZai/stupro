@@ -35,6 +35,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
         loadMultipleRootFragment(R.id.fl_main_content, 0, mClassFragment, mMeFragment);
         mNavigation.setOnNavigationItemSelectedListener(this);
         showHideFragment(mClassFragment);
+        mNavigation.setItemIconTintList(null);
     }
 
 
