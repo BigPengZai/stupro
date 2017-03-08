@@ -5,13 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/login_padding"
-    android:paddingLeft="@dimen/login_padding"
-    android:paddingRight="@dimen/login_padding"
     tools:context="com.onlyhiedu.mobile.UI.User.activity.RegActivity">
 
     <LinearLayout
         android:id="@+id/ll_top"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"

@@ -1,6 +1,8 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.os.Build;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,10 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
 
     @Override
     protected void initView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     @Override
@@ -58,7 +64,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({R.id.tv_code, R.id.btn_sign})
+    @OnClick({R.id.tv_code, R.id.btn_sign,R.id.ic_delete, R.id.rl_pwd_login})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_code:
@@ -66,6 +72,12 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
                 break;
             case R.id.btn_sign:
                 toLogin();
+                break;
+            case R.id.ic_delete:
+                finish();
+                break;
+            case R.id.rl_pwd_login:
+                finish();
                 break;
         }
     }
@@ -83,6 +95,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             mPresenter.readSecond();
         }
     }
+
 
 
 }

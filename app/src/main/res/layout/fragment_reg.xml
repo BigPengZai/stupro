@@ -2,13 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:ecdemo="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+    >
 
 
     <LinearLayout
         android:id="@+id/ll_reg_step1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:orientation="vertical">
 
         <com.onlyhiedu.mobile.Widget.InputTextView
@@ -32,6 +35,8 @@
         android:id="@+id/ll_reg_step2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -82,6 +87,8 @@
         android:id="@+id/ll_reg_step3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:visibility="gone">
@@ -111,6 +118,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:background="@drawable/shape_reg_ben_radius"
         android:text="下一步"
         android:textColor="@color/white"
@@ -121,6 +130,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:background="@drawable/shape_reg_ben_radius"
         android:text="下一步"
         android:textColor="@color/white"
@@ -132,6 +143,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
         android:background="@drawable/shape_reg_ben_radius"
         android:text="注册"
         android:textColor="@color/white"
@@ -144,6 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/size_20"
         android:gravity="center">
 
         <CheckBox

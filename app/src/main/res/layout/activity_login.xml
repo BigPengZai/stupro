@@ -96,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/size_30"
+        android:layout_marginTop="@dimen/size_40"
         android:background="@drawable/shape_login_ben_radius"
         android:text="登录"
         android:textSize="@dimen/sp_18"/>
