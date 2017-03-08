@@ -13,7 +13,7 @@ import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2017/3/1.
+ * Created by xwc on 2017/3/1.
  */
 
 public class CourseRecordFragment extends SimpleFragment implements View.OnClickListener {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ecdemo="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_reg"
     android:layout_width="match_parent"
@@ -8,55 +9,37 @@
     android:orientation="vertical"
     tools:context="com.onlyhiedu.mobile.UI.User.activity.RegActivity">
 
-    <LinearLayout
+    <include layout="@layout/layout_toolbar"/>
+
+    <com.onlyhiedu.mobile.Widget.InputTextView
+        android:id="@+id/edit_old_pw"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_padding"
+        ecdemo:item_close_icon="@mipmap/close_text"
+        ecdemo:item_hint_text="原密码"/>
 
-        <EditText
-            android:id="@+id/edit_old_pw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_45"
-            android:layout_marginRight="@dimen/size_45"
-            android:layout_marginTop="100dp"
-            android:hint="原密码"/>
+    <com.onlyhiedu.mobile.Widget.InputTextView
+        android:id="@+id/edit_new_pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_padding"
+        android:layout_marginTop="@dimen/size_15"
+        ecdemo:item_close_icon="@mipmap/close_text"
+        ecdemo:item_hint_text="新密码"/>
 
-        <LinearLayout
-            style="@style/match_wrap"
-            android:layout_marginLeft="@dimen/size_45"
-            android:layout_marginRight="@dimen/size_45"
-            android:layout_marginTop="@dimen/size_10"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/edit_new_pw"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="新密码"/>
-
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/edit_confirm_pw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_45"
-            android:layout_marginRight="@dimen/size_45"
-            android:layout_marginTop="@dimen/size_10"
-            android:hint="确认新密码"/>
-
-    </LinearLayout>
+    <com.onlyhiedu.mobile.Widget.InputTextView
+        android:id="@+id/edit_confirm_pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_padding"
+        android:layout_marginTop="@dimen/size_15"
+        ecdemo:item_close_icon="@mipmap/close_text"
+        ecdemo:item_hint_text="确认密码"/>
 
     <Button
         android:id="@+id/btn_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="25dp"
+        style="@style/select_log_out"
         android:text="确认修改"/>
 
-</RelativeLayout>
+</LinearLayout>

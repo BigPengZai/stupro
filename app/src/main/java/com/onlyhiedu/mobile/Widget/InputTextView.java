@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import com.onlyhiedu.mobile.R;
 
 /**
- * Created by Administrator on 2017/3/7.
+ * Created by xwc on 2017/3/7.
  */
 
 public class InputTextView extends RelativeLayout implements TextWatcher, View.OnClickListener {
@@ -67,7 +67,7 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (mEditText.getText().toString().length() != 0 && mEditText.hasFocus()) {
+        if (charSequence.toString().length() != 0 && mEditText.hasFocus()) {
             mImageClose.setVisibility(VISIBLE);
         } else {
             mImageClose.setVisibility(GONE);

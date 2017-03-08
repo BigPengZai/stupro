@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:src="@mipmap/ic_drawer_setting"/>
+            android:src="@mipmap/right"/>
 
     </LinearLayout>
 

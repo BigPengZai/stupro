@@ -9,6 +9,8 @@ import com.onlyhiedu.mobile.R;
 
 import butterknife.BindView;
 
+import static com.onlyhiedu.mobile.Utils.UIUtils.setIndicator;
+
 /**
  * Created by xuwc on 2017/2/18.
  */
@@ -26,7 +28,7 @@ public class ClassFragment extends SimpleFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.layout_viewpaget_tablayout;
+        return R.layout.layout_main_viewpaget_tablayout;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class ClassFragment extends SimpleFragment {
         mAdapter.addTab("完成课程", "CourseRecordFragment", CourseRecordFragment.class, null);
         mViewpager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewpager);
+        setIndicator(mTabLayout, 40, 40);
     }
 
 }

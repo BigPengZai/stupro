@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import butterknife.OnClick;
 
@@ -12,7 +13,7 @@ import butterknife.OnClick;
  * Created by pengpeng on 2017/3/2.
  */
 
-public class SettingActivity extends SimpleActivity  {
+public class SettingActivity extends SimpleActivity {
 
 
     @Override
@@ -26,7 +27,7 @@ public class SettingActivity extends SimpleActivity  {
     }
 
 
-    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.setting_about})
+    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.setting_about, R.id.btn_sign})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
@@ -38,6 +39,10 @@ public class SettingActivity extends SimpleActivity  {
             case R.id.setting_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case R.id.btn_sign:
+                UIUtils.startLoginActivity(this);
+                break;
+
         }
     }
 }

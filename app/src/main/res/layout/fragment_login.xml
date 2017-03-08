@@ -3,24 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ecdemo="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-    <android.support.design.widget.TextInputEditText
+    <com.onlyhiedu.mobile.Widget.InputTextView
         android:id="@+id/edit_pwd"
         android:layout_width="match_parent"
+        ecdemo:item_close_icon="@mipmap/close_text"
         android:layout_height="wrap_content"
-        ecdemo:item_hint_text="设置密码"/>
+        ecdemo:item_hint_text="手机号"/>
 
 
-    <android.support.design.widget.TextInputEditText
+    <com.onlyhiedu.mobile.Widget.InputTextView
         android:id="@+id/edit_confirm_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        ecdemo:item_close_icon="@mipmap/close_text"
         android:layout_marginTop="@dimen/size_15"
-        ecdemo:item_hint_text="确认密码"/>
+        ecdemo:item_hint_text="密码"/>
 
     <Button
         android:id="@+id/btn_next"

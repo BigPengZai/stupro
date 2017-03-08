@@ -42,9 +42,7 @@ public abstract class SimpleActivity extends SupportActivity {
         tvTitle.setText(title);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-//        toolbar.setNavigationIcon(R.mipmap.back);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

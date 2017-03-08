@@ -20,6 +20,7 @@
         <ImageView
             android:id="@+id/ic_delete"
             android:layout_width="wrap_content"
+            android:padding="@dimen/size_7"
             android:layout_height="wrap_content"
             android:src="@mipmap/close"/>
 
@@ -41,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_top"
         android:layout_marginTop="@dimen/size_20"/>
-
 
 
 </RelativeLayout>

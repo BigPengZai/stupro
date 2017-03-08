@@ -60,6 +60,7 @@ public class LoginActivity extends SimpleActivity {
         String pwd = mEditPwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 }

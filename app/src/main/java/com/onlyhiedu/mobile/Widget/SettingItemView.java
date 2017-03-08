@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.onlyhiedu.mobile.R;
 
 /**
- * Created by Administrator on 2017/3/4.
+ * Created by xwc on 2017/3/4.
  */
 
 public class SettingItemView extends RelativeLayout {

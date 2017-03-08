@@ -48,16 +48,13 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     }
 
 
-
     protected void setToolBar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
         tvTitle.setText(title);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-//        toolbar.setNavigationIcon(R.mipmap.back);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +93,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
 
     protected abstract int getLayout();
 
-    protected void initView() {}
+    protected void initView() {
+    }
 
-    protected void initData() {}
+    protected void initData() {
+    }
 }

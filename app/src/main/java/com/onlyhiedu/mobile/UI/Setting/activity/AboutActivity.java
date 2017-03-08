@@ -15,6 +15,6 @@ public class AboutActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
-
+        setToolBar("关于我们");
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="white">#FFFFFF</color>
@@ -18,8 +18,13 @@
     <color name="c_929292">#929292</color>
     <color name="c_262626">#262626</color>
     <color name="c_F74D64">#F74D64</color>
+    <color name="c_F2F2F2">#F2F2F2</color>
+    <color name="c_CCCCCC">#CCCCCC</color>
+    <color name="c_070707">#070707</color>
+    <color name="c_ACABAB">#ACABAB</color>
+    <color name="c_666666">#666666</color>
 
-<!--wheelview-->
+    <!--wheelview-->
     <color name="c3">#dedede</color>
     <color name="c7">#383838</color>
     <color name="c9">#cc3333</color>

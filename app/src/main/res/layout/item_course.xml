@@ -24,21 +24,24 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="科目"/>
+            android:text="科目"
+            android:textColor="@color/c_666666"/>
 
         <TextView
             android:id="@+id/tv_auth"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="讲师"/>
+            android:text="讲师"
+            android:textColor="@color/c_666666"/>
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="课程时间"/>
+            android:text="课程时间"
+            android:textColor="@color/c_666666"/>
     </LinearLayout>
 
 </LinearLayout>

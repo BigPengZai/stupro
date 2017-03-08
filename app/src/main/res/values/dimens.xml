@@ -41,6 +41,7 @@
     <dimen name="size_14">14dp</dimen>
     <dimen name="size_15">15dp</dimen>
     <dimen name="size_16">16dp</dimen>
+    <dimen name="size_17">17dp</dimen>
     <dimen name="size_18">18dp</dimen>
     <dimen name="size_20">20dp</dimen>
     <dimen name="size_21">21dp</dimen>
@@ -53,9 +54,10 @@
     <dimen name="size_40">40dp</dimen>
     <dimen name="size_45">45dp</dimen>
     <dimen name="size_46">46dp</dimen>
-
+    <dimen name="size_50">50dp</dimen>
 
     <dimen name="login_padding">@dimen/size_20</dimen>
     <dimen name="edit_height">45dp</dimen>
+
 
 </resources>
