@@ -6,38 +6,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <com.onlyhiedu.mobile.Widget.InputTextView
-        android:id="@+id/edit_pwd"
+    <LinearLayout
         android:layout_width="match_parent"
-        ecdemo:item_close_icon="@mipmap/close_text"
-        android:layout_height="wrap_content"
-        ecdemo:item_hint_text="手机号"/>
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/login_padding"
+        android:layout_marginRight="@dimen/login_padding"
+        android:orientation="vertical">
+
+        <com.onlyhiedu.mobile.Widget.InputTextView
+            android:id="@+id/edit_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ecdemo:item_close_icon="@mipmap/close_text"
+            ecdemo:item_hint_text="手机号码"/>
 
 
-    <com.onlyhiedu.mobile.Widget.InputTextView
-        android:id="@+id/edit_confirm_pw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ecdemo:item_close_icon="@mipmap/close_text"
-        android:layout_marginTop="@dimen/size_15"
-        ecdemo:item_hint_text="密码"/>
+        <com.onlyhiedu.mobile.Widget.InputTextView
+            android:id="@+id/edit_confirm_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_15"
+            ecdemo:item_close_icon="@mipmap/close_text"
+            ecdemo:item_hint_text="密码"/>
 
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/shape_reg_ben_radius"
-        android:text="登录"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_18"/>
+        <Button
+            android:id="@+id/btn_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/selector_reg_btn"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_18"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_next"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/size_10"
-        android:text="忘记密码?"/>
+        <TextView
+            android:id="@+id/tv_forget_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_sign"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_10"
+            android:padding="@dimen/size_10"
+            android:text="忘记密码?"
+            android:textColor="@color/c_242424"/>
+    </LinearLayout>
 </LinearLayout>

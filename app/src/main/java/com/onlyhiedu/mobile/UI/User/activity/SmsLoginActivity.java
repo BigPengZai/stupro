@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
@@ -64,20 +65,27 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({R.id.tv_code, R.id.btn_sign,R.id.ic_delete, R.id.rl_pwd_login})
+    @OnClick({R.id.tv_code, R.id.btn_sign, R.id.ic_delete, R.id.rl_pwd_login, R.id.btn_sign_in})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_code:
+
                 getMsgCode();
                 break;
             case R.id.btn_sign:
+
                 toLogin();
                 break;
             case R.id.ic_delete:
+
                 finish();
                 break;
             case R.id.rl_pwd_login:
+
                 finish();
+            case R.id.btn_sign_in:
+
+                startActivity(new Intent(this, RegActivity.class));
                 break;
         }
     }
@@ -95,7 +103,6 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             mPresenter.readSecond();
         }
     }
-
 
 
 }

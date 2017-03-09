@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="start"
-        app:itemTextColor="@color/c_F42440"
+        app:itemTextColor="@drawable/tab_text_color"
         app:menu="@menu/menu_home_bottom"/>
 
 </LinearLayout>

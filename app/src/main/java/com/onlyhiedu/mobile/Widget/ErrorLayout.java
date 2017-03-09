@@ -165,7 +165,7 @@ public class ErrorLayout extends LinearLayout implements
             case NODATA:
                 mErrorState = NODATA;
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
-                img.setBackgroundResource(R.mipmap.ic_launcher);
+                img.setBackgroundResource(R.mipmap.empty_pic);
                 img.setVisibility(View.VISIBLE);
                 mLoading.setVisibility(View.GONE);
                 setTvNoDataContent();

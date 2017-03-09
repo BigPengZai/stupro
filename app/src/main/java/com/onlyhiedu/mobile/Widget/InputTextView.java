@@ -80,6 +80,10 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
     }
 
 
+    public void setInputEnable(boolean enable) {
+        mEditText.setEnabled(enable);
+    }
+
     @Override
     public void onClick(View view) {
         mEditText.setText("");

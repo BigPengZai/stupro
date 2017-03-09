@@ -11,11 +11,17 @@
 
     <include layout="@layout/layout_toolbar"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/c_eeeeee"/>
+
     <com.onlyhiedu.mobile.Widget.InputTextView
         android:id="@+id/edit_old_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_padding"
+        android:layout_marginTop="@dimen/size_15"
         ecdemo:item_close_icon="@mipmap/close_text"
         ecdemo:item_hint_text="原密码"/>
 

@@ -50,6 +50,20 @@ public abstract class SimpleActivity extends SupportActivity {
             }
         });
     }
+    protected void setToolBar(String title,int iconId) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
+        tvTitle.setText(title);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(iconId);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressedSupport();
+            }
+        });
+    }
 
 
     @Override

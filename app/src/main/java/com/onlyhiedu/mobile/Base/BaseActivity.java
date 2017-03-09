@@ -63,6 +63,21 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         });
     }
 
+    protected void setToolBar(String title, int iconId) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
+        tvTitle.setText(title);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(iconId);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressedSupport();
+            }
+        });
+    }
+
     protected ActivityComponent getActivityComponent() {
         return DaggerActivityComponent.builder()
                 .appComponent(App.getAppComponent())

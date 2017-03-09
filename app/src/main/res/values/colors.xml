@@ -13,8 +13,8 @@
     <color name="list_divider">#ECEAEA</color>
     <color name="text_color_hint">#C9C8C8</color>
 
-
     <color name="c_F42440">#F42440</color>
+    <color name="c_E61B36">#E61B36</color>
     <color name="c_929292">#929292</color>
     <color name="c_262626">#262626</color>
     <color name="c_F74D64">#F74D64</color>
@@ -23,10 +23,14 @@
     <color name="c_070707">#070707</color>
     <color name="c_ACABAB">#ACABAB</color>
     <color name="c_666666">#666666</color>
+    <color name="c_242424">#242424</color>
+    <color name="c_eeeeee">#eeeeee</color>
+
 
     <!--wheelview-->
     <color name="c3">#dedede</color>
     <color name="c7">#383838</color>
     <color name="c9">#cc3333</color>
+
 
 </resources>

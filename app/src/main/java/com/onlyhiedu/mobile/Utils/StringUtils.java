@@ -42,7 +42,7 @@ public class StringUtils {
             return false;
         }
         if (password.length() < 6 || password.length() > 20) {
-            Toast.makeText(App.getInstance().getApplicationContext(), "密码要在8-20位之间", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getInstance().getApplicationContext(), "密码要在6-20位之间", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

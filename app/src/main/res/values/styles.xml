@@ -74,4 +74,14 @@
         <item name="android:textSize">@dimen/sp_18</item>
     </style>
 
+
+    <style name="register_btn" parent="match_wrap">
+        <item name="android:layout_marginRight">@dimen/login_padding</item>
+        <item name="android:layout_marginLeft">@dimen/login_padding</item>
+        <item name="android:background">@drawable/selector_reg_btn</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+    </style>
+
+
 </resources>

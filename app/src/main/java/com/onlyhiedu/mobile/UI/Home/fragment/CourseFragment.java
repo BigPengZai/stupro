@@ -35,12 +35,12 @@ public class CourseFragment extends SimpleFragment implements View.OnClickListen
 
     @Override
     protected void initEventAndData() {
-        mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
+        mErrorLayout.setState(ErrorLayout.NODATA);
         mErrorLayout.setOnLayoutClickListener(this);
 
         mAdapter = new CourseFragmentAdapter(mContext);
         UIUtils.setRecycleAdapter(mContext,mRecyclerView,mAdapter);
-        mAdapter.addItem("");mAdapter.addItem("");mAdapter.addItem("");
+//        mAdapter.addItem("");mAdapter.addItem("");mAdapter.addItem("");
     }
 
     @Override
