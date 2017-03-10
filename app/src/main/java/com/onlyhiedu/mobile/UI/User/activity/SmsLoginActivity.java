@@ -83,6 +83,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             case R.id.rl_pwd_login:
 
                 finish();
+                break;
             case R.id.btn_sign_in:
 
                 startActivity(new Intent(this, RegActivity.class));

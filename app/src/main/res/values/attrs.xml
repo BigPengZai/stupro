@@ -12,5 +12,10 @@
         <attr name="item_showIcon" format="boolean"/>
         <attr name="item_close_icon" format="reference|color"/>
         <attr name="item_hint_text" format="string"/>
+        <attr name="item_InputType">
+            <enum name="text" value="0"/>
+            <enum name="phone" value="1"/>
+            <enum name="password" value="2"/>
+        </attr>
     </declare-styleable>
 </resources>

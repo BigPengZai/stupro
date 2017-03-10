@@ -9,7 +9,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/window_bg</item>
         <item name="android:textColor">#262626</item>
-
     </style>
 
     <style name="match_parent">
@@ -40,7 +39,6 @@
     <style name="base_img" parent="@style/wrap_wrap">
 
     </style>
-
 
 
     <style name="select_log_out" parent="@style/match_wrap">

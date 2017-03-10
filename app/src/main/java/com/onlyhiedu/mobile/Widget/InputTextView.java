@@ -4,7 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.InputType;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +28,8 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
     private EditText mEditText;
     private ImageView mImageClose;
 
+    private boolean isPassword;
+    private boolean show;
 
     public InputTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,6 +42,7 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         setShowIcon(localTypedArray.getBoolean(R.styleable.input_text_item_showIcon, false));
         setIcon(localTypedArray.getDrawable(R.styleable.input_text_item_close_icon));
         setHint(localTypedArray.getString(R.styleable.input_text_item_hint_text));
+        setInputType(localTypedArray.getInt(R.styleable.input_text_item_InputType, 0));
 
         mEditText.addTextChangedListener(this);
         mImageClose.setOnClickListener(this);
@@ -47,6 +55,22 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
             mImageClose.setVisibility(GONE);
         }
     }
+
+    public void setInputType(int inputType) {
+        switch (inputType) {
+            case 0:
+                break;
+            case 1:
+                mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                break;
+            case 2:
+                mEditText.setTransformationMethod(PasswordTransformationMethod
+                        .getInstance());
+                break;
+        }
+
+    }
+
 
     private void setIcon(Drawable dra) {
         mImageClose.setImageDrawable(dra);
@@ -84,8 +108,47 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         mEditText.setEnabled(enable);
     }
 
+
+    public void setPassword(boolean password) {
+        isPassword = password;
+    }
+
+    public void pwdTextShow() {
+        mEditText.setTransformationMethod(HideReturnsTransformationMethod
+                .getInstance());
+        mImageClose.setImageResource(R.mipmap.visible);
+        initEditText();
+    }
+
+    public void pwdTextHint() {
+        mEditText.setTransformationMethod(PasswordTransformationMethod
+                .getInstance());
+        mImageClose.setImageResource(R.mipmap.ic_pwd_hide);
+        initEditText();
+    }
+
+    private void initEditText() {
+        CharSequence s = mEditText.getText();
+        if (s instanceof Spannable) {
+            Spannable spanText = (Spannable) s;
+            Selection.setSelection(spanText, s.length());
+        }
+    }
+
     @Override
     public void onClick(View view) {
-        mEditText.setText("");
+        if (isPassword) {
+            if (show) {
+                show = false;
+                pwdTextShow();
+            } else {
+                show = true;
+                pwdTextHint();
+            }
+        } else {
+            mEditText.setText("");
+        }
     }
+
+
 }

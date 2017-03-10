@@ -14,7 +14,8 @@
 
 
         <!-- User -->
-        <activity android:name=".UI.User.activity.LoginActivity">
+        <activity
+            android:name=".UI.User.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

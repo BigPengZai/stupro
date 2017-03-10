@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.Base;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,10 @@ public abstract class SimpleActivity extends SupportActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
+
+        //竖屏锁定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         mUnBinder = ButterKnife.bind(this);
         mContext = this;
         AppManager.getAppManager().addActivity(this);
@@ -50,7 +55,8 @@ public abstract class SimpleActivity extends SupportActivity {
             }
         });
     }
-    protected void setToolBar(String title,int iconId) {
+
+    protected void setToolBar(String title, int iconId) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
         tvTitle.setText(title);

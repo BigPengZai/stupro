@@ -63,6 +63,7 @@
             android:layout_marginLeft="@dimen/size_30"
             android:background="@drawable/transparent"
             android:hint="手机"
+            android:inputType="phone"
             android:textColorHint="@color/white"/>
 
     </LinearLayout>
@@ -93,6 +94,7 @@
             android:layout_weight="1"
             android:background="@drawable/transparent"
             android:hint="验证码"
+            android:inputType="phone"
             android:textColorHint="@color/white"/>
 
         <View

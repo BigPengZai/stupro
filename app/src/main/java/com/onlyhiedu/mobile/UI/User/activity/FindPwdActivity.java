@@ -40,6 +40,9 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
     @Override
     protected void initView() {
         setToolBar("找回密码", R.mipmap.close);
+
+        mEditPwd.setPassword(true);
+
     }
 
 

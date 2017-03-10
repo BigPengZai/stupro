@@ -30,22 +30,48 @@ public class StringUtils {
     }
 
     /**
-     * 密码
+     * 校验密码 ：密码要求6-12位,非纯数字,非纯字母
      *
      * @param context
      * @param password
      * @return
      */
     public static boolean checkPassword(String password) {
+
         if (TextUtils.isEmpty(password)) {
             Toast.makeText(App.getInstance().getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        // 判断一个字符串是否含有中文
+        if (isContainsChinese(password)) {
+            Toast.makeText(App.getInstance().getApplicationContext(), "不能包含中文", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         if (password.length() < 6 || password.length() > 20) {
             Toast.makeText(App.getInstance().getApplicationContext(), "密码要在6-20位之间", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        if (password.matches("^[a-zA-Z]+$") || password.matches("^[0-9]+$")) {
+            Toast.makeText(App.getInstance().getApplicationContext(), "密码不能是纯数字或字母", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    // 判断一个字符串是否含有中文
+    public static boolean isContainsChinese(String str) {
+        String regEx = "[\u4e00-\u9fa5]";
+        Pattern pat = Pattern.compile(regEx);
+        Matcher matcher = pat.matcher(str);
+        boolean flg = false;
+        if (matcher.find()) {
+            flg = true;
+        }
+        return flg;
     }
 
 }

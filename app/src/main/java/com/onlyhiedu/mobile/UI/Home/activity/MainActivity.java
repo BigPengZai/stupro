@@ -15,7 +15,6 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
 
 
 
-
     private ClassFragment mClassFragment;
     private MeFragment mMeFragment;
 
