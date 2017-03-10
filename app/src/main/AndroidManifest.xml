@@ -14,8 +14,10 @@
 
 
         <!-- User -->
-        <activity
-            android:name=".UI.User.activity.LoginActivity">
+        <activity android:name=".UI.User.activity.LoginActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -29,6 +31,9 @@
         <activity android:name=".UI.Setting.activity.SettingActivity"/>
         <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
         <activity android:name=".UI.Setting.activity.FeedBackActivity"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
     </application>
 
 </manifest>

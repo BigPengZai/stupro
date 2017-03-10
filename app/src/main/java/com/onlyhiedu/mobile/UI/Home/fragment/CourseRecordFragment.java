@@ -39,10 +39,13 @@ public class CourseRecordFragment extends SimpleFragment implements View.OnClick
         mErrorLayout.setOnLayoutClickListener(this);
 
         mAdapter = new CourseFragmentAdapter(mContext);
+        mAdapter.addItem("");
+        mAdapter.addItem("");
+        mAdapter.addItem("");
+        for (int i = 0; i < 15; i++) {
+            mAdapter.addItem("");
+        }
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
-        mAdapter.addItem("");
-        mAdapter.addItem("");
-        mAdapter.addItem("");
 
     }
 

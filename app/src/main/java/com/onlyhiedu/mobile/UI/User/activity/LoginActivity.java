@@ -6,8 +6,11 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -21,19 +24,21 @@ import butterknife.OnClick;
 
 public class LoginActivity extends SimpleActivity {
 
-    private boolean isChecked = true;
-    public static final String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.edit_number)
     EditText mEditNumber;
     @BindView(R.id.edit_pwd)
     EditText mEditPwd;
+
     @BindView(R.id.img_show)
     ImageView mImg_Show;
-
-
+    private boolean isChecked = true;
+    public static final String TAG = LoginActivity.class.getSimpleName();
+    private boolean mShow;
+    InputMethodManager inputMethodManager;
     @Override
     protected int getLayout() {
+
         return R.layout.activity_login;
     }
 
@@ -43,10 +48,9 @@ public class LoginActivity extends SimpleActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
     }
 
-    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show})
+    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_sign:
@@ -64,26 +68,25 @@ public class LoginActivity extends SimpleActivity {
             case R.id.img_show:
                 showPwd();
                 break;
+            case R.id.edit_number:
+                isShowDemo();
+                break;
         }
     }
-
     private void showPwd() {
         if (isChecked) {
             mEditPwd.setTransformationMethod(HideReturnsTransformationMethod
                     .getInstance());
             isChecked = false;
-            mImg_Show.setImageResource(R.mipmap.visible);
+            mImg_Show.setImageResource(R.mipmap.ic_launcher);
         } else {
-
             mEditPwd.setTransformationMethod(PasswordTransformationMethod
                     .getInstance());
             isChecked = true;
             mImg_Show.setImageResource(R.mipmap.ic_pwd_hide);
-
         }
         initEditText();
     }
-
     private void initEditText() {
         CharSequence s = mEditPwd.getText();
         if (s instanceof Spannable) {
@@ -91,7 +94,6 @@ public class LoginActivity extends SimpleActivity {
             Selection.setSelection(spanText, s.length());
         }
     }
-
     private void toLogin() {
         String number = mEditNumber.getText().toString();
         String pwd = mEditPwd.getText().toString();
@@ -99,5 +101,9 @@ public class LoginActivity extends SimpleActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
+    }
+
+    public void isShowDemo() {
+
     }
 }
