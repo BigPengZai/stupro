@@ -59,6 +59,9 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
         mSexWheel = WheelUtils.getWhellView(mContext, sexL, mSexData);
         mGradeWheel = WheelUtils.getWhellView(mContext, gradeL, mGradeData);
         mAddressWheel = WheelUtils.getWhellView2(mContext, addressL, mAddressData, mAddressData2);
+
+        mSettingName.hintRightImage();
+
     }
 
 
@@ -105,12 +108,9 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
     };
 
 
-    @OnClick({R.id.setting_name, R.id.setting_sex, R.id.setting_grade, R.id.setting_address, R.id.setting})
+    @OnClick({R.id.setting_sex, R.id.setting_grade, R.id.setting_address, R.id.setting})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.setting_name:
-                //TODO
-                break;
             case R.id.setting_sex:
 
                 mSexWheel.show();

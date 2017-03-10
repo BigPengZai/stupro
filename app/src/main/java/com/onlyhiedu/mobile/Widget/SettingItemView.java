@@ -63,4 +63,8 @@ public class SettingItemView extends RelativeLayout {
     public void setShowDivider(boolean showDivider) {
         mDividerView.setVisibility(showDivider ? View.VISIBLE : View.GONE);
     }
+
+    public void hintRightImage() {
+        mImage.setVisibility(GONE);
+    }
 }
