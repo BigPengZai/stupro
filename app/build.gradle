@@ -14,7 +14,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [ UMENG_CHANNEL_VALUE:"default_channel" ]
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "default_channel"]
+
     }
 
     signingConfigs {
@@ -41,9 +42,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-
-
     }
+    sourceSets{
+        main{
+            jniLibs.srcDirs=['libs']
+        }
+    }
+
     productFlavors {
         onlyedu{}
 //        qihu360 {} // 360手机助手
@@ -134,4 +139,5 @@ dependencies {
     //Widget
     compile 'com.contrarywind:Android-PickerView:3.0.4'
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
+    compile files('libs/agora-rtc-sdk.jar')
 }

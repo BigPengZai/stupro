@@ -90,11 +90,14 @@ public class LoginActivity extends SimpleActivity {
     }
 
     private void toLogin() {
-        String number = mEditNumber.getText().toString();
-        String pwd = mEditPwd.getText().toString();
-        if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
+//        String number = mEditNumber.getText().toString();
+//        String pwd = mEditPwd.getText().toString();
+//        if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
+//            startActivity(new Intent(this, MainActivity.class));
+//            finish();
+//        }
+
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

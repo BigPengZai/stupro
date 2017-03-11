@@ -1,11 +1,14 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
+import com.onlyhiedu.mobile.UI.SessionRoom.sessionui.SessionRoomActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
@@ -16,7 +19,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/3/1.
  */
 
-public class CourseFragment extends SimpleFragment implements View.OnClickListener {
+public class CourseFragment extends SimpleFragment implements View.OnClickListener, BaseRecyclerAdapter.OnItemClickListener {
 
     private CourseFragmentAdapter mAdapter;
 
@@ -41,10 +44,11 @@ public class CourseFragment extends SimpleFragment implements View.OnClickListen
         mAdapter.addItem("");
         mAdapter.addItem("");
         mAdapter.addItem("");
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 8; i++) {
             mAdapter.addItem("");
         }
         UIUtils.setRecycleAdapter(mContext,mRecyclerView,mAdapter);
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -53,4 +57,10 @@ public class CourseFragment extends SimpleFragment implements View.OnClickListen
     }
 
 
+    @Override
+    public void onItemClick(int position, long itemId) {
+        //上课狗屎代码
+        getContext().startActivity(new Intent(getContext(),SessionRoomActivity.class));
+        getActivity().finish();
+    }
 }

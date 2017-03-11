@@ -9,6 +9,8 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
+import com.onlyhiedu.mobile.UI.SessionRoom.model.CurrentUserSettings;
+import com.onlyhiedu.mobile.UI.SessionRoom.model.WorkerThread;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
@@ -34,6 +36,21 @@ public class App extends Application {
                 AppCompatDelegate.MODE_NIGHT_NO);
     }
 
+
+    private WorkerThread mWorkerThread;
+
+    public synchronized void initWorkerThread() {
+        if (mWorkerThread == null) {
+            mWorkerThread = new WorkerThread(getApplicationContext());
+            mWorkerThread.start();
+
+            mWorkerThread.waitForReady();
+        }
+    }
+
+    public synchronized WorkerThread getWorkerThread() {
+        return mWorkerThread;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,4 +75,6 @@ public class App extends Application {
                 .appModule(new AppModule(instance))
                 .build();
     }
+    public static final CurrentUserSettings mVideoSettings = new CurrentUserSettings();
+
 }

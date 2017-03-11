@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.onlyhiedu.mobile">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <application
         android:name=".App.App"
         android:allowBackup="true"
@@ -31,6 +38,18 @@
         <activity android:name=".UI.Setting.activity.SettingActivity"/>
         <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
         <activity android:name=".UI.Setting.activity.FeedBackActivity"/>
+
+        <activity android:name=".UI.SessionRoom.sessionui.SessionRoomActivity"/>
+        <activity
+           android:name=".UI.SessionRoom.sessionui.ChatActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+             />
+        <activity
+            android:name=".UI.SessionRoom.sessionui.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:label="@string/label_settings" />
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />

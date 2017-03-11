@@ -35,10 +35,10 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<String> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, String item, int position) {
         ViewHolder h = (ViewHolder) holder;
-        View view = h.itemView;
-        view.setScaleY(0.7f);
-        view.setScaleX(0.7f);
-        ViewCompat.animate(view).scaleX(1.0f).scaleY(1.0f).setDuration(500).setInterpolator(new OvershootInterpolator()).start();
+//        View view = h.itemView;
+//        view.setScaleY(0.7f);
+//        view.setScaleX(0.7f);
+//        ViewCompat.animate(view).scaleX(1.0f).scaleY(1.0f).setDuration(500).setInterpolator(new OvershootInterpolator()).start();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
