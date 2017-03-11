@@ -28,6 +28,9 @@ import butterknife.OnClick;
 
 public class MeFragment extends SimpleFragment implements View.OnClickListener {
 
+    private static final int INIT_ADDRESS_DATA_DONE = 7;
+    private boolean showAddress = false;
+
     private OptionsPickerView mSexWheel;
     private OptionsPickerView mGradeWheel;
     private OptionsPickerView mAddressWheel;
@@ -55,14 +58,17 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
 
     @Override
     protected void initEventAndData() {
-        initAddressData();
-        mSexWheel = WheelUtils.getWhellView(mContext, sexL, mSexData);
-        mGradeWheel = WheelUtils.getWhellView(mContext, gradeL, mGradeData);
-        mAddressWheel = WheelUtils.getWhellView2(mContext, addressL, mAddressData, mAddressData2);
-
         mSettingName.hintRightImage();
-
+        thread.start();
     }
+
+    Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            initAddressData();
+            showAddress = true;
+        }
+    });
 
 
     private void initAddressData() {
@@ -112,16 +118,24 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_sex:
-
+                if (mSexWheel == null) {
+                    mSexWheel = WheelUtils.getWhellView(mContext, sexL, mSexData);
+                }
                 mSexWheel.show();
                 break;
             case R.id.setting_grade:
-
+                if (mGradeWheel == null) {
+                    mGradeWheel = WheelUtils.getWhellView(mContext, gradeL, mGradeData);
+                }
                 mGradeWheel.show();
                 break;
             case R.id.setting_address:
-
-                mAddressWheel.show();
+                if (mAddressWheel == null ) {
+                    mAddressWheel = WheelUtils.getWhellView2(mContext, addressL, mAddressData, mAddressData2);
+                }
+                if(showAddress){
+                    mAddressWheel.show();
+                }
                 break;
             case R.id.setting:
                 startActivity(new Intent(getContext(), SettingActivity.class));
