@@ -59,8 +59,6 @@ public class CourseFragment extends SimpleFragment implements View.OnClickListen
 
     @Override
     public void onItemClick(int position, long itemId) {
-        //上课狗屎代码
-        getContext().startActivity(new Intent(getContext(),SessionRoomActivity.class));
-        getActivity().finish();
+        mActivity.startActivity(new Intent(getContext(),SessionRoomActivity.class));
     }
 }
