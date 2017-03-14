@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Home.activity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
@@ -17,7 +18,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
 
     private ClassFragment mClassFragment;
     private MeFragment mMeFragment;
-
+    private long mExitTime = 0;
 
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
@@ -47,5 +48,20 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
             showHideFragment(mMeFragment);
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressedSupport() {
+//        super.onBackPressedSupport();
+        exit();
+    }
+
+    private void exit() {
+        if (System.currentTimeMillis() - mExitTime > 2000) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        } else {
+            finish();
+        }
     }
 }

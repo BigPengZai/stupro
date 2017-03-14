@@ -21,15 +21,24 @@
 
 
         <!-- User -->
-        <activity android:name=".UI.User.activity.LoginActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+        <activity android:name=".UI.Home.activity.SplashActivity"
+                  android:theme="@style/SplashTheme"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".UI.User.activity.LoginActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>-->
         </activity>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>

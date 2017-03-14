@@ -90,6 +90,10 @@
         <item name="android:shadowDy">2</item>
         <item name="android:shadowColor">@color/transparent_75_white</item>
     </style>
-
+    <!--splash -->
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
 </resources>
