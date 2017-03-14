@@ -5,6 +5,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
@@ -13,7 +14,6 @@ import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import butterknife.BindView;
 
 public class MainActivity extends SimpleActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-
 
 
     private ClassFragment mClassFragment;
@@ -61,7 +61,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
-            finish();
+            AppManager.getAppManager().AppExit();
         }
     }
 }
