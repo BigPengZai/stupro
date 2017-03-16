@@ -32,7 +32,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     protected Activity mActivity;
     protected Context mContext;
 
-    private boolean isInited = false;
     private Unbinder mUnBinder;
 
     @Override

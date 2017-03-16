@@ -12,12 +12,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceView;
 
-
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.SessionRoom.propeller.Constant;
+import com.onlyhiedu.mobile.Utils.DynamicKey4;
 
 import java.io.File;
-
+import java.util.Date;
+import java.util.Random;
 
 import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
@@ -138,8 +139,27 @@ public class WorkerThread extends Thread {
         }
 
         ensureRtcEngineReadyLock();
-        int openVCall = mRtcEngine.joinChannel(null, channel, "OpenVCall", uid);
+
+
+        String appId = mContext.getString(R.string.private_app_id);
+        int tsWrong = (int)(new Date().getTime()/1000);
+        int ts = (int) (System.currentTimeMillis()/1000);
+
+        int r = new Random().nextInt();
+//        long uid = my_uid;
+        int expiredTs = 0;
+
+        Log.d(TAG, "appId:"+appId);
+        try {
+            appId = DynamicKey4.generateMediaChannelKey(appId, "a8e0dbb830d44c9f8e7e5a4e32c62c53", "AAA", ts, r, uid, expiredTs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        int openVCall = mRtcEngine.joinChannel(appId, channel, "OpenVCall", uid);
         Log.d(TAG, "openVCall:"+openVCall);
+        Log.d(TAG, "appId:"+appId);
         mEngineConfig.mChannel = channel;
 
         enablePreProcessor();

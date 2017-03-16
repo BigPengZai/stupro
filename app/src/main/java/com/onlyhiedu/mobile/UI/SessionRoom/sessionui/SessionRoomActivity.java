@@ -20,6 +20,7 @@ import com.onlyhiedu.mobile.UI.SessionRoom.model.ConstantApp;
 
 
 public class SessionRoomActivity extends BaseSessionActivity implements View.OnClickListener {
+
     public static final String TAG = SessionRoomActivity.class.getSimpleName();
     private Button mMBut_stu;
     private Button mBut_Guwen;

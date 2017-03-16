@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -79,18 +80,22 @@ public class RetrofitHelper {
                 return response;
             }
         };
-//        Interceptor apikey = new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request();
-//                request = request.newBuilder()
-//                        .addHeader("apikey", Constants.KEY_API)
-//                        .build();
-//                return chain.proceed(request);
-//            }
-//        };
+        Interceptor parameters = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+                HttpUrl originalHttpUrl = original.url();
+                HttpUrl url = originalHttpUrl.newBuilder()
+                        .addQueryParameter("apikey", "your-actual-api-key")
+                        .build();
+                Request.Builder requestBuilder = original.newBuilder()
+                        .url(url);
+                Request request = requestBuilder.build();
+                return chain.proceed(request);
+            }
+        };
         builder.addNetworkInterceptor(cacheInterceptor);
-//        builder.addInterceptor(apikey);
+        builder.addInterceptor(parameters);
         builder.cache(cache).addInterceptor(cacheInterceptor);
         //设置超时
         builder.connectTimeout(10, TimeUnit.SECONDS);

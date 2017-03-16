@@ -21,7 +21,6 @@ public abstract class SimpleFragment extends SupportFragment {
     protected Activity mActivity;
     protected Context mContext;
     private Unbinder mUnBinder;
-    private boolean isInited = false;
 
     @Override
     public void onAttach(Context context) {
@@ -41,17 +40,6 @@ public abstract class SimpleFragment extends SupportFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUnBinder = ButterKnife.bind(this, view);
-//        if (savedInstanceState == null) {
-//            if (!isHidden()) {
-//                isInited = true;
-//                initEventAndData();
-//            }
-//        } else {
-//            if (!isSupportHidden()) {
-//                isInited = true;
-//                initEventAndData();
-//            }
-//        }
     }
     //类库支持的懒加载
     @Override
@@ -61,15 +49,6 @@ public abstract class SimpleFragment extends SupportFragment {
             initEventAndData();
         }
     }
-
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        if (!isInited && !hidden) {
-//            isInited = true;
-//            initEventAndData();
-//        }
-//    }
 
     @Override
     public void onDestroyView() {
