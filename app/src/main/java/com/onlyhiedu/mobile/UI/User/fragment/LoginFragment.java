@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.UI.User.fraagment;
+package com.onlyhiedu.mobile.UI.User.fragment;
 
 import android.content.Intent;
 import android.view.View;

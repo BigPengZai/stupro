@@ -155,7 +155,7 @@ public class UIUtils {
             child.setPadding(0, 0, 0, 0);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 
-            if ((i + 1 )% 2 == 0) {
+            if ((i + 1) % 2 == 0) {
                 params.leftMargin = left / 2;
                 params.rightMargin = right;
 

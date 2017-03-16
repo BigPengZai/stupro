@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.onlyhiedu.mobile.Dagger.FragmentScope;
 import com.onlyhiedu.mobile.Dagger.Modul.FragmentModule;
-import com.onlyhiedu.mobile.UI.User.fraagment.RegFragment;
+import com.onlyhiedu.mobile.UI.User.fragment.RegFragment;
 
 import dagger.Component;
 

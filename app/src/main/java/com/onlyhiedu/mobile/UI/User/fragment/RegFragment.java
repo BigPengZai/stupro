@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.UI.User.fraagment;
+package com.onlyhiedu.mobile.UI.User.fragment;
 
 import android.view.View;
 import android.view.animation.Animation;

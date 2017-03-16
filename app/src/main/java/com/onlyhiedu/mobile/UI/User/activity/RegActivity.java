@@ -4,8 +4,8 @@ import android.support.design.widget.TabLayout;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.User.fraagment.LoginFragment;
-import com.onlyhiedu.mobile.UI.User.fraagment.RegFragment;
+import com.onlyhiedu.mobile.UI.User.fragment.LoginFragment;
+import com.onlyhiedu.mobile.UI.User.fragment.RegFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;
