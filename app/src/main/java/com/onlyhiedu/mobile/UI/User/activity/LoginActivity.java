@@ -10,20 +10,22 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.onlyhiedu.mobile.Base.SimpleActivity;
+import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
+import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class LoginActivity extends SimpleActivity {
+public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
 
 
     private boolean isChecked = true;
-    public static final String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.edit_number)
     EditText mEditNumber;
@@ -33,12 +35,18 @@ public class LoginActivity extends SimpleActivity {
     ImageView mImg_Show;
 
     @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
+    @Override
     protected int getLayout() {
         return R.layout.activity_login;
     }
 
+
     @Override
-    protected void initEventAndData() {
+    protected void initView() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -90,14 +98,21 @@ public class LoginActivity extends SimpleActivity {
     }
 
     private void toLogin() {
-//        String number = mEditNumber.getText().toString();
-//        String pwd = mEditPwd.getText().toString();
-//        if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-//            startActivity(new Intent(this, MainActivity.class));
-//            finish();
-//        }
+        String number = mEditNumber.getText().toString();
+        String pwd = mEditPwd.getText().toString();
+        if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
+            mPresenter.getUser(number, pwd);
+        }
+    }
 
+    @Override
+    public void showUser() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    @Override
+    public void showError(String msg) {
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">HiEducation</string>
 
+
+
     <string name="state_network_error">网络错误</string>
     <string name="state_loading">正在加载…</string>
     <string name="state_not_more">没有更多数据</string>

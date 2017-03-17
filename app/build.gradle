@@ -14,7 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "default_channel"]
+//        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "default_channel"]
 
     }
 
@@ -23,18 +23,13 @@ android {
             keyAlias 'onlyedu123'
             keyPassword 'onlyedu123'
             storePassword 'onlyedu123'
+            storeFile file('../../onlyedu.jks')
         }
     }
 
 
     buildTypes {
-        debug {
-            // 显示Log
-            minifyEnabled false
-            zipAlignEnabled false
-            shrinkResources false
-            signingConfig signingConfigs.debug
-        }
+
         release {
             minifyEnabled true
             zipAlignEnabled true
@@ -49,8 +44,8 @@ android {
         }
     }
 
-    productFlavors {
-        onlyedu{}
+//    productFlavors {
+//        onlyedu{}
 //        qihu360 {} // 360手机助手
 //        yingyongbao {} // 腾讯应用宝
 //        wandoujia {} // 豌豆荚
@@ -68,34 +63,33 @@ android {
 //        wangyi163 {} // 网易应用
 //        anzhi {} // 安智市场
 //        google {} // google play
-    }
-    productFlavors.all {
-        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
-    }
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            def fileName
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                if (variant.buildType.name.equals('release')) {
-                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime() }.apk"
-                } else if (variant.buildType.name.equals('debug')) {
-                    // apk_渠道名-版本号-版本名称-编译时间.apk
-                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime() }_debug.apk"
-                }
+//    }
+//    productFlavors.all {
+//        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+//    }
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def outputFile = output.outputFile
+//            def fileName
+//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                if (variant.buildType.name.equals('release')) {
+//                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime() }.apk"
+//                } else if (variant.buildType.name.equals('debug')) {
+//                    // apk_渠道名-版本号-版本名称-编译时间.apk
+//                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime() }_debug.apk"
+//                }
+//
+//                output.outputFile = new File(outputFile.parent, fileName)
+//            }
+//        }
+//    }
 
-                output.outputFile = new File(outputFile.parent, fileName)
-            }
-        }
-    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
-
-    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
 
 apt {

@@ -151,7 +151,7 @@ public class WorkerThread extends Thread {
 
         Log.d(TAG, "appId:"+appId);
         try {
-            appId = DynamicKey4.generateMediaChannelKey(appId, "a8e0dbb830d44c9f8e7e5a4e32c62c53", "AAA", ts, r, uid, expiredTs);
+            appId = DynamicKey4.generateMediaChannelKey(appId, "a8e0dbb830d44c9f8e7e5a4e32c62c53", "AAAA", ts, r, uid, expiredTs);
         } catch (Exception e) {
             e.printStackTrace();
         }

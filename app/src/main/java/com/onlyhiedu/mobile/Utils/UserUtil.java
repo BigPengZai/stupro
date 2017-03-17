@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 
 public class UserUtil {
+
     static public Boolean isLogin() {
         ArrayList<UserDataBean> userInfoData = DaoUtil.getInstance().query(UserDataBean.class);
         if (userInfoData != null && userInfoData.size() > 0) {

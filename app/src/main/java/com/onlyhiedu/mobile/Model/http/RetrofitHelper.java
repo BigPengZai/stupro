@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
+import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 
 import java.io.File;
@@ -30,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitHelper {
 
     private static OkHttpClient sOkHttpClient = null;
-    private static WxApis sWxService = null;
+    private static onlyApis sOnlyApis = null;
 
     public RetrofitHelper() {
         init();
@@ -38,7 +39,7 @@ public class RetrofitHelper {
 
     private void init() {
         initOkHttp();
-        sWxService = getWxApiService();
+        sOnlyApis = getOnlyApiService();
     }
 
     private static void initOkHttp() {
@@ -106,14 +107,14 @@ public class RetrofitHelper {
         sOkHttpClient = builder.build();
     }
 
-    private static WxApis getWxApiService() {
-        Retrofit gankRetrofit = new Retrofit.Builder()
-                .baseUrl(WxApis.HOST)
+    private static onlyApis getOnlyApiService() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(sOnlyApis.HOST)
                 .client(sOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        return gankRetrofit.create(WxApis.class);
+        return retrofit.create(onlyApis.class);
     }
 
 
@@ -126,6 +127,11 @@ public class RetrofitHelper {
         return (ResourceSubscriber) observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(subscriber);
+    }
+
+
+    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m) {
+        return sOnlyApis.getUser(z, m, "Android", "student");
     }
 
 

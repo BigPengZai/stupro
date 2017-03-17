@@ -10,6 +10,9 @@ public class Constants {
 
     public static final String PATH_DATA = App.getInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
     public static final String PATH_CACHE = PATH_DATA + "/com.onlyhiedu.mobile.NetCache";
+    public static final String NET_ERROR = "网络异常";
+
+
 
     public static final int NUM_OF_PAGE = 20;
 
@@ -18,9 +21,12 @@ public class Constants {
     public static final int TYPE_B = 102;
     public static final int TYPE_C = 103;
 
+
+
     //================= KEY ==================== //
 
     //================= Intent ================= //
 
     //================= sp_key ================= //
+    public static final String TOKEN = "token";
 }

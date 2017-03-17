@@ -54,10 +54,10 @@ public class StringUtils {
             return false;
         }
 
-        if (password.matches("^[a-zA-Z]+$") || password.matches("^[0-9]+$")) {
-            Toast.makeText(App.getInstance().getApplicationContext(), "密码不能是纯数字或字母", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (password.matches("^[a-zA-Z]+$") || password.matches("^[0-9]+$")) {
+//            Toast.makeText(App.getInstance().getApplicationContext(), "密码不能是纯数字或字母", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
         return true;
     }
