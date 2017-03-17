@@ -141,9 +141,10 @@ public class UIUtils {
 
         tabStrip.setAccessible(true);
         LinearLayout ll_tab = null;
+
         try {
             ll_tab = (LinearLayout) tabStrip.get(tabs);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

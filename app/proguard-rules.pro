@@ -88,8 +88,7 @@ public static ** valueOf(java.lang.String);
 -keep public class  com.onlyhiedu.mobile.Model.http.onlyHttpResponse {
    *;
 }
-
--keep public class  com.onlyhiedu.mobile.Utils.UIUtils {
+-keep public class  android.support.design.widget.TabLayout {
    *;
 }
 -dontwarn okio.**
