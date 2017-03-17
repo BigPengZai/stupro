@@ -27,6 +27,7 @@
 
 
         <TextView
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -41,7 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_10"
-        ecdemo:item_detailText="诚"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="姓名"/>
 

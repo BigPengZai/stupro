@@ -3,7 +3,9 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 
 import java.io.File;
@@ -87,7 +89,7 @@ public class RetrofitHelper {
                 Request original = chain.request();
                 HttpUrl originalHttpUrl = original.url();
                 HttpUrl url = originalHttpUrl.newBuilder()
-                        .addQueryParameter("apikey", "your-actual-api-key")
+                        .addQueryParameter("token", SPUtil.getToken())
                         .build();
                 Request.Builder requestBuilder = original.newBuilder()
                         .url(url);
@@ -133,6 +135,7 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m,Long time) {
         return sOnlyApis.getUser(z, m,time, "Android", "student");
     }
-
-
+    public Flowable<onlyHttpResponse<StudentInfo>> fetchStudentInfo() {
+        return sOnlyApis.getStudentInfo();
+    }
 }

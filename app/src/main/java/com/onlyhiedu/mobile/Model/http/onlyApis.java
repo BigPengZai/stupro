@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 
 import io.reactivex.Flowable;
@@ -29,8 +30,13 @@ public interface onlyApis {
     @POST("client/user/login")
     Flowable<onlyHttpResponse<UserDataBean>> getUser(@Field("phone") String phone, @Field("password") String password,@Field("timestamp") Long timestamp, @Field("deviceType") String deviceType, @Field("userType") String userType);
 
+    /**
+     * 获取学生信息
+     * @param token
+     * @return
+     */
+    @POST("client/user/getStudentInfo")
+    Flowable<onlyHttpResponse<StudentInfo>> getStudentInfo();
 
-//    @FormUrlEncoded
-//    @POST("client/user/getStudentInfo")
 
 }

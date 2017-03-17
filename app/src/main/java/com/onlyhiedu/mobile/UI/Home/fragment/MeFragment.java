@@ -2,14 +2,19 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.onlyhiedu.mobile.App.App;
-import com.onlyhiedu.mobile.Base.SimpleFragment;
+import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.AddressBean;
 import com.onlyhiedu.mobile.Model.bean.AddressModel;
 import com.onlyhiedu.mobile.Model.bean.ProvinceBean;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.presenter.MePresenter;
+import com.onlyhiedu.mobile.UI.Home.presenter.contract.MeContract;
 import com.onlyhiedu.mobile.UI.Setting.activity.SettingActivity;
 import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
@@ -26,9 +31,8 @@ import butterknife.OnClick;
  * Created by xuwc on 2017/2/18.
  */
 
-public class MeFragment extends SimpleFragment implements View.OnClickListener {
+public class MeFragment extends BaseFragment<MePresenter> implements MeContract.View {
 
-    private static final int INIT_ADDRESS_DATA_DONE = 7;
     private boolean showAddress = false;
 
     private OptionsPickerView mSexWheel;
@@ -41,6 +45,9 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
     private ArrayList<ProvinceBean> mAddressData = new ArrayList<>();
     private ArrayList<ArrayList<String>> mAddressData2 = new ArrayList<>();
 
+
+    @BindView(R.id.tv_name)
+    TextView mTvName;
     @BindView(R.id.setting_name)
     SettingItemView mSettingName;
     @BindView(R.id.setting_sex)
@@ -52,15 +59,39 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
 
 
     @Override
+    protected void initInject() {
+        getFragmentComponent().inject(this);
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.fr_me;
     }
 
     @Override
-    protected void initEventAndData() {
+    protected void initView() {
         mSettingName.hintRightImage();
         thread.start();
     }
+
+    @Override
+    protected void initData() {
+         mPresenter.getStudentInfo();
+    }
+
+
+    @Override
+    public void showStudentInfo(StudentInfo data) {
+        mSettingName.setDetailText(data.name);
+        mTvName.setText(data.name);
+        if (data.sex == 0) {
+            mSettingSex.setDetailText("男");
+        } else {
+            mSettingSex.setDetailText("女");
+        }
+        mSettingGrade.setDetailText(data.grade);
+    }
+
 
     Thread thread = new Thread(new Runnable() {
         @Override
@@ -130,10 +161,10 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
                 mGradeWheel.show();
                 break;
             case R.id.setting_address:
-                if (mAddressWheel == null ) {
+                if (mAddressWheel == null) {
                     mAddressWheel = WheelUtils.getWhellView2(mContext, addressL, mAddressData, mAddressData2);
                 }
-                if(showAddress){
+                if (showAddress) {
                     mAddressWheel.show();
                 }
                 break;
@@ -143,4 +174,9 @@ public class MeFragment extends SimpleFragment implements View.OnClickListener {
         }
     }
 
+
+    @Override
+    public void showError(String msg) {
+        Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+    }
 }
