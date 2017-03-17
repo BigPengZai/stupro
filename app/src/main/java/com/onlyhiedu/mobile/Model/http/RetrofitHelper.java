@@ -130,8 +130,8 @@ public class RetrofitHelper {
     }
 
 
-    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m) {
-        return sOnlyApis.getUser(z, m, "Android", "student");
+    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m,Long time) {
+        return sOnlyApis.getUser(z, m,time, "Android", "student");
     }
 
 

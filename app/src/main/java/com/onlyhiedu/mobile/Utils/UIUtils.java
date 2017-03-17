@@ -169,4 +169,14 @@ public class UIUtils {
         }
     }
 
+    /**
+     * 加密后的密码
+     * @param phone
+     * @param pwd
+     * @return
+     */
+    public static String sha512(String phone, String pwd) {
+        return Encrypt.SHA512(phone + "&" + pwd + ":onlyhi");
+    }
+
 }

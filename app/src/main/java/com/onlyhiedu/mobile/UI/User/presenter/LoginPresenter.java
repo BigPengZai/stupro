@@ -6,7 +6,9 @@ import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
+import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.SPUtil;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import javax.inject.Inject;
 
@@ -30,7 +32,12 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
     @Override
     public void getUser(String phone, String pwd) {
-        Flowable<onlyHttpResponse<UserDataBean>> flowable = mRetrofitHelper.fetchUser(phone, pwd);
+
+        long timeMillis = System.currentTimeMillis();
+        String password = Encrypt.SHA512( UIUtils.sha512(phone, pwd) + timeMillis) ;
+
+
+        Flowable<onlyHttpResponse<UserDataBean>> flowable = mRetrofitHelper.fetchUser(phone, password, timeMillis);
 
         ResourceSubscriber observer = new ResourceSubscriber<onlyHttpResponse<UserDataBean>>() {
             @Override

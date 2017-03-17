@@ -27,7 +27,10 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/login")
-    Flowable<onlyHttpResponse<UserDataBean>> getUser(@Field("phone") String phone, @Field("password") String password, @Field("deviceType") String deviceType, @Field("userType") String userType);
+    Flowable<onlyHttpResponse<UserDataBean>> getUser(@Field("phone") String phone, @Field("password") String password,@Field("timestamp") Long timestamp, @Field("deviceType") String deviceType, @Field("userType") String userType);
 
+
+//    @FormUrlEncoded
+//    @POST("client/user/getStudentInfo")
 
 }
