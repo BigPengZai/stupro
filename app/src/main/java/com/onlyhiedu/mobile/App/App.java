@@ -9,14 +9,14 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
-import com.onlyhiedu.mobile.UI.SessionRoom.model.CurrentUserSettings;
-import com.onlyhiedu.mobile.UI.SessionRoom.model.WorkerThread;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.InputStream;
 
+import io.agore.openvcall.model.CurrentUserSettings;
+import io.agore.openvcall.model.WorkerThread;
 import okhttp3.OkHttpClient;
 
 /**

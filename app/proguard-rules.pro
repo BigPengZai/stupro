@@ -29,6 +29,9 @@
 # EventBus
 #声网
 -keep class io.agore.**{*;}
+-keep class io.agora.rtc.audio.**{*;}
+-keep class io.agora.rtc.xm.**{*;}
+-keep class io.agora.rtc.video.**{*;}
 #声网
 
 -keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
@@ -85,11 +88,15 @@ public static ** valueOf(java.lang.String);
 -keep public class  com.onlyhiedu.mobile.Model.bean.** {
     *;
 }
--keep public class  com.onlyhiedu.mobile.Model.http.onlyHttpResponse {
-   *;
-}
 -keep public class  android.support.design.widget.TabLayout {
    *;
 }
+-keep public class com.onlyhiedu.mobile.Model.http.onlyHttpResponse{
+   *;
+}
+#-keep public class com.onlyhiedu.mobile.App.App{
+#   *;
+#}
+
 -dontwarn okio.**
 -dontwarn retrofit2.**

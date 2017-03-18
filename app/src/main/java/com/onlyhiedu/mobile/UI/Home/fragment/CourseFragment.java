@@ -8,7 +8,7 @@ import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
-import com.onlyhiedu.mobile.UI.SessionRoom.sessionui.SessionRoomActivity;
+import io.agore.openvcall.ui.RoomActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
@@ -54,6 +54,6 @@ public class CourseFragment extends SimpleFragment implements View.OnClickListen
 
     @Override
     public void onItemClick(int position, long itemId) {
-         mActivity.startActivity(new Intent(mActivity,SessionRoomActivity.class));
+         mActivity.startActivity(new Intent(mActivity,RoomActivity.class));
     }
 }

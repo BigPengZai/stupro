@@ -34,7 +34,7 @@ public class MePresenter extends RxPresenter<MeContract.View> implements MeContr
             @Override
             public void onNextData(onlyHttpResponse<StudentInfo> data) {
                 if (getView() != null) {
-                    if (data.isHasError()) {
+                    if (!data.isHasError()) {
                         getView().showStudentInfo(data.getData());
                     } else {
                         getView().showError(data.getMessage());

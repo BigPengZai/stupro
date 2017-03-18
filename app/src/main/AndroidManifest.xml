@@ -44,13 +44,13 @@
         <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
         <activity android:name=".UI.Setting.activity.FeedBackActivity"/>
 
-        <activity android:name=".UI.SessionRoom.sessionui.SessionRoomActivity"/>
+        <activity android:name="io.agore.openvcall.ui.RoomActivity"/>
         <activity
-            android:name=".UI.SessionRoom.sessionui.ChatActivity"
+            android:name="io.agore.openvcall.ui.ChatActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".UI.SessionRoom.sessionui.SettingsActivity"
+            android:name="io.agore.openvcall.ui.SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/label_settings"
             android:screenOrientation="portrait"/>
