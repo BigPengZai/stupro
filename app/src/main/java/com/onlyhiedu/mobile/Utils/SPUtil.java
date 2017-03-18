@@ -29,10 +29,17 @@ public class SPUtil {
     public static void setToken(String token) {
         getAppSp().edit().putString(Constants.TOKEN, token).apply();
     }
+
     public static String getToken() {
         return getAppSp().getString(Constants.TOKEN, "");
     }
 
+    public static String getPhone() {
+        return getAppSp().getString(Constants.PHONE, "");
+    }
 
+    public static void setPhone(String phone) {
+        getAppSp().edit().putString(Constants.PHONE, phone).apply();
+    }
 
 }

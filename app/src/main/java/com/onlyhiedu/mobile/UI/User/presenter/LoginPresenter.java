@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.UI.User.presenter;
 
 import android.util.Log;
 
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
@@ -47,8 +48,9 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                 if (getView() != null) {
 
                     if (!data.isHasError()) {
-                        Log.d("xwc","_"+data.getData().token);
+                        Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setToken(data.getData().token);
+                        SPUtil.setPhone(data.getData().phone);
                         getView().showUser();
                     } else {
                         getView().showError(data.getMessage());

@@ -18,5 +18,8 @@ public interface MeContract {
     interface Presenter extends BasePresenter<MeContract.View> {
 
         void getStudentInfo();
+        void updateSex(int sex);
+        void updateGrade(String grade);
+        void updateExamArea(String examArea);
     }
 }

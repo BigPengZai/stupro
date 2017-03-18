@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.onlyhiedu.mobile.App.AppManager;
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
@@ -27,8 +28,8 @@ import java.lang.reflect.Method;
 
 public class UIUtils {
 
-
     public static void startLoginActivity(Context context) {
+        SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();
         context.startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
@@ -171,6 +172,7 @@ public class UIUtils {
 
     /**
      * 加密后的密码
+     *
      * @param phone
      * @param pwd
      * @return

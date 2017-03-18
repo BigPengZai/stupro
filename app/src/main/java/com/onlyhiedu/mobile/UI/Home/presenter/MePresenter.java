@@ -45,4 +45,56 @@ public class MePresenter extends RxPresenter<MeContract.View> implements MeContr
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+    @Override
+    public void updateSex(int sex) {
+
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateSex(sex);
+
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+
+                    getView().showError(data.getMessage());
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+
+    @Override
+    public void updateGrade(String grade) {
+
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateGrade(grade);
+
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+
+                    getView().showError(data.getMessage());
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void updateExamArea(String examArea) {
+
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateExamArea(examArea);
+
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+
+                    getView().showError(data.getMessage());
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
 }

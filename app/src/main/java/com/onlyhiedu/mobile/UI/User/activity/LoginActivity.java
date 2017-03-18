@@ -17,6 +17,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 
 import butterknife.BindView;
@@ -51,6 +52,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        mEditNumber.setText(SPUtil.getPhone());
+
     }
 
     @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number})

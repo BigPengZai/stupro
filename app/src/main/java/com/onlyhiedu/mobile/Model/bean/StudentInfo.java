@@ -35,9 +35,10 @@ public class StudentInfo {
      * connectStatus : successwait
      */
 
-    public int id;
+    public String stuNo;
     public String name;
     public String grade;
-    public int sex;
+    public String examArea;
+    public Integer sex;
 
 }

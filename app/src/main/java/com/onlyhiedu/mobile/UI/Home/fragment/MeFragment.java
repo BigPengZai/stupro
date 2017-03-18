@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,9 @@ import butterknife.OnClick;
 public class MeFragment extends BaseFragment<MePresenter> implements MeContract.View {
 
     private boolean showAddress = false;
+
+    private Integer mSex; //性别
+
 
     private OptionsPickerView mSexWheel;
     private OptionsPickerView mGradeWheel;
@@ -76,7 +80,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
 
     @Override
     protected void initData() {
-         mPresenter.getStudentInfo();
+        mPresenter.getStudentInfo();
     }
 
 
@@ -84,12 +88,18 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
     public void showStudentInfo(StudentInfo data) {
         mSettingName.setDetailText(data.name);
         mTvName.setText(data.name);
+        mSex = data.sex;
         if (data.sex == 0) {
             mSettingSex.setDetailText("男");
-        } else {
+        }
+        if (data.sex == 1) {
             mSettingSex.setDetailText("女");
         }
+        if (data.sex == null) {
+            mSettingSex.setDetailText(null);
+        }
         mSettingGrade.setDetailText(data.grade);
+        mSettingAddress.setDetailText(data.examArea);
     }
 
 
@@ -128,19 +138,33 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
     OptionsPickerView.OnOptionsSelectListener sexL = new OptionsPickerView.OnOptionsSelectListener() {
         @Override
         public void onOptionsSelect(int options1, int option2, int options3, View v) {
-            mSettingSex.setDetailText(mSexData.get(options1).getPickerViewText());
+
+            if (mSex == null || mSex != options1) {
+                mSex = options1;
+                mPresenter.updateSex(mSex);
+                mSettingSex.setDetailText(mSexData.get(options1).getPickerViewText());
+            }
+
         }
     };
     OptionsPickerView.OnOptionsSelectListener gradeL = new OptionsPickerView.OnOptionsSelectListener() {
         @Override
         public void onOptionsSelect(int options1, int option2, int options3, View v) {
-            mSettingGrade.setDetailText(mGradeData.get(options1).getPickerViewText());
+            String grade = mGradeData.get(options1).getPickerViewText();
+            if (TextUtils.isEmpty(mSettingGrade.getDetailText()) || !grade.equals(mSettingGrade.getDetailText())) {
+                mPresenter.updateGrade(grade);
+                mSettingGrade.setDetailText(grade);
+            }
         }
     };
     OptionsPickerView.OnOptionsSelectListener addressL = new OptionsPickerView.OnOptionsSelectListener() {
         @Override
         public void onOptionsSelect(int options1, int option2, int options3, View v) {
-            mSettingAddress.setDetailText(mAddressData.get(options1).getPickerViewText() + mAddressData2.get(options1).get(option2));
+            String address = mAddressData.get(options1).getPickerViewText() + "," + mAddressData2.get(options1).get(option2);
+            if (TextUtils.isEmpty(mSettingAddress.getDetailText()) || !address.equals(mSettingAddress.getDetailText())) {
+                mPresenter.updateExamArea(address);
+                mSettingAddress.setDetailText(address);
+            }
         }
     };
 

@@ -45,7 +45,6 @@ public class WheelUtils {
         ArrayList<ProvinceBean> data = new ArrayList<>();
         data.add(new ProvinceBean(0, "男", "描述部分", "其他数据"));
         data.add(new ProvinceBean(0, "女", "描述部分", "其他数据"));
-        data.add(new ProvinceBean(0, "其他", "描述部分", "其他数据"));
         return data;
     }
 
