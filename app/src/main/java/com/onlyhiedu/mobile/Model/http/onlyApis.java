@@ -59,7 +59,11 @@ public interface onlyApis {
     @POST("client/student/updateGrade")
     Flowable<onlyHttpResponse> updateGrade(@Field("grade") String grade);
 
-
+    /**
+     * 修改高考所在地
+     * @param examArea
+     * @return
+     */
     @FormUrlEncoded
     @POST("client/student/updateExamArea")
     Flowable<onlyHttpResponse> updateExamArea(@Field("examArea") String examArea);
