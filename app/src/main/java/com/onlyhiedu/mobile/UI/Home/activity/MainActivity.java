@@ -39,6 +39,8 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
     }
 
 
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.one) {

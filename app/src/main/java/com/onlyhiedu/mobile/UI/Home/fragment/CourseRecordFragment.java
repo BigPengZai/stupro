@@ -8,12 +8,12 @@ import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
-import io.agore.openvcall.ui.RoomActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
 
 import butterknife.BindView;
+import io.agore.openvcall.ui.RoomActivity;
 
 /**
  * Created by xwc on 2017/3/1.
@@ -42,12 +42,7 @@ public class CourseRecordFragment extends SimpleFragment implements View.OnClick
         mErrorLayout.setOnLayoutClickListener(this);
 
         mAdapter = new CourseFragmentAdapter(mContext);
-        mAdapter.addItem("");
-        mAdapter.addItem("");
-        mAdapter.addItem("");
-        for (int i = 0; i < 15; i++) {
-            mAdapter.addItem("");
-        }
+
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
         mAdapter.setOnItemClickListener(this);
     }

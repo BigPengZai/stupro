@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
+import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 
@@ -67,4 +68,14 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/student/updateExamArea")
     Flowable<onlyHttpResponse> updateExamArea(@Field("examArea") String examArea);
+
+    /**
+     * 获取学生课程列表
+     * @param page
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/student/getNoStartCourseList")
+    Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Field("pageNo") int page);
+
 }

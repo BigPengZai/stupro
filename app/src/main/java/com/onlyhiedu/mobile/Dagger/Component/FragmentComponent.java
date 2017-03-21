@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.onlyhiedu.mobile.Dagger.FragmentScope;
 import com.onlyhiedu.mobile.Dagger.Modul.FragmentModule;
+import com.onlyhiedu.mobile.UI.Home.fragment.CourseFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.User.fragment.RegFragment;
 
@@ -18,5 +19,7 @@ public interface FragmentComponent {
     void inject(RegFragment activity);
 
     void inject(MeFragment activity);
+
+    void inject(CourseFragment activity);
 
 }

@@ -145,7 +145,7 @@ public class ErrorLayout extends LinearLayout implements
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
                 if (SystemUtil.isNetworkConnected()) {
                     tv.setText(R.string.error_view_load_error_click_to_refresh);
-                    img.setBackgroundResource(R.mipmap.ic_launcher);
+                    img.setBackgroundResource(R.mipmap.page_icon_network);
                 } else {
                     tv.setText(R.string.error_view_network_error_click_to_refresh);
                     img.setBackgroundResource(R.mipmap.page_icon_network);
@@ -176,7 +176,7 @@ public class ErrorLayout extends LinearLayout implements
                 break;
             case NODATA_ENABLE_CLICK:
                 mErrorState = NODATA_ENABLE_CLICK;
-                img.setBackgroundResource(R.mipmap.ic_launcher);
+                img.setBackgroundResource(R.mipmap.empty_pic);
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
                 img.setVisibility(View.VISIBLE);
                 mLoading.setVisibility(View.GONE);
