@@ -34,7 +34,6 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     private CourseFragmentAdapter mAdapter;
 
-
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh)
@@ -111,6 +110,8 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         if (mSwipeRefresh.isRefreshing()) {
             mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
             mSwipeRefresh.setRefreshing(false);
+        }else{
+            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
         }
     }
 
