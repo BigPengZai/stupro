@@ -129,7 +129,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void onItemClick(int position, long itemId) {
-        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
+//        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
     }
 
     @Override

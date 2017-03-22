@@ -21,6 +21,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout="@layout/small_video_view_dock" />
+        <Button
+            android:id="@+id/but_dimiss"
+            android:text="我要下课"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 
@@ -38,7 +44,7 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@android:color/white" />
-<!--操作界面-->
+        <!--操作界面-->
         <io.agore.propeller.ui.AGLinearLayout
             android:visibility="gone"
             android:id="@+id/bottom_container"
@@ -158,7 +164,7 @@
             android:layout_width="172dp"
             android:layout_height="144dp"
             android:layout_marginBottom="20dp"
-             />
+            />
 
     </RelativeLayout>
     <RelativeLayout
@@ -166,7 +172,7 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
+        <ProgressBar
             android:id="@+id/iv_loading"
             android:layout_centerInParent="true"
             android:src="@mipmap/ic_launcher"

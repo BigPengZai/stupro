@@ -81,27 +81,5 @@
             android:enabled="false"
             android:text="学生"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/but_guwen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:enabled="false"
-                android:text="顾问/直接登录"/>
-            <Button
-                android:id="@+id/but_jiazhang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:enabled="false"
-                android:text="家长/直接登录"/>
-        </RelativeLayout>
-
     </LinearLayout>
 </RelativeLayout>

@@ -23,8 +23,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String TAG = RoomActivity.class.getSimpleName();
     private Button mMBut_stu;
-    private Button mBut_Guwen;
-    private Button mMBut_jiazhang;
     private EditText mV_channel;
     private EditText mMV_uid;
 
@@ -39,11 +37,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         mV_channel = (EditText) findViewById(R.id.channel_name);
         mMV_uid = (EditText) findViewById(R.id.channel_uid);
         mMBut_stu = (Button) findViewById(R.id.but_stu);
-        mBut_Guwen = (Button) findViewById(R.id.but_guwen);
-        mMBut_jiazhang = (Button) findViewById(R.id.but_jiazhang);
         mMBut_stu.setOnClickListener(this);
-        mBut_Guwen.setOnClickListener(this);
-        mMBut_jiazhang.setOnClickListener(this);
         mMBut_stu.setEnabled(false);
         mV_channel.addTextChangedListener(new TextWatcher() {
             @Override
@@ -59,8 +53,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void afterTextChanged(Editable s) {
                 boolean isEmpty = TextUtils.isEmpty(s.toString());
-                mBut_Guwen.setEnabled(!isEmpty);
-                mMBut_jiazhang.setEnabled(!isEmpty);
             }
         });
         mMV_uid.addTextChangedListener(new TextWatcher() {
@@ -179,26 +171,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             case R.id.but_stu:
                 forwardToRoom();
                 break;
-            case R.id.but_guwen:
-                guwenToRoom();
-                break;
-            case R.id.but_jiazhang:
-                guwenToRoom();
-                break;
         }
-    }
-
-    private void guwenToRoom() {
-        String channel = mV_channel.getText().toString();
-        vSettings().mChannelName = channel;
-        EditText v_encryption_key = (EditText) findViewById(R.id.encryption_key);
-        String encryption = v_encryption_key.getText().toString();
-        vSettings().mEncryptionKey = encryption;
-        Intent i = new Intent(this, ChatActivity.class);
-        i.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME, channel);
-        i.putExtra(ConstantApp.ACTION_KEY_UID, "123");
-        i.putExtra(ConstantApp.ACTION_KEY_ENCRYPTION_KEY, encryption);
-        i.putExtra(ConstantApp.ACTION_KEY_ENCRYPTION_MODE, getResources().getStringArray(R.array.encryption_mode_values)[vSettings().mEncryptionModeIndex]);
-        startActivity(i);
     }
 }

@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.Model.http;
 
 
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 
@@ -82,6 +83,15 @@ public interface onlyApis {
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
     @POST("client/student/getNoStartCourseList")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
+
+    /**
+     * 获取教室信息
+     *
+     * @param
+     * @return
+     */
+    @POST("")
+    Flowable<onlyHttpResponse<RoomInfo>> getRoomInfoList();
 
     /**
      * 修改密码

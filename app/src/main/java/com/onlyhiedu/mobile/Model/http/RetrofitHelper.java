@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Utils.SPUtil;
@@ -102,7 +103,7 @@ public class RetrofitHelper {
         builder.addInterceptor(parameters);
         builder.cache(cache).addInterceptor(cacheInterceptor);
         //设置超时
-        builder.connectTimeout(10, TimeUnit.SECONDS);
+        builder.connectTimeout(15, TimeUnit.SECONDS);
         builder.readTimeout(20, TimeUnit.SECONDS);
         builder.writeTimeout(20, TimeUnit.SECONDS);
         //错误重连
@@ -155,6 +156,10 @@ public class RetrofitHelper {
 
     public Flowable<onlyHttpResponse<CourseList>> fetchGetNoStartCourseList(int page) {
         return sOnlyApis.getNoStartCourseList(page);
+    }
+
+    public Flowable<onlyHttpResponse<RoomInfo>> fetchGetRoomInfoList() {
+        return sOnlyApis.getRoomInfoList();
     }
 
     public Flowable<onlyHttpResponse<CourseList>> fetchGetEndCourseList(int page) {

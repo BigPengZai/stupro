@@ -26,5 +26,7 @@ public interface CourseContract  {
         void getCourseList(boolean isRefresh);
 
         void getEndCourseList(boolean isRefresh);
+
+        void getRoomInfoList();
     }
 }

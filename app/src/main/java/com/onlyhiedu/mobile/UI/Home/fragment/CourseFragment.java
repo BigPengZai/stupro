@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
 import java.util.List;
 
 import butterknife.BindView;
+import io.agore.openvcall.ui.ChatActivity;
 import io.agore.openvcall.ui.RoomActivity;
 
 /**
@@ -40,6 +42,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     RecyclerRefreshLayout mSwipeRefresh;
     @BindView(R.id.error_layout)
     ErrorLayout mErrorLayout;
+    private Intent mIntent;
 
     @Override
     protected void initInject() {
@@ -73,6 +76,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
                 onRefreshing();
             }
         });
+
     }
 
     @Override
@@ -110,7 +114,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         if (mSwipeRefresh.isRefreshing()) {
             mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
             mSwipeRefresh.setRefreshing(false);
-        }else{
+        } else {
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
         }
     }
@@ -129,7 +133,14 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void onItemClick(int position, long itemId) {
-        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
+        CourseList.ListBean item = mAdapter.getItem(position);
+        if (item != null) {
+            mIntent = new Intent(mActivity, ChatActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("item", item);
+            mIntent.putExtras(bundle);
+            mActivity.startActivity(mIntent);
+        }
     }
 
     @Override

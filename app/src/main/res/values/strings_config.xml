@@ -4,6 +4,7 @@
     <!-- PLEASE KEEP THIS App ID IN SAFE PLACE -->
     <!-- Get your own app id at https://dashboard.agora.io/ -->
     <string name="private_app_id">79ab6c141bd84eb08621b98063fe23af</string>
+    <string name="private_app_cate">a8e0dbb830d44c9f8e7e5a4e32c62c53</string>
 
     <string-array name="encryption_mode_values">
         <item>AES-128-XTS</item>

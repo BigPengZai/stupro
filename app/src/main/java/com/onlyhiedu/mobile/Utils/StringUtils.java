@@ -73,5 +73,14 @@ public class StringUtils {
         }
         return flg;
     }
+    //检查字符串是否数字
+    public static boolean isNumeric(String str){
+        for (int i = str.length();--i>=0;){
+            if (!Character.isDigit(str.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

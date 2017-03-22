@@ -104,4 +104,9 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+
+    @Override
+    public void getRoomInfoList() {
+
+    }
 }

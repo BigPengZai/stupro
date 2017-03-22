@@ -64,6 +64,7 @@ public class App extends Application {
         initGlide();
 
         DaoUtil.getInstance(this);
+        initWorkerThread();
     }
     private void initGlide(){
         Glide.get(this).register(GlideUrl.class,InputStream.class,new OkHttpUrlLoader.Factory(new OkHttpClient()));
