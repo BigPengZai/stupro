@@ -1,10 +1,11 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
-import android.content.DialogInterface;
+import android.widget.Toast;
 
-import com.onlyhiedu.mobile.Base.SimpleActivity;
+import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.Utils.DialogListener;
+import com.onlyhiedu.mobile.UI.Setting.presenter.ModifyPwPresenter;
+import com.onlyhiedu.mobile.UI.Setting.presenter.contract.ModifyPwContract;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 
@@ -15,7 +16,7 @@ import butterknife.OnClick;
  * Created by pengpeng on 2017/3/3.
  */
 
-public class ModifyPwActivity extends SimpleActivity {
+public class ModifyPwActivity extends BaseActivity<ModifyPwPresenter> implements ModifyPwContract.View {
 
     @BindView(R.id.edit_old_pw)
     InputTextView mEdit_Old_Number;
@@ -26,34 +27,49 @@ public class ModifyPwActivity extends SimpleActivity {
 
 
     @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
+    @Override
     protected int getLayout() {
         return R.layout.activity_modify;
     }
 
     @Override
-    protected void initEventAndData() {
+    protected void initView() {
         setToolBar("设置");
     }
 
-
     @OnClick(R.id.btn_confirm)
     public void onClick() {
+        String newPwd = mEdit_New_Pw.getEditText();
+        String configPwd = mEdit_Confirm_Pw.getEditText();
+
+        if(newPwd.equals(configPwd)){
+            mPresenter.updatePassword(mEdit_Old_Number.getEditText(), System.currentTimeMillis(), newPwd);
+        }else{
+            Toast.makeText(mContext, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void showUpdate(String msg) {
+        mEdit_Old_Number.clean();
+        mEdit_New_Pw.clean();
+        mEdit_Confirm_Pw.clean();
         DialogUtil.showOnlyAlert(this,
                 "提示"
-                , "修改成功"
+                , msg
                 , ""
                 , ""
-                , true, true, new DialogListener() {
-                    @Override
-                    public void onPositive(DialogInterface dialog) {
-
-                    }
-
-                    @Override
-                    public void onNegative(DialogInterface dialog) {
-
-                    }
-                }
+                , true, true, null
         );
+    }
+
+    @Override
+    public void showError(String msg) {
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 }

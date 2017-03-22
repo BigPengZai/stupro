@@ -160,4 +160,8 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<CourseList>> fetchGetEndCourseList(int page) {
         return sOnlyApis.getEndCourseList(page);
     }
+
+    public Flowable<onlyHttpResponse> fetchUpdatePassword(String oldPassword, Long timestamp, String newPassword) {
+        return sOnlyApis.updatePassword(oldPassword, timestamp, newPassword);
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
+import com.onlyhiedu.mobile.UI.Setting.activity.ModifyPwActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity;
@@ -24,4 +25,6 @@ public interface ActivityComponent {
     void inject(FindPwdActivity activity);
 
     void inject(LoginActivity activity);
+
+    void inject(ModifyPwActivity activity);
 }

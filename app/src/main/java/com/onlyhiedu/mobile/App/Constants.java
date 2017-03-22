@@ -30,4 +30,5 @@ public class Constants {
     //================= sp_key ================= //
     public static final String TOKEN = "token";
     public static final String PHONE = "phone";
+    public static final String PASSWORD = "Password";
 }

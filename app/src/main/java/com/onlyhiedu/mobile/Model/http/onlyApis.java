@@ -80,7 +80,18 @@ public interface onlyApis {
      */
     @POST("client/student/getNoStartCourseList")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
-
     @POST("client/student/getNoStartCourseList")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
+
+    /**
+     * 修改密码
+     * @param oldPassword
+     * @param timestamp
+     * @param newPassword
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/user/updatePassword")
+    Flowable<onlyHttpResponse> updatePassword(@Field("oldPassword") String oldPassword, @Field("timestamp") Long timestamp, @Field("newPassword") String newPassword);
+
 }

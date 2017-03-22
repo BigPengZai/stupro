@@ -150,5 +150,8 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         }
     }
 
+    public void clean(){
+        mEditText.setText("");
+    }
 
 }
