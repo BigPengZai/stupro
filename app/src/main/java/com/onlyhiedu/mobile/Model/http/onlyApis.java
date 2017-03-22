@@ -43,6 +43,7 @@ public interface onlyApis {
 
     /**
      * 修改学生性别
+     *
      * @param sex
      * @return
      */
@@ -53,6 +54,7 @@ public interface onlyApis {
 
     /**
      * 修改学生年级
+     *
      * @param sex
      * @return
      */
@@ -62,6 +64,7 @@ public interface onlyApis {
 
     /**
      * 修改高考所在地
+     *
      * @param examArea
      * @return
      */
@@ -71,11 +74,13 @@ public interface onlyApis {
 
     /**
      * 获取学生课程列表
+     *
      * @param page
      * @return
      */
-    @FormUrlEncoded
     @POST("client/student/getNoStartCourseList")
-    Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Field("pageNo") int page);
+    Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
 
+    @POST("client/student/getNoStartCourseList")
+    Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
 }

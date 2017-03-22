@@ -17,7 +17,8 @@ import io.reactivex.subscribers.ResourceSubscriber;
 
 public class CoursePresenter extends RxPresenter<CourseContract.View> implements CourseContract.Presenter {
 
-    private int mCurrentPage = 1;
+    private int mNoStartPage = 1;
+    private int mEndPage;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -29,12 +30,12 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
     @Override
     public void getCourseList(boolean isRefresh) {
         if (isRefresh) {
-            mCurrentPage = 1;
+            mNoStartPage = 1;
         } else {
-            mCurrentPage++;
+            mNoStartPage++;
         }
 
-        Flowable<onlyHttpResponse<CourseList>> flowable = mRetrofitHelper.fetchGetNoStartCourseList(mCurrentPage);
+        Flowable<onlyHttpResponse<CourseList>> flowable = mRetrofitHelper.fetchGetNoStartCourseList(mNoStartPage);
 
         ResourceSubscriber<onlyHttpResponse<CourseList>> observer = new ResourceSubscriber<onlyHttpResponse<CourseList>>() {
 
@@ -65,5 +66,42 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+    @Override
+    public void getEndCourseList(boolean isRefresh) {
+        if (isRefresh) {
+            mEndPage = 1;
+        } else {
+            mEndPage++;
+        }
 
+        Flowable<onlyHttpResponse<CourseList>> flowable = mRetrofitHelper.fetchGetEndCourseList(mEndPage);
+
+        ResourceSubscriber<onlyHttpResponse<CourseList>> observer = new ResourceSubscriber<onlyHttpResponse<CourseList>>() {
+
+            @Override
+            public void onNext(onlyHttpResponse<CourseList> data) {
+                if (getView() != null) {
+                    if (!data.isHasError()) {
+                        getView().showCourseListSuccess(data.getData().list);
+                    } else {
+                        getView().showCourseListFailure();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+                if (getView() != null) getView().showNetWorkError();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
 }

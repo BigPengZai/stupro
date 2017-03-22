@@ -136,19 +136,28 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m, Long time) {
         return sOnlyApis.getUser(z, m, time, "Android", "student");
     }
+
     public Flowable<onlyHttpResponse<StudentInfo>> fetchStudentInfo() {
         return sOnlyApis.getStudentInfo();
     }
+
     public Flowable<onlyHttpResponse> fetchUpdateSex(int sex) {
         return sOnlyApis.updateSex(sex);
     }
+
     public Flowable<onlyHttpResponse> fetchUpdateGrade(String grade) {
         return sOnlyApis.updateGrade(grade);
     }
+
     public Flowable<onlyHttpResponse> fetchUpdateExamArea(String grade) {
         return sOnlyApis.updateExamArea(grade);
     }
-    public Flowable<onlyHttpResponse<CourseList>> fetchGetNoStartCourseList(int page){
+
+    public Flowable<onlyHttpResponse<CourseList>> fetchGetNoStartCourseList(int page) {
         return sOnlyApis.getNoStartCourseList(page);
+    }
+
+    public Flowable<onlyHttpResponse<CourseList>> fetchGetEndCourseList(int page) {
+        return sOnlyApis.getEndCourseList(page);
     }
 }
