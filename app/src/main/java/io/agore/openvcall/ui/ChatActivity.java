@@ -232,7 +232,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         worker().joinChannel(mChannelName, Integer.parseInt(mUid));
         TextView textChannelName = (TextView) findViewById(R.id.channel_name);
         textChannelName.setText(mChannelName);
-//        optional();
+        optional();
        /* LinearLayout bottomContainer = (LinearLayout) findViewById(R.id.bottom_container);
         FrameLayout.MarginLayoutParams fmp = (FrameLayout.MarginLayoutParams) bottomContainer.getLayoutParams();
         fmp.bottomMargin = virtualKeyHeight() + 16;
@@ -566,7 +566,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
 
                     Message msg = new Message(Message.MSG_TYPE_TEXT,
                             new User(config().mUid, String.valueOf(config().mUid)), msgStr);
-                    notifyMessageChanged(msg);
+//                    notifyMessageChanged(msg);
 
                     return true;
                 }
@@ -946,12 +946,12 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
             case AGEventHandler.EVENT_TYPE_ON_DATA_CHANNEL_MSG:
                 peerUid = (Integer) data[0];
                 final byte[] content = (byte[]) data[1];
-                notifyMessageChanged(new Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
+//                notifyMessageChanged(new Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
                 break;
             case AGEventHandler.EVENT_TYPE_ON_AGORA_MEDIA_ERROR: {
                 int error = (int) data[0];
                 String description = (String) data[1];
-                notifyMessageChanged(new Message(new User(0, null), error + " " + description));
+//                notifyMessageChanged(new Message(new User(0, null), error + " " + description));
                 break;
             }
         }
