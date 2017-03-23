@@ -18,8 +18,8 @@ import retrofit2.http.Query;
 public interface onlyApis {
 
 
-    String HOST = "http://192.168.1.182:8080/";
-
+//    String HOST = "http://192.168.1.182:8080/";
+    String HOST = "http://192.168.1.250:8089/";
     /**
      * 客户端登录
      *

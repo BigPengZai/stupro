@@ -31,6 +31,20 @@
 
 
     <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_bg"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/iv_loading"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -162,21 +176,8 @@
             android:layout_alignParentBottom="true"
             android:id="@+id/msg_list"
             android:layout_width="172dp"
-            android:layout_height="144dp"
-            android:layout_marginBottom="20dp"
-            />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp" />
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_bg"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ProgressBar
-            android:id="@+id/iv_loading"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
     </RelativeLayout>
 </FrameLayout>
