@@ -125,7 +125,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
     private Button mMBut_dimiss;
     private int msgid = 0;
     private String mChannelName;
-    private CourseList.ListBean mCourseBean;
+    private RoomInfo mRoomInfo;
 
     private void headsetPlugged(final boolean plugged) {
         new Thread(new Runnable() {
@@ -170,23 +170,18 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         mIv_loading = (ProgressBar) findViewById(R.id.iv_loading);
         mMBut_dimiss = (Button) findViewById(R.id.but_dimiss);
         mMBut_dimiss.setOnClickListener(this);
-        mCourseBean = (CourseList.ListBean) getIntent().getSerializableExtra("item");
         //获取频道 id  老师uid 学生uid
-        RoomInfo roomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
-        if (mCourseBean != null && roomInfo != null) {
-
-            Log.d(TAG, "item:" + mCourseBean.getTeacherUuid());
-            Log.d(TAG, "item:" + mCourseBean.getUuid());
-            Log.d(TAG, "item:" + mCourseBean.getLeadsUuid());
-            Log.d(TAG, "item:" + roomInfo.getSignallingChannelId());
+        mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
+        if (mRoomInfo != null) {
+            Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
             //课程频道
-            mChannelName = mCourseBean.getUuid();
+            mChannelName = mRoomInfo.getCommChannelId();
             //学生uid
-            mUid = mCourseBean.getLeadsUuid();
+            mUid = mRoomInfo.getChannelStudentId()+"";
         } else {
             return;
         }
-        if (!StringUtils.isNumeric(mCourseBean.getLeadsUuid())) {
+        if (!StringUtils.isNumeric(mRoomInfo.getChannelStudentId()+"")) {
             Log.d(TAG, "uid不是数字组成");
             DialogUtil.showOnlyAlert(this,
                     "提示"
@@ -249,7 +244,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         String certificate = this.getString(R.string.private_app_cate);
         String appId = this.getString(R.string.private_app_id);
         //假数据
-        String account = "2000";
+        String account = mRoomInfo.getChannelStudentId()+"";
         m_agoraAPI = AgoraAPIOnlySignal.getInstance(this, appId);
         long expiredTime = System.currentTimeMillis() / 1000 + 3600;
         String token = calcToken(appId, certificate, account, expiredTime);
@@ -327,7 +322,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
 
     private void joinSignalling() {
         //测试数据 信令频道
-        String channelName = "BBBB";
+        String channelName = mRoomInfo.getSignallingChannelId();
         Log.d(TAG,"Join channel " + channelName);
         m_agoraAPI.channelJoin(channelName);
     }
@@ -365,7 +360,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         switch (view.getId()) {
             case R.id.but_dimiss:
                 //call  的对象 假数据即老师信令的id
-                String peer = "1000";
+                String peer = mRoomInfo.getChannelTeacherId()+"";
                 //发送点对点 消息
                 m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");
                 break;
@@ -785,7 +780,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-        if (uid == Integer.parseInt(mCourseBean.getTeacherName())) {
+        if (uid == mRoomInfo.getChannelTeacherId()) {
             doRenderRemoteUi(uid);
         }
     }
