@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Home.presenter.contract;
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by Administrator on 2017/3/21.
  */
 
-public interface CourseContract  {
+public interface CourseContract {
 
     interface View extends BaseView {
 
@@ -19,6 +20,8 @@ public interface CourseContract  {
         void showCourseListFailure();
 
         void showNetWorkError();
+
+        void showRoomInfoSucess(RoomInfo roomInfo);
     }
 
     interface Presenter extends BasePresenter<CourseContract.View> {
@@ -27,6 +30,6 @@ public interface CourseContract  {
 
         void getEndCourseList(boolean isRefresh);
 
-        void getRoomInfoList();
+        void getRoomInfoList(String uuid);
     }
 }

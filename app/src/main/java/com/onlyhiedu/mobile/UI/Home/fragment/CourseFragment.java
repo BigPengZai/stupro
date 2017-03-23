@@ -3,12 +3,14 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
@@ -43,7 +45,9 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     @BindView(R.id.error_layout)
     ErrorLayout mErrorLayout;
     private Intent mIntent;
+    private CourseList.ListBean mItem;
 
+    public static final String TAG = CourseFragment.class.getSimpleName();
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -125,6 +129,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         mSwipeRefresh.setRefreshing(false);
     }
 
+
     @Override
     public void onClick(View view) {
         mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
@@ -133,15 +138,26 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void onItemClick(int position, long itemId) {
-        CourseList.ListBean item = mAdapter.getItem(position);
-        if (item != null) {
+        mItem = mAdapter.getItem(position);
+        if (mItem != null) {
+            mPresenter.getRoomInfoList(mItem.getUuid());
+        }
+    }
+
+    @Override
+    public void showRoomInfoSucess(RoomInfo roomInfo) {
+        if (mItem != null&&roomInfo!=null) {
+            String signallingChannelId = roomInfo.getSignallingChannelId();
+            Log.d(TAG, "signallingChannelId:"+signallingChannelId);
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("item", item);
+            bundle.putSerializable("item", mItem);
+            bundle.putSerializable("roomInfo",roomInfo);
             mIntent.putExtras(bundle);
             mActivity.startActivity(mIntent);
         }
     }
+
 
     @Override
     public void showError(String msg) {

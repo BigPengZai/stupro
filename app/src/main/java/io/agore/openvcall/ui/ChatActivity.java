@@ -38,10 +38,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.security.MessageDigest;
@@ -168,10 +171,14 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         mMBut_dimiss = (Button) findViewById(R.id.but_dimiss);
         mMBut_dimiss.setOnClickListener(this);
         mCourseBean = (CourseList.ListBean) getIntent().getSerializableExtra("item");
-        if (mCourseBean != null) {
+        //获取频道 id  老师uid 学生uid
+        RoomInfo roomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
+        if (mCourseBean != null && roomInfo != null) {
+
             Log.d(TAG, "item:" + mCourseBean.getTeacherUuid());
             Log.d(TAG, "item:" + mCourseBean.getUuid());
             Log.d(TAG, "item:" + mCourseBean.getLeadsUuid());
+            Log.d(TAG, "item:" + roomInfo.getSignallingChannelId());
             //课程频道
             mChannelName = mCourseBean.getUuid();
             //学生uid

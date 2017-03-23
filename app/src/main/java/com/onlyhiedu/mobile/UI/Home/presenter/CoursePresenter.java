@@ -1,7 +1,10 @@
 package com.onlyhiedu.mobile.UI.Home.presenter;
 
+import android.util.Log;
+
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
@@ -106,7 +109,32 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
     }
 
     @Override
-    public void getRoomInfoList() {
+    public void getRoomInfoList(String uuid) {
+        Flowable<onlyHttpResponse<RoomInfo>> flowable = mRetrofitHelper.fetchGetRoomInfoList(uuid);
+        ResourceSubscriber<onlyHttpResponse<RoomInfo>> observer = new ResourceSubscriber<onlyHttpResponse<RoomInfo>>() {
+            @Override
+            public void onNext(onlyHttpResponse<RoomInfo> data) {
+                if (getView() != null) {
 
+                    if (!data.isHasError()) {
+                        //返回的数据
+                        getView().showRoomInfoSucess(data.getData());
+                    } else {
+                        getView().showCourseListFailure();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                if (getView() != null) getView().showNetWorkError();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
     }
 }

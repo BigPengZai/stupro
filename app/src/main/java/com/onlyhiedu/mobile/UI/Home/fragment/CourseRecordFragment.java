@@ -1,6 +1,6 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
-import android.content.Intent;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
@@ -119,6 +120,11 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     public void showNetWorkError() {
         mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
         mSwipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void showRoomInfoSucess(RoomInfo roomInfo) {
+
     }
 
     @Override

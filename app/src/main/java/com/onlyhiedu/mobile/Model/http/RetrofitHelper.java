@@ -158,8 +158,8 @@ public class RetrofitHelper {
         return sOnlyApis.getNoStartCourseList(page);
     }
 
-    public Flowable<onlyHttpResponse<RoomInfo>> fetchGetRoomInfoList() {
-        return sOnlyApis.getRoomInfoList();
+    public Flowable<onlyHttpResponse<RoomInfo>> fetchGetRoomInfoList(String uuid) {
+        return sOnlyApis.getRoomInfoList(uuid);
     }
 
     public Flowable<onlyHttpResponse<CourseList>> fetchGetEndCourseList(int page) {

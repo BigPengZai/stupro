@@ -90,8 +90,8 @@ public interface onlyApis {
      * @param
      * @return
      */
-    @POST("")
-    Flowable<onlyHttpResponse<RoomInfo>> getRoomInfoList();
+    @POST("client/course/getCourseRoom")
+    Flowable<onlyHttpResponse<RoomInfo>> getRoomInfoList(@Query("courseUuid") String uuid);
 
     /**
      * 修改密码
