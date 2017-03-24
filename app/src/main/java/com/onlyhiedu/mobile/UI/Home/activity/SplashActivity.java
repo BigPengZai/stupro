@@ -22,16 +22,17 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(TextUtils.isEmpty(SPUtil.getToken())){
+                if (TextUtils.isEmpty(SPUtil.getToken())) {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
-                }else{
+                } else {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }

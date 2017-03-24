@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +13,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
@@ -19,8 +23,11 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import static com.onlyhiedu.mobile.Utils.AppUtil.isMethodsCompat;
 
 /**
  * Created by xuwc on 2017/2/21.
@@ -180,5 +187,66 @@ public class UIUtils {
     public static String sha512(String phone, String pwd) {
         return Encrypt.SHA512(phone + "&" + pwd + ":onlyhi");
     }
+
+    /**
+     * 获取项目Cache大小
+     * @param context
+     */
+    public static String calculateCacheSize(Context context) {
+        long fileSize = 0;
+        String cacheSize = "0KB";
+        File filesDir = context.getFilesDir();
+        File cacheDir = context.getCacheDir();
+
+        fileSize += AppFilesUtil.getDirSize(filesDir);
+        fileSize += AppFilesUtil.getDirSize(cacheDir);
+        // 2.2版本才有将应用缓存转移到sd卡的功能
+        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+            File externalCacheDir = AppUtil
+                    .getExternalCacheDir(context);
+            fileSize += AppFilesUtil.getDirSize(externalCacheDir);
+        }
+        if (fileSize > 0)
+            cacheSize = AppFilesUtil.formatFileSize(fileSize);
+        return  cacheSize;
+    }
+
+    /**
+     * 清楚App缓存
+     * @param showToast
+     */
+    public static void clearAppCache(boolean showToast) {
+        final Handler handler = showToast ? new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+                    Toast.makeText(App.getInstance().getApplicationContext(),"缓存清除成功",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(App.getInstance().getApplicationContext(),"缓存清除失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        } : null;
+        AppOperator.runOnThread(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = new Message();
+                try {
+                    AppFilesUtil.cleanInternalCache(App.getInstance().getApplicationContext());
+                    // 2.2版本才有将应用缓存转移到sd卡的功能
+                    if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+                        AppFilesUtil.deleteFilesByDirectory(AppUtil
+                                .getExternalCacheDir(App.getInstance().getApplicationContext()));
+                    }
+                    msg.what = 1;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = -1;
+                }
+                if (handler != null)
+                    handler.sendMessage(msg);
+            }
+        });
+    }
+
 
 }

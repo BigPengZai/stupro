@@ -105,4 +105,81 @@ public class AppFilesUtil {
     }
 
 
+
+    /**
+     * 获取目录文件大小
+     *
+     * @param dir
+     * @return
+     */
+    public static long getDirSize(File dir) {
+        if (dir == null) {
+            return 0;
+        }
+        if (!dir.isDirectory()) {
+            return 0;
+        }
+        long dirSize = 0;
+        File[] files = dir.listFiles();
+        if (files != null) {
+
+            for (File file : files) {
+                if (file.isFile()) {
+                    dirSize += file.length();
+                } else if (file.isDirectory()) {
+                    dirSize += file.length();
+                    dirSize += getDirSize(file); // 递归调用继续统计
+                }
+            }
+        }
+        return dirSize;
+    }
+
+    /**
+     * 转换文件大小
+     *
+     * @param fileS
+     * @return B/KB/MB/GB
+     */
+    public static String formatFileSize(long fileS) {
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+        String fileSizeString = "";
+        if (fileS < 1024) {
+            fileSizeString = df.format((double) fileS) + "B";
+        } else if (fileS < 1048576) {
+            fileSizeString = df.format((double) fileS / 1024) + "KB";
+        } else if (fileS < 1073741824) {
+            fileSizeString = df.format((double) fileS / 1048576) + "MB";
+        } else {
+            fileSizeString = df.format((double) fileS / 1073741824) + "G";
+        }
+        return fileSizeString;
+    }
+
+    /**
+     * 清除本应用内部缓存
+     * (/data/data/com.xxx.xxx/cache)
+     *
+     * @param context
+     */
+    public static void cleanInternalCache(Context context) {
+        deleteFilesByDirectory(context.getCacheDir());
+        deleteFilesByDirectory(context.getFilesDir());
+    }
+    /**
+     * 删除方法 这里只会删除某个文件夹下的文件，如果传入的directory是个文件，将不做处理
+     *
+     * @param directory
+     */
+    public static void deleteFilesByDirectory(File directory) {
+        if (directory != null && directory.exists() && directory.isDirectory()) {
+            for (File child : directory.listFiles()) {
+                if (child.isDirectory()) {
+                    deleteFilesByDirectory(child);
+                }
+                child.delete();
+            }
+        }
+    }
+
 }

@@ -39,7 +39,6 @@ public class FindPwdPresenter extends RxPresenter<FindPwdContract.View> implemen
                     getView().showSecond(60 - new Long(value).intValue());
             }
         };
-
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 }

@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
@@ -22,15 +21,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
+
+import io.agora.rtc.RtcEngine;
 import io.agore.openvcall.model.ConstantApp;
 import io.agore.openvcall.model.CurrentUserSettings;
 import io.agore.openvcall.model.EngineConfig;
 import io.agore.openvcall.model.MyEngineEventHandler;
 import io.agore.openvcall.model.WorkerThread;
 
-import io.agora.rtc.RtcEngine;
-
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends com.onlyhiedu.mobile.Base.BaseActivity {
 //    private final static Logger log = LoggerFactory.getLogger(BaseActivity.class);
 
     @Override

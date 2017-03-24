@@ -81,7 +81,7 @@ public interface onlyApis {
      */
     @POST("client/student/getNoStartCourseList")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
-    @POST("client/student/getNoStartCourseList")
+    @POST("client/student/getEndCourseList")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
 
     /**

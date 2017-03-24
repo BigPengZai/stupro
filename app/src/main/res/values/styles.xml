@@ -91,8 +91,7 @@
         <item name="android:shadowColor">@color/transparent_75_white</item>
     </style>
     <!--splash -->
-    <style name="SplashTheme" parent="android:Theme.Black.NoTitleBar.Fullscreen">
-        <item name="android:windowNoTitle">true</item>
+    <style name="SplashTheme" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
         <item name="android:windowBackground">@mipmap/background</item>
     </style>
 </resources>

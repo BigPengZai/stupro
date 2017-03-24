@@ -34,7 +34,9 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
 
-        <activity android:name=".UI.Home.activity.MainActivity"/>
+        <activity
+            android:name=".UI.Home.activity.MainActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
         <activity android:name=".UI.User.activity.SmsLoginActivity"/>
@@ -54,7 +56,9 @@
             android:label="@string/label_settings"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".A">
 
+        </activity>
     </application>
 
 </manifest>

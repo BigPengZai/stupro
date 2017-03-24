@@ -121,7 +121,7 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
                         //返回的数据
                         getView().showRoomInfoSucess(data.getData());
                     } else {
-                        getView().showError("");
+                        getView().showError(data.getMessage());
                     }
                 }
             }

@@ -1,9 +1,11 @@
 package com.onlyhiedu.mobile.Utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -100,4 +102,20 @@ public class AppUtil {
         return resultString;
     }
 
+    /**
+     * 判断当前版本是否兼容目标版本的方法
+     *
+     * @param VersionCode
+     * @return
+     */
+    public static boolean isMethodsCompat(int VersionCode) {
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        return currentVersion >= VersionCode;
+    }
+
+
+    @TargetApi(8)
+    public static File getExternalCacheDir(Context context) {
+        return context.getExternalCacheDir();
+    }
 }

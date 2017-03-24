@@ -1,7 +1,6 @@
 package io.agore.openvcall.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.onlyhiedu.mobile.R;
+
 import io.agore.openvcall.model.ConstantApp;
 
 
@@ -27,10 +27,15 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
     private EditText mMV_uid;
 
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_session_room);
+    protected void initInject() {
+
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.activity_session_room;
     }
 
     protected void initUIandEvent() {
@@ -164,7 +169,6 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -172,5 +176,10 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
                 forwardToRoom();
                 break;
         }
+    }
+
+    @Override
+    public void showError(String msg) {
+
     }
 }

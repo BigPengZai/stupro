@@ -8,50 +8,41 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.ViewStub;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Widget.draw.DrawView;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -69,6 +60,8 @@ import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
 import io.agore.propeller.headset.bluetooth.BluetoothHeadsetBroadcastReceiver;
 import io.agore.propeller.preprocessing.VideoPreProcessing;
+
+import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
 public class ChatActivity extends BaseActivity implements AGEventHandler, IHeadsetPlugListener, View.OnClickListener {
 
@@ -119,7 +112,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
     private String mUid;
     private RelativeLayout mRl_bg;
     private ProgressBar mIv_loading;
-
+    private DrawView mDrawView;
 
     private AgoraAPIOnlySignal m_agoraAPI;
     private Button mMBut_dimiss;
@@ -146,29 +139,27 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         }).start();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
-    }
-
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
+    protected void initInject() {
+
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return false;
+    protected int getLayout() {
+        return R.layout.activity_chat;
     }
+
 
     @Override
     protected void initUIandEvent() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         //测试 狗屎代码
         mRl_bg = (RelativeLayout) findViewById(R.id.rl_bg);
         mIv_loading = (ProgressBar) findViewById(R.id.iv_loading);
         mMBut_dimiss = (Button) findViewById(R.id.but_dimiss);
+        mDrawView = (DrawView) findViewById(R.id.draw_view);
         mMBut_dimiss.setOnClickListener(this);
         //获取频道 id  老师uid 学生uid
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
@@ -206,17 +197,18 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         //登录信令系统成功后  登录通信频道
         initSignalling();
         event().addEventHandler(this);
-     /*   Intent i = getIntent();
-        mChannelName = i.getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
-        mUid = i.getStringExtra(ConstantApp.ACTION_KEY_UID);
-        final String encryptionKey = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_KEY);
-        final String encryptionMode = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_MODE);
-        Log.d(TAG, "channelName:" + mChannelName);
-        Log.d(TAG, "encryptionKey:" + encryptionKey);
-        Log.d(TAG, "encryptionMode:" + encryptionMode);
-        Log.d(TAG, "mUid:初始化 " + mUid);
 
-        doConfigEngine(encryptionKey, encryptionMode);*/
+//     /*   Intent i = getIntent();
+//        mChannelName = i.getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
+//        mUid = i.getStringExtra(ConstantApp.ACTION_KEY_UID);
+//        final String encryptionKey = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_KEY);
+//        final String encryptionMode = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_MODE);
+//        Log.d(TAG, "channelName:" + mChannelName);
+//        Log.d(TAG, "encryptionKey:" + encryptionKey);
+//        Log.d(TAG, "encryptionMode:" + encryptionMode);
+//        Log.d(TAG, "mUid:初始化 " + mUid);
+//
+//        doConfigEngine(encryptionKey, encryptionMode);*/
         //RecyclerView
         SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
         surfaceV.setZOrderOnTop(false);
@@ -233,10 +225,10 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         TextView textChannelName = (TextView) findViewById(R.id.channel_name);
         textChannelName.setText(mChannelName);
         optional();
-       /* LinearLayout bottomContainer = (LinearLayout) findViewById(R.id.bottom_container);
-        FrameLayout.MarginLayoutParams fmp = (FrameLayout.MarginLayoutParams) bottomContainer.getLayoutParams();
-        fmp.bottomMargin = virtualKeyHeight() + 16;
-        initMessageList();*/
+//       /* LinearLayout bottomContainer = (LinearLayout) findViewById(R.id.bottom_container);
+//        FrameLayout.MarginLayoutParams fmp = (FrameLayout.MarginLayoutParams) bottomContainer.getLayoutParams();
+//        fmp.bottomMargin = virtualKeyHeight() + 16;
+//        initMessageList();*/
     }
 
     private void initSignalling() {
@@ -274,18 +266,39 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
             public void onMessageInstantReceive(String account, int uid, String msg) {
                 Log.d(TAG, "点对点消息：" + account + " : " + (long) (uid & 0xffffffffl) + " : " + msg);
                 //进行 下课，白版等业务逻辑的处理
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        initDismissDialog();
+//                    }
+//                });
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initDismissDialog();
+                        mDrawView.eventActionDown(598.3423f, 1807.26172f);
+                        mDrawView.eventActionMove(587.44653f, 1804.27344f);
+                        mDrawView.eventActionMove(569.23495f, 1809.27728f);
+                        mDrawView.eventActionMove(549.37833f, 1814.63873f);
+                        mDrawView.eventActionMove(535.32938f, 1818.7486f);
+                        mDrawView.eventActionMove(514.23633f, 1829.7107f);
+                        mDrawView.eventActionMove(504.03308f, 1833.38202f);
+                        mDrawView.eventActionMove(495.6029f, 1843.06268f);
+                        mDrawView.eventActionMove(480.0887f, 1855.4698f);
+                        mDrawView.eventActionMove(474.37845f, 1867.63525f);
+                        mDrawView.eventActionMove(464.10852f, 1876.40698f);
+                        mDrawView.eventActionMove(457.64493f, 1885.87323f);
+                        mDrawView.eventActionUp(457.64493f, 1885.87323f);
                     }
                 });
+
+
             }
 
             //收到频道消息回调(onMessageChannelReceive)
             @Override
             public void onMessageChannelReceive(String channelID, String account, int uid, String msg) {
                 Log.d(TAG, "频道消息：" + channelID + " " + account + " : " + msg);
+
             }
 
             @Override
@@ -379,39 +392,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
 
     }
 
-    public static String md5hex(byte[] s) {
-        MessageDigest messageDigest = null;
-        try {
-            messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(s);
-            return hexlify(messageDigest.digest());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    public static String hexlify(byte[] data) {
-        char[] DIGITS_LOWER = {'0', '1', '2', '3', '4', '5',
-                '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
-        /**
-         * 用于建立十六进制字符的输出的大写字符数组
-         */
-        char[] DIGITS_UPPER = {'0', '1', '2', '3', '4', '5',
-                '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
-        char[] toDigits = DIGITS_LOWER;
-        int l = data.length;
-        char[] out = new char[l << 1];
-        // two characters form the hex value.
-        for (int i = 0, j = 0; i < l; i++) {
-            out[j++] = toDigits[(0xF0 & data[i]) >>> 4];
-            out[j++] = toDigits[0x0F & data[i]];
-        }
-        return String.valueOf(out);
-
-    }
 
 
     public void onClickHideIME(View view) {
@@ -492,9 +472,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         i.addAction(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED);
         i.addAction(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED);
         registerReceiver(mBluetoothHeadsetBroadcastListener, i);
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
     }
@@ -625,8 +602,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
     }
 
     @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
+    public void onBackPressedSupport() {
         if (m_agoraAPI != null) {
             m_agoraAPI.logout();
             Log.d(TAG, "信令退出");
@@ -637,6 +613,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
         quitCall();
         Log.d(TAG, "onBackPressed");
     }
+
 
     private void quitCall() {
         deInitUIandEvent();
@@ -1095,15 +1072,9 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
             iv.setEnabled(true);
         }
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void showError(String msg) {
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
-
-
 }
