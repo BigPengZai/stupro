@@ -5,6 +5,7 @@ import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
+import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 
 import java.util.List;
@@ -108,6 +109,15 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/user/updatePassword")
     Flowable<onlyHttpResponse> updatePassword(@Field("oldPassword") String oldPassword, @Field("timestamp") Long timestamp, @Field("newPassword") String newPassword);
+
+
+    /**
+     *
+     *
+     * */
+    @POST("client/student/getAppInfo")
+    Flowable<onlyHttpResponse<UpdataVersionInfo>> updataVersion();
+
 
     @FormUrlEncoded
     @POST("client/courseware/getCoursewareImageList")

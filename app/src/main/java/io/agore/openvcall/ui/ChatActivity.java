@@ -9,28 +9,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewParent;
 import android.view.ViewStub;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -41,13 +34,9 @@ import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
-
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -55,8 +44,6 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
-import io.agore.openvcall.model.Message;
-import io.agore.openvcall.model.User;
 import io.agore.propeller.Constant;
 import io.agore.propeller.UserStatusData;
 import io.agore.propeller.VideoInfoData;
@@ -65,19 +52,12 @@ import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
 import io.agore.propeller.headset.bluetooth.BluetoothHeadsetBroadcastReceiver;
 import io.agore.propeller.preprocessing.VideoPreProcessing;
-
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
 public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, View.OnClickListener, ChatContract.View {
 
-
-//    private GridVideoViewContainer mGridVideoViewContainer;
-
     private TeacherVideoView mGridVideoViewContainer;
-    private StudentVideoView mStuVideoView;
     private RelativeLayout mSmallVideoViewDock;
-
-    // should only be modified under UI thread
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
 
     private volatile boolean mVideoMuted = false;
@@ -209,18 +189,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         //登录信令系统成功后  登录通信频道
         initSignalling();
         event().addEventHandler(this);
-
-//     /*   Intent i = getIntent();
-//        mChannelName = i.getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
-//        mUid = i.getStringExtra(ConstantApp.ACTION_KEY_UID);
-//        final String encryptionKey = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_KEY);
-//        final String encryptionMode = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_MODE);
-//        Log.d(TAG, "channelName:" + mChannelName);
-//        Log.d(TAG, "encryptionKey:" + encryptionKey);
-//        Log.d(TAG, "encryptionMode:" + encryptionMode);
-//        Log.d(TAG, "mUid:初始化 " + mUid);
-//
-//        doConfigEngine(encryptionKey, encryptionMode);*/
+//        doConfigEngine(encryptionKey, encryptionMode);
         //RecyclerView
         SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
         surfaceV.setZOrderOnTop(false);
@@ -229,13 +198,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mGridVideoViewContainer = (TeacherVideoView) findViewById(R.id.grid_video_view_container);
         mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
-//        initRoom();
     }
 
     private void initRoom() {
         worker().joinChannel(mChannelName, Integer.parseInt(mUid));
-        TextView textChannelName = (TextView) findViewById(R.id.channel_name);
-        textChannelName.setText(mChannelName);
+//        TextView textChannelName = (TextView) findViewById(R.id.channel_name);
+//        textChannelName.setText(mChannelName);
 
         mPresenter.getCourseWareImageList("f35b6c57c9484a5dab9795a1fd42bea8");
 
@@ -386,7 +354,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
-        ImageLoader.loadImage(Glide.with(this), mImageCourseWare, data.get(0).imageUrl);
+        //TODO 数据有问题
+//        ImageLoader.loadImage(Glide.with(this), mImageCourseWare, data.get(0).imageUrl);
     }
 
 
@@ -413,71 +382,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         return "1:" + appID + ":" + expiredTime + ":" + sign;
 
     }
-
-
-
-    public void onClickHideIME(View view) {
-//        log.debug("onClickHideIME " + view);
-        closeIME(findViewById(R.id.msg_content));
-        findViewById(R.id.msg_input_container).setVisibility(View.GONE);
-        findViewById(R.id.bottom_action_end_call).setVisibility(View.VISIBLE);
-        findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
-    }
-
-    private InChannelMessageListAdapter mMsgAdapter;
-
-    private ArrayList<Message> mMsgList;
-
-    private void initMessageList() {
-        mMsgList = new ArrayList<>();
-        RecyclerView msgListView = (RecyclerView) findViewById(R.id.msg_list);
-        mMsgAdapter = new InChannelMessageListAdapter(this, mMsgList);
-        mMsgAdapter.setHasStableIds(true);
-        msgListView.setAdapter(mMsgAdapter);
-        msgListView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        msgListView.addItemDecoration(new MessageListDecoration());
-    }
-
-    private void notifyMessageChanged(Message msg) {
-        mMsgList.add(msg);
-
-        int MAX_MESSAGE_COUNT = 16;
-
-        if (mMsgList.size() > MAX_MESSAGE_COUNT) {
-            int toRemove = mMsgList.size() - MAX_MESSAGE_COUNT;
-            for (int i = 0; i < toRemove; i++) {
-                mMsgList.remove(i);
-            }
-        }
-
-        mMsgAdapter.notifyDataSetChanged();
-    }
-
-    private int mDataStreamId;
-
-    private void sendChannelMsg(String msgStr) {
-        RtcEngine rtcEngine = rtcEngine();
-        if (mDataStreamId <= 0) {
-            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
-        }
-
-        if (mDataStreamId < 0) {
-            String errorMsg = "Create data stream error happened " + mDataStreamId;
-//            log.warn(errorMsg);
-            showLongToast(errorMsg);
-            return;
-        }
-
-        byte[] encodedMsg;
-        try {
-            encodedMsg = msgStr.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            encodedMsg = msgStr.getBytes();
-        }
-
-        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
-    }
-
     private void optional() {
         HeadsetPlugManager.getInstance().registerHeadsetPlugListener(this);
         mHeadsetListener = new HeadsetBroadcastReceiver();
@@ -531,77 +435,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         return profileIndex;
     }
 
-    private void doConfigEngine(String encryptionKey, String encryptionMode) {
+    /*private void doConfigEngine(String encryptionKey, String encryptionMode) {
         int vProfile = ConstantApp.VIDEO_PROFILES[getVideoProfileIndex()];
 
         worker().configEngine(vProfile, encryptionKey, encryptionMode);
-    }
-
-    //会话 按钮
-    public void onBtn0Clicked(View view) {
-//        log.info("onBtn0Clicked " + view + " " + mVideoMuted + " " + mAudioMuted);
-        showMessageEditContainer();
-    }
-
-    private void showMessageEditContainer() {
-        findViewById(R.id.bottom_action_container).setVisibility(View.GONE);
-        findViewById(R.id.bottom_action_end_call).setVisibility(View.GONE);
-        findViewById(R.id.msg_input_container).setVisibility(View.VISIBLE);
-
-        EditText edit = (EditText) findViewById(R.id.msg_content);
-
-        edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND
-                        || (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    String msgStr = v.getText().toString();
-                    if (TextUtils.isEmpty(msgStr)) {
-                        return false;
-                    }
-                    sendChannelMsg(msgStr);
-
-                    v.setText("");
-
-                    Message msg = new Message(Message.MSG_TYPE_TEXT,
-                            new User(config().mUid, String.valueOf(config().mUid)), msgStr);
-//                    notifyMessageChanged(msg);
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        openIME(edit);
-    }
-
-    public void onCustomizedFunctionClicked(View view) {
-//        log.info("onCustomizedFunctionClicked " + view + " " + mVideoMuted + " " + mAudioMuted);
-        if (mVideoMuted) {
-            onSwitchSpeakerClicked();
-        } else {
-            onSwitchCameraClicked();
-        }
-    }
-
-    private void onSwitchCameraClicked() {
-        RtcEngine rtcEngine = rtcEngine();
-        rtcEngine.switchCamera();
-    }
-
-    private void onSwitchSpeakerClicked() {
-        RtcEngine rtcEngine = rtcEngine();
-        rtcEngine.setEnableSpeakerphone(!(mEarpiece = !mEarpiece));
-
-        ImageView iv = (ImageView) findViewById(R.id.customized_function_id);
-        if (mEarpiece) {
-            iv.clearColorFilter();
-        } else {
-            iv.setColorFilter(getResources().getColor(R.color.agora_blue), PorterDuff.Mode.MULTIPLY);
-        }
-    }
-
+    }*/
     @Override
     protected void deInitUIandEvent() {
         optionalDestroy();
@@ -616,13 +454,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         worker().preview(false, null, 0);
 
     }
-
-    //退出课堂
-    public void onEndCallClicked(View view) {
-//        log.info("onEndCallClicked " + view);
-        quitCall();
-    }
-
     @Override
     public void onBackPressedSupport() {
         if (m_agoraAPI != null) {
@@ -635,8 +466,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         quitCall();
         Log.d(TAG, "onBackPressed");
     }
-
-
     private void quitCall() {
         deInitUIandEvent();
         mUid = "";
@@ -644,70 +473,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private VideoPreProcessing mVideoPreProcessing;
-
-    public void onBtnNClicked(View view) {
-        if (mVideoPreProcessing == null) {
-            mVideoPreProcessing = new VideoPreProcessing();
-        }
-
-        ImageView iv = (ImageView) view;
-        Object showing = view.getTag();
-        if (showing != null && (Boolean) showing) {
-            mVideoPreProcessing.enablePreProcessing(false);
-            iv.setTag(null);
-            iv.clearColorFilter();
-        } else {
-            mVideoPreProcessing.enablePreProcessing(true);
-            iv.setTag(true);
-            iv.setColorFilter(getResources().getColor(R.color.agora_blue), PorterDuff.Mode.MULTIPLY);
-        }
-    }
-
-    //切换 视频 为音频
-    public void onVoiceChatClicked(View view) {
-//        log.info("onVoiceChatClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
-        if (mUidsList.size() == 0) {
-            return;
-        }
-
-        SurfaceView surfaceV = getLocalView();
-        ViewParent parent;
-        if (surfaceV == null || (parent = surfaceV.getParent()) == null) {
-//            log.warn("onVoiceChatClicked " + view + " " + surfaceV);
-            return;
-        }
-
-        RtcEngine rtcEngine = rtcEngine();
-        rtcEngine.muteLocalVideoStream(mVideoMuted = !mVideoMuted);
-
-        ImageView iv = (ImageView) view;
-
-        iv.setImageResource(mVideoMuted ? R.drawable.btn_video : R.drawable.btn_voice);
-
-        hideLocalView(mVideoMuted);
-
-        if (mVideoMuted) {
-            resetEarpiece();
-            Log.d(TAG, "resetEarpiece");
-        } else {
-            resetCamera();
-            Log.d(TAG, "resetCamera");
-        }
-    }
-
-    private SurfaceView getLocalView() {
-        for (HashMap.Entry<Integer, SoftReference<SurfaceView>> entry : mUidsList.entrySet()) {
-            if (entry.getKey() == 0 || entry.getKey() == config().mUid) {
-                return entry.getValue().get();
-            }
-        }
-        return null;
-    }
-
-    private void hideLocalView(boolean hide) {
-        int uid = Integer.parseInt(mUid);
-        doHideTargetView(uid, hide);
-    }
 
     private void doHideTargetView(int targetUid, boolean hide) {
         HashMap<Integer, Integer> status = new HashMap<>();
@@ -726,56 +491,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         }
     }
-
-    private void resetCamera() {
-        RtcEngine rtcEngine = rtcEngine();
-        rtcEngine.setEnableSpeakerphone(!mWithHeadset);
-        if (!mWithHeadset) {
-            mEarpiece = false;
-        } else {
-            mEarpiece = true;
-        }
-        ImageView iv = (ImageView) findViewById(R.id.customized_function_id);
-        iv.clearColorFilter();
-        iv.setImageResource(R.drawable.btn_switch_camera);
-    }
-
-    private void resetEarpiece() {
-        RtcEngine rtcEngine = rtcEngine();
-        rtcEngine.setEnableSpeakerphone(!mWithHeadset);
-        ImageView iv = (ImageView) findViewById(R.id.customized_function_id);
-        iv.setImageResource(R.drawable.btn_speaker);
-        if (mWithHeadset) {
-            mEarpiece = true;
-            iv.clearColorFilter();
-            iv.setClickable(false);
-            iv.setEnabled(false);
-        } else {
-            mEarpiece = false;
-            iv.setColorFilter(getResources().getColor(R.color.agora_blue), PorterDuff.Mode.MULTIPLY);
-        }
-    }
-
-    //切换 声音
-    public void onVoiceMuteClicked(View view) {
-//        log.info("onVoiceMuteClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
-        if (mUidsList.size() == 0) {
-            return;
-        }
-
-        RtcEngine rtcEngine = rtcEngine();
-        //将自己静音 (muteLocalAudioStream)
-        rtcEngine.muteLocalAudioStream(mAudioMuted = !mAudioMuted);
-
-        ImageView iv = (ImageView) view;
-
-        if (mAudioMuted) {
-            iv.setColorFilter(getResources().getColor(R.color.agora_blue), PorterDuff.Mode.MULTIPLY);
-        } else {
-            iv.clearColorFilter();
-        }
-    }
-
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
@@ -865,7 +580,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (isFinishing()) {
                     return;
                 }
-
                 doHandleExtraCallback(type, data);
             }
         });
@@ -1060,9 +774,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         recycler.addItemDecoration(new SmallVideoViewDecoration());
         recycler.setAdapter(mSmallVideoViewAdapter);
 
-//        recycler.setDrawingCacheEnabled(true);
-//        recycler.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
-
         if (!create) {
             mSmallVideoViewAdapter.setLocalUid(config().mUid);
             mSmallVideoViewAdapter.notifyUiChanged(mUidsList, exceptUid, null, null);
@@ -1070,8 +781,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         recycler.setVisibility(View.VISIBLE);
         mSmallVideoViewDock.setVisibility(View.VISIBLE);
 
-//        mStuVideoView= (StudentVideoView) findViewById(R.id.stu_view);
-//        mStuVideoView.initViewContainer(getApplicationContext(), 0, mUidsList); // first is now full view
 
 
     }
@@ -1085,15 +794,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         headsetPlugged(plugged);
         mWithHeadset = plugged;
-        ImageView iv = (ImageView) findViewById(R.id.customized_function_id);
-        if (mVideoMuted && plugged) {
-            // disable switching speaker button
-            iv.setClickable(false);
-            iv.setEnabled(false);
-        } else if (!plugged) {
-            iv.setClickable(true);
-            iv.setEnabled(true);
-        }
     }
 
     @Override
