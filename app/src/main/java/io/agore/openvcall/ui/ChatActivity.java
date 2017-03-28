@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -34,9 +35,11 @@ import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.List;
+
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -52,6 +55,7 @@ import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
 import io.agore.propeller.headset.bluetooth.BluetoothHeadsetBroadcastReceiver;
 import io.agore.propeller.preprocessing.VideoPreProcessing;
+
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
 public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, View.OnClickListener, ChatContract.View {
@@ -219,7 +223,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         String certificate = this.getString(R.string.private_app_cate);
         String appId = this.getString(R.string.private_app_id);
         //假数据
-        String account = mRoomInfo.getChannelStudentId()+"";
+        String account = mRoomInfo.getChannelStudentId() + "";
         m_agoraAPI = AgoraAPIOnlySignal.getInstance(this, appId);
         long expiredTime = System.currentTimeMillis() / 1000 + 3600;
         String token = calcToken(appId, certificate, account, expiredTime);
@@ -319,9 +323,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void joinSignalling() {
         //测试数据 信令频道
         String channelName = mRoomInfo.getSignallingChannelId();
-        Log.d(TAG,"Join channel " + channelName);
+        Log.d(TAG, "Join channel " + channelName);
         m_agoraAPI.channelJoin(channelName);
     }
+
     private void initDismissDialog() {
         DialogUtil.showOnlyAlert(this,
                 ""
@@ -354,8 +359,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
-        //TODO 数据有问题
-//        ImageLoader.loadImage(Glide.with(this), mImageCourseWare, data.get(0).imageUrl);
+        if (data != null && data.size() != 0 && data.get(0) != null) {
+            ImageLoader.loadImage(Glide.with(this), mImageCourseWare, data.get(0).imageUrl);
+        }
     }
 
 
@@ -364,7 +370,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         switch (view.getId()) {
             case R.id.but_dimiss:
                 //call  的对象 假数据即老师信令的id
-                String peer = mRoomInfo.getChannelTeacherId()+"";
+                String peer = mRoomInfo.getChannelTeacherId() + "";
                 //发送点对点 消息
                 m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");
                 break;
@@ -382,6 +388,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         return "1:" + appID + ":" + expiredTime + ":" + sign;
 
     }
+
     private void optional() {
         HeadsetPlugManager.getInstance().registerHeadsetPlugListener(this);
         mHeadsetListener = new HeadsetBroadcastReceiver();
@@ -454,6 +461,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         worker().preview(false, null, 0);
 
     }
+
     @Override
     public void onBackPressedSupport() {
         if (m_agoraAPI != null) {
@@ -466,6 +474,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         quitCall();
         Log.d(TAG, "onBackPressed");
     }
+
     private void quitCall() {
         deInitUIandEvent();
         mUid = "";
@@ -491,6 +500,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         }
     }
+
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
@@ -532,6 +542,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
     }
+
     @Override
     public void onJoinChannelSuccess(String channel, final int uid, int elapsed) {
         runOnUiThread(new Runnable() {
@@ -554,6 +565,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
     }
+
     @Override
     public void onUserJoined(int uid, int elapsed) {
         Log.d(TAG, "uid:onUserJoined " + uid);
@@ -780,7 +792,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         recycler.setVisibility(View.VISIBLE);
         mSmallVideoViewDock.setVisibility(View.VISIBLE);
-
 
 
     }

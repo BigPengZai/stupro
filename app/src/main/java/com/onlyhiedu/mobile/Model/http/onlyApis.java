@@ -112,7 +112,7 @@ public interface onlyApis {
 
 
     /**
-     *
+     *版本更新
      *
      * */
     @POST("client/student/getAppInfo")
