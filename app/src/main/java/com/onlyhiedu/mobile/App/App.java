@@ -10,7 +10,6 @@ import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
-import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.InputStream;
@@ -56,15 +55,12 @@ public class App extends Application {
         super.onCreate();
         instance = this;
 
-        //初始化日志
-        Logger.init(getPackageName()).hideThreadInfo();
-
         LeakCanary.install(this);
 
         initGlide();
 
         DaoUtil.getInstance(this);
-        initWorkerThread();
+//        initWorkerThread();
     }
     private void initGlide(){
         Glide.get(this).register(GlideUrl.class,InputStream.class,new OkHttpUrlLoader.Factory(new OkHttpClient()));

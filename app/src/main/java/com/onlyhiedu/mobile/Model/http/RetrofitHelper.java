@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
@@ -13,6 +14,7 @@ import com.onlyhiedu.mobile.Utils.SystemUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -174,4 +176,12 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<UpdataVersionInfo>> fetchUpdataVersion() {
         return sOnlyApis.updataVersion();
     }
+
+    public Flowable<onlyHttpResponse<List<CourseWareImageList>>> fetchGetCoursewareImageList(String wareId) {
+        return sOnlyApis.getCoursewareImageList(wareId);
+    }
+
+
+
+
 }

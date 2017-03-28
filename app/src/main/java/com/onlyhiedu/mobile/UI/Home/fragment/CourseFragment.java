@@ -23,7 +23,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import io.agore.openvcall.ui.ChatActivity;
-import io.agore.openvcall.ui.RoomActivity;
 
 /**
  * Created by Administrator on 2017/3/1.
@@ -48,6 +47,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     private CourseList.ListBean mItem;
 
     public static final String TAG = CourseFragment.class.getSimpleName();
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -96,8 +96,11 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showCourseListSuccess(List<CourseList.ListBean> data) {
 
-        if (mSwipeRefresh.isRefreshing()) {
+        if (mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
+        }
+
+        if (mSwipeRefresh.isRefreshing()) {
             mAdapter.clear();
             mAdapter.addAll(data);
             mSwipeRefresh.setRefreshing(false);
@@ -115,25 +118,21 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showCourseListFailure() {
-        if (mSwipeRefresh.isRefreshing()) {
-            mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
-            mSwipeRefresh.setRefreshing(false);
-        } else {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
-        }
-    }
-
-    @Override
-    public void showNetWorkError() {
+        if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
         mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
-        mSwipeRefresh.setRefreshing(false);
     }
-
 
     @Override
     public void onClick(View view) {
         mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
         mPresenter.getCourseList(true);
+    }
+
+
+    @Override
+    public void showNetWorkError() {
+        mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
+        mSwipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -146,12 +145,12 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showRoomInfoSucess(RoomInfo roomInfo) {
-        if (roomInfo!=null) {
+        if (roomInfo != null) {
             String signallingChannelId = roomInfo.getSignallingChannelId();
-            Log.d(TAG, "signallingChannelId:"+signallingChannelId);
+            Log.d(TAG, "signallingChannelId:" + signallingChannelId);
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("roomInfo",roomInfo);
+            bundle.putSerializable("roomInfo", roomInfo);
             mIntent.putExtras(bundle);
             mActivity.startActivity(mIntent);
         }

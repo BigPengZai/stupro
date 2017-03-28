@@ -11,6 +11,7 @@ import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity;
 
 import dagger.Component;
+import io.agore.openvcall.ui.ChatActivity;
 
 /**
  * Created by xuwc on 2016/11/24.
@@ -30,4 +31,7 @@ public interface ActivityComponent {
     void inject(ModifyPwActivity activity);
 
     void inject(AboutActivity aboutActivity);
+
+    void inject(ChatActivity activity);
+
 }

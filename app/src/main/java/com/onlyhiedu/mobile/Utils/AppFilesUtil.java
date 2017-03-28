@@ -2,8 +2,6 @@ package com.onlyhiedu.mobile.Utils;
 
 import android.content.Context;
 
-import com.orhanobut.logger.Logger;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,7 +33,7 @@ public class AppFilesUtil {
             oos.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Logger.d("保存失败");
+//            Logger.d("保存失败");
         }finally {
             if (fos!=null){
                 try {

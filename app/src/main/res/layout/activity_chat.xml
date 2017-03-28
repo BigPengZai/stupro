@@ -36,17 +36,12 @@
         </LinearLayout>
 
 
-
-
-        <ScrollView
+        <com.onlyhiedu.mobile.Widget.MyScrollView
             android:id="@+id/scrollView"
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
-            <com.onlyhiedu.mobile.Widget.MyHorizontalScrollView
-                android:layout_width="match_parent"
-                android:scrollbarSize="2dp"
-                android:layout_height="wrap_content">
 
                 <com.onlyhiedu.mobile.Widget.draw.DrawView
                     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -66,14 +61,14 @@
                     app:dv_draw_width="4">
 
                     <ImageView
-                        android:layout_width="2000px"
-                        android:layout_height="2000px"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/ic_launcher"/>
+                        android:id="@+id/image_course_ware"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"/>
 
                 </com.onlyhiedu.mobile.Widget.draw.DrawView>
-            </com.onlyhiedu.mobile.Widget.MyHorizontalScrollView>
-        </ScrollView>
+
+        </com.onlyhiedu.mobile.Widget.MyScrollView>
 
     </LinearLayout>
 
@@ -87,10 +82,9 @@
 
         <ProgressBar
             android:id="@+id/iv_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 
     <RelativeLayout

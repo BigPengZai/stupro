@@ -12,7 +12,7 @@ public class Constants {
     public static final String PATH_CACHE = PATH_DATA + "/com.onlyhiedu.mobile.NetCache";
     public static final String NET_ERROR = "网络异常";
     public static final String TAG = "OnlyhiAPP";
-
+    public static final String Async = "Async";
 
     public static final int NUM_OF_PAGE = 20;
 

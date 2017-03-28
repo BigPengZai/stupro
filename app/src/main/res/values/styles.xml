@@ -92,6 +92,6 @@
     </style>
     <!--splash -->
     <style name="SplashTheme" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
-        <item name="android:windowBackground">@mipmap/background</item>
+        <item name="android:windowBackground">@mipmap/launch_bg</item>
     </style>
 </resources>

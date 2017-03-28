@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.Base.BasePresenter;
 
 import io.agora.rtc.RtcEngine;
 import io.agore.openvcall.model.ConstantApp;
@@ -29,7 +30,7 @@ import io.agore.openvcall.model.EngineConfig;
 import io.agore.openvcall.model.MyEngineEventHandler;
 import io.agore.openvcall.model.WorkerThread;
 
-public abstract class BaseActivity extends com.onlyhiedu.mobile.Base.BaseActivity {
+public abstract class BaseActivity<T extends BasePresenter>extends com.onlyhiedu.mobile.Base.BaseActivity<T>   {
 //    private final static Logger log = LoggerFactory.getLogger(BaseActivity.class);
 
     @Override

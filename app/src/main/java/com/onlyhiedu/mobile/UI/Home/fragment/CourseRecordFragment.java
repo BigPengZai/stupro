@@ -20,7 +20,6 @@ import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
 import java.util.List;
 
 import butterknife.BindView;
-import io.agore.openvcall.ui.RoomActivity;
 
 /**
  * Created by xwc on 2017/3/1.
@@ -89,8 +88,11 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showCourseListSuccess(List<CourseList.ListBean> data) {
 
-        if (mSwipeRefresh.isRefreshing()) {
+        if(mErrorLayout.getErrorState() !=ErrorLayout.HIDE_LAYOUT){
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
+        }
+
+        if (mSwipeRefresh.isRefreshing()) {
             mAdapter.clear();
             mAdapter.addAll(data);
             mSwipeRefresh.setRefreshing(false);
@@ -108,12 +110,8 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showCourseListFailure() {
-        if (mSwipeRefresh.isRefreshing()) {
-            mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
-            mSwipeRefresh.setRefreshing(false);
-        }else{
-            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
-        }
+        if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
+        mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
     }
 
     @Override

@@ -2,9 +2,12 @@ package com.onlyhiedu.mobile.Model.http;
 
 
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
+
+import java.util.List;
 
 import io.reactivex.Flowable;
 import retrofit2.http.Field;
@@ -19,7 +22,9 @@ public interface onlyApis {
 
 
 //    String HOST = "http://192.168.1.182:8080/";
-    String HOST = "http://192.168.1.250:8089/";
+
+    //测试环境
+    String HOST = "http://192.168.1.252:8089/";
     /**
      * 客户端登录
      *
@@ -104,4 +109,7 @@ public interface onlyApis {
     @POST("client/user/updatePassword")
     Flowable<onlyHttpResponse> updatePassword(@Field("oldPassword") String oldPassword, @Field("timestamp") Long timestamp, @Field("newPassword") String newPassword);
 
+    @FormUrlEncoded
+    @POST("client/courseware/getCoursewareImageList")
+    Flowable<onlyHttpResponse<List<CourseWareImageList>>> getCoursewareImageList(@Field("coursewareId") String courseWareId );
 }
