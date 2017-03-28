@@ -6,6 +6,7 @@ import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
+import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
@@ -168,5 +169,9 @@ public class RetrofitHelper {
 
     public Flowable<onlyHttpResponse> fetchUpdatePassword(String oldPassword, Long timestamp, String newPassword) {
         return sOnlyApis.updatePassword(oldPassword, timestamp, newPassword);
+    }
+
+    public Flowable<onlyHttpResponse<UpdataVersionInfo>> fetchUpdataVersion() {
+        return sOnlyApis.updataVersion();
     }
 }

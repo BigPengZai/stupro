@@ -69,9 +69,11 @@
 
 
         <RelativeLayout
+            android:id="@+id/rl_update"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginLeft="@dimen/login_padding">
+            android:layout_marginLeft="@dimen/login_padding"
+            android:background="@drawable/selector_comm_settting_item">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,6 +97,28 @@
                 style="@style/horizontal_line"
                 android:layout_alignParentBottom="true"/>
         </RelativeLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_down"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="正在下载..."/>
+            <ProgressBar
+                android:layout_marginTop="17dp"
+                android:id="@+id/pb_down"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+            </ProgressBar>
+        </LinearLayout>
+
 
     </LinearLayout>
 
