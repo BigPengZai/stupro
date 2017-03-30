@@ -14,6 +14,8 @@ import com.onlyhiedu.mobile.Dagger.Component.ActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Utils.AppUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
 
@@ -32,7 +34,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     protected Activity mContext;
 
     private Unbinder mUnBinder;
-
+    private String mPageName = "com.onlyhiedu.mobile";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +52,19 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         AppManager.getAppManager().addActivity(this);
         initView();
         initData();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(mPageName);
+        MobclickAgent.onResume(mContext);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(mPageName);
+        MobclickAgent.onPause(mContext);
     }
 
 

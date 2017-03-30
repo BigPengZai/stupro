@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
+import android.view.View;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
@@ -8,6 +9,7 @@ import com.onlyhiedu.mobile.UI.Setting.presenter.ModifyPwPresenter;
 import com.onlyhiedu.mobile.UI.Setting.presenter.contract.ModifyPwContract;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Widget.InputTextView;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,16 +44,20 @@ public class ModifyPwActivity extends BaseActivity<ModifyPwPresenter> implements
     }
 
     @OnClick(R.id.btn_confirm)
-    public void onClick() {
-        String newPwd = mEdit_New_Pw.getEditText();
-        String configPwd = mEdit_Confirm_Pw.getEditText();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_confirm:
+                String newPwd = mEdit_New_Pw.getEditText();
+                String configPwd = mEdit_Confirm_Pw.getEditText();
 
-        if(newPwd.equals(configPwd)){
-            mPresenter.updatePassword(mEdit_Old_Number.getEditText(), System.currentTimeMillis(), newPwd);
-        }else{
-            Toast.makeText(mContext, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+                if(newPwd.equals(configPwd)){
+                    mPresenter.updatePassword(mEdit_Old_Number.getEditText(), System.currentTimeMillis(), newPwd);
+                }else{
+                    Toast.makeText(mContext, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+                }
+                MobclickAgent.onEvent(this,"modify_confirm_pw");
+                break;
         }
-
     }
 
     @Override

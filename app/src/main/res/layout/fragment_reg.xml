@@ -147,6 +147,7 @@
         android:gravity="center">
 
         <CheckBox
+            android:id="@+id/cb_check"
             style="@style/wrap_wrap"
             android:checked="true"/>
 

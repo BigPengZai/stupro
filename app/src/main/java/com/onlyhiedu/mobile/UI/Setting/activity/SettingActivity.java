@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,6 +42,7 @@ public class SettingActivity extends SimpleActivity {
         switch (view.getId()) {
             case R.id.setting_pwd:
                 startActivity(new Intent(this, ModifyPwActivity.class));
+                MobclickAgent.onEvent(this,"setting_modify_pw");
                 break;
             case R.id.setting_feedback:
                 startActivity(new Intent(this, FeedBackActivity.class));
@@ -50,6 +52,7 @@ public class SettingActivity extends SimpleActivity {
                 break;
             case R.id.btn_sign:
                 UIUtils.startLoginActivity(this);
+
                 break;
             case R.id.ll_clean_cache:
                 cleanAppCache();

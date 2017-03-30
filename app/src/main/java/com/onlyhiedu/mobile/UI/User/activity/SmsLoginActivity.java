@@ -13,6 +13,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -71,10 +72,12 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             case R.id.tv_code:
 
                 getMsgCode();
+                MobclickAgent.onEvent(this,"sms_identifying_code");
                 break;
             case R.id.btn_sign:
 
                 toLogin();
+                MobclickAgent.onEvent(this, "sms_login");
                 break;
             case R.id.ic_delete:
 

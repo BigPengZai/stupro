@@ -1,9 +1,15 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -35,6 +41,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.onlyhiedu.mobile.R.id.line;
+
 /**
  * Created by pengpeng on 2017/3/2.
  */
@@ -48,8 +56,12 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
     LinearLayout mLl_Down;
     @BindView(R.id.pb_down)
     ProgressBar mPb_Down;
+    @BindView(R.id.rl_line)
+    RelativeLayout mRl_Line;
     public static final String TAG = AboutActivity.class.getSimpleName();
 
+    public static final String PHONE_NUM = "400-876-3300";
+    private final int CALL_REQUEST_CODE = 1;
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -65,9 +77,79 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
         setToolBar("关于我们");
     }
 
-    @OnClick(R.id.rl_update)
-    public void onClick() {
-        mPresenter.updataVersion();
+    @OnClick({R.id.rl_update, R.id.rl_line})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_update:
+                mPresenter.updataVersion();
+                break;
+            case R.id.rl_line:
+                requestPermission();
+                break;
+        }
+    }
+
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // 第一次请求权限时，用户如果拒绝，下一次请求shouldShowRequestPermissionRationale()返回true
+            // 向用户解释为什么需要这个权限
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
+                new AlertDialog.Builder(this)
+                        .setMessage("申请拨打电话权限")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //申请权限
+                                ActivityCompat.requestPermissions(AboutActivity.this,
+                                        new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
+                            }
+                        })
+                        .show();
+            } else {
+                //申请相机权限
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
+            }
+        } else {
+//            tvPermissionStatus.setTextColor(Color.GREEN);
+//            tvPermissionStatus.setText("相机权限已申请");
+            callLine();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CALL_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                tvPermissionStatus.setTextColor(Color.GREEN);
+//                tvPermissionStatus.setText("相机权限已申请");
+                callLine();
+            } else {
+                //用户勾选了不再询问
+                //提示用户手动打开权限
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                    Toast.makeText(this, "拨打电话权限已被禁止", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+    private void callLine() {
+        //拨打电话
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + PHONE_NUM));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        startActivity(intent);
+
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.FindPwdPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.FindPwdContract;
 import com.onlyhiedu.mobile.Widget.InputTextView;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -68,8 +69,10 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
             case R.id.tv_code:
                 mTvCode.setEnabled(false);
                 mPresenter.readSecond();
+                MobclickAgent.onEvent(this,"forgot_identifying_code");
                 break;
             case R.id.btn_sign_in:
+                MobclickAgent.onEvent(this,"forgot_register");
                 break;
         }
     }

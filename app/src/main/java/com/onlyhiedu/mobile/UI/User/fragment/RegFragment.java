@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,6 +56,8 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     @BindView(R.id.tv_code)
     TextView mTvCode;
 
+    @BindView(R.id.cb_check)
+    CheckBox mCb_Check;
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -80,7 +84,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
 
 
-    @OnClick({R.id.btn_next_number, R.id.btn_next_name, R.id.btn_register})
+    @OnClick({R.id.btn_next_number, R.id.btn_next_name, R.id.btn_register,R.id.tv_code,R.id.cb_check})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_next_number:
@@ -91,6 +95,13 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
                 break;
             case R.id.btn_register:
                 nextRegister();
+                MobclickAgent.onEvent(mContext,"register_register");
+                break;
+            case R.id.tv_code:
+                MobclickAgent.onEvent(mContext,"register_identifying_code");
+                break;
+            case R.id.cb_check:
+                MobclickAgent.onEvent(mContext,"register_clause");
                 break;
         }
     }

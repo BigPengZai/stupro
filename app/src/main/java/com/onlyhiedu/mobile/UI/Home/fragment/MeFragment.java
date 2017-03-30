@@ -21,6 +21,7 @@ import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,20 +87,23 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
 
     @Override
     public void showStudentInfo(StudentInfo data) {
-        mSettingName.setDetailText(data.name);
-        mTvName.setText(data.name);
-        mSex = data.sex;
-        if (data.sex == 0) {
-            mSettingSex.setDetailText("男");
+        if (data != null&&data.name!=null) {
+            mSettingName.setDetailText(data.name);
+            mTvName.setText(data.name);
+            mSex = data.sex;
+            if (data.sex!=null&&data.sex == 0) {
+                mSettingSex.setDetailText("男");
+            }
+            if (data.sex!=null&&data.sex == 1) {
+                mSettingSex.setDetailText("女");
+            }
+            if (data.sex == null) {
+                mSettingSex.setDetailText(null);
+            }
+            mSettingGrade.setDetailText(data.grade);
+            mSettingAddress.setDetailText(data.examArea);
         }
-        if (data.sex == 1) {
-            mSettingSex.setDetailText("女");
-        }
-        if (data.sex == null) {
-            mSettingSex.setDetailText(null);
-        }
-        mSettingGrade.setDetailText(data.grade);
-        mSettingAddress.setDetailText(data.examArea);
+
     }
 
 
@@ -194,6 +198,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
                 break;
             case R.id.setting:
                 startActivity(new Intent(getContext(), SettingActivity.class));
+                MobclickAgent.onEvent(mContext,"me_setting");
                 break;
         }
     }

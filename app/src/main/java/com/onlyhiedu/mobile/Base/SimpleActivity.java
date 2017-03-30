@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.R;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,7 +25,7 @@ public abstract class SimpleActivity extends SupportActivity {
 
     protected Activity mContext;
     private Unbinder mUnBinder;
-
+    private String mPageName = "com.onlyhiedu.mobile";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,19 @@ public abstract class SimpleActivity extends SupportActivity {
         initEventAndData();
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(mPageName);
+        MobclickAgent.onResume(mContext);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(mPageName);
+        MobclickAgent.onPause(mContext);
+    }
 
     protected void setToolBar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

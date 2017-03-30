@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
+import com.onlyhiedu.mobile.UI.Setting.activity.FeedBackActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.ModifyPwActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
@@ -34,4 +35,5 @@ public interface ActivityComponent {
 
     void inject(ChatActivity activity);
 
+    void inject(FeedBackActivity feedBackActivity);
 }

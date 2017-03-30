@@ -1,5 +1,7 @@
 package com.onlyhiedu.mobile.Utils;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -83,4 +85,12 @@ public class StringUtils {
         return true;
     }
 
+    /**
+     *
+     * @return 获取手机唯一标识
+     */
+    public static   String getDeviceId(){
+        TelephonyManager TelephonyMgr = (TelephonyManager) App.getInstance().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        return TelephonyMgr.getDeviceId();
+    }
 }

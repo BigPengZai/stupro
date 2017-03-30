@@ -2,12 +2,17 @@ package com.onlyhiedu.mobile.Utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.compat.BuildConfig;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import io.agora.rtc.video.EglBase;
 
 /**
  * Created by pengpeng on 2017/2/22.

@@ -16,10 +16,14 @@ public interface ChatContract {
     interface View extends BaseView {
 
         void showCourseWareImageList(List<CourseWareImageList> data);
+
+        void showClassConsumption(String msg);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
 
         void getCourseWareImageList(String wareId);
+
+        void uploadClassConsumption(String courseUuid,String endTime);
     }
 }

@@ -127,7 +127,8 @@
             android:layout_alignParentRight="true"
             android:padding="@dimen/size_10"
             android:text="忘记密码"
-            android:textColor="#80ffffff"/>
+            android:textColor="#80ffffff"
+            android:layout_alignParentTop="true"/>
     </RelativeLayout>
 
 </LinearLayout>

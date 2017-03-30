@@ -2,10 +2,12 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.Base.ViewPagerAdapterFragment;
 import com.onlyhiedu.mobile.R;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 
@@ -15,7 +17,7 @@ import static com.onlyhiedu.mobile.Utils.UIUtils.setIndicator;
  * Created by xuwc on 2017/2/18.
  */
 
-public class ClassFragment extends SimpleFragment {
+public class ClassFragment extends SimpleFragment implements TabLayout.OnTabSelectedListener {
 
 
     private ViewPagerAdapterFragment mAdapter;
@@ -26,6 +28,7 @@ public class ClassFragment extends SimpleFragment {
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
 
+    public static final String TAG = ClassFragment.class.getSimpleName();
     @Override
     protected int getLayoutId() {
         return R.layout.layout_main_viewpaget_tablayout;
@@ -39,6 +42,30 @@ public class ClassFragment extends SimpleFragment {
         mViewpager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewpager);
         setIndicator(mTabLayout, 40, 40);
+        mTabLayout.addOnTabSelectedListener(this);
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        switch (tab.getPosition()) {
+            case 0:
+                Log.d(TAG, "000000");
+                MobclickAgent.onEvent(mContext,"tab_nostart");
+                break;
+            case 1:
+                Log.d(TAG, "11111");
+                MobclickAgent.onEvent(mContext,"tab_finish");
+                break;
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
 }

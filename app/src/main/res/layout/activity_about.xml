@@ -37,8 +37,10 @@
 
         </LinearLayout>
 
-
+<!--客服热线-->
         <RelativeLayout
+            android:background="@drawable/selector_comm_settting_item"
+            android:id="@+id/rl_line"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginLeft="@dimen/login_padding"

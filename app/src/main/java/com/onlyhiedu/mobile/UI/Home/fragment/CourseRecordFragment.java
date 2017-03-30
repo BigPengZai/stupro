@@ -16,6 +16,7 @@ import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -134,6 +135,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void onItemClick(int position, long itemId) {
 //        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
+        MobclickAgent.onEvent(mContext,"item_finish_item");
     }
 
     @Override

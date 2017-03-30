@@ -12,6 +12,7 @@ import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerFragmentComponent;
 import com.onlyhiedu.mobile.Dagger.Component.FragmentComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.FragmentModule;
+import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
 
@@ -33,7 +34,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     protected Context mContext;
 
     private Unbinder mUnBinder;
-
+    private String mPageName = "com.onlyhiedu.mobile";
     @Override
     public void onAttach(Context context) {
         mActivity = (Activity) context;
@@ -68,6 +69,19 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         mUnBinder = ButterKnife.bind(this, view);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(mPageName);
+        MobclickAgent.onResume(mContext);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(mPageName);
+        MobclickAgent.onPause(mContext);
+    }
     //类库支持的懒加载
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {

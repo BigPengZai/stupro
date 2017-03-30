@@ -35,6 +35,7 @@ import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -109,6 +110,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private Chronometer mMChronometer;
+    private String mUuid;
 
     private void headsetPlugged(final boolean plugged) {
         new Thread(new Runnable() {
@@ -159,6 +161,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mMBut_dimiss.setOnClickListener(this);
         //获取频道 id  老师uid 学生uid
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
+        mUuid = getIntent().getStringExtra("uuid");
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
             //课程频道
@@ -211,7 +214,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
         mPresenter.getCourseWareImageList("f35b6c57c9484a5dab9795a1fd42bea8");
 
-        optional();
+//        optional();
 //       /* LinearLayout bottomContainer = (LinearLayout) findViewById(R.id.bottom_container);
 //        FrameLayout.MarginLayoutParams fmp = (FrameLayout.MarginLayoutParams) bottomContainer.getLayoutParams();
 //        fmp.bottomMargin = virtualKeyHeight() + 16;
@@ -364,15 +367,27 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    @Override
+    public void showClassConsumption(String msg) {
+        Log.d(TAG, "msg:"+msg);
+        if (msg != null && msg.equals("成功")) {
+
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dimiss:
-                //call  的对象 假数据即老师信令的id
+             /*   //call  的对象 假数据即老师信令的id
                 String peer = mRoomInfo.getChannelTeacherId() + "";
                 //发送点对点 消息
-                m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");
+                m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");*/
+                Log.d(TAG, "uuid:" + mUuid);
+                mPresenter.uploadClassConsumption(mUuid,System.currentTimeMillis()+"");
+                Log.d(TAG, "时间戳："+System.currentTimeMillis());
+                MobclickAgent.onEvent(this,"finish_class");
                 break;
 
         }
@@ -450,10 +465,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     protected void deInitUIandEvent() {
         optionalDestroy();
-
         doLeaveChannel();
         event().removeEventHandler(this);
-
+        finish();
     }
 
     private void doLeaveChannel() {
@@ -477,8 +491,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void quitCall() {
         deInitUIandEvent();
-        mUid = "";
-        finish();
+
     }
 
     private VideoPreProcessing mVideoPreProcessing;
@@ -809,6 +822,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void showError(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
