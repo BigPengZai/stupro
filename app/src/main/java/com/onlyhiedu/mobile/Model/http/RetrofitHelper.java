@@ -3,8 +3,10 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
+import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
+import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
@@ -137,8 +139,8 @@ public class RetrofitHelper {
     }
 
 
-    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m, Long time) {
-        return sOnlyApis.getUser(z, m, time, "Android", "student");
+    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m, Long time,String token,String deviceid) {
+        return sOnlyApis.getUser(z, m, time, "Android", "student",token,deviceid);
     }
 
     public Flowable<onlyHttpResponse<StudentInfo>> fetchStudentInfo() {
@@ -181,7 +183,12 @@ public class RetrofitHelper {
         return sOnlyApis.getCoursewareImageList(wareId);
     }
 
+    public Flowable<onlyHttpResponse<FeedBackInfo>> fetchRequestFeedBackInfo(String content) {
+        return sOnlyApis.requestFeedBackInfo(content);
+    }
 
-
+    public Flowable<onlyHttpResponse<ClassConsumption>> fetchUploadClassConsumption(String uuid,String endtime) {
+        return sOnlyApis.uploadClassConsumption(uuid, endtime);
+    }
 
 }

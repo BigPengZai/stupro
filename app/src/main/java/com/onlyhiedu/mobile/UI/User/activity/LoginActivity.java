@@ -6,6 +6,7 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,6 +37,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @BindView(R.id.img_show)
     ImageView mImg_Show;
 
+    public static final String TAG = LoginActivity.class.getSimpleName();
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -61,12 +64,15 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         switch (view.getId()) {
             case R.id.tv_sms_sign:
                 startActivity(new Intent(this, SmsLoginActivity.class));
+                MobclickAgent.onEvent(this, "login_sms_login");
                 break;
             case R.id.tv_find_pwd:
                 startActivity(new Intent(this, FindPwdActivity.class));
+                MobclickAgent.onEvent(this, "login_forget_pw");
                 break;
             case R.id.btn_sign:
                 toLogin();
+                MobclickAgent.onEvent(this, "logindemo");
                 break;
             case R.id.btn_sign_in:
                 startActivity(new Intent(this, RegActivity.class));
@@ -104,7 +110,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String number = mEditNumber.getText().toString();
         String pwd = mEditPwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-            mPresenter.getUser(number, pwd);
+            if (SPUtil.getToken().equals("")) {
+                mPresenter.getUser(number, pwd, null, StringUtils.getDeviceId());
+                Log.d(TAG, "StringUtils.getDeviceId():"+StringUtils.getDeviceId());
+            } else {
+                mPresenter.getUser(number, pwd, SPUtil.getToken(), StringUtils.getDeviceId());
+            }
         }
     }
 
