@@ -16,7 +16,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 import com.onlyhiedu.mobile.R;
 
@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Ing. Oscar G. Medina Cruz
  */
-public class DrawView extends RelativeLayout implements View.OnTouchListener {
+public class DrawView extends FrameLayout implements View.OnTouchListener {
 
     // FINAL VARS
     final String TAG = "DrawView";
@@ -59,7 +59,12 @@ public class DrawView extends RelativeLayout implements View.OnTouchListener {
     private DrawingTool mDrawingTool;
 
     private List<DrawMove> mDrawMoveHistory;
+
+
+
     private int mDrawMoveHistoryIndex = -1;
+
+
 
     /**
      * Default constructor

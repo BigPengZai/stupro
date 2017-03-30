@@ -13,4 +13,6 @@ public class CourseWareImageList {
     public String coursewareId;
     public String imageUrl;
     public String imageName;
+    public int height;
+    public int width;
 }

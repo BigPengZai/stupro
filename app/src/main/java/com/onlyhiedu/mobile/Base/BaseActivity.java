@@ -14,7 +14,6 @@ import com.onlyhiedu.mobile.Dagger.Component.ActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;

@@ -17,23 +17,29 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.Chronometer;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
+import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
+import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -41,6 +47,8 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -59,9 +67,8 @@ import io.agore.propeller.preprocessing.VideoPreProcessing;
 
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
-public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, View.OnClickListener, ChatContract.View {
+public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, ChatContract.View {
 
-    private TeacherVideoView mGridVideoViewContainer;
     private RelativeLayout mSmallVideoViewDock;
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
 
@@ -100,16 +107,27 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
      */
 //    private GoogleApiClient client;
     private String mUid;
-    private RelativeLayout mRl_bg;
-    private DrawView mDrawView;
-    private ImageView mImageCourseWare;
+    private int mScreenWidth;
+    @BindView(R.id.grid_video_view_container)
+    TeacherVideoView mGridVideoViewContainer;
+    @BindView(R.id.scrollView)
+    MyScrollView mScrollView;
+    @BindView(R.id.rl_bg)
+    RelativeLayout mRl_bg;
+    @BindView(R.id.draw_view)
+    DrawView mDrawView;
+    @BindView(R.id.image_course_ware)
+    ImageView mImageCourseWare;
+    @BindView(R.id.chronometer)
+    Chronometer mChronometer;
+    @BindView(R.id.image_full_screen)
+    ImageView mImageFullScreen;
 
-    private AgoraAPIOnlySignal m_agoraAPI;
-    private Button mMBut_dimiss;
     private int msgid = 0;
+    private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
-    private Chronometer mMChronometer;
+    private RequestManager mRequestManager;
     private String mUuid;
 
     private void headsetPlugged(final boolean plugged) {
@@ -145,27 +163,24 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     protected void initUIandEvent() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        mScreenWidth = ScreenUtil.getScreenWidth(this);
+        mRequestManager = Glide.with(this);
 
         //测试 狗屎代码
-        mRl_bg = (RelativeLayout) findViewById(R.id.rl_bg);
-        mMBut_dimiss = (Button) findViewById(R.id.but_dimiss);
-        mDrawView = (DrawView) findViewById(R.id.draw_view);
-        mImageCourseWare = (ImageView) findViewById(R.id.image_course_ware);
+        mChronometer.setBase(SystemClock.elapsedRealtime());//计时器清零
+        int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
+        mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
 
-        mMChronometer = (Chronometer) findViewById(R.id.chronometer);
-        mMChronometer.setBase(SystemClock.elapsedRealtime());//计时器清零
-        int hour = (int) ((SystemClock.elapsedRealtime() - mMChronometer.getBase()) / 1000 / 60);
-        mMChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
-
-        mMBut_dimiss.setOnClickListener(this);
         //获取频道 id  老师uid 学生uid
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
         mUuid = getIntent().getStringExtra("uuid");
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
             //课程频道
-            mChannelName = mRoomInfo.getCommChannelId();
+//            mChannelName = mRoomInfo.getCommChannelId();
+            mChannelName = "DebugChannel_XWC";
             //学生uid
             mUid = mRoomInfo.getChannelStudentId() + "";
         } else {
@@ -202,7 +217,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         surfaceV.setZOrderOnTop(false);
         surfaceV.setZOrderMediaOverlay(false);
         mUidsList.put(0, new SoftReference<>(surfaceV)); // get first surface view
-        mGridVideoViewContainer = (TeacherVideoView) findViewById(R.id.grid_video_view_container);
         mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
     }
@@ -212,7 +226,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //        TextView textChannelName = (TextView) findViewById(R.id.channel_name);
 //        textChannelName.setText(mChannelName);
 
-        mPresenter.getCourseWareImageList("f35b6c57c9484a5dab9795a1fd42bea8");
+        mPresenter.getCourseWareImageList("fbe78bf5aa014ebf917813c3d828dcfb");
 
 //        optional();
 //       /* LinearLayout bottomContainer = (LinearLayout) findViewById(R.id.bottom_container);
@@ -255,32 +269,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
                 Log.d(TAG, "点对点消息：" + account + " : " + (long) (uid & 0xffffffffl) + " : " + msg);
-                //进行 下课，白版等业务逻辑的处理
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        initDismissDialog();
-//                    }
-//                });
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mDrawView.eventActionDown(598.3423f, 1807.26172f);
-                        mDrawView.eventActionMove(587.44653f, 1804.27344f);
-                        mDrawView.eventActionMove(569.23495f, 1809.27728f);
-                        mDrawView.eventActionMove(549.37833f, 1814.63873f);
-                        mDrawView.eventActionMove(535.32938f, 1818.7486f);
-                        mDrawView.eventActionMove(514.23633f, 1829.7107f);
-                        mDrawView.eventActionMove(504.03308f, 1833.38202f);
-                        mDrawView.eventActionMove(495.6029f, 1843.06268f);
-                        mDrawView.eventActionMove(480.0887f, 1855.4698f);
-                        mDrawView.eventActionMove(474.37845f, 1867.63525f);
-                        mDrawView.eventActionMove(464.10852f, 1876.40698f);
-                        mDrawView.eventActionMove(457.64493f, 1885.87323f);
-                        mDrawView.eventActionUp(457.64493f, 1885.87323f);
+                        ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
+                        if (whiteboardData.ResponseParam != null) {
+                            mPresenter.setDrawableStyle(mDrawView, whiteboardData);
+                        }
                     }
                 });
-
 
             }
 
@@ -288,6 +286,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onMessageChannelReceive(String channelID, String account, int uid, String msg) {
                 Log.d(TAG, "频道消息：" + channelID + " " + account + " : " + msg);
+
+                int type = mPresenter.getActionType(msg);
+                if (type == ChatPresenter.DRAW) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<String[]> drawData = mPresenter.parseDrawJson(msg);
+                            mPresenter.drawPoint(mDrawView, drawData);
+                        }
+                    });
+                }
 
             }
 
@@ -320,6 +329,18 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     }
                 });
             }
+
+            @Override
+            public void onChannelUserList(String[] accounts, int[] uids) {
+                super.onChannelUserList(accounts, uids);
+
+                for (String str : accounts) {
+                    if (str.equals(mRoomInfo.getChannelTeacherId())) {
+                        requestWhiteBoardData();
+                        mSendRequestWhiteBoardData = true;
+                    }
+                }
+            }
         });
     }
 
@@ -327,7 +348,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         //测试数据 信令频道
         String channelName = mRoomInfo.getSignallingChannelId();
         Log.d(TAG, "Join channel " + channelName);
-        m_agoraAPI.channelJoin(channelName);
+        m_agoraAPI.channelJoin("DebugChannel_XWC");
     }
 
     private void initDismissDialog() {
@@ -362,34 +383,84 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
-        if (data != null && data.size() != 0 && data.get(0) != null) {
-            ImageLoader.loadImage(Glide.with(this), mImageCourseWare, data.get(0).imageUrl);
+
+        int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
+
+        if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
+            float rate = (float) imageWidth / (float) data.get(0).width;
+            int imageHeight = (int) ((float) data.get(0).height * rate);
+            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl, imageWidth, imageHeight);
+            mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
         }
     }
 
     @Override
     public void showClassConsumption(String msg) {
-        Log.d(TAG, "msg:"+msg);
+        Log.d(TAG, "msg:" + msg);
         if (msg != null && msg.equals("成功")) {
 
         }
     }
 
 
-    @Override
+    private ViewGroup.LayoutParams mScrollViewP;
+    private ViewGroup.LayoutParams mDrawViewP;
+    private ViewGroup.LayoutParams mImageCourseWareP;
+    private boolean mSwitch; //全屏半屏
+    private float rate;      //缩放比例
+
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.but_dimiss:
-             /*   //call  的对象 假数据即老师信令的id
+            case R.id.but_dismiss:
+                //call  的对象 假数据即老师信令的id
                 String peer = mRoomInfo.getChannelTeacherId() + "";
                 //发送点对点 消息
-                m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");*/
+                m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");
                 Log.d(TAG, "uuid:" + mUuid);
-                mPresenter.uploadClassConsumption(mUuid,System.currentTimeMillis()+"");
-                Log.d(TAG, "时间戳："+System.currentTimeMillis());
-                MobclickAgent.onEvent(this,"finish_class");
+                mPresenter.uploadClassConsumption(mUuid, System.currentTimeMillis() + "");
+                Log.d(TAG, "时间戳：" + System.currentTimeMillis());
+                MobclickAgent.onEvent(this, "finish_class");
                 break;
+            case R.id.image_full_screen:
 
+                if (mScrollViewP == null) {
+                    mScrollViewP = mScrollView.getLayoutParams();
+                    mDrawViewP = mDrawView.getLayoutParams();
+                    mImageCourseWareP = mImageCourseWare.getLayoutParams();
+                    rate = (float) mScreenWidth / (float) mScrollView.getWidth();
+                }
+
+                if (mSwitch) {
+                    mSwitch = false;
+                    mScrollView.setLayoutParams(mScrollViewP);
+                    mDrawView.setLayoutParams(mDrawViewP);
+                    mImageCourseWare.setLayoutParams(mImageCourseWareP);
+                } else {
+//                ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
+//                        Animation.RELATIVE_TO_SELF, 1f,
+//                        Animation.RELATIVE_TO_SELF, 0.5f);
+//                scaleX.setDuration(200);
+//
+//                ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
+//                        Animation.RELATIVE_TO_SELF, 0.5f,
+//                        Animation.RELATIVE_TO_SELF, 0);
+//                scaleY.setDuration(200);
+//
+//                AnimationSet set = new AnimationSet(true);
+//                set.setFillAfter(true);
+//                set.addAnimation(scaleX);
+//                set.addAnimation(scaleY);
+//                mScrollView.startAnimation(set);
+                    mScrollView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
+                    mDrawView.setLayoutParams(new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
+                    mImageCourseWare.setLayoutParams(params);
+                    mSwitch = true;
+                }
+
+
+                break;
         }
     }
 
@@ -563,7 +634,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void run() {
                 Log.d(TAG, "加入成功后uid: " + uid);
                 mRl_bg.setVisibility(View.GONE);
-                mMChronometer.start();
+                mChronometer.start();
                 if (isFinishing()) {
                     return;
                 }
@@ -579,6 +650,19 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         });
     }
 
+    //请求白板数据
+    private static final String requestWhiteBoardData = "requestWhiteBoardData";
+    private boolean mSendRequestWhiteBoardData;
+
+    private void requestWhiteBoardData() {
+        if (mRoomInfo != null) {
+            RequestWhiteBoard requestStr = new RequestWhiteBoard();
+            requestStr.AccountID = mRoomInfo.getChannelStudentId() + "";
+            String json = JsonUtil.toJson(requestStr);
+            m_agoraAPI.messageInstantSend(mRoomInfo.getChannelTeacherId() + "", 0, json, requestWhiteBoardData);
+        }
+    }
+
     @Override
     public void onUserJoined(int uid, int elapsed) {
         Log.d(TAG, "uid:onUserJoined " + uid);
@@ -586,6 +670,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 mRl_bg.setVisibility(View.GONE);
+
+                if (uid == mRoomInfo.getChannelTeacherId() && !mSendRequestWhiteBoardData) {
+                    requestWhiteBoardData();
+                }
             }
         });
 

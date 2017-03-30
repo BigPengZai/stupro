@@ -1,45 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:keepScreenOn="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:keepScreenOn="true">
+
+    <!--上课-->
     <LinearLayout
+        android:id="@+id/ll_video"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <io.agore.openvcall.ui.TeacherVideoView
+            android:id="@+id/grid_video_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ViewStub
+            android:id="@id/small_video_view_dock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:inflatedId="@id/small_video_view_dock"
+            android:layout="@layout/small_video_view_dock"/>
+
+        <Button
+            android:id="@+id/but_dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我要下课"/>
+    </LinearLayout>
+
+    <!--白版-->
+    <com.onlyhiedu.mobile.Widget.MyScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--上课-->
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <io.agore.openvcall.ui.TeacherVideoView
-                android:id="@+id/grid_video_view_container"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ll_video"
+        android:background="@color/white">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_course_ware"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <ViewStub
-                android:id="@id/small_video_view_dock"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:inflatedId="@id/small_video_view_dock"
-                android:layout="@layout/small_video_view_dock"/>
-            <Button
-                android:id="@+id/but_dimiss"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我要下课"/>
-        </LinearLayout>
-        <!--白版-->
-        <com.onlyhiedu.mobile.Widget.MyScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+                android:scaleType="fitXY"/>
+
             <com.onlyhiedu.mobile.Widget.draw.DrawView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/draw_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 app:dv_draw_alpha="255"
                 app:dv_draw_anti_alias="true"
                 app:dv_draw_color="@color/colorAccent"
@@ -50,33 +67,42 @@
                 app:dv_draw_mode="draw"
                 app:dv_draw_style="stroke"
                 app:dv_draw_tool="pen"
-                app:dv_draw_width="4">
-                <ImageView
-                    android:id="@+id/image_course_ware"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"/>
+                app:dv_draw_width="4"/>
+        </FrameLayout>
 
-            </com.onlyhiedu.mobile.Widget.draw.DrawView>
-        </com.onlyhiedu.mobile.Widget.MyScrollView>
-    </LinearLayout>
+    </com.onlyhiedu.mobile.Widget.MyScrollView>
+
     <Chronometer
         android:id="@+id/chronometer"
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:gravity="bottom|center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:paddingBottom="17dp"/>
+
     <RelativeLayout
         android:id="@+id/rl_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:visibility="gone">
+
         <ProgressBar
             android:id="@+id/iv_loading"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
-</FrameLayout>
+
+    <ImageView
+        android:id="@+id/image_full_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="12dp"
+        android:padding="@dimen/size_6"
+        android:src="@mipmap/ic_full_screen"/>
+
+</RelativeLayout>

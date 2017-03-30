@@ -17,11 +17,12 @@ public class RoomInfo  implements Serializable{
      * data : {"commChannelId":"DC8497B8-A5EF-4E58-8940-3981E4511A7D10","signallingChannelId":"DC8497B8-A5EF-4E58-8940-3981E4511A7D1012207187","channelTeacherId":1511698262,"channelStudentId":1951267069}
      */
 
-
         private String commChannelId;
         private String signallingChannelId;
         private int channelTeacherId;
         private int channelStudentId;
+
+
 
         public String getCommChannelId() {
             return commChannelId;

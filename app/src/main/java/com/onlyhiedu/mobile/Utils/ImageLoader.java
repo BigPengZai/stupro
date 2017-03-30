@@ -75,6 +75,9 @@ public class ImageLoader {
         }
     }
 
-
+    public static void loadImage(RequestManager loader, ImageView view, String url,int w,int h){
+        DrawableRequestBuilder builder = loader.load(url).diskCacheStrategy(DiskCacheStrategy.ALL).override(w,h);
+        builder.into(view);
+    }
 
 }

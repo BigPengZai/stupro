@@ -119,7 +119,8 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
 
                     if (!data.isHasError()) {
                         //返回的数据
-                        getView().showRoomInfoSucess(data.getData());
+                        RoomInfo bean = data.getData();
+                        getView().showRoomInfoSucess(bean);
                     } else {
                         getView().showError(data.getMessage());
                     }
