@@ -3,6 +3,7 @@ package io.agore.openvcall.ui;
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
+import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 
@@ -27,13 +28,14 @@ public interface ChatContract {
         void getCourseWareImageList(String wareId);
 
         void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data);
+        void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data);
 
-        int getActionType(String msg);
+        NotifyWhiteboardOperator getNotifyWhiteboard(String str);
 
-        List<String[]> parseDrawJson(String msg);
+        int getActionType(NotifyWhiteboardOperator bean);
 
-        void drawPoint(DrawView view,List<String[]> data);
+        void drawPoint(DrawView view, NotifyWhiteboardOperator json);
 
-        void uploadClassConsumption(String courseUuid,String endTime);
+        void uploadClassConsumption(String courseUuid, String endTime);
     }
 }

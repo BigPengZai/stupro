@@ -20,6 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,6 +34,7 @@ import com.bumptech.glide.RequestManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.R;
@@ -287,17 +291,25 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void onMessageChannelReceive(String channelID, String account, int uid, String msg) {
                 Log.d(TAG, "频道消息：" + channelID + " " + account + " : " + msg);
 
-                int type = mPresenter.getActionType(msg);
-                if (type == ChatPresenter.DRAW) {
+                NotifyWhiteboardOperator notifyWhiteboard = mPresenter.getNotifyWhiteboard(msg);
+
+                if (notifyWhiteboard != null) {
+
+                    int type = mPresenter.getActionType(notifyWhiteboard);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            List<String[]> drawData = mPresenter.parseDrawJson(msg);
-                            mPresenter.drawPoint(mDrawView, drawData);
+                            if (type == ChatPresenter.DRAW) {
+                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
+                            }
+                            if (type == ChatPresenter.SET) {
+                                mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
+                            }
+
                         }
                     });
-                }
 
+                }
             }
 
             @Override
@@ -436,27 +448,34 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     mScrollView.setLayoutParams(mScrollViewP);
                     mDrawView.setLayoutParams(mDrawViewP);
                     mImageCourseWare.setLayoutParams(mImageCourseWareP);
+
+                    mDrawView.clearAnimation();
                 } else {
-//                ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
-//                        Animation.RELATIVE_TO_SELF, 1f,
-//                        Animation.RELATIVE_TO_SELF, 0.5f);
-//                scaleX.setDuration(200);
-//
-//                ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
-//                        Animation.RELATIVE_TO_SELF, 0.5f,
-//                        Animation.RELATIVE_TO_SELF, 0);
-//                scaleY.setDuration(200);
-//
-//                AnimationSet set = new AnimationSet(true);
-//                set.setFillAfter(true);
-//                set.addAnimation(scaleX);
-//                set.addAnimation(scaleY);
-//                mScrollView.startAnimation(set);
+
+
                     mScrollView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     mDrawView.setLayoutParams(new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
                     mImageCourseWare.setLayoutParams(params);
                     mSwitch = true;
+
+
+                    ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0,
+                            Animation.RELATIVE_TO_SELF, 0.5f);
+                    scaleX.setDuration(0);
+
+                    ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_PARENT, 0);
+                    scaleY.setDuration(0);
+
+                    AnimationSet set = new AnimationSet(true);
+                    set.setFillAfter(true);
+                    set.addAnimation(scaleX);
+                    set.addAnimation(scaleY);
+                    mDrawView.startAnimation(set);
+
                 }
 
 

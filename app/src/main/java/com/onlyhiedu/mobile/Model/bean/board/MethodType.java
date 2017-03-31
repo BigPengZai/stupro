@@ -8,7 +8,7 @@ public interface MethodType {
 
     String POINT = "PaintPoint";
     String LINE = "PaintLine";
-
+    String PaintSet = "PaintSet"; //画笔颜色改变
 
 
 }
