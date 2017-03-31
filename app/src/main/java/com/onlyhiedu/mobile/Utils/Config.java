@@ -9,9 +9,10 @@ import java.io.File;
  */
 
 public class Config {
+
     public static File getDirFile(String subFileName){
         if(isSDMounted()){
-            return mkdirsFolder(getSDirAbsolutePath() + "/Seeker/" + subFileName);
+            return mkdirsFolder(getSDirAbsolutePath() + "/onlyhieduDownload/" + subFileName);
         }
         return null;
     }

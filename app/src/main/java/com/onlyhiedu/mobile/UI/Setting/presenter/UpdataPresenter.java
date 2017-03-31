@@ -1,7 +1,5 @@
 package com.onlyhiedu.mobile.UI.Setting.presenter;
 
-import android.util.Log;
-
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
@@ -20,10 +18,12 @@ import io.reactivex.Flowable;
 public class UpdataPresenter extends RxPresenter<UpdataContract.View> implements UpdataContract.Presenter {
 
     private RetrofitHelper mRetrofitHelper;
+
     @Inject
     public UpdataPresenter(RetrofitHelper mRetrofitHelper) {
         this.mRetrofitHelper = mRetrofitHelper;
     }
+
     @Override
     public void updataVersion() {
         Flowable<onlyHttpResponse<UpdataVersionInfo>> flowable = mRetrofitHelper.fetchUpdataVersion();
@@ -31,18 +31,16 @@ public class UpdataPresenter extends RxPresenter<UpdataContract.View> implements
         MyResourceSubscriber<onlyHttpResponse<UpdataVersionInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<UpdataVersionInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<UpdataVersionInfo> data) {
-                if (getView() != null) {
-                    getView().showUpdataSuccess(data.getData());
-                    if (data.getData() != null) {
-                        Log.d("tag", "" + data.getData().getVersion());
-                    } else {
-                        Log.d("tag","komg");
-                    }
+                if (getView() != null && data.getData() != null) {
+                    if (data.isHasError())
+                        getView().showUpdataSuccess(data.getData());
+                    else
+                        getView().showError(data.getMessage());
 
                 }
             }
         };
 
-        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 }

@@ -17,26 +17,28 @@ import io.reactivex.Flowable;
 
 public class FeedBackPresenter extends RxPresenter<FeedBackContract.View> implements FeedBackContract.Presenter {
 
-    private  RetrofitHelper mRetrofiHelper;
+    private RetrofitHelper mRetrofitHelper;
 
     @Inject
-    public FeedBackPresenter(RetrofitHelper mRetrofiHelper) {
-        this.mRetrofiHelper = mRetrofiHelper;
+    public FeedBackPresenter(RetrofitHelper mRetrofitHelper) {
+        this.mRetrofitHelper = mRetrofitHelper;
     }
 
     @Override
     public void sendFeedBack(String content) {
 
 
-        Flowable<onlyHttpResponse<FeedBackInfo>> flowable = mRetrofiHelper.fetchRequestFeedBackInfo(content);
+        Flowable<onlyHttpResponse<FeedBackInfo>> flowable = mRetrofitHelper.fetchRequestFeedBackInfo(content);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
-                if (getView() != null) {
+                if (getView() != null && !data.isHasError())
                     getView().showFeedBackSuccess(data.getMessage());
-                }
+                else
+                    getView().showError(data.getMessage());
+
             }
         };
-        addSubscription(mRetrofiHelper.startObservable(flowable,observer));
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 }
