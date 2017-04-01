@@ -12,8 +12,8 @@ import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
+import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
-import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,8 +33,10 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
 
     public static String Notify_WhiteboardOperator = "Notify_WhiteboardOperator";
-    public static int DRAW = 1;
-    public static int SET = 2;
+    public static final int DRAW = 1;
+    public static final int SET = 2;
+    public static final int SCROLL = 3;
+    public static final int Eraser = 4;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -53,7 +55,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             @Override
             public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
                 if (getView() != null) {
-
                     if (!data.isHasError()) getView().showCourseWareImageList(data.getData());
                     else getView().showError(data.getMessage());
                 }
@@ -97,12 +98,13 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         return null;
     }
 
+
     @Override
     public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
 
         List<String[]> datas = new ArrayList<>();
         String type = json.NotifyParam.MethodType;
-        if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE)) {
+        if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE) || type.equals(MethodType.EraserPoint)) {
             String[] spit = json.NotifyParam.MethodParam.split("[|]");
             for (String str : spit) {
                 String[] data = new String[2];
@@ -112,18 +114,41 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 datas.add(data);
             }
         }
-        view.setDrawingMode(DrawingMode.values()[0]);
-        String[] xyAxle = datas.get(0);
-        view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-        if (datas.size() == 2) {
-            String[] xyAxle2 = datas.get(1);
-            view.eventActionUp(Float.parseFloat(xyAxle2[0]), Float.parseFloat(xyAxle2[1]));
-        } else {
-            for (int i = 1; i < datas.size() - 1; i++) {
-                view.eventActionMove(Float.parseFloat(datas.get(i)[0]), Float.parseFloat(datas.get(i)[1]));
+        if(datas.size()>0){
+            String[] xyAxle = datas.get(0);
+            view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
+            if (datas.size() == 2) {
+                String[] xyAxle2 = datas.get(1);
+                view.eventActionUp(Float.parseFloat(xyAxle2[0]), Float.parseFloat(xyAxle2[1]));
+            } else {
+                for (int i = 1; i < datas.size() - 1; i++) {
+                    view.eventActionMove(Float.parseFloat(datas.get(i)[0]), Float.parseFloat(datas.get(i)[1]));
+                }
+                view.eventActionUp(Float.parseFloat(datas.get(datas.size() - 1)[0]), Float.parseFloat(datas.get(datas.size() - 1)[1]));
             }
-            view.eventActionUp(Float.parseFloat(datas.get(datas.size() - 1)[0]), Float.parseFloat(datas.get(datas.size() - 1)[1]));
         }
+
+    }
+
+    @Override
+    public void ScrollDrawView(MyScrollView view, NotifyWhiteboardOperator bean) {
+        //TODO
+//        String s = "255,0,520,520";  表示为视区矩形范围,X,Y,WIDTH,HEIGHT
+        String s = bean.NotifyParam.MethodParam;
+        String[] spit = s.split(",");
+//        if(view.getScrollY()){
+
+//        }
+
+
+//        view.scrollTo(0,yAxis);
+    }
+
+    @Override
+    public void drawEraser(DrawView view, NotifyWhiteboardOperator json) {
+//        view.setDrawColor(R.color.white);
+        view.setDrawColor(Color.argb(0,255,255,255));
+        drawPoint(view,json);
     }
 
     @Override
@@ -134,6 +159,12 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if (type.equals(MethodType.PaintSet)) {
             return SET;
+        }
+        if(type.equals(MethodType.ViewRect)){
+            return SCROLL;
+        }
+        if(type.equals(MethodType.EraserPoint)){
+            return Eraser;
         }
         return 0;
     }

@@ -45,6 +45,7 @@ import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.ref.SoftReference;
@@ -300,12 +301,20 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         @Override
                         public void run() {
                             if (type == ChatPresenter.DRAW) {
+                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
                                 mPresenter.drawPoint(mDrawView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.SET) {
                                 mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
                             }
-
+                            if (type == ChatPresenter.SCROLL) {
+                                mPresenter.ScrollDrawView(mScrollView,notifyWhiteboard);
+                            }
+                            if(type == ChatPresenter.Eraser){
+                                mDrawView.setDrawingMode(DrawingMode.values()[2]);
+//                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
+                                mPresenter.drawEraser(mDrawView,notifyWhiteboard);
+                            }
                         }
                     });
 
@@ -401,9 +410,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
             float rate = (float) imageWidth / (float) data.get(0).width;
             int imageHeight = (int) ((float) data.get(0).height * rate);
-            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl, imageWidth, imageHeight);
+            mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl/*, imageWidth, imageHeight*/);
             mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+
         }
+
     }
 
     @Override
@@ -477,8 +489,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     mDrawView.startAnimation(set);
 
                 }
-
-
                 break;
         }
     }

@@ -5,6 +5,7 @@ import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
+import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 
 import java.util.List;
@@ -35,6 +36,10 @@ public interface ChatContract {
         int getActionType(NotifyWhiteboardOperator bean);
 
         void drawPoint(DrawView view, NotifyWhiteboardOperator json);
+
+        void ScrollDrawView(MyScrollView view , NotifyWhiteboardOperator yAxis);
+
+        void drawEraser(DrawView view, NotifyWhiteboardOperator json);
 
         void uploadClassConsumption(String courseUuid, String endTime);
     }
