@@ -1,12 +1,16 @@
 package com.onlyhiedu.mobile.Model.http;
 
+import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.Utils.UIUtils;
+
 public class onlyHttpResponse<T> {
 
     private boolean hasError;
     private int code;
     private String message;
     private T data;
-
+    //token失效
+    public static final int TOKEN_LOSE = 112;
     public boolean isHasError() {
         return hasError;
     }
@@ -16,6 +20,9 @@ public class onlyHttpResponse<T> {
     }
 
     public String getMessage() {
+        if (code == TOKEN_LOSE) {
+            UIUtils.startLoginActivity(App.getInstance());
+        }
         return message;
     }
 
@@ -24,6 +31,9 @@ public class onlyHttpResponse<T> {
     }
 
     public int getCode() {
+        if (code == TOKEN_LOSE) {
+            UIUtils.startLoginActivity(App.getInstance());
+        }
         return code;
     }
 

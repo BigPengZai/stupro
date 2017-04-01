@@ -146,8 +146,6 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showRoomInfoSucess(RoomInfo roomInfo) {
         if (roomInfo != null&&mItem.getUuid()!=null) {
-            String signallingChannelId = roomInfo.getSignallingChannelId();
-            Log.d(TAG, "signallingChannelId:" + signallingChannelId);
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("roomInfo", roomInfo);

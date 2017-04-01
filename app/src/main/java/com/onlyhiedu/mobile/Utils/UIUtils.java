@@ -9,9 +9,12 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Selection;
+import android.text.Spannable;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -41,6 +44,13 @@ public class UIUtils {
         context.startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+    public static void initCursor(EditText mEdit) {
+        CharSequence s = mEdit.getText();
+        if (s instanceof Spannable) {
+            Spannable spanText = (Spannable) s;
+            Selection.setSelection(spanText, s.length());
+        }
+    }
 
     public static void setRcDecorationAndLayoutManager(Context context, RecyclerView recyclerView, BaseRecyclerAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

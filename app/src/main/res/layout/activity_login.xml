@@ -11,6 +11,7 @@
     tools:context="com.onlyhiedu.mobile.UI.User.activity.LoginActivity">
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/btn_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_40"
-        android:background="@drawable/shape_login_ben_radius"
+        android:background="@drawable/selector_login"
         android:text="登录"
         android:textSize="@dimen/sp_18"/>
 

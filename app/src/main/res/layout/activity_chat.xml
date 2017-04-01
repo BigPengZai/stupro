@@ -80,19 +80,7 @@
         android:layout_centerHorizontal="true"
         android:paddingBottom="17dp"/>
 
-    <RelativeLayout
-        android:id="@+id/rl_bg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="gone">
 
-        <ProgressBar
-            android:id="@+id/iv_loading"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
 
     <ImageView
         android:id="@+id/image_full_screen"
@@ -103,5 +91,16 @@
         android:layout_alignParentRight="true"
         android:padding="@dimen/size_12"
         android:src="@mipmap/ic_full_screen"/>
-
+    <RelativeLayout
+        android:id="@+id/rl_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+        <ProgressBar
+            android:id="@+id/iv_loading"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 </RelativeLayout>

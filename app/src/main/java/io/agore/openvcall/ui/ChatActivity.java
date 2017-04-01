@@ -923,7 +923,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         recycler.setVisibility(View.VISIBLE);
         mSmallVideoViewDock.setVisibility(View.VISIBLE);
 
-
     }
 
     @Override

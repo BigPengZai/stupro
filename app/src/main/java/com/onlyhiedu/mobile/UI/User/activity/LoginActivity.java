@@ -20,6 +20,7 @@ import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
@@ -56,8 +57,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
         mEditNumber.setText(SPUtil.getPhone());
-
+        UIUtils.initCursor(mEditNumber);
     }
+
+
 
     @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number})
     public void onClick(View view) {
@@ -72,7 +75,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case R.id.btn_sign:
                 toLogin();
-                 MobclickAgent.onEvent(this, "logindemo");
+                 MobclickAgent.onEvent(this, "login_login");
                 break;
             case R.id.btn_sign_in:
                 startActivity(new Intent(this, RegActivity.class));
@@ -95,15 +98,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             isChecked = true;
             mImg_Show.setImageResource(R.mipmap.ic_pwd_hide);
         }
-        initEditText();
-    }
-
-    private void initEditText() {
-        CharSequence s = mEditPwd.getText();
-        if (s instanceof Spannable) {
-            Spannable spanText = (Spannable) s;
-            Selection.setSelection(spanText, s.length());
-        }
+        UIUtils.initCursor(mEditPwd);
     }
 
     private void toLogin() {
