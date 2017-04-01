@@ -308,12 +308,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.SCROLL) {
-                                mPresenter.ScrollDrawView(mScrollView,notifyWhiteboard);
+                                mPresenter.ScrollDrawView(mScrollView, notifyWhiteboard);
                             }
-                            if(type == ChatPresenter.Eraser){
+                            if (type == ChatPresenter.Eraser) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[2]);
 //                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
-                                mPresenter.drawEraser(mDrawView,notifyWhiteboard);
+                                mPresenter.drawEraser(mDrawView, notifyWhiteboard);
                             }
                         }
                     });
@@ -917,9 +917,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         recycler.setAdapter(mSmallVideoViewAdapter);
 
         if (!create) {
-            mSmallVideoViewAdapter.setLocalUid(config().mUid);
-            mSmallVideoViewAdapter.notifyUiChanged(mUidsList, exceptUid, null, null);
         }
+        mSmallVideoViewAdapter.setLocalUid(config().mUid);
+        mSmallVideoViewAdapter.notifyUiChanged(mUidsList, exceptUid, null, null);
         recycler.setVisibility(View.VISIBLE);
         mSmallVideoViewDock.setVisibility(View.VISIBLE);
 
