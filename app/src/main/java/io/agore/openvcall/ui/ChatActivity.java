@@ -673,7 +673,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 mUidsList.put(uid, local);
                 rtcEngine().muteLocalAudioStream(mAudioMuted);
-                worker().getRtcEngine().setEnableSpeakerphone(true);
+                worker().getRtcEngine().setEnableSpeakerphone(false);
                 mRl_bg.setVisibility(View.GONE);
             }
         });
