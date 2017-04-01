@@ -4,8 +4,49 @@
                 android:layout_height="match_parent"
                 android:keepScreenOn="true">
 
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/elevation"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="17dp"/>
+
+
+            <Button
+                android:id="@+id/but_dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我要下课"/>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+
+
     <!--上课-->
     <LinearLayout
+        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/ll_video"
         android:layout_width="200dp"
         android:layout_height="match_parent"
@@ -24,16 +65,11 @@
             android:layout_weight="1"
             android:inflatedId="@id/small_video_view_dock"
             android:layout="@layout/small_video_view_dock"/>
-
-        <Button
-            android:id="@+id/but_dismiss"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我要下课"/>
     </LinearLayout>
 
     <!--白版-->
     <com.onlyhiedu.mobile.Widget.MyScrollView
+        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,14 +107,6 @@
         </FrameLayout>
 
     </com.onlyhiedu.mobile.Widget.MyScrollView>
-
-    <Chronometer
-        android:id="@+id/chronometer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="17dp"/>
 
 
 

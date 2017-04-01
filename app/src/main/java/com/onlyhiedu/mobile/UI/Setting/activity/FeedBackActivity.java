@@ -5,17 +5,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
-import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Setting.presenter.FeedBackPresenter;
 import com.onlyhiedu.mobile.UI.Setting.presenter.contract.FeedBackContract;
-import com.onlyhiedu.mobile.UI.Setting.presenter.contract.UpdataContract;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,7 +72,7 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
 
     @Override
     public void showError(String msg) {
-        Log.d(TAG, "msg:" + msg);
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void initButState() {

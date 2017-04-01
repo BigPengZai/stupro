@@ -32,11 +32,13 @@ import io.reactivex.Flowable;
 public class ChatPresenter extends RxPresenter<ChatContract.View> implements ChatContract.Presenter {
 
 
-    public static String Notify_WhiteboardOperator = "Notify_WhiteboardOperator";
+    public static final String Notify_WhiteboardOperator = "Notify_WhiteboardOperator";
     public static final int DRAW = 1;
     public static final int SET = 2;
     public static final int SCROLL = 3;
     public static final int Eraser = 4;
+    public static final int Oval = 5;
+    public static final int Rect = 6;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -101,7 +103,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     @Override
     public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
-
         List<String[]> datas = new ArrayList<>();
         String type = json.NotifyParam.MethodType;
         if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE) || type.equals(MethodType.EraserPoint)) {
@@ -114,7 +115,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 datas.add(data);
             }
         }
-        if(datas.size()>0){
+        if (datas.size() > 0) {
             String[] xyAxle = datas.get(0);
             view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
             if (datas.size() == 2) {
@@ -147,8 +148,24 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     @Override
     public void drawEraser(DrawView view, NotifyWhiteboardOperator json) {
 //        view.setDrawColor(R.color.white);
-        view.setDrawColor(Color.argb(0,255,255,255));
-        drawPoint(view,json);
+        view.setDrawColor(Color.argb(0, 255, 255, 255));
+        drawPoint(view, json);
+    }
+
+    @Override
+    public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
+        String s = json.NotifyParam.MethodParam;
+        String[] xyAxle = s.split(",");
+        view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
+
+        int x = Integer.parseInt(xyAxle[0]) + Integer.parseInt(xyAxle[2]);
+        int y = Integer.parseInt(xyAxle[1]) + Integer.parseInt(xyAxle[3]);
+        view.eventActionUp(x, y);
+    }
+
+    @Override
+    public void drawRectangle(DrawView view, NotifyWhiteboardOperator json) {
+        drawOval(view,json);
     }
 
     @Override
@@ -160,11 +177,17 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         if (type.equals(MethodType.PaintSet)) {
             return SET;
         }
-        if(type.equals(MethodType.ViewRect)){
+        if (type.equals(MethodType.ViewRect)) {
             return SCROLL;
         }
-        if(type.equals(MethodType.EraserPoint)){
+        if (type.equals(MethodType.EraserPoint)) {
             return Eraser;
+        }
+        if (type.equals(MethodType.PaintEllipse)) {
+            return Oval;
+        }
+        if(type.equals(MethodType.PaintRect)){
+            return Rect;
         }
         return 0;
     }

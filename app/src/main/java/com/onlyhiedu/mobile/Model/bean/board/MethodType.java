@@ -11,4 +11,6 @@ public interface MethodType {
     String PaintSet = "PaintSet"; //画笔颜色改变
     String ViewRect = "ViewRect"; //PC拖动白板
     String EraserPoint = "EraserPoint";//橡皮擦
+    String PaintEllipse = "PaintEllipse";//○
+    String PaintRect = "PaintRect"; //画方
 }

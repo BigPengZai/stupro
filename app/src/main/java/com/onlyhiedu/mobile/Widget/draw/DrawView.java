@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -61,9 +62,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     private List<DrawMove> mDrawMoveHistory;
 
 
-
     private int mDrawMoveHistoryIndex = -1;
-
 
 
     /**
@@ -150,6 +149,13 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                                 canvas.drawCircle(drawMove.getStartX(), drawMove.getStartY(),
                                         drawMove.getStartX() - drawMove.getEndX(), drawMove.getPaint());
                             break;
+
+                        case OVAL:
+
+                            RectF oval = new RectF(drawMove.getStartX(), drawMove.getStartY(), drawMove.getEndX(), drawMove.getEndY());
+                            canvas.drawOval(oval, drawMove.getPaint());
+                            break;
+
                     }
                     break;
                 case TEXT:
@@ -219,7 +225,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     public void eventActionUp(float x, float y) {
         mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).setEndX(x).setEndY(y);
 
-        if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER) {
+        if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER  || mDrawingTool == DrawingTool.OVAL) {
             mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).getDrawingPathList()
                     .get(mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).getDrawingPathList().size() - 1)
                     .lineTo(x, y);
@@ -303,7 +309,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                 .setDrawingMode(mDrawingMode).setDrawingTool(mDrawingTool));
         mDrawMoveHistoryIndex++;
 
-        if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER) {
+        if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER || mDrawingTool == DrawingTool.OVAL) {
             Path path = new Path();
             path.moveTo(x, y);
             path.lineTo(x, y);
@@ -325,8 +331,8 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         setOnTouchListener(this);
     }
 
-    private void setMyBackground(Drawable drawable){
-        if(null != drawable){
+    private void setMyBackground(Drawable drawable) {
+        if (null != drawable) {
             setBackground(drawable);
         }
     }

@@ -46,6 +46,7 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
+import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.ref.SoftReference;
@@ -224,6 +225,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mUidsList.put(0, new SoftReference<>(surfaceV)); // get first surface view
         mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
+
     }
 
     private void initRoom() {
@@ -301,6 +303,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         @Override
                         public void run() {
                             if (type == ChatPresenter.DRAW) {
+                                mDrawView.setDrawingTool(DrawingTool.values()[0]);
                                 mDrawView.setDrawingMode(DrawingMode.values()[0]);
                                 mPresenter.drawPoint(mDrawView, notifyWhiteboard);
                             }
@@ -314,6 +317,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mDrawView.setDrawingMode(DrawingMode.values()[2]);
 //                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
                                 mPresenter.drawEraser(mDrawView, notifyWhiteboard);
+                            }
+                            if(type == ChatPresenter.Oval){
+                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
+                                mDrawView.setDrawingTool(DrawingTool.values()[4]);
+                                mPresenter.drawOval(mDrawView,notifyWhiteboard);
+                            }
+                            if(type == ChatPresenter.Rect){
+                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
+                                mDrawView.setDrawingTool(DrawingTool.values()[2]);
+                                mPresenter.drawRectangle(mDrawView,notifyWhiteboard);
                             }
                         }
                     });
