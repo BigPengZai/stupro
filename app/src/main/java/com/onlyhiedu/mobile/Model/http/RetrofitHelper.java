@@ -187,8 +187,8 @@ public class RetrofitHelper {
         return sOnlyApis.requestFeedBackInfo(content);
     }
 
-    public Flowable<onlyHttpResponse<ClassConsumption>> fetchUploadClassConsumption(String uuid, String endtime) {
-        return sOnlyApis.uploadClassConsumption(uuid, endtime);
+    public Flowable<onlyHttpResponse<ClassConsumption>> fetchUploadClassConsumption(String uuid) {
+        return sOnlyApis.uploadClassConsumption(uuid);
     }
 
 }

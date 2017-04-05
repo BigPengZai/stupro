@@ -45,7 +45,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
             @Override
             public void onNextData(onlyHttpResponse<UserDataBean> data) {
-                if (getView() != null) {
+                if (getView() != null && data != null) {
 
                     if (!data.isHasError()) {
                         Log.d(Constants.TAG, "Token : " + data.getData().token);

@@ -82,10 +82,11 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
 
             @Override
             public void onNext(onlyHttpResponse<CourseList> data) {
-                if (getView() != null) {
+                if (getView() != null && data != null) {
                     if (!data.isHasError()) {
                         getView().showCourseListSuccess(data.getData().list);
                     } else {
+                        getView().showError(data.getMessage());
                         getView().showCourseListFailure();
                     }
                 }

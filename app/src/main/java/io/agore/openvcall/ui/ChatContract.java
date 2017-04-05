@@ -45,6 +45,6 @@ public interface ChatContract {
 
         void drawRectangle(DrawView view, NotifyWhiteboardOperator json);
 
-        void uploadClassConsumption(String courseUuid, String endTime);
+        void uploadClassConsumption(String courseUuid);
     }
 }

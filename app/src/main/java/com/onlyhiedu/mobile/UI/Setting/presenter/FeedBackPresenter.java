@@ -32,10 +32,14 @@ public class FeedBackPresenter extends RxPresenter<FeedBackContract.View> implem
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
-                if (getView() != null && !data.isHasError())
-                    getView().showFeedBackSuccess(data.getMessage());
-                else
-                    getView().showError(data.getMessage());
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showFeedBackSuccess(data.getMessage());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+
 
             }
         };

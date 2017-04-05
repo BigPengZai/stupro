@@ -461,8 +461,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 //发送点对点 消息
                 m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");
                 Log.d(TAG, "uuid:" + mUuid);
-                mPresenter.uploadClassConsumption(mUuid, System.currentTimeMillis() + "");
-                Log.d(TAG, "时间戳：" + System.currentTimeMillis());
+                mPresenter.uploadClassConsumption(mUuid);
                 MobclickAgent.onEvent(this, "finish_class");
                 break;
             case R.id.image_full_screen:

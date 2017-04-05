@@ -33,7 +33,7 @@ public class MePresenter extends RxPresenter<MeContract.View> implements MeContr
         MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<StudentInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<StudentInfo> data) {
-                if (getView() != null) {
+                if (getView() != null ) {
                     if (!data.isHasError()) {
                         getView().showStudentInfo(data.getData());
                     } else {

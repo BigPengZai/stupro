@@ -143,5 +143,5 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/course/updateEndTime")
-    Flowable<onlyHttpResponse<ClassConsumption>> uploadClassConsumption(@Field("courseUuid") String courseUuid, @Field("endTime") String endTime);
+    Flowable<onlyHttpResponse<ClassConsumption>> uploadClassConsumption(@Field("courseUuid") String courseUuid);
 }

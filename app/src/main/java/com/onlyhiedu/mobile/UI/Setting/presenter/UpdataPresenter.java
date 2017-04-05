@@ -32,7 +32,7 @@ public class UpdataPresenter extends RxPresenter<UpdataContract.View> implements
             @Override
             public void onNextData(onlyHttpResponse<UpdataVersionInfo> data) {
                 if (getView() != null && data.getData() != null) {
-                    if (data.isHasError())
+                    if (!data.isHasError())
                         getView().showUpdataSuccess(data.getData());
                     else
                         getView().showError(data.getMessage());

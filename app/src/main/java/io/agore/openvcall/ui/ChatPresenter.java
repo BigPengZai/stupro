@@ -164,16 +164,16 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     @Override
     public void drawRectangle(DrawView view, NotifyWhiteboardOperator json) {
-        drawOval(view,json);
+        drawOval(view, json);
     }
 
     @Override
     public int getActionType(NotifyWhiteboardOperator bean) {
         String type = bean.NotifyParam.MethodType;
-        if (type.equals(MethodType.POINT) ) {
+        if (type.equals(MethodType.POINT)) {
             return DRAW;
         }
-        if( type.equals(MethodType.LINE)){
+        if (type.equals(MethodType.LINE)) {
             return Line;
         }
         if (type.equals(MethodType.PaintSet)) {
@@ -188,7 +188,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         if (type.equals(MethodType.PaintEllipse)) {
             return Oval;
         }
-        if(type.equals(MethodType.PaintRect)){
+        if (type.equals(MethodType.PaintRect)) {
             return Rect;
         }
         return 0;
@@ -196,13 +196,18 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
 
     @Override
-    public void uploadClassConsumption(String courseUuid, String endTime) {
-        Flowable<onlyHttpResponse<ClassConsumption>> flowable = mRetrofitHelper.fetchUploadClassConsumption(courseUuid, endTime);
+    public void uploadClassConsumption(String courseUuid) {
+        Flowable<onlyHttpResponse<ClassConsumption>> flowable = mRetrofitHelper.fetchUploadClassConsumption(courseUuid);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
-                if (getView() != null) {
-                    getView().showClassConsumption(data.getMessage());
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showClassConsumption(data.getMessage());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+
                 }
             }
         };
