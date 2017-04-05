@@ -39,6 +39,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final int Eraser = 4;
     public static final int Oval = 5;
     public static final int Rect = 6;
+    public static final int Line = 7;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -120,6 +121,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
             if (datas.size() == 2) {
                 String[] xyAxle2 = datas.get(1);
+                view.eventActionMove(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
                 view.eventActionUp(Float.parseFloat(xyAxle2[0]), Float.parseFloat(xyAxle2[1]));
             } else {
                 for (int i = 1; i < datas.size() - 1; i++) {
@@ -128,7 +130,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 view.eventActionUp(Float.parseFloat(datas.get(datas.size() - 1)[0]), Float.parseFloat(datas.get(datas.size() - 1)[1]));
             }
         }
-
     }
 
     @Override
@@ -147,8 +148,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     @Override
     public void drawEraser(DrawView view, NotifyWhiteboardOperator json) {
-//        view.setDrawColor(R.color.white);
-        view.setDrawColor(Color.argb(0, 255, 255, 255));
         drawPoint(view, json);
     }
 
@@ -157,7 +156,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         String s = json.NotifyParam.MethodParam;
         String[] xyAxle = s.split(",");
         view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-
+        view.eventActionMove(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
         int x = Integer.parseInt(xyAxle[0]) + Integer.parseInt(xyAxle[2]);
         int y = Integer.parseInt(xyAxle[1]) + Integer.parseInt(xyAxle[3]);
         view.eventActionUp(x, y);
@@ -171,8 +170,11 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     @Override
     public int getActionType(NotifyWhiteboardOperator bean) {
         String type = bean.NotifyParam.MethodType;
-        if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE)) {
+        if (type.equals(MethodType.POINT) ) {
             return DRAW;
+        }
+        if( type.equals(MethodType.LINE)){
+            return Line;
         }
         if (type.equals(MethodType.PaintSet)) {
             return SET;

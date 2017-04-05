@@ -9,6 +9,5 @@ public enum DrawingTool {
     LINE,
     RECTANGLE,
     CIRCLE,
-    OVAL
-
+    OVAL,
 }

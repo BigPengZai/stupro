@@ -307,6 +307,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mDrawView.setDrawingMode(DrawingMode.values()[0]);
                                 mPresenter.drawPoint(mDrawView, notifyWhiteboard);
                             }
+                            if (type == ChatPresenter.Line) {
+                                mDrawView.setDrawingTool(DrawingTool.values()[1]);
+                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
+                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
+                            }
+
                             if (type == ChatPresenter.SET) {
                                 mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
                             }
@@ -315,7 +321,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             }
                             if (type == ChatPresenter.Eraser) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[2]);
-//                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
+                                mDrawView.setDrawingTool(DrawingTool.values()[2]);
                                 mPresenter.drawEraser(mDrawView, notifyWhiteboard);
                             }
                             if(type == ChatPresenter.Oval){
@@ -426,7 +432,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
             ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl/*, imageWidth, imageHeight*/);
             mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
-
+            mDrawView.setCanvas(imageWidth,imageHeight);
         }
 
     }

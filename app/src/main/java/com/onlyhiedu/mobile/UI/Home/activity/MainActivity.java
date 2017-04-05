@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
-import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
