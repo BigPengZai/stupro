@@ -43,6 +43,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         //竖屏锁定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+
         mUnBinder = ButterKnife.bind(this);
         mContext = this;
         initInject();

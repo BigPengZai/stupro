@@ -107,7 +107,3 @@ public static ** valueOf(java.lang.String);
 -keep public class [com.onlyhiedu.mobile].R$*{
 public static final int *;
 }
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}

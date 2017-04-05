@@ -89,7 +89,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showCourseListSuccess(List<CourseList.ListBean> data) {
 
-        if(mErrorLayout.getErrorState() !=ErrorLayout.HIDE_LAYOUT){
+        if (mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         }
 
@@ -112,7 +112,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showCourseListFailure() {
         if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
-        mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
+        mErrorLayout.setState(ErrorLayout.NODATA);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void onItemClick(int position, long itemId) {
 //        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
-        MobclickAgent.onEvent(mContext,"item_finish_item");
+        MobclickAgent.onEvent(mContext, "item_finish_item");
     }
 
     @Override

@@ -20,32 +20,41 @@ import com.onlyhiedu.mobile.R;
  */
 
 public class DialogUtil {
-    public static Dialog showProgressDialog(Context context,String msg,boolean cancleable,boolean outsideTouchable) {
-        Dialog dialog = buildDialog(context,cancleable,outsideTouchable);
-        View root = View.inflate(context,R.layout.progressview_wrapconent,null);
+
+    public static Dialog showProgressDialog(Context context, String msg, boolean cancleable, boolean outsideTouchable) {
+        Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        dialog.setCancelable(cancleable);
+        dialog.setCanceledOnTouchOutside(outsideTouchable);
+        View root = View.inflate(context, R.layout.progressview_wrapconent, null);
         TextView tvMsg = (TextView) root.findViewById(R.id.message);
         tvMsg.setText(msg);
         dialog.setContentView(root);
-        setDialogStyle(context,dialog,0);
         dialog.show();
         //根据实际view高度调整
         return dialog;
     }
 
+    public static void dismiss(Dialog dialog) {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+
     public static Dialog showOnlyAlert(Context activity, String title, String msg,
-                                      String firstTxt, String secondTxt,
-                                      boolean outsideCancleable, boolean cancleable,
-                                      final DialogListener listener){
-        return showAlert(activity,false,title,msg,firstTxt,secondTxt,outsideCancleable,cancleable,listener);
+                                       String firstTxt, String secondTxt,
+                                       boolean outsideCancleable, boolean cancleable,
+                                       final DialogListener listener) {
+        return showAlert(activity, false, title, msg, firstTxt, secondTxt, outsideCancleable, cancleable, listener);
     }
 
     private static Dialog showAlert(Context context, boolean isButtonVerticle, String title, String msg,
-                                       String firstTxt, String secondTxt,
-                                       boolean outsideCancleable, boolean cancleable,
-                                       final DialogListener listener){
-        Dialog dialog = buildDialog(context,cancleable,outsideCancleable);
-        int  height = assigAlertView(context,dialog,isButtonVerticle,title,msg,firstTxt,secondTxt,listener);
-        setDialogStyle(context,dialog,height);
+                                    String firstTxt, String secondTxt,
+                                    boolean outsideCancleable, boolean cancleable,
+                                    final DialogListener listener) {
+        Dialog dialog = buildDialog(context, cancleable, outsideCancleable);
+        int height = assigAlertView(context, dialog, isButtonVerticle, title, msg, firstTxt, secondTxt, listener);
+        setDialogStyle(context, dialog, height);
         dialog.show();
         return dialog;
     }
@@ -58,14 +67,14 @@ public class DialogUtil {
         return dialog;
     }
 
-    private static int  assigAlertView(Context activity, final Dialog dialog, boolean isButtonVerticle,
-                                          String title, String msg, String firstTxt, String secondTxt,
-                                          final DialogListener listener) {
-        View root = View.inflate(activity,isButtonVerticle ? R.layout.dialog_alert_vertical : R.layout.dialog_alert,null);
+    private static int assigAlertView(Context activity, final Dialog dialog, boolean isButtonVerticle,
+                                      String title, String msg, String firstTxt, String secondTxt,
+                                      final DialogListener listener) {
+        View root = View.inflate(activity, isButtonVerticle ? R.layout.dialog_alert_vertical : R.layout.dialog_alert, null);
         TextView tvTitle = (TextView) root.findViewById(R.id.tv_title);
-        if (TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             tvTitle.setVisibility(View.GONE);
-        }else {
+        } else {
             tvTitle.setVisibility(View.VISIBLE);
             tvTitle.setText(title);
         }
@@ -74,7 +83,7 @@ public class DialogUtil {
         tvMsg.setText(msg);
         Button button1 = (Button) root.findViewById(R.id.btn_1);
         Button button2 = (Button) root.findViewById(R.id.btn_2);
-        if (TextUtils.isEmpty(firstTxt)){
+        if (TextUtils.isEmpty(firstTxt)) {
             root.findViewById(R.id.ll_container).setVisibility(View.GONE);
             root.findViewById(R.id.line).setVisibility(View.GONE);
         } else {
@@ -84,16 +93,16 @@ public class DialogUtil {
                 @Override
                 public void onClick(View v) {
                     listener.onPositive(dialog);
-                    if (dialog != null && dialog.isShowing()){
+                    if (dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
                 }
             });
             //btn2
-            if (TextUtils.isEmpty(secondTxt)){
+            if (TextUtils.isEmpty(secondTxt)) {
                 root.findViewById(R.id.line_btn2).setVisibility(View.GONE);
                 button2.setVisibility(View.GONE);
-            }else {
+            } else {
                 root.findViewById(R.id.line_btn2).setVisibility(View.VISIBLE);
                 button2.setVisibility(View.VISIBLE);
                 button2.setText(secondTxt);
@@ -101,7 +110,7 @@ public class DialogUtil {
                     @Override
                     public void onClick(View v) {
                         listener.onNegative(dialog);
-                        if (dialog != null && dialog.isShowing()){
+                        if (dialog != null && dialog.isShowing()) {
                             dialog.dismiss();
                         }
                     }
@@ -109,10 +118,11 @@ public class DialogUtil {
             }
         }
         dialog.setContentView(root);
-        int height = mesureHeight(root,R.id.tv_msg);
+        int height = mesureHeight(root, R.id.tv_msg);
         return height;
     }
-    private static void setDialogStyle(Context activity, Dialog dialog,int measuredHeight ) {
+
+    private static void setDialogStyle(Context activity, Dialog dialog, int measuredHeight) {
         Window window = dialog.getWindow();
         //window.setWindowAnimations(R.style.dialog_center);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -130,36 +140,37 @@ public class DialogUtil {
         View textview = contentView.findViewById(R.id.tv_msg);
         ViewUtils.measureView(textview);
         int textHeight = textview.getMeasuredHeight();*/
-        if (measuredHeight > height){
+        if (measuredHeight > height) {
             wl.height = height;
         }
         //wl.horizontalMargin= 0.2f;
 // 设置显示位置
         // wl.gravity = Gravity.CENTER_HORIZONTAL;
-        if (!(activity instanceof Activity)){
+        if (!(activity instanceof Activity)) {
             wl.type = WindowManager.LayoutParams.TYPE_TOAST;
         }
         dialog.onWindowAttributesChanged(wl);
     }
+
     /**
-     *
      * @param root
-     * @param id  height为0,weight为1的scrollview包裹的view的id,如果没有,传0或负数即可
+     * @param id   height为0,weight为1的scrollview包裹的view的id,如果没有,传0或负数即可
      * @return
      */
     private static int mesureHeight(View root, int id) {
         measureView(root);
         int height = root.getMeasuredHeight();
         int heightExtra = 0;
-        if (id > 0){
+        if (id > 0) {
             View view = root.findViewById(id);
-            if (view != null){
+            if (view != null) {
                 measureView(view);
                 heightExtra = view.getMeasuredHeight();
             }
         }
         return height + heightExtra;
     }
+
     private static void measureView(View child) {
         ViewGroup.LayoutParams p = child.getLayoutParams();
         if (p == null) {
@@ -179,10 +190,10 @@ public class DialogUtil {
                     View.MeasureSpec.UNSPECIFIED);
         }
         if (lpWidth > 0) {
-            childWidthSpec= View.MeasureSpec.makeMeasureSpec(lpHeight,
+            childWidthSpec = View.MeasureSpec.makeMeasureSpec(lpHeight,
                     View.MeasureSpec.EXACTLY);
         } else {
-            childWidthSpec= View.MeasureSpec.makeMeasureSpec(0,
+            childWidthSpec = View.MeasureSpec.makeMeasureSpec(0,
                     View.MeasureSpec.UNSPECIFIED);
         }
         child.measure(childWidthSpec, childHeightSpec);

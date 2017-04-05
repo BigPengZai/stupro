@@ -1,9 +1,9 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +15,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
+import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
@@ -35,7 +36,12 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         CourseContract.View,
         RecyclerRefreshLayout.SuperRefreshLayoutListener {
 
+    public static final String TAG = CourseFragment.class.getSimpleName();
+
     private CourseFragmentAdapter mAdapter;
+    private Intent mIntent;
+    private CourseList.ListBean mItem;
+    private Dialog mDialog;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -43,10 +49,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     RecyclerRefreshLayout mSwipeRefresh;
     @BindView(R.id.error_layout)
     ErrorLayout mErrorLayout;
-    private Intent mIntent;
-    private CourseList.ListBean mItem;
 
-    public static final String TAG = CourseFragment.class.getSimpleName();
 
     @Override
     protected void initInject() {
@@ -119,7 +122,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showCourseListFailure() {
         if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
-        mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
+        mErrorLayout.setState(ErrorLayout.NODATA);
     }
 
     @Override
@@ -133,23 +136,28 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     public void showNetWorkError() {
         mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
         mSwipeRefresh.setRefreshing(false);
+        DialogUtil.dismiss(mDialog);
     }
 
     @Override
     public void onItemClick(int position, long itemId) {
         mItem = mAdapter.getItem(position);
         if (mItem != null) {
+            mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
             mPresenter.getRoomInfoList(mItem.getUuid());
         }
     }
 
     @Override
     public void showRoomInfoSucess(RoomInfo roomInfo) {
-        if (roomInfo != null&&mItem.getUuid()!=null) {
+        if (roomInfo != null && mItem.getUuid() != null) {
+
+            DialogUtil.dismiss(mDialog);
+
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("roomInfo", roomInfo);
-            bundle.putString("uuid",mItem.getUuid());
+            bundle.putString("uuid", mItem.getUuid());
             mIntent.putExtras(bundle);
             mActivity.startActivity(mIntent);
         }
@@ -158,7 +166,9 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showError(String msg) {
+        DialogUtil.dismiss(mDialog);
         Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
     }
+
 
 }
