@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -48,13 +49,14 @@ public class OkHttpManger {
      * @param destFileDir 文件存储根路径
      * @param downListener
      */
-    public void downloadAsync(final String url, final String destFileDir,
+    public Call downloadAsync(final String url, final String destFileDir,
                               final OKHttpUICallback.ProgressCallback downListener) throws IOException {
         File file = new File(destFileDir,getFileName(url));
         if(!file.exists()){
             file.createNewFile();
         }
-        downloadAsync(url, file, downListener);
+        Call call = downloadAsync(url, file, downListener);
+        return call;
     }
     /**
      * 获取文件名
@@ -72,7 +74,7 @@ public class OkHttpManger {
      * @param downListener
      * @throws IOException
      */
-    public void downloadAsync(final String url, final File downFile,
+    public Call downloadAsync(final String url, final File downFile,
                               final OKHttpUICallback.ProgressCallback downListener) throws IOException {
         OkHttpClient downLoadClient = mOkHttpClient.newBuilder()
                 .addInterceptor(new Interceptor() {
@@ -88,6 +90,9 @@ public class OkHttpManger {
                 })
                 .build();
         final Request request = new Request.Builder().url(url).build();
-        downLoadClient.newCall(request).enqueue(new OkHttpThreadCallback(okHttpHandler,downListener,true).setFile(downFile));
+        Call call = downLoadClient.newCall(request);
+        call.enqueue(new OkHttpThreadCallback(okHttpHandler, downListener, true)
+                        .setFile(downFile));
+        return call;
     }
 }

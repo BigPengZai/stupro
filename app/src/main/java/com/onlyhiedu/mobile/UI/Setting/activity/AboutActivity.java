@@ -1,10 +1,12 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +28,7 @@ import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.OKHttpUICallback;
 import com.onlyhiedu.mobile.Utils.OkHttpManger;
+import com.onlyhiedu.mobile.Utils.OkHttpThreadCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +58,11 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
 
     public static final String PHONE_NUM = "400-876-3300";
     private final int CALL_REQUEST_CODE = 1;
+    private final int DOWN_REQUEST_CODE = 2;
+    private String mUrl;
+    private ProgressDialog mDownDialog;
+    private Call mCall;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -68,6 +76,16 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
     @Override
     protected void initView() {
         setToolBar("关于我们");
+        mDownDialog = new ProgressDialog(AboutActivity.this);
+        mDownDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mDownDialog.setTitle("更新");
+        mDownDialog.setMessage("正在下载...");
+        mDownDialog.setIcon(R.mipmap.ic_launcher);
+        mDownDialog.setIndeterminate(false);
+        mDownDialog.setCanceledOnTouchOutside(false);
+        mDownDialog.setCancelable(true);
+        mDownDialog.setProgressNumberFormat("%1d M/%2d M");
+
     }
 
     @OnClick({R.id.rl_update, R.id.rl_line})
@@ -83,30 +101,15 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
     }
 
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            // 第一次请求权限时，用户如果拒绝，下一次请求shouldShowRequestPermissionRationale()返回true
-            // 向用户解释为什么需要这个权限
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
-                new AlertDialog.Builder(this)
-                        .setMessage("申请拨打电话权限")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //申请权限
-                                ActivityCompat.requestPermissions(AboutActivity.this,
-                                        new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
-                            }
-                        })
-                        .show();
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
+                return;
             } else {
-                //申请相机权限
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
+                callLine();
             }
         } else {
-//            tvPermissionStatus.setTextColor(Color.GREEN);
-//            tvPermissionStatus.setText("相机权限已申请");
             callLine();
         }
     }
@@ -114,66 +117,50 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CALL_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                tvPermissionStatus.setTextColor(Color.GREEN);
-//                tvPermissionStatus.setText("相机权限已申请");
-                callLine();
-            } else {
-                //用户勾选了不再询问
-                //提示用户手动打开权限
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                    Toast.makeText(this, "拨打电话权限已被禁止", Toast.LENGTH_SHORT).show();
+        switch (requestCode) {
+            case CALL_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    callLine();
+                } else {
+                    Toast.makeText(AboutActivity.this, "拨打电话权限未授权", Toast.LENGTH_SHORT)
+                            .show();
                 }
-            }
+                break;
+            case DOWN_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (mUrl != null) {
+                        downApk(mUrl);
+                    }
+                } else {
+                    Toast.makeText(AboutActivity.this, "SD卡存储权限未授权", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
     private void callLine() {
-        //拨打电话
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + PHONE_NUM));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         startActivity(intent);
-
     }
 
     @Override
     public void showUpdataSuccess(UpdataVersionInfo versionInfo) {
         if (versionInfo != null && !versionInfo.getVersion().equals(AppUtil.getVerName(this))) {
-            Log.d(TAG, "Version:" + versionInfo.getVersion());
-            Log.d(TAG, "" + AppUtil.getVerName(this));
             DialogUtil.showOnlyAlert(this, "版本更新", "有了新版本" + versionInfo.getVersion(), "更新", "取消", true, true, new DialogListener() {
                 @Override
                 public void onPositive(DialogInterface dialog) {
                     //确定
-                    Log.d(TAG, "onPositive");
-                    Log.d(TAG, "" + versionInfo.getUrl());
-                    downApk(versionInfo.getUrl());
-/*
-                    ProgressDialog mypDialog = new ProgressDialog(AboutActivity.this);
-                    mypDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    //设置进度条风格，风格为长形，有刻度的
-                    mypDialog.setTitle("地狱怒兽");
-                    //设置ProgressDialog 标题
-                    mypDialog.setMessage("");
-                    //设置ProgressDialog 提示信息
-                    mypDialog.setIcon(R.mipmap.ic_launcher);
-                    //设置ProgressDialog 标题图标
-                    mypDialog.setProgress(59);
-                    //设置ProgressDialog 进度条进度
-                    mypDialog.setIndeterminate(false);
-                    //设置ProgressDialog 的进度条是否不明确
-                    mypDialog.setCancelable(true);
-                    //设置ProgressDialog 是否可以按退回按键取消
-                    mypDialog.show();*/
+                    mUrl = versionInfo.getUrl();
+                    if (mUrl != null) {
+                        requestDownPermission();
+                    }
+
                 }
 
                 @Override
@@ -185,14 +172,33 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
         }
     }
 
+    private void requestDownPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, DOWN_REQUEST_CODE);
+                return;
+            } else {
+                if (mUrl != null) {
+                    downApk(mUrl);
+                }
+            }
+        } else {
+            if (mUrl != null) {
+                downApk(mUrl);
+            }
+        }
+    }
+
     private void downApk(String url) {
-        mLl_Down.setVisibility(View.VISIBLE);
+        mDownDialog.show();
         try {
-            OkHttpManger.getInstance().downloadAsync(url, Config.getDirFile("download").getAbsolutePath(), new OKHttpUICallback.ProgressCallback() {
+            //更新
+            mCall = OkHttpManger.getInstance().downloadAsync(url, Config.getDirFile("download").getAbsolutePath(), new OKHttpUICallback.ProgressCallback() {
                 @Override
                 public void onSuccess(Call call, Response response, String path) {
-                    Log.i("MainActivity", "path:" + path);
-                    mLl_Down.setVisibility(View.GONE);
+                    mDownDialog.cancel();
+                    Log.d(TAG, "path:" + path);
                     DialogUtil.showOnlyAlert(AboutActivity.this, "更新完成", "更新的版本是。。。。", "更新", "取消", false, false, new DialogListener() {
                         @Override
                         public void onPositive(DialogInterface dialog) {
@@ -210,27 +216,45 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
 
                 @Override
                 public void onProgress(long byteReadOrWrite, long contentLength, boolean done) {
-                    Log.i("MainActivity", "byteReadOrWrite:" + byteReadOrWrite + ",contentLength:" + contentLength + ",done:" + done);
-                    if (!done) {
-                        mPb_Down.setMax((int) contentLength);
+                    Log.d(TAG, "byteReadOrWrite:" + byteReadOrWrite + ",contentLength:" + contentLength + ",done:" + done);
+                    if (!done && mPb_Down != null) {
+                        mDownDialog.setMax((int) contentLength / 1024 / 1024);
                     }
-                    mPb_Down.setProgress((int) byteReadOrWrite);
+                    mDownDialog.setProgress((int) byteReadOrWrite / 1024 / 1024);
                 }
 
                 @Override
                 public void onError(Call call, IOException e) {
                     Log.i("MainActivity", "onError");
                 }
+
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+        mDownDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (mCall != null) {
+                    mCall.cancel();
+                    Log.d(TAG, "取消下载。。。。。。。");
+                }
+            }
+        });
+    }
 
+    @Override
+    public void onBackPressedSupport() {
+        super.onBackPressedSupport();
+        if (mCall != null) {
+            mCall.cancel();
+            Log.d(TAG, "取消下载。。。。。。。");
+        }
     }
 
     @Override
     public void showError(String msg) {
-        Log.d(TAG, "msg:" + msg);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 

@@ -63,9 +63,13 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
     @Override
     protected void initView() {
         mSettingInfo.showLeftImage();
+        mSettingInfo.setIvIcon(R.mipmap.me_info);
         mSettingAbout.showLeftImage();
+        mSettingAbout.setIvIcon(R.mipmap.me_about);
         mSettingConsumption.showLeftImage();
+        mSettingConsumption.setIvIcon(R.mipmap.me_consumption);
         mSetting.showLeftImage();
+        mSetting.setIvIcon(R.mipmap.me_setting);
     }
 
     @Override

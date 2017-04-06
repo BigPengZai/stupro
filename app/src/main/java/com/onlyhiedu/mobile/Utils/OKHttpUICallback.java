@@ -17,5 +17,6 @@ public class OKHttpUICallback {
         void onSuccess(Call call, Response response, String path);
         void onProgress(long byteReadOrWrite, long contentLength, boolean done);
         void onError(Call call, IOException e);
+
     }
 }
