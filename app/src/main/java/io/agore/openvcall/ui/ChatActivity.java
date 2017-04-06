@@ -32,6 +32,8 @@ import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
+import com.onlyhiedu.mobile.Model.bean.finishclass.RequestFinishClass;
+import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
@@ -39,6 +41,7 @@ import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
@@ -233,14 +236,43 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
                 Log.d(TAG, "点对点消息：" + account + " : " + (long) (uid & 0xffffffffl) + " : " + msg);
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
-                        if (whiteboardData.ResponseParam != null) {
-                            mPresenter.setDrawableStyle(mDrawView, whiteboardData);
+                        RequestFinishClass responseFinishClassData = JsonUtil.parseJson(msg, RequestFinishClass.class);
+                        if (responseFinishClassData != null&&mRoomInfo!=null) {
+                            //收到老师下课请求
+                            if ("Response_FinishClass".equals(responseFinishClassData.ActionType)
+                                    &&String.valueOf(mRoomInfo.getChannelTeacherId()).equals(responseFinishClassData.AccountID)) {
+                                initDismissDialog();
+                            }
                         }
+                        switch (msg) {
+                            case requestFinishClassTag:
+                                ResponseFinishClassData notify_finishClass = mPresenter.getNotify_FinishClass(msg);
+                                if (notify_finishClass != null && notify_finishClass.mResponParamBean != null) {
+                                    String confirm = notify_finishClass.mResponParamBean.Confirm;
+                                    if ("YES".equals(confirm)) {
+                                        //老师同意下课
+                                        if (m_agoraAPI != null) {
+                                            m_agoraAPI.logout();
+                                            Log.d(TAG, "信令退出");
+                                        }
+                                        if (mUidsList != null) {
+                                            mUidsList.clear();
+                                        }
+                                        quitCall();
+                                    }
+                                }
+                                break;
+                            case requestWhiteBoardData:
+                                ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
+                                if (whiteboardData.ResponseParam != null) {
+                                    mPresenter.setDrawableStyle(mDrawView, whiteboardData);
+                                }
+                                break;
+                        }
+
                     }
                 });
 
@@ -252,7 +284,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "频道消息：" + channelID + " " + account + " : " + msg);
 
                 NotifyWhiteboardOperator notifyWhiteboard = mPresenter.getNotifyWhiteboard(msg);
-
                 if (notifyWhiteboard != null) {
 
                     int type = mPresenter.getActionType(notifyWhiteboard);
@@ -297,8 +328,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             if (type == ChatPresenter.Destory) {
                                 SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                             }
-                            if(type == ChatPresenter.Create){
-                                mPresenter.setBoardCreate(mDrawView,notifyWhiteboard);
+                            if (type == ChatPresenter.Create) {
+                                mPresenter.setBoardCreate(mDrawView, notifyWhiteboard);
                             }
                         }
                     });
@@ -372,14 +403,20 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
                     @Override
                     public void onNegative(DialogInterface dialog) {
-                        //退出教室
-                        if (m_agoraAPI != null) {
-                            m_agoraAPI.logout();
+                        if (mRoomInfo != null) {
+                            //call  的对象 假数据即老师信令的id
+                            String peer = mRoomInfo.getChannelTeacherId() + "";
+                            //发送点对点 消息
+                            ResponseFinishClassData finish = new ResponseFinishClassData();
+                            finish.AccountID = mRoomInfo.getChannelStudentId() + "";
+                            finish.ActionType = "Response_FinishClass";
+                            finish.Keyword = "HKT";
+                            finish.ChannelID = mRoomInfo.getCommChannelId();
+                            finish.mResponParamBean.Confirm = "YES";
+                            finish.mResponParamBean.FinishTime = SystemClock.currentThreadTimeMillis()+"";
+                                    String json = JsonUtil.toJson(finish);
+                            m_agoraAPI.messageInstantSend(peer, 0, json, "stu_ok");
                         }
-                        if (mUidsList != null) {
-                            mUidsList.clear();
-                        }
-                        quitCall();
                     }
                 }
         );
@@ -422,13 +459,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
-                //call  的对象 假数据即老师信令的id
-                String peer = mRoomInfo.getChannelTeacherId() + "";
-                //发送点对点 消息
-                m_agoraAPI.messageInstantSend(peer, 0, "finishClass", "");
-                Log.d(TAG, "uuid:" + mUuid);
-                mPresenter.uploadClassConsumption(mUuid);
-                MobclickAgent.onEvent(this, "finish_class");
+                requestFinishClass();
+//                mPresenter.uploadClassConsumption(mUuid);
+//                MobclickAgent.onEvent(this, "finish_class");
                 break;
             case R.id.image_full_screen:
 
@@ -477,6 +510,21 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    //请求 下课 tag
+    private static final String requestFinishClassTag = "requestFinishClassTag";
+
+    private void requestFinishClass() {
+        if (mRoomInfo != null) {
+            //call  的对象 假数据即老师信令的id
+            String peer = mRoomInfo.getChannelTeacherId() + "";
+            //发送点对点 消息
+            RequestFinishClass finish = new RequestFinishClass();
+            finish.AccountID = mRoomInfo.getChannelStudentId() + "";
+            String json = JsonUtil.toJson(finish);
+            m_agoraAPI.messageInstantSend(peer, 0, json, requestFinishClassTag);
+        }
+    }
+
 
     //封装到uitl中
     public String calcToken(String appID, String certificate, String account, long expiredTime) {
@@ -503,11 +551,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         return profileIndex;
     }
 
-    /*private void doConfigEngine(String encryptionKey, String encryptionMode) {
-        int vProfile = ConstantApp.VIDEO_PROFILES[getVideoProfileIndex()];
-
-        worker().configEngine(vProfile, encryptionKey, encryptionMode);
-    }*/
     @Override
     protected void deInitUIandEvent() {
         doLeaveChannel();
@@ -531,7 +574,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mUidsList.clear();
         }
         quitCall();
-        Log.d(TAG, "onBackPressed");
+
     }
 
     private void quitCall() {

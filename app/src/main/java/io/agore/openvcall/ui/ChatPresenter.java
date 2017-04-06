@@ -8,6 +8,7 @@ import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.board.MethodType;
 import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
+import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
@@ -79,15 +80,15 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     @Override
     public void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data) {
         String s = data.NotifyParam.MethodParam;
-        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraserSize"))));
+        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=") + 8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf("PenColor=") + 9, s.indexOf("|EraserSize"))));
     }
 
     @Override
     public void setBoardCreate(DrawView drawView, NotifyWhiteboardOperator data) {
         String s = data.NotifyParam.MethodParam;
-        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraseSize"))));
+        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=") + 8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf("PenColor=") + 9, s.indexOf("|EraseSize"))));
     }
 
 
@@ -107,6 +108,20 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         return null;
     }
 
+    //获得请求下课msg
+    public ResponseFinishClassData getNotify_FinishClass(String msg) {
+        try {
+            JSONObject jsonObject = new JSONObject(msg);
+            String actionType = jsonObject.getString("ActionType");
+            if (actionType.equals("Response_FinishClass")) {
+                return JsonUtil.parseJson(msg, ResponseFinishClassData.class);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
 
     @Override
     public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
@@ -197,16 +212,16 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         if (type.equals(MethodType.PaintRect)) {
             return Rect;
         }
-        if(type.equals(MethodType.Destory)){
+        if (type.equals(MethodType.Destory)) {
             return Destory;
         }
-        if(type.equals(MethodType.Create)){
+        if (type.equals(MethodType.Create)) {
             return Create;
         }
         return 0;
     }
 
-
+    //课时消耗
     @Override
     public void uploadClassConsumption(String courseUuid) {
         Flowable<onlyHttpResponse<ClassConsumption>> flowable = mRetrofitHelper.fetchUploadClassConsumption(courseUuid);
