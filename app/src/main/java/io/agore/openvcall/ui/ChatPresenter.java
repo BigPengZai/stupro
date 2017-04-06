@@ -40,6 +40,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final int Oval = 5;
     public static final int Rect = 6;
     public static final int Line = 7;
+    public static final int Destory = 8;//老师离开教室
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -191,6 +192,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         if (type.equals(MethodType.PaintRect)) {
             return Rect;
         }
+        if(type.equals(MethodType.Destory)){
+            return Destory;
+        }
         return 0;
     }
 
@@ -207,7 +211,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                     } else {
                         getView().showError(data.getMessage());
                     }
-
                 }
             }
         };

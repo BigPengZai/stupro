@@ -22,6 +22,7 @@ public abstract class MyResourceSubscriber<T> extends ResourceSubscriber<T> impl
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
+
         Toast.makeText(App.getInstance().getApplicationContext(), Constants.NET_ERROR, Toast.LENGTH_SHORT).show();
     }
 

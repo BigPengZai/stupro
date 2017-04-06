@@ -50,6 +50,7 @@ public class App extends Application {
     public synchronized WorkerThread getWorkerThread() {
         return mWorkerThread;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,19 +61,21 @@ public class App extends Application {
         initGlide();
 
         DaoUtil.getInstance(this);
-       initWorkerThread();
+        initWorkerThread();
 
     }
-    private void initGlide(){
-        Glide.get(this).register(GlideUrl.class,InputStream.class,new OkHttpUrlLoader.Factory(new OkHttpClient()));
+
+    private void initGlide() {
+        Glide.get(this).register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(new OkHttpClient()));
     }
 
 
-    public static AppComponent getAppComponent(){
+    public static AppComponent getAppComponent() {
         return DaggerAppComponent.builder()
                 .appModule(new AppModule(instance))
                 .build();
     }
+
     public static final CurrentUserSettings mVideoSettings = new CurrentUserSettings();
 
 }

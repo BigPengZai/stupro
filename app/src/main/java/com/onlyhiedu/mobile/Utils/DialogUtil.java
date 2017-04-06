@@ -35,6 +35,9 @@ public class DialogUtil {
     }
 
     public static void dismiss(Dialog dialog) {
+        if(dialog == null){
+            return;
+        }
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
