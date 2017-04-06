@@ -1,8 +1,6 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,17 +29,11 @@ import com.onlyhiedu.mobile.Utils.OkHttpManger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
-
-import static com.onlyhiedu.mobile.R.id.line;
 
 /**
  * Created by pengpeng on 2017/3/2.
@@ -49,16 +41,17 @@ import static com.onlyhiedu.mobile.R.id.line;
 
 public class AboutActivity extends BaseActivity<UpdataPresenter> implements UpdataContract.View {
 
+    public static final String TAG = AboutActivity.class.getSimpleName();
+
     @BindView(R.id.rl_update)
     RelativeLayout mRl_Update;
-
     @BindView(R.id.ll_down)
     LinearLayout mLl_Down;
     @BindView(R.id.pb_down)
     ProgressBar mPb_Down;
     @BindView(R.id.rl_line)
     RelativeLayout mRl_Line;
-    public static final String TAG = AboutActivity.class.getSimpleName();
+
 
     public static final String PHONE_NUM = "400-876-3300";
     private final int CALL_REQUEST_CODE = 1;

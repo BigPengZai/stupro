@@ -32,7 +32,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:text="嗨课堂V1.1.1"
-                android:textColor="@color/c_F42440"
+                android:textColor="@color/c_666666"
                 android:textSize="@dimen/sp_17"/>
 
         </LinearLayout>
@@ -52,6 +52,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="客服热线"
+                android:textColor="@color/c_242424"
                 android:textSize="@dimen/sp_17"/>
 
 
@@ -62,6 +63,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="400-876-3300"
+                android:textColor="@color/c_F42440"
                 android:textSize="@dimen/sp_17"/>
 
             <View
@@ -83,6 +85,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="检测更新"
+                android:textColor="@color/c_242424"
                 android:textSize="@dimen/sp_17"/>
 
 
@@ -93,6 +96,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="V.11"
+                android:textColor="@color/c_929292"
                 android:textSize="@dimen/sp_17"/>
 
             <View
@@ -133,7 +137,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/size_20"
-        android:text="Copyright @ 2016 上海昂立智立方教育培训有限公司"
+        android:text="Copyright © 2016 上海昂立智立方教育培训有限公司"
         android:textColor="@color/c_CCCCCC"/>
 
     <LinearLayout
