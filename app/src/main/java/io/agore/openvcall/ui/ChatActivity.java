@@ -79,7 +79,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     public static final String TAG = ChatActivity.class.getSimpleName();
 
-//    private GoogleApiClient client;
+    //    private GoogleApiClient client;
     private String mUid;
     private int mScreenWidth;
     @BindView(R.id.grid_video_view_container)
@@ -104,6 +104,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private RequestManager mRequestManager;
     //课程id
     private String mUuid;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -179,6 +180,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void setToolBar() {
         setSupportActionBar(mToolbar);
+        mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.drawable.back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,8 +193,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void initRoom() {
         worker().joinChannel(mChannelName, Integer.parseInt(mUid));
-        if(mPresenter != null){
-
+        if (mPresenter != null) {
             mPresenter.getCourseWareImageList("fbe78bf5aa014ebf917813c3d828dcfb");
         }
 
@@ -255,6 +256,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (notifyWhiteboard != null) {
 
                     int type = mPresenter.getActionType(notifyWhiteboard);
+                    if (type == 0) {
+                        return;
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -290,8 +294,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mDrawView.setDrawingTool(DrawingTool.values()[2]);
                                 mPresenter.drawRectangle(mDrawView, notifyWhiteboard);
                             }
-                            if(type == ChatPresenter.Destory){
-                                SnackBarUtils.show(mDrawView,"老师已退出课堂", Color.GREEN);
+                            if (type == ChatPresenter.Destory) {
+                                SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
+                            }
+                            if(type == ChatPresenter.Create){
+                                mPresenter.setBoardCreate(mDrawView,notifyWhiteboard);
                             }
                         }
                     });
@@ -391,7 +398,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
             ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl/*, imageWidth, imageHeight*/);
             mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
-            mDrawView.setCanvas(imageWidth,imageHeight);
+            mDrawView.setCanvas(imageWidth, imageHeight);
         }
 
     }
@@ -626,10 +633,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 mRl_bg.setVisibility(View.GONE);
-
-                if (uid == mRoomInfo.getChannelTeacherId() && !mSendRequestWhiteBoardData) {
-                    requestWhiteBoardData();
-                }
             }
         });
 

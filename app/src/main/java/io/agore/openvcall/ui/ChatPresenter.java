@@ -41,6 +41,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final int Rect = 6;
     public static final int Line = 7;
     public static final int Destory = 8;//老师离开教室
+    public static final int Create = 9;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -77,14 +78,18 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     @Override
     public void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data) {
-//        String s =  "MethodParam" : "PenSize=5|PenColor=FFFF00FF|EraserSize=5"
-        String color = "PenColor=";
-        String Size = "EraserSize=";
         String s = data.NotifyParam.MethodParam;
-
-        drawView.setFontSize(Integer.valueOf(s.substring(8, s.indexOf(color) - 1)));
-        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf(color) + color.length(), s.indexOf(Size) - 1)));
+        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraserSize"))));
     }
+
+    @Override
+    public void setBoardCreate(DrawView drawView, NotifyWhiteboardOperator data) {
+        String s = data.NotifyParam.MethodParam;
+        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraseSize"))));
+    }
+
 
     @Override
     public NotifyWhiteboardOperator getNotifyWhiteboard(String msg) {
@@ -194,6 +199,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if(type.equals(MethodType.Destory)){
             return Destory;
+        }
+        if(type.equals(MethodType.Create)){
+            return Create;
         }
         return 0;
     }

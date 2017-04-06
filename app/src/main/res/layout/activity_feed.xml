@@ -52,7 +52,6 @@
             android:textSize="@dimen/sp_18"/>
 
         <View
-            android:background="@color/c_666666"
             style="@style/horizontal_line"/>
 
     </LinearLayout>

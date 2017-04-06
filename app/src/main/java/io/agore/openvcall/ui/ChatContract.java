@@ -30,6 +30,7 @@ public interface ChatContract {
 
         void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data);
         void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data);
+        void setBoardCreate(DrawView drawView, NotifyWhiteboardOperator data);
 
         NotifyWhiteboardOperator getNotifyWhiteboard(String str);
 

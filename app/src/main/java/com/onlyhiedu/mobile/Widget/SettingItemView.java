@@ -41,7 +41,7 @@ public class SettingItemView extends RelativeLayout {
         setTitleText(localTypedArray.getString(R.styleable.setting_view_item_titleText));
         setDetailText(localTypedArray.getString(R.styleable.setting_view_item_detailText));
         setShowDivider(localTypedArray.getBoolean(R.styleable.setting_view_item_showDivider, true));
-        setIvIcon(localTypedArray.getResourceId(R.styleable.setting_view_item_icon_left,R.drawable.ic_launcher));
+        setLiftImage(localTypedArray.getResourceId(R.styleable.setting_view_item_icon_left, 0));
     }
 
     public String getDetailText() {
@@ -67,15 +67,11 @@ public class SettingItemView extends RelativeLayout {
         mDividerView.setVisibility(showDivider ? View.VISIBLE : View.GONE);
     }
 
-    public void hintRightImage() {
-        mImage.setVisibility(GONE);
-    }
-
-    public void setIvIcon(int resId) {
+    public void setLiftImage(int resId) {
+        if (resId == 0) {
+            return;
+        }
         mIv_icon.setImageResource(resId);
     }
 
-    public void showLeftImage() {
-        mIv_icon.setVisibility(VISIBLE);
-    }
 }

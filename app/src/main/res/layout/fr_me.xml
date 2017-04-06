@@ -2,20 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:ecdemo="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:background="@color/c_F2F2F2"
               android:layout_height="match_parent"
+              android:background="@color/c_F2F2F2"
               android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:background="@mipmap/bg_user_home"
+        android:gravity="center"
         android:orientation="vertical">
+
         <ImageView
             android:id="@+id/iv_portrait"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/head_portrait"/>
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
@@ -25,32 +28,38 @@
             android:textSize="@dimen/sp_17"/>
     </LinearLayout>
 
-
     <!--info-->
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_10"
+        ecdemo:item_icon_left="@mipmap/me_info"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="我的信息"/>
+
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_consumption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        ecdemo:item_icon_left="@mipmap/me_consumption"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="课时消耗"/>
+
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
+        ecdemo:item_icon_left="@mipmap/me_setting"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="设置"/>
+
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        ecdemo:item_icon_left="@mipmap/me_about"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="关于我们"/>
 

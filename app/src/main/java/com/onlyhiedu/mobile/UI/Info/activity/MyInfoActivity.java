@@ -1,7 +1,6 @@
 package com.onlyhiedu.mobile.UI.Info.activity;
 
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -9,21 +8,17 @@ import android.widget.Toast;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseActivity;
-import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.AddressBean;
 import com.onlyhiedu.mobile.Model.bean.AddressModel;
 import com.onlyhiedu.mobile.Model.bean.ProvinceBean;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.Info.presenter.InfoPresenter;
 import com.onlyhiedu.mobile.UI.Info.presenter.contract.InfoContract;
-import com.onlyhiedu.mobile.UI.Setting.activity.SettingActivity;
 import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +62,6 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
     @Override
     protected void initView() {
         setToolBar("我的信息");
-        mSettingName.hintRightImage();
         thread.start();
     }
     @Override

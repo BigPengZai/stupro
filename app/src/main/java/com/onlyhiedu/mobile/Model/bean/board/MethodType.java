@@ -13,5 +13,7 @@ public interface MethodType {
     String EraserPoint = "EraserPoint";//橡皮擦
     String PaintEllipse = "PaintEllipse";//○
     String PaintRect = "PaintRect"; //画方
-    String Destory = "Destory";
+    String Destory = "Destory";  //老师退出视频
+    String Create = "Create";  //创建
+
 }
