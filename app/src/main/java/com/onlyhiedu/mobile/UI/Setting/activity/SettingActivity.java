@@ -37,7 +37,7 @@ public class SettingActivity extends SimpleActivity {
     }
 
 
-    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.setting_about, R.id.btn_sign,R.id.ll_clean_cache})
+    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_sign,R.id.ll_clean_cache})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
@@ -46,9 +46,6 @@ public class SettingActivity extends SimpleActivity {
                 break;
             case R.id.setting_feedback:
                 startActivity(new Intent(this, FeedBackActivity.class));
-                break;
-            case R.id.setting_about:
-                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.btn_sign:
                 UIUtils.startLoginActivity(this);

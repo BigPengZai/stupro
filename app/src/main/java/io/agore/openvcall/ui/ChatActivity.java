@@ -1,15 +1,9 @@
 package io.agore.openvcall.ui;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHeadset;
-import android.bluetooth.BluetoothProfile;
+
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.media.AudioManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.onlyhiedu.mobile.App.Constants;
@@ -48,11 +41,9 @@ import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
 import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 import com.umeng.analytics.MobclickAgent;
-
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.agora.AgoraAPI;
@@ -65,53 +56,17 @@ import io.agore.openvcall.model.ConstantApp;
 import io.agore.propeller.Constant;
 import io.agore.propeller.UserStatusData;
 import io.agore.propeller.VideoInfoData;
-import io.agore.propeller.headset.HeadsetBroadcastReceiver;
-import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
-import io.agore.propeller.headset.bluetooth.BluetoothHeadsetBroadcastReceiver;
-import io.agore.propeller.preprocessing.VideoPreProcessing;
+
 
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
 public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, ChatContract.View {
-
     private RelativeLayout mSmallVideoViewDock;
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
-
-    private volatile boolean mVideoMuted = false;
-
     private volatile boolean mAudioMuted = false;
-
-    private volatile boolean mEarpiece = false;
-
     private volatile boolean mWithHeadset = false;
-
     public static final String TAG = ChatActivity.class.getSimpleName();
-    private HeadsetBroadcastReceiver mHeadsetListener;
-    private BluetoothAdapter mBtAdapter;
-    private BluetoothProfile mBluetoothProfile;
-    private BluetoothHeadsetBroadcastReceiver mBluetoothHeadsetBroadcastListener;
-    private BluetoothProfile.ServiceListener mBluetoothHeadsetListener = new BluetoothProfile.ServiceListener() {
-
-        @Override
-        public void onServiceConnected(int profile, BluetoothProfile headset) {
-            if (profile == BluetoothProfile.HEADSET) {
-                mBluetoothProfile = headset;
-                List<BluetoothDevice> devices = headset.getConnectedDevices();
-                headsetPlugged(devices != null && devices.size() > 0);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(int profile) {
-            mBluetoothProfile = null;
-        }
-    };
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-//    private GoogleApiClient client;
     private String mUid;
     private int mScreenWidth;
     @BindView(R.id.grid_video_view_container)
@@ -128,65 +83,38 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     Chronometer mChronometer;
     @BindView(R.id.image_full_screen)
     ImageView mImageFullScreen;
-
-    private int msgid = 0;
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private RequestManager mRequestManager;
+    //课程id
     private String mUuid;
-
-    private void headsetPlugged(final boolean plugged) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (isFinishing()) {
-                    return;
-                }
-
-                RtcEngine rtcEngine = rtcEngine();
-                rtcEngine.setEnableSpeakerphone(!plugged);
-            }
-        }).start();
-    }
-
-
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
     }
-
     @Override
     protected int getLayout() {
         return R.layout.activity_chat;
     }
-
-
     @Override
     protected void initUIandEvent() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mScreenWidth = ScreenUtil.getScreenWidth(this);
         mRequestManager = Glide.with(this);
-
         //测试 狗屎代码
         mChronometer.setBase(SystemClock.elapsedRealtime());//计时器清零
         int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
         mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
-
         //获取频道 id  老师uid 学生uid
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
         mUuid = getIntent().getStringExtra("uuid");
+        Log.d(TAG, "uuid:"+mUuid);
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
             //课程频道
-//            mChannelName = mRoomInfo.getCommChannelId();
-            mChannelName = "DebugChannel_XWC";
+            mChannelName = mRoomInfo.getCommChannelId();
             //学生uid
             mUid = mRoomInfo.getChannelStudentId() + "";
         } else {
@@ -205,10 +133,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             //退出教室
                             finish();
                         }
-
                         @Override
                         public void onNegative(DialogInterface dialog) {
-
                         }
                     }
             );
@@ -217,8 +143,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         //登录信令系统成功后  登录通信频道
         initSignalling();
         event().addEventHandler(this);
-//        doConfigEngine(encryptionKey, encryptionMode);
-        //RecyclerView
         SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
         surfaceV.setZOrderOnTop(false);
         surfaceV.setZOrderMediaOverlay(false);
@@ -230,16 +154,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void initRoom() {
         worker().joinChannel(mChannelName, Integer.parseInt(mUid));
-//        TextView textChannelName = (TextView) findViewById(R.id.channel_name);
-//        textChannelName.setText(mChannelName);
-
         mPresenter.getCourseWareImageList("fbe78bf5aa014ebf917813c3d828dcfb");
-
-//        optional();
-//       /* LinearLayout bottomContainer = (LinearLayout) findViewById(R.id.bottom_container);
-//        FrameLayout.MarginLayoutParams fmp = (FrameLayout.MarginLayoutParams) bottomContainer.getLayoutParams();
-//        fmp.bottomMargin = virtualKeyHeight() + 16;
-//        initMessageList();*/
     }
 
     private void initSignalling() {
@@ -264,19 +179,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 });
 
             }
-
             @Override
             public void onLoginFailed(int ecode) {
                 Log.d(TAG, "Login failed" + ecode);
                 //进行异常处理的逻辑
-
             }
-
             //对方将收到 onMessageInstantReceive 回调。
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
                 Log.d(TAG, "点对点消息：" + account + " : " + (long) (uid & 0xffffffffl) + " : " + msg);
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -288,16 +199,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 });
 
             }
-
             //收到频道消息回调(onMessageChannelReceive)
             @Override
             public void onMessageChannelReceive(String channelID, String account, int uid, String msg) {
                 Log.d(TAG, "频道消息：" + channelID + " " + account + " : " + msg);
-
                 NotifyWhiteboardOperator notifyWhiteboard = mPresenter.getNotifyWhiteboard(msg);
-
                 if (notifyWhiteboard != null) {
-
                     int type = mPresenter.getActionType(notifyWhiteboard);
                     runOnUiThread(new Runnable() {
                         @Override
@@ -336,7 +243,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             }
                         }
                     });
-
                 }
             }
 
@@ -351,13 +257,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 super.onMessageSendError(messageID, ecode);
                 Log.d(TAG, "Error:" + messageID + ecode);
             }
-
             @Override
             public void onLogout(int ecode) {
                 super.onLogout(ecode);
                 Log.d(TAG, "Logout:" + ecode);
             }
-
             //加入频道后 回调
             @Override
             public void onChannelJoined(String chanID) {
@@ -369,11 +273,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     }
                 });
             }
-
             @Override
             public void onChannelUserList(String[] accounts, int[] uids) {
                 super.onChannelUserList(accounts, uids);
-
                 for (String str : accounts) {
                     if (str.equals(mRoomInfo.getChannelTeacherId())) {
                         requestWhiteBoardData();
@@ -388,7 +290,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         //测试数据 信令频道
         String channelName = mRoomInfo.getSignallingChannelId();
         Log.d(TAG, "Join channel " + channelName);
-        m_agoraAPI.channelJoin("DebugChannel_XWC");
+        m_agoraAPI.channelJoin(channelName);
     }
 
     private void initDismissDialog() {
@@ -418,14 +320,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
         );
     }
-
-
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
-
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
-
         if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
             float rate = (float) imageWidth / (float) data.get(0).width;
             int imageHeight = (int) ((float) data.get(0).height * rate);
@@ -433,6 +331,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl/*, imageWidth, imageHeight*/);
             mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
             mDrawView.setCanvas(imageWidth,imageHeight);
+
         }
 
     }
@@ -444,14 +343,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
         }
     }
-
-
     private ViewGroup.LayoutParams mScrollViewP;
     private ViewGroup.LayoutParams mDrawViewP;
     private ViewGroup.LayoutParams mImageCourseWareP;
     private boolean mSwitch; //全屏半屏
     private float rate;      //缩放比例
-
     @OnClick({R.id.but_dismiss, R.id.image_full_screen})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -465,108 +361,51 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 MobclickAgent.onEvent(this, "finish_class");
                 break;
             case R.id.image_full_screen:
-
                 if (mScrollViewP == null) {
                     mScrollViewP = mScrollView.getLayoutParams();
                     mDrawViewP = mDrawView.getLayoutParams();
                     mImageCourseWareP = mImageCourseWare.getLayoutParams();
                     rate = (float) mScreenWidth / (float) mScrollView.getWidth();
                 }
-
                 if (mSwitch) {
                     mSwitch = false;
                     mScrollView.setLayoutParams(mScrollViewP);
                     mDrawView.setLayoutParams(mDrawViewP);
                     mImageCourseWare.setLayoutParams(mImageCourseWareP);
-
                     mDrawView.clearAnimation();
                 } else {
-
-
                     mScrollView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     mDrawView.setLayoutParams(new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
                     mImageCourseWare.setLayoutParams(params);
                     mSwitch = true;
-
-
                     ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
                             Animation.RELATIVE_TO_PARENT, 0,
                             Animation.RELATIVE_TO_SELF, 0.5f);
                     scaleX.setDuration(0);
-
                     ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
                             Animation.RELATIVE_TO_SELF, 0.5f,
                             Animation.RELATIVE_TO_PARENT, 0);
                     scaleY.setDuration(0);
-
                     AnimationSet set = new AnimationSet(true);
                     set.setFillAfter(true);
                     set.addAnimation(scaleX);
                     set.addAnimation(scaleY);
                     mDrawView.startAnimation(set);
-
                 }
                 break;
         }
     }
-
-
     //封装到uitl中
     public String calcToken(String appID, String certificate, String account, long expiredTime) {
-        // Token = 1:appID:expiredTime:sign
-        // Token = 1:appID:expiredTime:md5(account + vendorID + certificate + expiredTime)
-
         String sign = md5hex((account + appID + certificate + expiredTime).getBytes());
         return "1:" + appID + ":" + expiredTime + ":" + sign;
-
     }
-
-    private void optional() {
-        HeadsetPlugManager.getInstance().registerHeadsetPlugListener(this);
-        mHeadsetListener = new HeadsetBroadcastReceiver();
-        registerReceiver(mHeadsetListener, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
-
-        mBluetoothHeadsetBroadcastListener = new BluetoothHeadsetBroadcastReceiver();
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBtAdapter != null && BluetoothProfile.STATE_CONNECTED == mBtAdapter.getProfileConnectionState(BluetoothProfile.HEADSET)) { // on some devices, BT is not supported
-            boolean bt = mBtAdapter.getProfileProxy(getBaseContext(), mBluetoothHeadsetListener, BluetoothProfile.HEADSET);
-            int connection = mBtAdapter.getProfileConnectionState(BluetoothProfile.HEADSET);
-        }
-
-        IntentFilter i = new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED);
-        i.addAction(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED);
-        i.addAction(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED);
-        registerReceiver(mBluetoothHeadsetBroadcastListener, i);
-
-        setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
-    }
-
-    private void optionalDestroy() {
-        if (mBtAdapter != null) {
-            mBtAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mBluetoothProfile);
-            mBluetoothProfile = null;
-            mBtAdapter = null;
-        }
-
-        if (mBluetoothHeadsetBroadcastListener != null) {
-            unregisterReceiver(mBluetoothHeadsetBroadcastListener);
-            mBluetoothHeadsetBroadcastListener = null;
-        }
-
-        if (mHeadsetListener != null) {
-            unregisterReceiver(mHeadsetListener);
-            mHeadsetListener = null;
-        }
-        HeadsetPlugManager.getInstance().unregisterHeadsetPlugListener(this);
-    }
-
     private int getVideoProfileIndex() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         int profileIndex = pref.getInt(ConstantApp.PrefManager.PREF_PROPERTY_PROFILE_IDX, ConstantApp.DEFAULT_PROFILE_IDX);
         if (profileIndex > ConstantApp.VIDEO_PROFILES.length - 1) {
             profileIndex = ConstantApp.DEFAULT_PROFILE_IDX;
-
             // save the new value
             SharedPreferences.Editor editor = pref.edit();
             editor.putInt(ConstantApp.PrefManager.PREF_PROPERTY_PROFILE_IDX, profileIndex);
@@ -574,24 +413,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         return profileIndex;
     }
-
-    /*private void doConfigEngine(String encryptionKey, String encryptionMode) {
-        int vProfile = ConstantApp.VIDEO_PROFILES[getVideoProfileIndex()];
-
-        worker().configEngine(vProfile, encryptionKey, encryptionMode);
-    }*/
     @Override
     protected void deInitUIandEvent() {
-        optionalDestroy();
         doLeaveChannel();
         event().removeEventHandler(this);
-        finish();
     }
 
     private void doLeaveChannel() {
         worker().leaveChannel(mChannelName);
         worker().preview(false, null, 0);
-
+        finish();
+        mChronometer.stop();
     }
 
     @Override
@@ -599,6 +431,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (m_agoraAPI != null) {
             m_agoraAPI.logout();
             Log.d(TAG, "信令退出");
+
         }
         if (mUidsList != null) {
             mUidsList.clear();
@@ -609,11 +442,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void quitCall() {
         deInitUIandEvent();
-
     }
-
-    private VideoPreProcessing mVideoPreProcessing;
-
     private void doHideTargetView(int targetUid, boolean hide) {
         HashMap<Integer, Integer> status = new HashMap<>();
         status.put(targetUid, hide ? UserStatusData.VIDEO_MUTED : UserStatusData.DEFAULT_STATUS);
@@ -631,7 +460,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         }
     }
-
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
@@ -639,7 +467,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             doRenderRemoteUi(uid);
         }
     }
-
     private void doRenderRemoteUi(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
@@ -658,22 +485,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 surfaceV.setZOrderMediaOverlay(!useDefaultLayout);
 //设置远端视频显示属性 (setupRemoteVideo)
                 rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-
-               /* if (useDefaultLayout) {
-                    log.debug("doRenderRemoteUi LAYOUT_TYPE_DEFAULT " + (uid & 0xFFFFFFFFL));
-                    switchToDefaultVideoView();
-                } else {
-                    int bigBgUid = mSmallVideoViewAdapter == null ? uid : mSmallVideoViewAdapter.getExceptedUid();
-                    Log.d(TAG, "bigBgUid:" + bigBgUid);
-                    Log.d(TAG, "uid:" + uid);
-                    switchToSmallVideoView(bigBgUid);
-                }*/
                 switchToSmallVideoView(uid);
-
             }
         });
     }
-
     @Override
     public void onJoinChannelSuccess(String channel, final int uid, int elapsed) {
         runOnUiThread(new Runnable() {
@@ -709,7 +524,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             m_agoraAPI.messageInstantSend(mRoomInfo.getChannelTeacherId() + "", 0, json, requestWhiteBoardData);
         }
     }
-
     @Override
     public void onUserJoined(int uid, int elapsed) {
         Log.d(TAG, "uid:onUserJoined " + uid);
@@ -717,7 +531,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 mRl_bg.setVisibility(View.GONE);
-
                 if (uid == mRoomInfo.getChannelTeacherId() && !mSendRequestWhiteBoardData) {
                     requestWhiteBoardData();
                 }
@@ -730,10 +543,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public void onUserOffline(int uid, int reason) {
         doRemoveRemoteUi(uid);
     }
-
     @Override
     public void onExtraCallback(final int type, final Object... data) {
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -744,7 +555,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
     }
-
     private void doHandleExtraCallback(int type, Object... data) {
         Log.d(TAG, "type:" + type);
         int peerUid;
@@ -758,9 +568,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     status.put(peerUid, muted ? UserStatusData.AUDIO_MUTED : UserStatusData.DEFAULT_STATUS);
                     mGridVideoViewContainer.notifyUiChanged(mUidsList, config().mUid, status, null);
                 }
-
                 break;
-
             case AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_MUTED:
                 peerUid = (Integer) data[0];
                 muted = (boolean) data[1];
@@ -884,9 +692,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         requestRemoteStreamType(mUidsList.size());
 
     }
-
     public int mLayoutType = LAYOUT_TYPE_DEFAULT;
-
     public static final int LAYOUT_TYPE_DEFAULT = 0;
 
     public static final int LAYOUT_TYPE_SMALL = 1;
@@ -896,10 +702,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             ViewStub stub = (ViewStub) findViewById(R.id.small_video_view_dock);
             mSmallVideoViewDock = (RelativeLayout) stub.inflate();
         }
-
         boolean twoWayVideoCall = mUidsList.size() == 2;
         RecyclerView recycler = (RecyclerView) findViewById(R.id.small_video_view_container);
-
         boolean create = false;
 
         if (mSmallVideoViewAdapter == null) {
@@ -912,48 +716,25 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             });
 //            mSmallVideoViewAdapter.setHasStableIds(true);
         }
-//        recycler.setHasFixedSize(true);
-
-//        log.debug("bindToSmallVideoView " + twoWayVideoCall + " " + (exceptUid & 0xFFFFFFFFL));
-
-        if (twoWayVideoCall) {
-//            recycler.setLayoutManager(new RtlLinearLayoutManager(this, RtlLinearLayoutManager.HORIZONTAL, false));
-        } else {
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false) {
-
             @Override
             public boolean canScrollVertically() {
                 return false;
-
-
             }
         };
         recycler.setLayoutManager(linearLayoutManager);
         recycler.addItemDecoration(new SmallVideoViewDecoration());
         recycler.setAdapter(mSmallVideoViewAdapter);
-
-        if (!create) {
-        }
         mSmallVideoViewAdapter.setLocalUid(config().mUid);
         mSmallVideoViewAdapter.notifyUiChanged(mUidsList, exceptUid, null, null);
         recycler.setVisibility(View.VISIBLE);
         mSmallVideoViewDock.setVisibility(View.VISIBLE);
-
     }
-
     @Override
     public void notifyHeadsetPlugged(final boolean plugged, Object... extraData) {
-//        log.info("notifyHeadsetPlugged " + plugged + " " + extraData);
-        boolean bluetooth = false;
-        if (extraData != null && extraData.length > 0 && (Integer) extraData[0] == HeadsetPlugManager.BLUETOOTH) { // this is only for bluetooth
-            bluetooth = true;
-        }
-        headsetPlugged(plugged);
         mWithHeadset = plugged;
     }
-
     @Override
     public void showError(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();

@@ -55,10 +55,6 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
         String deviceInfo = getDeviceInfo(this);
         Log.d(TAG, "deviceInfo:"+deviceInfo);
 
-        File root = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "myDir" + File.separator);
-        boolean mkdirs = root.mkdirs();
-        Log.d(TAG, "mkdirs:"+mkdirs);
     }
 
 

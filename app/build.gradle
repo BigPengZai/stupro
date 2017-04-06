@@ -42,10 +42,10 @@ android {
     }
 
     productFlavors {
-//        onlyedu{}
-        qihu360 {} // 360手机助手
-        yingyongbao {} // 腾讯应用宝
-       wandoujia {} // 豌豆荚
+        onlyedu{}
+//        qihu360 {} // 360手机助手
+//        yingyongbao {} // 腾讯应用宝
+//       wandoujia {} // 豌豆荚
 //        baidu {} // 百度手机助手
 //        miui {} // 小米
 //        flyme {} // 魅族

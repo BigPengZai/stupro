@@ -24,6 +24,7 @@ public class SettingItemView extends RelativeLayout {
 
     //内容
     private String mDetailText;
+    private final ImageView mIv_icon;
 
 
     public SettingItemView(Context context, AttributeSet attrs) {
@@ -34,11 +35,13 @@ public class SettingItemView extends RelativeLayout {
         mTvDetail = (TextView) findViewById(R.id.content);
         mImage = (ImageView) findViewById(R.id.right_icon);
         mDividerView = findViewById(R.id.item_bottom_divider);
+        mIv_icon = (ImageView) findViewById(R.id.iv_icon);
 
         TypedArray localTypedArray = context.obtainStyledAttributes(attrs, R.styleable.setting_view);
         setTitleText(localTypedArray.getString(R.styleable.setting_view_item_titleText));
         setDetailText(localTypedArray.getString(R.styleable.setting_view_item_detailText));
         setShowDivider(localTypedArray.getBoolean(R.styleable.setting_view_item_showDivider, true));
+        setIvIcon(localTypedArray.getResourceId(R.styleable.setting_view_item_icon_left,R.drawable.ic_launcher));
     }
 
     public String getDetailText() {
@@ -66,5 +69,13 @@ public class SettingItemView extends RelativeLayout {
 
     public void hintRightImage() {
         mImage.setVisibility(GONE);
+    }
+
+    public void setIvIcon(int resId) {
+        mIv_icon.setImageResource(resId);
+    }
+
+    public void showLeftImage() {
+        mIv_icon.setVisibility(VISIBLE);
     }
 }

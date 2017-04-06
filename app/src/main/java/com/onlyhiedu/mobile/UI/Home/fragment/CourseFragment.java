@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -142,6 +143,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     @Override
     public void onItemClick(int position, long itemId) {
         mItem = mAdapter.getItem(position);
+        Log.d(TAG, "uuid:"+mItem.getUuid());
         if (mItem != null) {
             mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
             mPresenter.getRoomInfoList(mItem.getUuid());
@@ -158,6 +160,8 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
             Bundle bundle = new Bundle();
             bundle.putSerializable("roomInfo", roomInfo);
             bundle.putString("uuid", mItem.getUuid());
+            bundle.putString("uuid",mItem.getUuid());
+            Log.d(TAG, "uuid:"+mItem.getUuid());
             mIntent.putExtras(bundle);
             mActivity.startActivity(mIntent);
         }

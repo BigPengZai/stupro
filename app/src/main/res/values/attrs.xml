@@ -5,6 +5,7 @@
         <attr name="item_detailText" format="string"/>
         <attr name="item_showDivider" format="boolean"/>
         <attr name="item_icon" format="reference|color"/>
+        <attr name="item_icon_left" format="reference"/>
     </declare-styleable>
 
 

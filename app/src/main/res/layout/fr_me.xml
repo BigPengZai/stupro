@@ -5,23 +5,17 @@
               android:background="@color/c_F2F2F2"
               android:layout_height="match_parent"
               android:orientation="vertical">
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="@mipmap/bg_user_home"
         android:orientation="vertical">
-
-
         <ImageView
             android:id="@+id/iv_portrait"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/head_portrait"/>
-
-
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
@@ -31,85 +25,33 @@
             android:textSize="@dimen/sp_17"/>
     </LinearLayout>
 
+
     <!--info-->
     <com.onlyhiedu.mobile.Widget.SettingItemView
-        android:id="@+id/setting_name"
+        android:id="@+id/setting_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_10"
         ecdemo:item_showDivider="true"
-        ecdemo:item_titleText="姓名"/>
-
+        ecdemo:item_titleText="我的信息"/>
     <com.onlyhiedu.mobile.Widget.SettingItemView
-        android:id="@+id/setting_sex"
+        android:id="@+id/setting_consumption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ecdemo:item_showDivider="true"
-        ecdemo:item_titleText="性別"/>
-
-    <com.onlyhiedu.mobile.Widget.SettingItemView
-        android:id="@+id/setting_grade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ecdemo:item_showDivider="true"
-        ecdemo:item_titleText="年级"/>
-
-    <com.onlyhiedu.mobile.Widget.SettingItemView
-        android:id="@+id/setting_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ecdemo:item_showDivider="false"
-        ecdemo:item_titleText="高考所在地"/>
-
+        ecdemo:item_titleText="课时消耗"/>
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        ecdemo:item_showDivider="false"
+        ecdemo:item_showDivider="true"
         ecdemo:item_titleText="设置"/>
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_info"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_horizontal"-->
-    <!--android:layout_marginTop="35dp"-->
-    <!--android:text="我的信息"-->
-    <!--android:textSize="17sp"/>-->
-
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1px"-->
-    <!--android:layout_marginLeft="15dp"-->
-    <!--android:layout_marginRight="15dp"-->
-    <!--android:layout_marginTop="5dp"-->
-    <!--android:background="@color/black"/>-->
-    <!--</LinearLayout>-->
-
-    <!--&lt;!&ndash;about&ndash;&gt;-->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/ll_about"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_about"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_horizontal"-->
-    <!--android:layout_marginTop="15dp"-->
-    <!--android:text="关于我们"-->
-    <!--android:textSize="17sp"/>-->
-
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1px"-->
-    <!--android:layout_marginLeft="15dp"-->
-    <!--android:layout_marginRight="15dp"-->
-    <!--android:layout_marginTop="5dp"-->
-    <!--android:background="@color/black"/>-->
-    <!--</LinearLayout>-->
+    <com.onlyhiedu.mobile.Widget.SettingItemView
+        android:id="@+id/setting_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ecdemo:item_showDivider="true"
+        ecdemo:item_titleText="关于我们"/>
 
 </LinearLayout>

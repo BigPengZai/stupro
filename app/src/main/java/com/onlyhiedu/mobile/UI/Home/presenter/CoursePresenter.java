@@ -117,7 +117,6 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
             @Override
             public void onNextData(onlyHttpResponse<RoomInfo> data) {
                 if (getView() != null) {
-
                     if (!data.isHasError()) {
                         //返回的数据
                         RoomInfo bean = data.getData();

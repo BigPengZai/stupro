@@ -63,15 +63,6 @@
     </LinearLayout>
 
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
-        android:id="@+id/setting_about"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/login_padding"
-        ecdemo:item_showDivider="true"
-        ecdemo:item_titleText="关于我们"/>
-
-
     <Button
         android:id="@+id/btn_sign"
         style="@style/select_log_out"
