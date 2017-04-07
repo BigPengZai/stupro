@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Setting.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
@@ -24,9 +25,9 @@ public class SettingActivity extends SimpleActivity {
 
     @BindView(R.id.tv_cache_size)
     TextView mTvCacheSize;
-
     @Override
     protected int getLayout() {
+
         return R.layout.activity_setting;
     }
 
@@ -37,7 +38,7 @@ public class SettingActivity extends SimpleActivity {
     }
 
 
-    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_sign,R.id.ll_clean_cache})
+    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out,R.id.ll_clean_cache})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
@@ -47,7 +48,7 @@ public class SettingActivity extends SimpleActivity {
             case R.id.setting_feedback:
                 startActivity(new Intent(this, FeedBackActivity.class));
                 break;
-            case R.id.btn_sign:
+            case R.id.btn_out:
                 UIUtils.startLoginActivity(this);
 
                 break;

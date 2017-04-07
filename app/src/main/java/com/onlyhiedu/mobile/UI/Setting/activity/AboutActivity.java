@@ -78,9 +78,7 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
         setToolBar("关于我们");
         mDownDialog = new ProgressDialog(AboutActivity.this);
         mDownDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mDownDialog.setTitle("更新");
         mDownDialog.setMessage("正在下载...");
-        mDownDialog.setIcon(R.mipmap.ic_launcher);
         mDownDialog.setIndeterminate(false);
         mDownDialog.setCanceledOnTouchOutside(false);
         mDownDialog.setCancelable(true);

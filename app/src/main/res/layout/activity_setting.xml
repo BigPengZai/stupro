@@ -64,7 +64,7 @@
 
 
     <Button
-        android:id="@+id/btn_sign"
+        android:id="@+id/btn_out"
         style="@style/select_log_out"
         android:text="退出登录"
         />
