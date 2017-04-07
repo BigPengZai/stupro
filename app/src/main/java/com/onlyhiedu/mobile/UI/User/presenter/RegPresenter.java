@@ -23,6 +23,7 @@ import static android.R.attr.value;
 
 public class RegPresenter extends RxPresenter<RegContract.View> implements RegContract.Presenter {
 
+
     private RetrofitHelper mRetrofitHelper;
 
     @Inject
