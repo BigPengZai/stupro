@@ -179,7 +179,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                     break;
                 case TEXT:
                     if (drawMove.getText() != null && !drawMove.getText().equals("")) {
-                        mContentCanvas.drawText(drawMove.getText(), drawMove.getEndX(), drawMove.getEndY(), drawMove.getPaint());
+                        mContentCanvas.drawText(drawMove.getText(), drawMove.getStartX(), drawMove.getStartY(), drawMove.getPaint());
                     }
                     break;
                 case ERASER:
@@ -588,7 +588,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     public void refreshLastText(String newText) {
         if (mDrawMoveHistory.get(mDrawMoveHistory.size() - 1)
                 .getDrawingMode() == DrawingMode.TEXT) {
-            mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).setText(newText).setStartX(0).setStartY(0).setEndX(10).setEndY(10);
+            mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).setText(newText);
             invalidate();
         } else
             Log.e(TAG, "The last item that you want to refresh text isn't TEXT element.");

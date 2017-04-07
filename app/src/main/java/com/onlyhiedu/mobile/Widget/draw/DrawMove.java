@@ -61,12 +61,12 @@ public class DrawMove {
         return mStartY;
     }
 
-    public float getEndX() {
-        return mEndX;
-    }
-
     public float getEndY() {
         return mEndY;
+    }
+
+    public float getEndX() {
+        return mEndX;
     }
 
     public String getText() {

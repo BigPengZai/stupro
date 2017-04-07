@@ -15,5 +15,6 @@ public interface MethodType {
     String PaintRect = "PaintRect"; //画方
     String Destory = "Destory";  //老师退出视频
     String Create = "Create";  //创建
+    String PaintText = "PaintText";
 
 }

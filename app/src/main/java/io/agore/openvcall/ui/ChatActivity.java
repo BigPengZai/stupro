@@ -41,12 +41,10 @@ import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Utils.StringUtils;
-import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
 import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
-import com.umeng.analytics.MobclickAgent;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -331,6 +329,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             if (type == ChatPresenter.Create) {
                                 mPresenter.setBoardCreate(mDrawView, notifyWhiteboard);
                             }
+                            if(type == ChatPresenter.PaintText){
+                                mDrawView.setDrawingMode(DrawingMode.values()[1]);
+                                mPresenter.drawText(mDrawView,notifyWhiteboard);
+                            }
                         }
                     });
 
@@ -372,7 +374,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 super.onChannelUserList(accounts, uids);
 
                 for (String str : accounts) {
-                    if (str.equals(mRoomInfo.getChannelTeacherId())) {
+                    if (Integer.parseInt(str) == mRoomInfo.getChannelTeacherId()) {
                         requestWhiteBoardData();
                         mSendRequestWhiteBoardData = true;
                     }

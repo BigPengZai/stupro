@@ -43,6 +43,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final int Line = 7;
     public static final int Destory = 8;//老师离开教室
     public static final int Create = 9;
+    public static final int PaintText = 10;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -75,20 +76,28 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
         drawView.setFontSize(bean.WhiteboardPenSize);
         drawView.setDrawColor(Color.parseColor("#" + bean.WhiteboardPenColor));
+        String fontType = bean.WhiteboardFontType;
+        String[] split = fontType.split(",");
+        String str = split[split.length-1];
+        float fintSize = Float.parseFloat(str.substring(1, str.length()));
+        drawView.setFontSize(fintSize);
     }
 
     @Override
     public void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data) {
         String s = data.NotifyParam.MethodParam;
-        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=") + 8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf("PenColor=") + 9, s.indexOf("|EraserSize"))));
+        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraserSize"))));
+
     }
 
     @Override
     public void setBoardCreate(DrawView drawView, NotifyWhiteboardOperator data) {
         String s = data.NotifyParam.MethodParam;
-        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=") + 8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf("PenColor=") + 9, s.indexOf("|EraseSize"))));
+        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraseSize"))));
+        String[] split = s.substring(s.indexOf("FontType=")+9, s.length()).split(",");
+        drawView.setFontSize(Float.parseFloat(split[split.length-1].replace("#","")));
     }
 
 
@@ -189,6 +198,19 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
     @Override
+    public void drawText(DrawView view, NotifyWhiteboardOperator json) {
+        String s = json.NotifyParam.MethodParam;
+        String spit[] = s.split("[|]");
+        String[] xyAxle = spit[0].split(",");
+        view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
+        view.eventActionMove(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
+        int x = Integer.parseInt(xyAxle[0]) + Integer.parseInt(xyAxle[2]);
+        int y = Integer.parseInt(xyAxle[1]) + Integer.parseInt(xyAxle[3]);
+        view.eventActionUp(x, y);
+        view.refreshLastText(spit[1]);
+    }
+
+    @Override
     public int getActionType(NotifyWhiteboardOperator bean) {
         String type = bean.NotifyParam.MethodType;
         if (type.equals(MethodType.POINT)) {
@@ -217,6 +239,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if (type.equals(MethodType.Create)) {
             return Create;
+        }
+        if(type.equals(MethodType.PaintText)){
+            return PaintText;
         }
         return 0;
     }
