@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
+import static android.R.attr.data;
 import static android.R.attr.value;
 
 /**
@@ -22,7 +23,6 @@ import static android.R.attr.value;
  */
 
 public class RegPresenter extends RxPresenter<RegContract.View> implements RegContract.Presenter {
-
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -39,7 +39,7 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
             @Override
             public void onNextData(Long value) {
                 if (getView() != null)
-                    getView().showSecond(60 - new Long(data).intValue());
+                    getView().showSecond(60 - new Long(value).intValue());
             }
         };
 

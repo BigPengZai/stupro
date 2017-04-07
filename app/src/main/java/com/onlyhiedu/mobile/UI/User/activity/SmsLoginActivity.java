@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
@@ -62,6 +63,11 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     }
 
     @Override
+    public void showAuthSuccess(AuthCodeInfo info) {
+
+    }
+
+    @Override
     public void showError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
@@ -72,10 +78,12 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             case R.id.tv_code:
                 //获取验证码
                 getMsgCode();
-                MobclickAgent.onEvent(this,"sms_identifying_code");
+                if ("获取验证码".equals(mTvCode.getText().toString())) {
+                    mPresenter.getAuthCode(mEditNumber.getText().toString());
+                    MobclickAgent.onEvent(mContext, "register_identifying_code");
+                }
                 break;
             case R.id.btn_sign:
-
                 toLogin();
                 MobclickAgent.onEvent(this, "sms_login");
                 break;

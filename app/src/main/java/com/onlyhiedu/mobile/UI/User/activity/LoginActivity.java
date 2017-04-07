@@ -2,8 +2,6 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.text.Selection;
-import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -37,8 +35,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     EditText mEditPwd;
     @BindView(R.id.img_show)
     ImageView mImg_Show;
-    private int REQUESTCODE=11;
+    private int REQUEST_CODE = 11;
     public static final String TAG = LoginActivity.class.getSimpleName();
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -58,35 +57,29 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
         mEditNumber.setText(SPUtil.getPhone());
         UIUtils.initCursor(mEditNumber);
-        String username = getIntent().getStringExtra("username");
-        if (username != null) {
-            Log.d(TAG, "username:"+username);
-        } else {
-            Log.d(TAG, "空");
-        }
     }
-
 
 
     @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_sign:
+                //短信验证码登录
                 startActivity(new Intent(this, SmsLoginActivity.class));
-                 MobclickAgent.onEvent(this, "login_sms_login");
+                MobclickAgent.onEvent(this, "login_sms_login");
                 break;
             case R.id.tv_find_pwd:
                 startActivity(new Intent(this, FindPwdActivity.class));
-                 MobclickAgent.onEvent(this, "login_forget_pw");
+                MobclickAgent.onEvent(this, "login_forget_pw");
                 break;
             case R.id.btn_sign:
                 toLogin();
-                 MobclickAgent.onEvent(this, "login_login");
+                MobclickAgent.onEvent(this, "login_login");
                 break;
             case R.id.btn_sign_in:
                 //注册
 //                startActivity(new Intent(this, RegActivity.class));
-                startActivityForResult(new Intent(this, RegActivity.class),REQUESTCODE);
+                startActivityForResult(new Intent(this, RegActivity.class), REQUEST_CODE);
                 break;
             case R.id.img_show:
                 showPwd();
@@ -115,7 +108,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
             if (SPUtil.getToken().equals("")) {
                 mPresenter.getUser(number, pwd, null, StringUtils.getDeviceId());
-                Log.d(TAG, "StringUtils.getDeviceId():"+StringUtils.getDeviceId());
+                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
             } else {
                 mPresenter.getUser(number, pwd, SPUtil.getToken(), StringUtils.getDeviceId());
             }
@@ -135,14 +128,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String username = data.getStringExtra("username");
-        switch (requestCode) {
-            case 11:
-                mEditNumber.setText(username);
-                UIUtils.initCursor(mEditNumber);
-                break;
-            default:
-                break;
+        if (data != null) {
+            String username = data.getStringExtra("username");
+            switch (requestCode) {
+                case 11:
+                    mEditNumber.setText(username);
+                    UIUtils.initCursor(mEditNumber);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

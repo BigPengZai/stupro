@@ -10,7 +10,6 @@ import com.onlyhiedu.mobile.UI.Setting.activity.FeedBackActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.ModifyPwActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
-import com.onlyhiedu.mobile.UI.User.activity.RegisterActivity;
 import com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity;
 
 import dagger.Component;
@@ -41,5 +40,4 @@ public interface ActivityComponent {
 
     void inject(MyInfoActivity myInfoActivity);
 
-    void inject(RegisterActivity registerActivity);
 }

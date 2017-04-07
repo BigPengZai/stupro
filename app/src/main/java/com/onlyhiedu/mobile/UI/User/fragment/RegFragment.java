@@ -105,7 +105,11 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
                 MobclickAgent.onEvent(mContext, "register_register");
                 break;
             case R.id.tv_code:
-                MobclickAgent.onEvent(mContext, "register_identifying_code");
+                //获取验证码
+                if ("获取验证码".equals(mTvCode.getText().toString())) {
+                    mPresenter.getAuthCode(mEditNumber.getEditText());
+                    MobclickAgent.onEvent(mContext, "register_identifying_code");
+                }
                 break;
             case R.id.cb_check:
                 MobclickAgent.onEvent(mContext, "register_clause");
@@ -179,7 +183,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     @Override
     public void showSuccess() {
         Log.d(TAG, "注册完成");
-        Toast.makeText(getContext(),"注册成功",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "注册成功", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         intent.putExtra("username", mEditNumber.getEditText());
         getActivity().setResult(11, intent);
