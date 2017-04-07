@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
-import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
