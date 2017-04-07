@@ -19,5 +19,6 @@ public class AuthCodeInfo {
         public void setAuthCode(String authCode) {
             this.authCode = authCode;
         }
+
     }
 

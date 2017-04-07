@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
+import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
@@ -45,13 +46,16 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     //手机号码
     @BindView(R.id.edit_number)
     InputTextView mEditNumber;
+    //验证码输入框
     @BindView(R.id.edit_code)
     EditText mEditCode;
     //姓名
     @BindView(R.id.edit_name)
     InputTextView mEditName;
+    //设置密码
     @BindView(R.id.edit_pwd)
     InputTextView mEditPwd;
+    //确认密码
     @BindView(R.id.edit_confirm_pwd)
     InputTextView mEditConfirmPwd;
     @BindView(R.id.ll_reg_step3)
@@ -66,6 +70,8 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     @BindView(R.id.cb_check)
     CheckBox mCb_Check;
     public static final String TAG = RegFragment.class.getSimpleName();
+
+    private AuthCodeInfo mCodeInfo;
 
     @Override
     protected void initInject() {
@@ -87,7 +93,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     @Override
     protected void initData() {
-
+        mCodeInfo = new AuthCodeInfo();
     }
 
 
@@ -95,18 +101,25 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_next_number:
-                nextNumber();
+                //下一步
+                if (StringUtils.isMobile(mEditNumber.getEditText())) {
+                    nextNumber();
+                }
                 break;
             case R.id.btn_next_name:
-                nextCodeAndName();
+                if (mCodeInfo != null) {
+                    confirmSecond();
+                }
                 break;
             case R.id.btn_register:
-                nextRegister();
+                //注册
+                confirmThird();
                 MobclickAgent.onEvent(mContext, "register_register");
                 break;
             case R.id.tv_code:
                 //获取验证码
                 if ("获取验证码".equals(mTvCode.getText().toString())) {
+                    mPresenter.readSecond();
                     mPresenter.getAuthCode(mEditNumber.getEditText());
                     MobclickAgent.onEvent(mContext, "register_identifying_code");
                 }
@@ -116,7 +129,45 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
                 break;
         }
     }
+    //第二步验证
+    private void confirmSecond() {
+        Log.d(TAG, "验证码"+mCodeInfo.getAuthCode());
+        if (mEditCode.getText().length() == 0) {
+            Toast.makeText(mContext, "请填写验证码信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mEditName.getEditText().length() == 0) {
+            Toast.makeText(mContext, "请填写姓名", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mEditCode.getText().toString().equals(mCodeInfo.getAuthCode())) {
+            Toast.makeText(mContext, "验证码信息错误", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (StringUtils.checkAccountMark(mEditName.getEditText())) {
+            nextCodeAndName();
+        }
+    }
 
+    //第三步验证
+    private void confirmThird() {
+        if (mEditPwd.getEditText().length() == 0) {
+            Toast.makeText(mContext, "请输入密码", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mEditConfirmPwd.getEditText().length() == 0) {
+            Toast.makeText(mContext, "请再次输入确认密码", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mEditPwd.getEditText().equals(mEditConfirmPwd.getEditText())) {
+            Toast.makeText(mContext, "两次密码不一致", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (StringUtils.checkPassword(mEditPwd.getEditText())) {
+            nextRegister();
+        }
+
+    }
     private void nextNumber() {
         mTvCode.setEnabled(false);
         mPresenter.readSecond();
@@ -150,7 +201,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     private void nextRegister() {
         String pwd = mEditPwd.getEditText();
         String phone = mEditNumber.getEditText();
-        String pw = UIUtils.sha512(phone, pwd) + System.currentTimeMillis();
+        String pw = UIUtils.sha512(phone, pwd);
         String username = mEditName.getEditText();
         String confirmPwd = mEditConfirmPwd.getEditText();
         if (StringUtils.checkPassword(pwd)
@@ -181,20 +232,25 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
     @Override
-    public void showSuccess() {
-        Log.d(TAG, "注册完成");
-        Toast.makeText(getContext(), "注册成功", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent();
-        intent.putExtra("username", mEditNumber.getEditText());
-        getActivity().setResult(11, intent);
-        getActivity().finish();
+    public void showSuccess(RegisterInfo info) {
+        if (info != null) {
+            Log.d(TAG, "注册结果：" + info.getMessage());
+            Log.d(TAG, "注册完成");
+            Toast.makeText(getContext(), "注册成功", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.putExtra("username", mEditNumber.getEditText());
+            getActivity().setResult(11, intent);
+            getActivity().finish();
+        }
     }
 
     @Override
     public void showAuthSuccess(AuthCodeInfo info) {
         if (info != null) {
             Log.d(TAG, "验证码：" + info.getAuthCode());
+            mCodeInfo.setAuthCode(info.getAuthCode());
         }
+
     }
 
     @Override

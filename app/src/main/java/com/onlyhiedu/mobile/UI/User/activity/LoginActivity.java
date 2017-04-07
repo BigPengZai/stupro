@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_sign:
-                //短信验证码登录
+                //短信验证码登录 暂时没有
                 startActivity(new Intent(this, SmsLoginActivity.class));
                 MobclickAgent.onEvent(this, "login_sms_login");
                 break;
@@ -73,6 +73,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 MobclickAgent.onEvent(this, "login_forget_pw");
                 break;
             case R.id.btn_sign:
+                //登录
                 toLogin();
                 MobclickAgent.onEvent(this, "login_login");
                 break;

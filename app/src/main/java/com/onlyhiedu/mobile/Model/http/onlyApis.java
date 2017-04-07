@@ -29,9 +29,9 @@ public interface onlyApis {
 //    String HOST = "http://192.168.1.182:8080/";
 
     //测试环境
-    String HOST = "http://192.168.1.252:8090/";
+//    String HOST = "http://192.168.1.252:8090/";
     //公网环境
-//    String HOST = "http://api.onlyeduhi.com/";
+    String HOST = "http://api.onlyeduhi.com/";
 
     /**
      * 客户端登录
@@ -155,7 +155,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/register")
-    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password);
+    Flowable<onlyHttpResponse<RegisterInfo>> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password);
 
     /**
      * 验证码

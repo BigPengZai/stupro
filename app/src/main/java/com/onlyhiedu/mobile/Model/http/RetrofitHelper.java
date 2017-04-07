@@ -194,8 +194,8 @@ public class RetrofitHelper {
     }
 
     //注册
-    public Flowable<onlyHttpResponse> fetchRegisterInfo(String phone,String username,String pwd) {
-        return sOnlyApis.registerInfo(phone,username,pwd);
+    public Flowable<onlyHttpResponse<RegisterInfo>> fetchRegisterInfo(String username,String phone,String pwd) {
+        return sOnlyApis.registerInfo(username,phone,pwd);
     }
 
     //验证码

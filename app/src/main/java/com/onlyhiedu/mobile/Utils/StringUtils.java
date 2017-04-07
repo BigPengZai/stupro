@@ -16,6 +16,24 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
     /**
+     * 验证用户名只包含字母，中文
+     *
+     * @param account
+     * @return
+     */
+    public static boolean checkAccountMark(String account) {
+        String all = "^[a-zA-Z\\u4e00-\\u9fa5]+$";
+        Pattern pattern = Pattern.compile(all);
+        boolean matches = pattern.matches(all, account);
+        if (account.getBytes().length >= 4 && account.getBytes().length <= 20 && matches) {
+            return true;
+        } else {
+            Toast.makeText(App.getInstance().getApplicationContext(), "姓名格式为:字母,中文、长度：4-20", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    /**
      * 手机号码验证
      */
     public static boolean isMobile(String mobileNumber) {
@@ -75,10 +93,11 @@ public class StringUtils {
         }
         return flg;
     }
+
     //检查字符串是否数字
-    public static boolean isNumeric(String str){
-        for (int i = str.length();--i>=0;){
-            if (!Character.isDigit(str.charAt(i))){
+    public static boolean isNumeric(String str) {
+        for (int i = str.length(); --i >= 0; ) {
+            if (!Character.isDigit(str.charAt(i))) {
                 return false;
             }
         }
@@ -86,11 +105,12 @@ public class StringUtils {
     }
 
     /**
-     *
      * @return 获取手机唯一标识
      */
-    public static   String getDeviceId(){
+    public static String getDeviceId() {
         TelephonyManager TelephonyMgr = (TelephonyManager) App.getInstance().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         return TelephonyMgr.getDeviceId();
     }
+
+
 }
