@@ -70,7 +70,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_code:
-
+                //获取验证码
                 getMsgCode();
                 MobclickAgent.onEvent(this,"sms_identifying_code");
                 break;

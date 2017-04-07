@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     EditText mEditPwd;
     @BindView(R.id.img_show)
     ImageView mImg_Show;
-
+    private int REQUESTCODE=11;
     public static final String TAG = LoginActivity.class.getSimpleName();
     @Override
     protected void initInject() {
@@ -58,6 +58,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
         mEditNumber.setText(SPUtil.getPhone());
         UIUtils.initCursor(mEditNumber);
+        String username = getIntent().getStringExtra("username");
+        if (username != null) {
+            Log.d(TAG, "username:"+username);
+        } else {
+            Log.d(TAG, "空");
+        }
     }
 
 
@@ -78,7 +84,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                  MobclickAgent.onEvent(this, "login_login");
                 break;
             case R.id.btn_sign_in:
-                startActivity(new Intent(this, RegActivity.class));
+                //注册
+//                startActivity(new Intent(this, RegActivity.class));
+                startActivityForResult(new Intent(this, RegActivity.class),REQUESTCODE);
                 break;
             case R.id.img_show:
                 showPwd();
@@ -123,5 +131,18 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String username = data.getStringExtra("username");
+        switch (requestCode) {
+            case 11:
+                mEditNumber.setText(username);
+                UIUtils.initCursor(mEditNumber);
+                break;
+            default:
+                break;
+        }
     }
 }

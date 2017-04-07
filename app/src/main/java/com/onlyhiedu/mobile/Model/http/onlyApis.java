@@ -1,10 +1,12 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
@@ -27,7 +29,10 @@ public interface onlyApis {
 //    String HOST = "http://192.168.1.182:8080/";
 
     //测试环境
-    String HOST = "http://192.168.1.252:8090/";
+//    String HOST = "http://192.168.1.252:8090/";
+    //公网环境
+    String HOST = "http://api.onlyeduhi.com/";
+
     /**
      * 客户端登录
      *
@@ -144,4 +149,19 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/course/updateEndTime")
     Flowable<onlyHttpResponse<ClassConsumption>> uploadClassConsumption(@Field("courseUuid") String courseUuid);
+
+    /**
+     * 注册
+     */
+    @FormUrlEncoded
+    @POST("client/user/register")
+    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password);
+
+    /**
+     * 验证码
+     */
+    @FormUrlEncoded
+    @POST("client/user/getAuthCode")
+    Flowable<onlyHttpResponse<AuthCodeInfo>> getAuthCode(@Field("phone") String phone);
+
 }

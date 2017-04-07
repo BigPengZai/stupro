@@ -1,5 +1,8 @@
 package com.onlyhiedu.mobile.UI.User.fragment;
 
+import android.content.Intent;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,10 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -37,10 +42,12 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     Button mBtnNextName;
     @BindView(R.id.btn_register)
     Button mBtnRegister;
+    //手机号码
     @BindView(R.id.edit_number)
     InputTextView mEditNumber;
     @BindView(R.id.edit_code)
     EditText mEditCode;
+    //姓名
     @BindView(R.id.edit_name)
     InputTextView mEditName;
     @BindView(R.id.edit_pwd)
@@ -58,6 +65,8 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     @BindView(R.id.cb_check)
     CheckBox mCb_Check;
+    public static final String TAG = RegFragment.class.getSimpleName();
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -82,9 +91,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
 
-
-
-    @OnClick({R.id.btn_next_number, R.id.btn_next_name, R.id.btn_register,R.id.tv_code,R.id.cb_check})
+    @OnClick({R.id.btn_next_number, R.id.btn_next_name, R.id.btn_register, R.id.tv_code, R.id.cb_check})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_next_number:
@@ -95,13 +102,13 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
                 break;
             case R.id.btn_register:
                 nextRegister();
-                MobclickAgent.onEvent(mContext,"register_register");
+                MobclickAgent.onEvent(mContext, "register_register");
                 break;
             case R.id.tv_code:
-                MobclickAgent.onEvent(mContext,"register_identifying_code");
+                MobclickAgent.onEvent(mContext, "register_identifying_code");
                 break;
             case R.id.cb_check:
-                MobclickAgent.onEvent(mContext,"register_clause");
+                MobclickAgent.onEvent(mContext, "register_clause");
                 break;
         }
     }
@@ -109,7 +116,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     private void nextNumber() {
         mTvCode.setEnabled(false);
         mPresenter.readSecond();
-
+        mPresenter.getAuthCode(mEditNumber.getEditText());
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_left_out);
         animation.setFillAfter(true);
         mLlRegStep1.startAnimation(animation);
@@ -138,9 +145,15 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     private void nextRegister() {
         String pwd = mEditPwd.getEditText();
+        String phone = mEditNumber.getEditText();
+        String pw = UIUtils.sha512(phone, pwd) + System.currentTimeMillis();
+        String username = mEditName.getEditText();
         String confirmPwd = mEditConfirmPwd.getEditText();
-        if (StringUtils.checkPassword(pwd) && StringUtils.checkPassword(confirmPwd)) {
-
+        if (StringUtils.checkPassword(pwd)
+                && StringUtils.checkPassword(confirmPwd)
+                && username != null
+                && phone != null) {
+            mPresenter.registerUser(username, phone, pw);
         }
 
     }
@@ -161,6 +174,23 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
             return;
         }
         mTvCode.setText(getString(R.string.text_get_verification_code_again, second));
+    }
+
+    @Override
+    public void showSuccess() {
+        Log.d(TAG, "注册完成");
+        Toast.makeText(getContext(),"注册成功",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra("username", mEditNumber.getEditText());
+        getActivity().setResult(11, intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void showAuthSuccess(AuthCodeInfo info) {
+        if (info != null) {
+            Log.d(TAG, "验证码：" + info.getAuthCode());
+        }
     }
 
     @Override

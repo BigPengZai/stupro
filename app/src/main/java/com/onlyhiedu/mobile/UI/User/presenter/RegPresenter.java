@@ -1,9 +1,13 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
+import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
+import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,10 +38,48 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
             @Override
             public void onNextData(Long value) {
                 if (getView() != null)
-                    getView().showSecond(60 - new Long(value).intValue());
+                    getView().showSecond(60 - new Long(data).intValue());
             }
         };
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+
+    @Override
+    public void registerUser(String userName, String phone, String pwd) {
+        String pw = UIUtils.sha512(phone, pwd) + System.currentTimeMillis();
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchRegisterInfo(phone, userName, pw);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showSuccess();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void getAuthCode(String phone) {
+        Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
+        MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showAuthSuccess(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
     }
 }

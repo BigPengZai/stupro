@@ -3,10 +3,12 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
@@ -191,4 +193,13 @@ public class RetrofitHelper {
         return sOnlyApis.uploadClassConsumption(uuid);
     }
 
+    //注册
+    public Flowable<onlyHttpResponse> fetchRegisterInfo(String phone,String username,String pwd) {
+        return sOnlyApis.registerInfo(phone,username,pwd);
+    }
+
+    //验证码
+    public Flowable<onlyHttpResponse<AuthCodeInfo>> fetchAuthCode(String phone) {
+        return sOnlyApis.getAuthCode(phone);
+    }
 }
