@@ -11,8 +11,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
-import static android.R.attr.value;
-
 /**
  * Created by Administrator on 2017/3/3.
  */
@@ -36,10 +34,9 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
             @Override
             public void onNextData(Long data) {
                 if (getView() != null)
-                    getView().showSecond(60 - new Long(value).intValue());
+                    getView().showSecond(60 - new Long(data).intValue());
             }
         };
-
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 }

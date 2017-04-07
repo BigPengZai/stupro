@@ -36,7 +36,7 @@ public class FindPwdPresenter extends RxPresenter<FindPwdContract.View> implemen
             @Override
             public void onNextData(Long data) {
                 if (getView() != null)
-                    getView().showSecond(60 - new Long(value).intValue());
+                    getView().showSecond(60 - new Long(data).intValue());
             }
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));

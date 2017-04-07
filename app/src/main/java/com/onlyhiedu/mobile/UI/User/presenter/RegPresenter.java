@@ -32,7 +32,7 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
 
         MyResourceSubscriber observer = new MyResourceSubscriber<Long>() {
             @Override
-            public void onNextData(Long data) {
+            public void onNextData(Long value) {
                 if (getView() != null)
                     getView().showSecond(60 - new Long(value).intValue());
             }

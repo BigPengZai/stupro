@@ -16,5 +16,6 @@ public interface MethodType {
     String Destory = "Destory";  //老师退出视频
     String Create = "Create";  //创建
     String PaintText = "PaintText";
+    String EraserRect = "EraserRect";//范围清除
 
 }

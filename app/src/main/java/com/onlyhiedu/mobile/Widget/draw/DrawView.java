@@ -192,6 +192,16 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                         drawMove.getPaint().setXfermode(null);
                     }
                     break;
+                case ERASER_RECT:
+                    if (drawMove.getDrawingPathList() != null && drawMove.getDrawingPathList().size() > 0) {
+                        drawMove.getPaint().setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+
+                        Paint paint = drawMove.getPaint();
+                        paint.setStyle(Paint.Style.FILL);
+                        mContentCanvas.drawRect(drawMove.getStartX(), drawMove.getStartY(), drawMove.getEndX(), drawMove.getEndY(),paint);
+                        drawMove.getPaint().setXfermode(null);
+                    }
+                    break;
             }
         }
 

@@ -7,5 +7,6 @@ package com.onlyhiedu.mobile.Widget.draw;
 public enum DrawingMode {
     DRAW,
     TEXT,
-    ERASER
+    ERASER,
+    ERASER_RECT
 }

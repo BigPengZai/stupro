@@ -333,6 +333,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mDrawView.setDrawingMode(DrawingMode.values()[1]);
                                 mPresenter.drawText(mDrawView,notifyWhiteboard);
                             }
+                            if(type == ChatPresenter.EraserRect){
+                                mDrawView.setDrawingMode(DrawingMode.values()[3]);
+                                mPresenter.drawEraserRect(mDrawView,notifyWhiteboard);
+                            }
                         }
                     });
 

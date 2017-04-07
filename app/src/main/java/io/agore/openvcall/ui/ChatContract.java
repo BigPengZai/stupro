@@ -42,6 +42,8 @@ public interface ChatContract {
 
         void drawEraser(DrawView view, NotifyWhiteboardOperator json);
 
+        void drawEraserRect(DrawView view, NotifyWhiteboardOperator json);
+
         void drawOval(DrawView view, NotifyWhiteboardOperator json);
 
         void drawRectangle(DrawView view, NotifyWhiteboardOperator json);

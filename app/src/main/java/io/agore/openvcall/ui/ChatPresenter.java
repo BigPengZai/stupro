@@ -44,6 +44,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final int Destory = 8;//老师离开教室
     public static final int Create = 9;
     public static final int PaintText = 10;
+    public static final int EraserRect = 11;
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -182,6 +183,11 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
     @Override
+    public void drawEraserRect(DrawView view, NotifyWhiteboardOperator json) {
+        drawOval(view, json);
+    }
+
+    @Override
     public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
         String s = json.NotifyParam.MethodParam;
         String[] xyAxle = s.split(",");
@@ -242,6 +248,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if(type.equals(MethodType.PaintText)){
             return PaintText;
+        }
+        if(type.equals(MethodType.EraserRect)){
+            return EraserRect;
         }
         return 0;
     }
