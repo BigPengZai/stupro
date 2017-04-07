@@ -8,7 +8,6 @@ import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
-import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
@@ -194,7 +193,7 @@ public class RetrofitHelper {
     }
 
     //注册
-    public Flowable<onlyHttpResponse<RegisterInfo>> fetchRegisterInfo(String username,String phone,String pwd) {
+    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username,String phone,String pwd) {
         return sOnlyApis.registerInfo(username,phone,pwd);
     }
 

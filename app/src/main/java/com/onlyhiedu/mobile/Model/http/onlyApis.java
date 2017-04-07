@@ -155,7 +155,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/register")
-    Flowable<onlyHttpResponse<RegisterInfo>> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password);
+    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password);
 
     /**
      * 验证码

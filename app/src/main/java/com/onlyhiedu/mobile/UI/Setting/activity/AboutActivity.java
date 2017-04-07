@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,7 +27,6 @@ import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.OKHttpUICallback;
 import com.onlyhiedu.mobile.Utils.OkHttpManger;
-import com.onlyhiedu.mobile.Utils.OkHttpThreadCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +81,6 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
         mDownDialog.setCanceledOnTouchOutside(false);
         mDownDialog.setCancelable(true);
         mDownDialog.setProgressNumberFormat("%1d M/%2d M");
-
     }
 
     @OnClick({R.id.rl_update, R.id.rl_line})
@@ -103,7 +100,6 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
-                return;
             } else {
                 callLine();
             }
@@ -175,7 +171,6 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, DOWN_REQUEST_CODE);
-                return;
             } else {
                 if (mUrl != null) {
                     downApk(mUrl);

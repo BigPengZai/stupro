@@ -2,12 +2,10 @@ package com.onlyhiedu.mobile.UI.User.presenter;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
-import com.onlyhiedu.mobile.Model.bean.RegisterInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
-import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,14 +13,12 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
-import static android.R.attr.data;
-import static android.R.attr.value;
-
 /**
  * Created by Administrator on 2017/3/9.
  */
 
 public class RegPresenter extends RxPresenter<RegContract.View> implements RegContract.Presenter {
+
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -49,13 +45,13 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
 
     @Override
     public void registerUser(String userName, String phone, String pwd) {
-        Flowable<onlyHttpResponse<RegisterInfo>> flowable = mRetrofitHelper.fetchRegisterInfo(userName,phone, pwd);
-        MyResourceSubscriber<onlyHttpResponse<RegisterInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<RegisterInfo>>() {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchRegisterInfo(userName,phone, pwd);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
-            public void onNextData(onlyHttpResponse<RegisterInfo> data) {
+            public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showSuccess(data.getData());
+                        getView().showSuccess(data.getMessage());
                     } else {
                         getView().showError(data.getMessage());
                     }

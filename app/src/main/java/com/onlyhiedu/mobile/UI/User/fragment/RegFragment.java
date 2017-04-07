@@ -232,11 +232,10 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
     @Override
-    public void showSuccess(RegisterInfo info) {
+    public void showSuccess(String info) {
         if (info != null) {
-            Log.d(TAG, "注册结果：" + info.getMessage());
             Log.d(TAG, "注册完成");
-            Toast.makeText(getContext(), "注册成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.putExtra("username", mEditNumber.getEditText());
             getActivity().setResult(11, intent);
@@ -250,7 +249,6 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
             Log.d(TAG, "验证码：" + info.getAuthCode());
             mCodeInfo.setAuthCode(info.getAuthCode());
         }
-
     }
 
     @Override
