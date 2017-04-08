@@ -1,12 +1,17 @@
 package com.onlyhiedu.mobile.Utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Selection;
@@ -200,6 +205,7 @@ public class UIUtils {
 
     /**
      * 获取项目Cache大小
+     *
      * @param context
      */
     public static String calculateCacheSize(Context context) {
@@ -218,11 +224,12 @@ public class UIUtils {
         }
         if (fileSize > 0)
             cacheSize = AppFilesUtil.formatFileSize(fileSize);
-        return  cacheSize;
+        return cacheSize;
     }
 
     /**
      * 清楚App缓存
+     *
      * @param showToast
      */
     public static void clearAppCache(boolean showToast) {
@@ -230,9 +237,9 @@ public class UIUtils {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
-                    Toast.makeText(App.getInstance().getApplicationContext(),"缓存清除成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getInstance().getApplicationContext(), "缓存清除成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(App.getInstance().getApplicationContext(),"缓存清除失败",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getInstance().getApplicationContext(), "缓存清除失败", Toast.LENGTH_SHORT).show();
                 }
             }
         } : null;
@@ -258,5 +265,28 @@ public class UIUtils {
         });
     }
 
+
+    public static  boolean requestPermission(Activity context, int code,String[] permission) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(context, permission, code);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+
+    public static void callLine(Activity activity,String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum));
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        activity.startActivity(intent);
+    }
 
 }

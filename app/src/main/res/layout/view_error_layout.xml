@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/pageerrLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
     <RelativeLayout
         android:background="@color/c_F2F2F2"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical">
@@ -45,6 +47,37 @@
                 android:text="加载中…"
                 android:textColor="#999999"
                 android:textSize="@dimen/sp_14" />
+
+
+            <LinearLayout
+                android:id="@+id/ll_phone"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:gravity="center"
+                    android:text="您可以拨打客服电话400-876-3300或登录嗨课堂"
+                    android:textColor="#999999"
+                    android:textSize="@dimen/sp_14" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="3dip"
+                    android:gravity="center"
+                    android:text="官网进行咨询预约课程"
+                    android:textColor="#999999"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+
+
         </LinearLayout>
     </RelativeLayout>
 

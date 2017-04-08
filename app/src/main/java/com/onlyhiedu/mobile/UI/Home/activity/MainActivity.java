@@ -1,10 +1,10 @@
 package com.onlyhiedu.mobile.UI.Home.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.text.TextUtils;
@@ -17,10 +17,10 @@ import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,12 +30,14 @@ import butterknife.BindView;
 
 public class MainActivity extends SimpleActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final int CALL_REQUEST_CODE = 110;
 
     private ClassFragment mClassFragment;
     private MeFragment mMeFragment;
     private long mExitTime = 0;
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
 
@@ -53,10 +55,9 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
         showHideFragment(mClassFragment);
         mNavigation.setItemIconTintList(null);
         String deviceInfo = getDeviceInfo(this);
-        Log.d(TAG, "deviceInfo:"+deviceInfo);
+        Log.d(TAG, "deviceInfo:" + deviceInfo);
 
     }
-
 
 
     public static boolean checkPermission(Context context, String permission) {
@@ -82,6 +83,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
         }
         return result;
     }
+
     public static String getDeviceInfo(Context context) {
         try {
             org.json.JSONObject json = new org.json.JSONObject();
@@ -138,7 +140,6 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.one) {
@@ -146,7 +147,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
         }
         if (item.getItemId() == R.id.tow) {
             showHideFragment(mMeFragment);
-            MobclickAgent.onEvent(this,"me_me");
+            MobclickAgent.onEvent(this, "me_me");
         }
         return true;
     }
@@ -165,4 +166,30 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
             AppManager.getAppManager().AppExit();
         }
     }
+
+
+    public void requestPermissions(Activity context, int code, String[] permission) {
+        if (UIUtils.requestPermission(context, code, permission)) {
+            UIUtils.callLine(this, "400-876-3300");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case CALL_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    UIUtils.callLine(this, "400-876-3300");
+                } else {
+                    Toast.makeText(mContext, "拨打电话权限未授权", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
 }

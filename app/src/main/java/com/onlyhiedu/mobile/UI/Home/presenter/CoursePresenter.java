@@ -45,7 +45,7 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
             public void onNext(onlyHttpResponse<CourseList> data) {
                 if (null != getView() && null != data) {
                     if (!data.isHasError() && data.getData() != null && data.getData().list != null) {
-                        getView().showCourseListSuccess(data.getData().list);
+                        getView().showCourseListSuccess(data.getData().list,isRefresh);
                     } else {
                         getView().showCourseListFailure();
                     }
@@ -84,7 +84,7 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
             public void onNext(onlyHttpResponse<CourseList> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showCourseListSuccess(data.getData().list);
+                        getView().showCourseListSuccess(data.getData().list,isRefresh);
                     } else {
                         getView().showError(data.getMessage());
                         getView().showCourseListFailure();

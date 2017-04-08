@@ -28,7 +28,7 @@ public interface onlyApis {
 //    String HOST = "http://192.168.1.182:8080/";
 
     //测试环境
-//    String HOST = "http://192.168.1.252:8090/";
+    //String HOST = "http://192.168.1.252:8090/";
     //公网环境
     String HOST = "http://api.onlyeduhi.com/";
 
@@ -99,6 +99,7 @@ public interface onlyApis {
      */
     @POST("client/student/getNoStartCourseList")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
+
     @POST("client/student/getEndCourseList")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
 
@@ -113,6 +114,7 @@ public interface onlyApis {
 
     /**
      * 修改密码
+     *
      * @param oldPassword
      * @param timestamp
      * @param newPassword
@@ -124,16 +126,15 @@ public interface onlyApis {
 
 
     /**
-     *版本更新
-     *
-     * */
+     * 版本更新
+     */
     @POST("client/student/getAppInfo")
     Flowable<onlyHttpResponse<UpdataVersionInfo>> updataVersion();
 
 
     @FormUrlEncoded
     @POST("client/courseware/getCoursewareImageList")
-    Flowable<onlyHttpResponse<List<CourseWareImageList>>> getCoursewareImageList(@Field("coursewareId") String courseWareId );
+    Flowable<onlyHttpResponse<List<CourseWareImageList>>> getCoursewareImageList(@Field("coursewareId") String courseWareId);
 
     /**
      * 意见反馈

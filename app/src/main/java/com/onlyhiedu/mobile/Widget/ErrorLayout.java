@@ -1,12 +1,15 @@
 package com.onlyhiedu.mobile.Widget;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.R;
@@ -31,9 +34,13 @@ public class ErrorLayout extends LinearLayout implements
     private final Context context;
     public ImageView img;
     private OnClickListener listener;
+    private OnClickListener mListenerPhone;
+
     private int mErrorState;
     private String strNoDataContent = "";
     private TextView tv;
+    private LinearLayout mLlPhone;
+    private TextView mTvPhone;
 
     public ErrorLayout(Context context) {
         super(context);
@@ -51,7 +58,6 @@ public class ErrorLayout extends LinearLayout implements
         View view = View.inflate(context, R.layout.view_error_layout, null);
         img = (ImageView) view.findViewById(R.id.img_error_layout);
         tv = (TextView) view.findViewById(R.id.tv_error_layout);
-        RelativeLayout mLayout = (RelativeLayout) view.findViewById(R.id.pageerrLayout);
         mLoading = (ProgressBar) view.findViewById(R.id.animProgress);
         setBackgroundColor(-1);
         setOnClickListener(this);
@@ -66,8 +72,35 @@ public class ErrorLayout extends LinearLayout implements
                 }
             }
         });
+
+        initLlPhone(view);
+
         addView(view);
         changeErrorLayoutBgMode(context);
+    }
+
+
+    private void initLlPhone(View view){
+        mLlPhone = (LinearLayout) view.findViewById(R.id.ll_phone);
+        mTvPhone = (TextView) view.findViewById(R.id.tv_phone);
+        SpannableStringBuilder builder = new SpannableStringBuilder(mTvPhone.getText().toString());
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.parseColor("#F42440"));
+        builder.setSpan(redSpan, 9, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTvPhone.setText(builder);
+
+        mLlPhone.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                    if (mListenerPhone != null)
+                        mListenerPhone.onClick(v);
+            }
+        });
+
+    }
+
+    public void setListenerPhone(OnClickListener listenerPhone) {
+        mListenerPhone = listenerPhone;
     }
 
     public void changeErrorLayoutBgMode(Context context1) {
@@ -79,6 +112,11 @@ public class ErrorLayout extends LinearLayout implements
     public void dismiss() {
         mErrorState = HIDE_LAYOUT;
         setVisibility(View.GONE);
+    }
+
+
+    public void isLlPhoneVisibility(int visibility) {
+        mLlPhone.setVisibility(visibility);
     }
 
     public int getErrorState() {

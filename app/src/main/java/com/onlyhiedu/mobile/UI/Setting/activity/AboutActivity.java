@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Setting.presenter.UpdataPresenter;
 import com.onlyhiedu.mobile.UI.Setting.presenter.contract.UpdataContract;
 import com.onlyhiedu.mobile.Utils.AppUtil;
@@ -27,6 +28,7 @@ import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.OKHttpUICallback;
 import com.onlyhiedu.mobile.Utils.OkHttpManger;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +37,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
+
+import static com.onlyhiedu.mobile.UI.Home.activity.MainActivity.CALL_REQUEST_CODE;
 
 /**
  * Created by pengpeng on 2017/3/2.
@@ -55,7 +59,6 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
 
 
     public static final String PHONE_NUM = "400-876-3300";
-    private final int CALL_REQUEST_CODE = 1;
     private final int DOWN_REQUEST_CODE = 2;
     private String mUrl;
     private ProgressDialog mDownDialog;
@@ -90,23 +93,13 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
                 mPresenter.updataVersion();
                 break;
             case R.id.rl_line:
-                requestPermission();
+                if (UIUtils.requestPermission(this, MainActivity.CALL_REQUEST_CODE, new String[]{Manifest.permission.CALL_PHONE})) {
+                    UIUtils.callLine(this, PHONE_NUM);
+                }
                 break;
         }
     }
 
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE);
-            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
-            } else {
-                callLine();
-            }
-        } else {
-            callLine();
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -114,7 +107,7 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
         switch (requestCode) {
             case CALL_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    callLine();
+                    UIUtils.callLine(this, PHONE_NUM);
                 } else {
                     Toast.makeText(AboutActivity.this, "拨打电话权限未授权", Toast.LENGTH_SHORT)
                             .show();
@@ -135,13 +128,6 @@ public class AboutActivity extends BaseActivity<UpdataPresenter> implements Upda
         }
     }
 
-    private void callLine() {
-        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + PHONE_NUM));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        startActivity(intent);
-    }
 
     @Override
     public void showUpdataSuccess(UpdataVersionInfo versionInfo) {

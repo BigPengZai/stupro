@@ -15,7 +15,7 @@ public interface CourseContract {
 
     interface View extends BaseView {
 
-        void showCourseListSuccess(List<CourseList.ListBean> data);
+        void showCourseListSuccess(List<CourseList.ListBean> data,boolean isRefresh);
 
         void showCourseListFailure();
 

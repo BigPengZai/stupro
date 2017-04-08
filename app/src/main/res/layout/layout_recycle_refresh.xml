@@ -19,6 +19,9 @@
 
     </com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout>
 
+
+
+
     <com.onlyhiedu.mobile.Widget.ErrorLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
