@@ -1,7 +1,6 @@
 package com.onlyhiedu.mobile.UI.User.fragment;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -33,8 +32,6 @@ import butterknife.OnClick;
 public class RegFragment extends BaseFragment<RegPresenter> implements RegContract.View {
 
 
-    private boolean mPwd;
-    private boolean mConfirmPwd;
 
     @BindView(R.id.btn_next_number)
     Button mBtnNextNumber;
@@ -107,7 +104,9 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
                 break;
             case R.id.btn_next_name:
                 if (mCodeInfo != null) {
-                    confirmSecond();
+                    if (mPresenter.confirmThird(mEditCode.getText().toString(), mEditName.getEditText(), mCodeInfo.getAuthCode())) {
+                        nextCodeAndName();
+                    }
                 }
                 break;
             case R.id.btn_register:
@@ -126,25 +125,6 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
             case R.id.cb_check:
                 MobclickAgent.onEvent(mContext, "register_clause");
                 break;
-        }
-    }
-    //第二步验证
-    private void confirmSecond() {
-        Log.d(TAG, "验证码"+mCodeInfo.getAuthCode());
-        if (mEditCode.getText().length() == 0) {
-            Toast.makeText(mContext, "请填写验证码信息", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (mEditName.getEditText().length() == 0) {
-            Toast.makeText(mContext, "请填写姓名", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!mEditCode.getText().toString().equals(mCodeInfo.getAuthCode())) {
-            Toast.makeText(mContext, "验证码信息错误", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (StringUtils.checkAccountMark(mEditName.getEditText())) {
-            nextCodeAndName();
         }
     }
 
@@ -167,6 +147,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
         }
 
     }
+
     private void nextNumber() {
         mTvCode.setEnabled(false);
         mPresenter.readSecond();
