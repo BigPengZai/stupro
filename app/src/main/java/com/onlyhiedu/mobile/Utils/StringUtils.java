@@ -106,18 +106,18 @@ public class StringUtils {
     }
 
   /*  *//**
-     * @return 获取手机唯一标识
-     */
-    public static String getDeviceId(Context context) {
-        TelephonyManager TelephonyMgr = (TelephonyManager) App.getInstance().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        return TelephonyMgr.getDeviceId();
-    }
+//     * @return 获取手机唯一标识
+//     */
+//    public static String getDeviceId(Context context) {
+//        TelephonyManager TelephonyMgr = (TelephonyManager) App.getInstance().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+//        return TelephonyMgr.getDeviceId();
+//    }
     /**
      * pad 设备id
-     * *//*
+     * */
     public static String getDeviceId(Context context) {
         String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         return android_id;
-    }*/
+    }
 
 }

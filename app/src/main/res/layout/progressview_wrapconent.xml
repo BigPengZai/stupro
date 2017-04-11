@@ -4,15 +4,19 @@
              android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="180dp"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/size_8"
+        android:paddingTop="@dimen/size_8"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_roundcorner_progress"
         android:gravity="center">
 
 
         <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginRight="12dip"/>
 
         <TextView
@@ -22,7 +26,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="djjdjdjd"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_16"/>
+            android:textColor="@color/white"/>
     </LinearLayout>
 </FrameLayout>

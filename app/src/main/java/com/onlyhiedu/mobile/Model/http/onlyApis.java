@@ -25,7 +25,6 @@ import retrofit2.http.Query;
 public interface onlyApis {
 
 
-//    String HOST = "http://192.168.1.182:8080/";
 
     //测试环境
     String HOST = "http://192.168.1.252:8090/";
