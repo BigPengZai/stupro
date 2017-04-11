@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.Utils;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -104,13 +105,19 @@ public class StringUtils {
         return true;
     }
 
-    /**
+  /*  *//**
      * @return 获取手机唯一标识
      */
-    public static String getDeviceId() {
+    public static String getDeviceId(Context context) {
         TelephonyManager TelephonyMgr = (TelephonyManager) App.getInstance().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         return TelephonyMgr.getDeviceId();
     }
-
+    /**
+     * pad 设备id
+     * *//*
+    public static String getDeviceId(Context context) {
+        String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return android_id;
+    }*/
 
 }

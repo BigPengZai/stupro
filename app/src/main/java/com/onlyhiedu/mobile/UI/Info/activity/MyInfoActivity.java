@@ -67,6 +67,7 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
     @Override
     protected void initData() {
         mPresenter.getStudentInfo();
+        mSettingName.hintRightImage();
     }
     @Override
     public void showStudentInfo(StudentInfo data) {
