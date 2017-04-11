@@ -51,6 +51,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_phone"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
