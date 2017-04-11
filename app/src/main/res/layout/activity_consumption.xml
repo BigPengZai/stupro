@@ -3,9 +3,9 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-
-    <TextView
-        android:text="课时消耗"
-        android:layout_width="wrap_content"
+    <include layout="@layout/layout_toolbar"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>
