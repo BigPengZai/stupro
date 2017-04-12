@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.Model.http;
 
 
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
+import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -49,6 +50,25 @@ public interface onlyApis {
                                                      @Field("userType") String userType,
                                                      @Field("token") String token,
                                                      @Field("deviceId") String deviceId);
+
+
+    /**
+     * 客户端验证码登录
+     *
+     * @param phone
+     * @param deviceType
+     * @param userType
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/user/authLogin")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> authLogin(@Field("token") String token,
+                                                           @Field("authCode") String authCode,
+                                                           @Field("phone") String phone,
+                                                           @Field("deviceType") String deviceType,
+                                                           @Field("userType") String userType,
+                                                           @Field("deviceId") String deviceId);
+
 
     /**
      * 获取学生信息

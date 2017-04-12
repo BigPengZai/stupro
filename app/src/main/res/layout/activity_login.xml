@@ -111,9 +111,7 @@
         style="@style/match_wrap"
         android:layout_marginTop="@dimen/size_10"
         android:orientation="horizontal">
-<!--短信验证码登录入口暂时关闭-->
         <TextView
-            android:visibility="gone"
             android:id="@+id/tv_sms_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

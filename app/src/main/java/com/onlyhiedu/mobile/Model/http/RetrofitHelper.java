@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
+import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -200,5 +201,9 @@ public class RetrofitHelper {
     //验证码
     public Flowable<onlyHttpResponse<AuthCodeInfo>> fetchAuthCode(String phone) {
         return sOnlyApis.getAuthCode(phone);
+    }
+    //验证码登录
+    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchAuthLogin(String token, String authcode, String phone, String deviceid) {
+        return sOnlyApis.authLogin(token, authcode, phone, "Android", "student",deviceid);
     }
 }

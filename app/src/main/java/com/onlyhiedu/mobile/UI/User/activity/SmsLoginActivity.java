@@ -2,17 +2,23 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
+import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
+import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -27,7 +33,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     EditText mEditCode;
     @BindView(R.id.tv_code)
     TextView mTvCode;
-
+    public static final String TAG = SmsLoginActivity.class.getSimpleName();
 
     @Override
     protected void initInject() {
@@ -64,7 +70,17 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
 
     @Override
     public void showAuthSuccess(AuthCodeInfo info) {
+        Log.d(TAG, "验证码：" + info.getAuthCode());
+    }
 
+    @Override
+    public void showAuthLoginSuccess(AuthUserDataBean info) {
+        if (info != null) {
+            Log.d(TAG, ""+info.getDeviceId());
+            startActivity(new Intent(this, MainActivity.class));
+            AppManager.getAppManager().finishActivity(LoginActivity.class);
+            finish();
+        }
     }
 
     @Override
@@ -105,7 +121,14 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     private void toLogin() {
         String number = mEditNumber.getText().toString();
         String code = mEditCode.getText().toString();
-
+        if (StringUtils.isMobile(number)) {
+            if (SPUtil.getToken().equals("")) {
+                mPresenter.authLogin(null, code, number, StringUtils.getDeviceId(this));
+                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId(this));
+            } else {
+                mPresenter.authLogin(SPUtil.getToken(), code, number, StringUtils.getDeviceId(this));
+            }
+        }
     }
 
     private void getMsgCode() {
