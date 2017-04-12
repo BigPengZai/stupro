@@ -123,10 +123,10 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
         String code = mEditCode.getText().toString();
         if (StringUtils.isMobile(number)) {
             if (SPUtil.getToken().equals("")) {
-                mPresenter.authLogin(null, code, number, StringUtils.getDeviceId(this));
-                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId(this));
+                mPresenter.authLogin(null, code, number, StringUtils.getDeviceId());
+                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
             } else {
-                mPresenter.authLogin(SPUtil.getToken(), code, number, StringUtils.getDeviceId(this));
+                mPresenter.authLogin(SPUtil.getToken(), code, number, StringUtils.getDeviceId());
             }
         }
     }
