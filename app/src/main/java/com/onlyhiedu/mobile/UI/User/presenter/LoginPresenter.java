@@ -33,10 +33,10 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
 
     @Override
-    public void getUser(String phone, String pwd,String token,String deviceid) {
+    public void getUser(String phone, String pwd,String deviceid) {
         long timeMillis = System.currentTimeMillis();
         String password = Encrypt.SHA512(UIUtils.sha512(phone, pwd) + timeMillis);
-        Flowable<onlyHttpResponse<UserDataBean>> flowable = mRetrofitHelper.fetchUser(phone, password, timeMillis,token,deviceid);
+        Flowable<onlyHttpResponse<UserDataBean>> flowable = mRetrofitHelper.fetchUser(phone, password, timeMillis,deviceid);
         MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<UserDataBean>>() {
             @Override
             public void onNextData(onlyHttpResponse<UserDataBean> data) {

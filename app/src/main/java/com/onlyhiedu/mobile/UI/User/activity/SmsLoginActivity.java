@@ -13,12 +13,10 @@ import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
-import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
-import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -76,7 +74,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     @Override
     public void showAuthLoginSuccess(AuthUserDataBean info) {
         if (info != null) {
-            Log.d(TAG, ""+info.getDeviceId());
+            Log.d(TAG, "" + info.getDeviceId());
             startActivity(new Intent(this, MainActivity.class));
             AppManager.getAppManager().finishActivity(LoginActivity.class);
             finish();
@@ -122,12 +120,8 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
         String number = mEditNumber.getText().toString();
         String code = mEditCode.getText().toString();
         if (StringUtils.isMobile(number)) {
-            if (SPUtil.getToken().equals("")) {
-                mPresenter.authLogin(null, code, number, StringUtils.getDeviceId());
-                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
-            } else {
-                mPresenter.authLogin(SPUtil.getToken(), code, number, StringUtils.getDeviceId());
-            }
+            mPresenter.authLogin( code, number, StringUtils.getDeviceId());
+            Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
         }
     }
 

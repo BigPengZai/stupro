@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
-import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
@@ -18,7 +17,6 @@ import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
-import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
@@ -28,13 +26,13 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/3/7.
  */
 
-public class LoginFragment extends BaseFragment<LoginPresenter> implements LoginContract.View  {
+public class LoginFragment extends BaseFragment<LoginPresenter> implements LoginContract.View {
 
-   /* @BindView(R.id.edit_pwd)
-    InputTextView mEditPwd;
-    @BindView(R.id.edit_confirm_pwd)
-    InputTextView mEditConfirmPwd;*/
-   private boolean isChecked = true;
+    /* @BindView(R.id.edit_pwd)
+     InputTextView mEditPwd;
+     @BindView(R.id.edit_confirm_pwd)
+     InputTextView mEditConfirmPwd;*/
+    private boolean isChecked = true;
     @BindView(R.id.edit_number)
     EditText mEdit_Num;
     @BindView(R.id.edit_pwd)
@@ -42,6 +40,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     @BindView(R.id.img_show)
     ImageView mImg_Show;
     public static final String TAG = LoginFragment.class.getSimpleName();
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -63,7 +62,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     }
 
-    @OnClick({R.id.btn_sign, R.id.tv_forget_pwd,R.id.img_show})
+    @OnClick({R.id.btn_sign, R.id.tv_forget_pwd, R.id.img_show})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_sign:
@@ -89,18 +88,16 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     public void showError(String msg) {
 
     }
+
     private void toLogin() {
         String number = mEdit_Num.getText().toString();
         String pwd = mEdit_Pwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-            if (SPUtil.getToken().equals("")) {
-                mPresenter.getUser(number, pwd, null, StringUtils.getDeviceId(mContext));
-                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId(mContext));
-            } else {
-                mPresenter.getUser(number, pwd, SPUtil.getToken(), StringUtils.getDeviceId(mContext));
-            }
+            mPresenter.getUser(number, pwd, StringUtils.getDeviceId());
+            Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
         }
     }
+
     private void showPwd() {
         if (isChecked) {
             mEdit_Pwd.setTransformationMethod(HideReturnsTransformationMethod

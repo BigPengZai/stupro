@@ -26,7 +26,6 @@ import retrofit2.http.Query;
 public interface onlyApis {
 
 
-
     //测试环境
     String HOST = "http://192.168.1.252:8090/";
     //公网环境
@@ -48,7 +47,6 @@ public interface onlyApis {
                                                      @Field("timestamp") Long timestamp,
                                                      @Field("deviceType") String deviceType,
                                                      @Field("userType") String userType,
-                                                     @Field("token") String token,
                                                      @Field("deviceId") String deviceId);
 
 
@@ -62,8 +60,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/authLogin")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> authLogin(@Field("token") String token,
-                                                           @Field("authCode") String authCode,
+    Flowable<onlyHttpResponse<AuthUserDataBean>> authLogin(@Field("authCode") String authCode,
                                                            @Field("phone") String phone,
                                                            @Field("deviceType") String deviceType,
                                                            @Field("userType") String userType,

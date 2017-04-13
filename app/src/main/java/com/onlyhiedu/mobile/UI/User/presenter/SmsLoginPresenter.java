@@ -8,7 +8,6 @@ import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
 import com.onlyhiedu.mobile.Utils.SPUtil;
-import com.onlyhiedu.mobile.Utils.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +43,7 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+
     @Override
     public void getAuthCode(String phone) {
         Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
@@ -59,14 +59,14 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
                 }
             }
         };
-        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
     //验证码登录
     @Override
-    public void authLogin(String token, String authcode, String phone,String deviceid) {
+    public void authLogin(String authCode, String phone, String deviceId) {
 
-        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchAuthLogin(token, authcode, phone, deviceid);
+        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchAuthLogin(authCode, phone, deviceId);
         MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>>() {
             @Override
             public void onNextData(onlyHttpResponse<AuthUserDataBean> data) {
@@ -81,10 +81,8 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
                 }
             }
         };
-        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
-
-
 
 
 }

@@ -31,9 +31,6 @@ public class onlyHttpResponse<T> {
     }
 
     public int getCode() {
-        if (code == TOKEN_LOSE) {
-            UIUtils.startLoginActivity(App.getInstance());
-        }
         return code;
     }
 

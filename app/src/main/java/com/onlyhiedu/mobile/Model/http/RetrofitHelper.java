@@ -141,8 +141,8 @@ public class RetrofitHelper {
     }
 
 
-    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m, Long time,String token,String deviceid) {
-        return sOnlyApis.getUser(z, m, time, "Android", "student",token,deviceid);
+    public Flowable<onlyHttpResponse<UserDataBean>> fetchUser(String z, String m, Long time, String deviceid) {
+        return sOnlyApis.getUser(z, m, time, "Android", "student", deviceid);
     }
 
     public Flowable<onlyHttpResponse<StudentInfo>> fetchStudentInfo() {
@@ -194,16 +194,17 @@ public class RetrofitHelper {
     }
 
     //注册
-    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username,String phone,String pwd) {
-        return sOnlyApis.registerInfo(username,phone,pwd);
+    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username, String phone, String pwd) {
+        return sOnlyApis.registerInfo(username, phone, pwd);
     }
 
     //验证码
     public Flowable<onlyHttpResponse<AuthCodeInfo>> fetchAuthCode(String phone) {
         return sOnlyApis.getAuthCode(phone);
     }
+
     //验证码登录
-    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchAuthLogin(String token, String authcode, String phone, String deviceid) {
-        return sOnlyApis.authLogin(token, authcode, phone, "Android", "student",deviceid);
+    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchAuthLogin(String authCode, String phone, String deviceId) {
+        return sOnlyApis.authLogin(authCode, phone, "Android", "student", deviceId);
     }
 }

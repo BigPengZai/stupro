@@ -107,12 +107,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String number = mEditNumber.getText().toString();
         String pwd = mEditPwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-            if (SPUtil.getToken().equals("")) {
-                mPresenter.getUser(number, pwd, null, StringUtils.getDeviceId());
-                Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
-            } else {
-                mPresenter.getUser(number, pwd, SPUtil.getToken(), StringUtils.getDeviceId());
-            }
+            mPresenter.getUser(number, pwd, StringUtils.getDeviceId());
         }
     }
 
@@ -125,7 +120,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "msg:"+msg);
+        Log.d(TAG, "msg:" + msg);
     }
 
     @Override
