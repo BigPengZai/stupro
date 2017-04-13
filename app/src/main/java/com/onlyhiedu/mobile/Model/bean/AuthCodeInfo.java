@@ -7,18 +7,18 @@ package com.onlyhiedu.mobile.Model.bean;
 public class AuthCodeInfo {
 
 
-        /**
-         * authCode : 4837
-         */
-        private String authCode="8888";
+    /**
+     * authCode : 4837
+     */
+    private int authCode = 8888;
 
-        public String getAuthCode() {
-            return authCode;
-        }
-
-        public void setAuthCode(String authCode) {
-            this.authCode = authCode;
-        }
-
+    public int getAuthCode() {
+        return authCode;
     }
+
+    public void setAuthCode(int authCode) {
+        this.authCode = authCode;
+    }
+
+}
 

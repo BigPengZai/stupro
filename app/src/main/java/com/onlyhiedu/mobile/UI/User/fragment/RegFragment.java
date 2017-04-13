@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
-import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
@@ -31,7 +30,6 @@ import butterknife.OnClick;
  */
 
 public class RegFragment extends BaseFragment<RegPresenter> implements RegContract.View {
-
 
 
     @BindView(R.id.btn_next_number)
@@ -67,8 +65,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     @BindView(R.id.cb_check)
     CheckBox mCb_Check;
     public static final String TAG = RegFragment.class.getSimpleName();
-
-    private AuthCodeInfo mCodeInfo;
+    private int mAuthCode;
 
     @Override
     protected void initInject() {
@@ -82,15 +79,13 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     @Override
     protected void initView() {
-
         mEditPwd.setPassword(true);
         mEditConfirmPwd.setPassword(true);
-
     }
 
     @Override
     protected void initData() {
-        mCodeInfo = new AuthCodeInfo();
+
     }
 
 
@@ -104,8 +99,8 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
                 }
                 break;
             case R.id.btn_next_name:
-                if (mCodeInfo != null) {
-                    if (mPresenter.confirmThird(mEditCode.getText().toString(), mEditName.getEditText(), mCodeInfo.getAuthCode())) {
+                if (mAuthCode != 0) {
+                    if (mPresenter.confirmThird(mEditCode.getText().toString(), mEditName.getEditText(), mAuthCode)) {
                         nextCodeAndName();
                     }
                 }
@@ -131,21 +126,26 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     //第三步验证
     private void confirmThird() {
-        if (mEditPwd.getEditText().length() == 0) {
+        String pwd = mEditPwd.getEditText();
+        String confirmPwd =  mEditConfirmPwd.getEditText();
+        String phone = mEditNumber.getEditText();
+
+        if (TextUtils.isEmpty(pwd)) {
             Toast.makeText(mContext, "请输入密码", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mEditConfirmPwd.getEditText().length() == 0) {
+        if (TextUtils.isEmpty(confirmPwd)) {
             Toast.makeText(mContext, "请再次输入确认密码", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!mEditPwd.getEditText().equals(mEditConfirmPwd.getEditText())) {
+        if(!StringUtils.checkPassword(pwd) || !StringUtils.checkPassword(confirmPwd)){
+            return;
+        }
+        if (!pwd.equals(confirmPwd)) {
             Toast.makeText(mContext, "两次密码不一致", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (StringUtils.checkPassword(mEditPwd.getEditText())) {
-            nextRegister();
-        }
+        mPresenter.registerUser(mEditName.getEditText(), phone, UIUtils.sha512(phone, pwd),mEditCode.getText().toString());
 
     }
 
@@ -179,22 +179,6 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
         mEditName.setInputEnable(false);
     }
 
-    private void nextRegister() {
-        String pwd = mEditPwd.getEditText();
-        String phone = mEditNumber.getEditText();
-        String pw = UIUtils.sha512(phone, pwd);
-        String username = mEditName.getEditText();
-        String confirmPwd = mEditConfirmPwd.getEditText();
-        String authcode = mEditCode.getText().toString();
-        if (StringUtils.checkPassword(pwd)
-                && StringUtils.checkPassword(confirmPwd)
-                && !TextUtils.isEmpty(username)
-                && !TextUtils.isEmpty(phone)
-                && !TextUtils.isEmpty(authcode)) {
-            mPresenter.registerUser(username, phone, pw,authcode);
-        }
-
-    }
 
     private void setAnimation(Animation animation, View view, View view2) {
         view.startAnimation(animation);
@@ -227,11 +211,9 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
     @Override
-    public void showAuthSuccess(AuthCodeInfo info) {
-        if (info != null) {
-            Log.d(TAG, "验证码：" + info.getAuthCode());
-            mCodeInfo.setAuthCode(info.getAuthCode());
-        }
+    public void showAuthSuccess(int authCode) {
+        Log.d(TAG, "验证码：" + authCode);
+        mAuthCode = authCode;
     }
 
     @Override

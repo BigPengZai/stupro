@@ -1,7 +1,5 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
-import android.text.Editable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -36,6 +34,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
 
     public static final String TAG = FindPwdActivity.class.getSimpleName();
     private AuthCodeInfo mCodeInfo;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -116,7 +115,8 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
             Toast.makeText(mContext, "请输入验证码", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mCodeInfo != null && !mCodeInfo.getAuthCode().equals(authcode)) {
+        String s = "" + mCodeInfo.getAuthCode();
+        if (mCodeInfo != null && !s.equals(authcode)) {
             Toast.makeText(mContext, "验证码不正确", Toast.LENGTH_SHORT).show();
             return;
         }

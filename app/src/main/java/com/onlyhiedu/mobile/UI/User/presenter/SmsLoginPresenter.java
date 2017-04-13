@@ -52,7 +52,7 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
             public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showAuthSuccess(data.getData());
+                        getView().showAuthSuccess(data.getData().getAuthCode());
                     } else {
                         getView().showError(data.getMessage());
                     }

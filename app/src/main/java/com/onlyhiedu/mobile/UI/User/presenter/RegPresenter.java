@@ -74,7 +74,7 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
             public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showAuthSuccess(data.getData());
+                        getView().showAuthSuccess(data.getData().getAuthCode());
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -85,7 +85,7 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
     }
 
 
-    public boolean confirmThird(String code, String name, String serviceCode) {
+    public boolean confirmThird(String code, String name, int serviceCode) {
         if (TextUtils.isEmpty(code)) {
             Toast.makeText(App.getInstance().getApplicationContext(), "请填写验证码信息", Toast.LENGTH_SHORT).show();
             return false;
@@ -94,7 +94,7 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
             Toast.makeText(App.getInstance().getApplicationContext(), "请填写姓名", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (!code.equals(serviceCode)) {
+        if (!code.equals(serviceCode+"")) {
             Toast.makeText(App.getInstance().getApplicationContext(), "验证码信息错误", Toast.LENGTH_SHORT).show();
             return false;
         }

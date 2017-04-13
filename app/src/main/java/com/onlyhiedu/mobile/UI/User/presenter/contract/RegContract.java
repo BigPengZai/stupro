@@ -2,7 +2,6 @@ package com.onlyhiedu.mobile.UI.User.presenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
-import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 
 /**
  * Created by Administrator on 2017/3/3.
@@ -15,7 +14,7 @@ public interface RegContract {
         void showSecond(int second);
         void showSuccess(String info);
 
-        void showAuthSuccess(AuthCodeInfo info);
+        void showAuthSuccess(int authCode);
     }
 
     interface Presenter extends BasePresenter<RegContract.View> {

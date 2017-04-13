@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
-import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
@@ -31,7 +30,9 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     EditText mEditCode;
     @BindView(R.id.tv_code)
     TextView mTvCode;
+
     public static final String TAG = SmsLoginActivity.class.getSimpleName();
+    private int mAuthCode;
 
     @Override
     protected void initInject() {
@@ -67,8 +68,9 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     }
 
     @Override
-    public void showAuthSuccess(AuthCodeInfo info) {
-        Log.d(TAG, "验证码：" + info.getAuthCode());
+    public void showAuthSuccess(int authCode) {
+        mAuthCode = authCode;
+        Log.d(TAG, "验证码：" + mAuthCode);
     }
 
     @Override
@@ -119,8 +121,14 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     private void toLogin() {
         String number = mEditNumber.getText().toString();
         String code = mEditCode.getText().toString();
+        if (!code.equals(mAuthCode + "")) {
+            Toast.makeText(mContext, "验证码信息错误", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         if (StringUtils.isMobile(number)) {
-            mPresenter.authLogin( code, number, StringUtils.getDeviceId());
+            mPresenter.authLogin(code, number, StringUtils.getDeviceId());
             Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
         }
     }
