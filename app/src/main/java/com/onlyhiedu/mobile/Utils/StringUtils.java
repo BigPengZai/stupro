@@ -37,6 +37,10 @@ public class StringUtils {
      * 手机号码验证
      */
     public static boolean isMobile(String mobileNumber) {
+        if (TextUtils.isEmpty(mobileNumber)) {
+            Toast.makeText(App.getInstance().getApplicationContext(), "手机号码不能为空", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         Pattern p = Pattern
                 .compile("^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8]))\\d{8}$");
         Matcher m = p.matcher(mobileNumber);
@@ -52,7 +56,7 @@ public class StringUtils {
     /**
      * 校验密码 ：密码要求6-12位,非纯数字,非纯字母
      *
-     * @param context
+     * @param
      * @param password
      * @return
      */
@@ -104,6 +108,7 @@ public class StringUtils {
         return true;
     }
 
+ /**
     /**
      * @return 获取手机唯一标识
      */
@@ -111,6 +116,13 @@ public class StringUtils {
         TelephonyManager TelephonyMgr = (TelephonyManager) App.getInstance().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         return TelephonyMgr.getDeviceId();
     }
+    /**
+     * pad 设备id
+     * */
+   /* public static String getDeviceId(Context context) {
+        String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return android_id;
+    }*/
 
 
 }

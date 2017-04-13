@@ -10,7 +10,7 @@ public class AuthCodeInfo {
         /**
          * authCode : 4837
          */
-        private String authCode;
+        private String authCode="8888";
 
         public String getAuthCode() {
             return authCode;

@@ -49,8 +49,8 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
 
 
     @Override
-    public void registerUser(String userName, String phone, String pwd) {
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchRegisterInfo(userName, phone, pwd);
+    public void registerUser(String userName, String phone, String pwd,String authcode) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchRegisterInfo(userName, phone, pwd,authcode);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {

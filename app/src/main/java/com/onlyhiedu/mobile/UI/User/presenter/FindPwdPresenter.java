@@ -1,8 +1,10 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
+import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.FindPwdContract;
 
 import java.util.concurrent.TimeUnit;
@@ -40,5 +42,40 @@ public class FindPwdPresenter extends RxPresenter<FindPwdContract.View> implemen
             }
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+    @Override
+    public void getAuthCode(String phone) {
+        Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
+        MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showAuthSuccess(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
+    }
+
+    @Override
+    public void retrievePwd(String phone,String pwd,String authcode) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchRetrieve(phone, pwd, authcode);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showRetrievePwd();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable,observer));
     }
 }

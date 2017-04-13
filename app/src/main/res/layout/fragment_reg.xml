@@ -21,7 +21,7 @@
 
 
             <EditText
-                android:maxLength="20"
+                android:maxLength="4"
                 android:id="@+id/edit_code"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/edit_height"

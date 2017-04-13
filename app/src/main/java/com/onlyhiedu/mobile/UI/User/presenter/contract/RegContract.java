@@ -21,7 +21,7 @@ public interface RegContract {
     interface Presenter extends BasePresenter<RegContract.View> {
 
         void readSecond();
-        void registerUser(String userName,String phone, String pwd);
+        void registerUser(String userName,String phone, String pwd,String authcode);
 
         void getAuthCode(String phone);
     }

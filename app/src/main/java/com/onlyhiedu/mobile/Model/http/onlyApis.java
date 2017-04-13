@@ -171,7 +171,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/register")
-    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password);
+    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password,@Field("authCode") String authCode);
 
     /**
      * 验证码
@@ -180,4 +180,10 @@ public interface onlyApis {
     @POST("client/user/getAuthCode")
     Flowable<onlyHttpResponse<AuthCodeInfo>> getAuthCode(@Field("phone") String phone);
 
+    /**
+     * 找回密码
+     */
+    @FormUrlEncoded
+    @POST("client/user/retrievePawword")
+    Flowable<onlyHttpResponse> retrievePawword(@Field("phone") String phone,@Field("password") String password,@Field("authCode") String authCode);
 }

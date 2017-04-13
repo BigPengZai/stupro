@@ -69,6 +69,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 MobclickAgent.onEvent(this, "login_sms_login");
                 break;
             case R.id.tv_find_pwd:
+                //忘记密码
                 startActivity(new Intent(this, FindPwdActivity.class));
                 MobclickAgent.onEvent(this, "login_forget_pw");
                 break;

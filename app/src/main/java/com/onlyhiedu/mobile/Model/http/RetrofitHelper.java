@@ -194,8 +194,8 @@ public class RetrofitHelper {
     }
 
     //注册
-    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username, String phone, String pwd) {
-        return sOnlyApis.registerInfo(username, phone, pwd);
+    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username, String phone, String pwd,String authcode) {
+        return sOnlyApis.registerInfo(username, phone, pwd,authcode);
     }
 
     //验证码
@@ -206,5 +206,10 @@ public class RetrofitHelper {
     //验证码登录
     public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchAuthLogin(String authCode, String phone, String deviceId) {
         return sOnlyApis.authLogin(authCode, phone, "Android", "student", deviceId);
+    }
+
+    //找回密码
+    public Flowable<onlyHttpResponse> fetchRetrieve(String phone,String pwd,String authcode) {
+        return sOnlyApis.retrievePawword(phone,pwd,authcode);
     }
 }

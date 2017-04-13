@@ -191,15 +191,12 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showRoomInfoSucess(RoomInfo roomInfo) {
-        if (roomInfo != null && mItem.getUuid() != null) {
-
+        if (roomInfo != null &&mItem!=null) {
             DialogUtil.dismiss(mDialog);
-
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("roomInfo", roomInfo);
-            bundle.putString("uuid", mItem.getUuid());
-            bundle.putString("uuid", mItem.getUuid());
+            bundle.putSerializable("ListBean", mItem);
             Log.d(TAG, "uuid:" + mItem.getUuid());
             mIntent.putExtras(bundle);
             mActivity.startActivity(mIntent);

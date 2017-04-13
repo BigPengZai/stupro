@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.fragment;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -184,11 +185,13 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
         String pw = UIUtils.sha512(phone, pwd);
         String username = mEditName.getEditText();
         String confirmPwd = mEditConfirmPwd.getEditText();
+        String authcode = mEditCode.getText().toString();
         if (StringUtils.checkPassword(pwd)
                 && StringUtils.checkPassword(confirmPwd)
-                && username != null
-                && phone != null) {
-            mPresenter.registerUser(username, phone, pw);
+                && !TextUtils.isEmpty(username)
+                && !TextUtils.isEmpty(phone)
+                && !TextUtils.isEmpty(authcode)) {
+            mPresenter.registerUser(username, phone, pw,authcode);
         }
 
     }
