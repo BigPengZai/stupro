@@ -123,14 +123,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private String mTime;
     private long mRoomDix;
     private long mLong;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
     }
+
     @Override
     protected int getLayout() {
         return R.layout.activity_chat;
     }
+
     @Override
     protected void initUIandEvent() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -197,7 +200,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         };
         String startTime = mListBean.getStartTime() + ":00";
         String courseDate = mListBean.getCourseDate();
-        String endTime_start = mListBean.getEndTime()+ ":00";
+        String endTime_start = mListBean.getEndTime() + ":00";
 //        String startTime = "11:55:00";
 //        String courseDate = "2017-04-14";
 //        String endTime_start = "11:56:00";
@@ -288,11 +291,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 public void run() {
                     long l = SystemClock.elapsedRealtime() - mChronometer.getBase();
                     //超时15分钟
-                    if (l> (mRoomDix +15*60*1000)&&l<(mRoomDix +15*60*1000+1000)) {
+                    if (l > (mRoomDix + 15 * 60 * 1000) && l < (mRoomDix + 15 * 60 * 1000 + 1000)) {
                         sendMessage(UPDATE_FINISH_ROOM);
                     }
                     // 提前3分钟 通知即将推出教室
-                    if (l>(mRoomDix +3*60*1000)&&l<(mRoomDix +3*60*1000+1000)) {
+                    if (l > (mRoomDix + 3 * 60 * 1000) && l < (mRoomDix + 3 * 60 * 1000 + 1000)) {
                         sendMessage(UPDATE_NOTIFY);
                     }
                 }
@@ -301,6 +304,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mFinishTimer != null && mFinishTimerTask != null)
             mFinishTimer.schedule(mFinishTimerTask, delay, period);
     }
+
     private void stopTimer() {
         if (mTimer != null) {
             mTimer.cancel();
@@ -311,6 +315,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mTimerTask = null;
         }
     }
+
     private void stopFinishTimer() {
         if (mFinishTimer != null) {
             mFinishTimer.cancel();
@@ -321,6 +326,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mFinishTimerTask = null;
         }
     }
+
     public void sendMessage(int id) {
         if (mHandler != null) {
             Message message = Message.obtain(mHandler, id);
@@ -776,7 +782,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         stopTimer();
         stopFinishTimer();
         mHandler.removeCallbacksAndMessages(null);
-        mChronometer.stop();
+        if (mChronometer != null) {
+            mChronometer.stop();
+        }
         mHandler = null;
     }
 
@@ -1118,7 +1126,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void onChronometerTick(Chronometer chronometer) {
         mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
-        if(mLong> mRoomDix) {
+        if (mLong > mRoomDix) {
             chronometer.stop();
             startFinishTimer();
         }
