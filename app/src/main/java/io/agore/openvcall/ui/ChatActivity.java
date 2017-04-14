@@ -53,7 +53,6 @@ import java.lang.ref.SoftReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -81,14 +80,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private RelativeLayout mSmallVideoViewDock;
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
-
-
     private volatile boolean mAudioMuted = false;
-
     private volatile boolean mWithHeadset = false;
-
     public static final String TAG = ChatActivity.class.getSimpleName();
-
     //    private GoogleApiClient client;
     private String mUid;
     private int mScreenWidth;
@@ -106,35 +100,37 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     Chronometer mChronometer;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
-
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private RequestManager mRequestManager;
     //课程id
     private String mUuid;
-
     private CourseList.ListBean mListBean;
     private Handler mHandler = null;
     private static final int UPDATE_TIME = 0;
+    private static final int UPDATE_FINISH_ROOM = 1;
+    private static final int UPDATE_NOTIFY = 2;
     private Timer mTimer = null;
     private TimerTask mTimerTask = null;
+    private Timer mFinishTimer = null;
+    private TimerTask mFinishTimerTask = null;
     private static int delay = 1000;  //1s
     private static int period = 1000;  //1s
     private String mRoomStartTime;
-
+    private String mRoomEndTime;
+    private String mEndtime1;
+    private String mTime;
+    private long mRoomDix;
+    private long mLong;
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
     }
-
     @Override
     protected int getLayout() {
         return R.layout.activity_chat;
     }
-
-
     @Override
     protected void initUIandEvent() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -156,11 +152,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void initRoomData() {
-        mChronometer.setText("00:00:00");
         mChronometer.setBase(SystemClock.elapsedRealtime());
         int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
         mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
-        mChronometer .setOnChronometerTickListener(this);
+        mChronometer.setText("00:00:00");
+        mChronometer.setOnChronometerTickListener(this);
         //获取频道 id  老师uid 学生uid
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
@@ -171,8 +167,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
             //课程频道
-//            mChannelName = mRoomInfo.getCommChannelId();
-            mChannelName = "DebugChannel_XWC";
+            mChannelName = mRoomInfo.getCommChannelId();
+//            mChannelName = "DebugChannel_XWC";
             //学生uid
             mUid = mRoomInfo.getChannelStudentId() + "";
         } else {
@@ -188,6 +184,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     case UPDATE_TIME:
                         startRoomTime();
                         break;
+                    case UPDATE_FINISH_ROOM:
+                        finishRoom();
+                        break;
+                    case UPDATE_NOTIFY:
+                        initSoonDialog();
+                        break;
                     default:
                         break;
                 }
@@ -195,35 +197,67 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         };
         String startTime = mListBean.getStartTime() + ":00";
         String courseDate = mListBean.getCourseDate();
-        String time = DateUtil.getTime(courseDate + " " + startTime);
-        mRoomStartTime = DateUtil.getStrTime(time);
+        String endTime_start = mListBean.getEndTime()+ ":00";
+//        String startTime = "11:55:00";
+//        String courseDate = "2017-04-14";
+//        String endTime_start = "11:56:00";
+        mTime = DateUtil.getTime(courseDate + " " + startTime);
+        mEndtime1 = DateUtil.getTime(courseDate + " " + endTime_start);
+        mRoomStartTime = DateUtil.getStrTime(mTime);
+        mRoomEndTime = DateUtil.getStrTime(mEndtime1);
         String nowTime = DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss);
         DateFormat df = new SimpleDateFormat(DateUtil.yyyyMMddHHmmss);
         try {
-            Date room = df.parse(mRoomStartTime);
+            Date room_start = df.parse(mRoomStartTime);
+            Date room_end = df.parse(mRoomEndTime);
+            mRoomDix = room_end.getTime() - room_start.getTime();
             Date now = df.parse(nowTime);
-            long diff = room.getTime() - now.getTime();
-//            GregorianCalendar roomgcl = new GregorianCalendar();
-//            GregorianCalendar nowgcl = new GregorianCalendar();
-//            roomgcl.setTime(room);
-//            nowgcl.setTime(now);
-//            int diffs = (int) (nowgcl.getTimeInMillis() - roomgcl.getTimeInMillis());
-//            Log.d(TAG, "diffs:" + diffs);
-            Log.d(TAG, "diffs:" + diff/(1000*60));
+            long diff = room_start.getTime() - now.getTime();
+            Log.d(TAG, "diffs:" + diff / (1000 * 60));
             //没到开始时间
             if (diff > 0) {
                 startTimer();
             } else if (diff < 0) {
                 //从迟到时间开始计时
-                mChronometer.setBase(SystemClock.elapsedRealtime() - diff);
+                mChronometer.setBase(SystemClock.elapsedRealtime() + diff);
 //                int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
 //                mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
                 mChronometer.start();
             } else {
-                chormStart();
+                mChronometer.start();
+
             }
         } catch (Exception e) {
         }
+    }
+
+    private void initSoonDialog() {
+        DialogUtil.showOnlyAlert(this,
+                "提示"
+                , "本节课即将在3分钟后关闭！"
+                , "知道了"
+                , ""
+                , true, true, new DialogListener() {
+                    @Override
+                    public void onPositive(DialogInterface dialog) {
+                    }
+
+                    @Override
+                    public void onNegative(DialogInterface dialog) {
+                    }
+                }
+        );
+    }
+
+    private void finishRoom() {
+        if (m_agoraAPI != null) {
+            m_agoraAPI.logout();
+            Log.d(TAG, "信令退出");
+        }
+        if (mUidsList != null) {
+            mUidsList.clear();
+        }
+        quitCall();
     }
 
     private void startTimer() {
@@ -244,6 +278,29 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mTimer.schedule(mTimerTask, delay, period);
     }
 
+    private void startFinishTimer() {
+        if (mFinishTimer == null) {
+            mFinishTimer = new Timer();
+        }
+        if (mFinishTimerTask == null) {
+            mFinishTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    long l = SystemClock.elapsedRealtime() - mChronometer.getBase();
+                    //超时15分钟
+                    if (l> (mRoomDix +15*60*1000)&&l<(mRoomDix +15*60*1000+1000)) {
+                        sendMessage(UPDATE_FINISH_ROOM);
+                    }
+                    // 提前3分钟 通知即将推出教室
+                    if (l>(mRoomDix +3*60*1000)&&l<(mRoomDix +3*60*1000+1000)) {
+                        sendMessage(UPDATE_NOTIFY);
+                    }
+                }
+            };
+        }
+        if (mFinishTimer != null && mFinishTimerTask != null)
+            mFinishTimer.schedule(mFinishTimerTask, delay, period);
+    }
     private void stopTimer() {
         if (mTimer != null) {
             mTimer.cancel();
@@ -254,7 +311,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mTimerTask = null;
         }
     }
-
+    private void stopFinishTimer() {
+        if (mFinishTimer != null) {
+            mFinishTimer.cancel();
+            mFinishTimer = null;
+        }
+        if (mFinishTimerTask != null) {
+            mFinishTimerTask.cancel();
+            mFinishTimerTask = null;
+        }
+    }
     public void sendMessage(int id) {
         if (mHandler != null) {
             Message message = Message.obtain(mHandler, id);
@@ -263,13 +329,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void startRoomTime() {
-        chormStart();
-    }
-
-    private void chormStart() {
-        mChronometer.setBase(SystemClock.elapsedRealtime());//计时器清零
-        int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
-        mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
         mChronometer.start();
     }
 
@@ -715,7 +774,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     protected void onDestroy() {
         super.onDestroy();
         stopTimer();
-        mHandler.removeCallbacksAndMessages("");
+        stopFinishTimer();
+        mHandler.removeCallbacksAndMessages(null);
+        mChronometer.stop();
         mHandler = null;
     }
 
@@ -1056,11 +1117,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
-        Log.d(TAG, "当前时间："+chronometer.getText().toString());
-        // 如果开始计时到现在超过了startime秒
-       /* if (SystemClock.elapsedRealtime()
-                - chronometer.getBase() > startTime * 1000) {
+        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
+        if(mLong> mRoomDix) {
             chronometer.stop();
-        }*/
+            startFinishTimer();
+        }
+
     }
 }
