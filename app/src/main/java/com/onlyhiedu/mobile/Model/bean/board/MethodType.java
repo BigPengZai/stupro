@@ -17,5 +17,5 @@ public interface MethodType {
     String Create = "Create";  //创建
     String PaintText = "PaintText";
     String EraserRect = "EraserRect";//范围清除
-
+    String ChangeDoc = "ChangeDoc";  //改变白板关联的课件
 }

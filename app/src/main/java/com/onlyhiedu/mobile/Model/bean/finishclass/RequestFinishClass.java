@@ -8,7 +8,7 @@ package com.onlyhiedu.mobile.Model.bean.finishclass;
 public class RequestFinishClass {
     public String AccountID;
     public String ActionType = "Request_FinishClass";
-    public String ChannelID = "DebugChannel1";
+    public String ChannelID ;
     public String Keyword = "HKT";
     public String Timestamp = System.currentTimeMillis()+"";
 }

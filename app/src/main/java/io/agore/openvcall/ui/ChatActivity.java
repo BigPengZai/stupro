@@ -353,10 +353,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void initRoom() {
         worker().joinChannel(mChannelName, Integer.parseInt(mUid));
-        if (mPresenter != null) {
-            mPresenter.getCourseWareImageList("fbe78bf5aa014ebf917813c3d828dcfb");
-        }
-
     }
 
     private void initSignalling() {
@@ -403,6 +399,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     &&
                                     String.valueOf(mRoomInfo.getChannelTeacherId()).equals(responseFinishClassData.AccountID)) {
                                 initDismissDialog();
+                                return;
                             }
                         }
                         ResponseFinishClassData notify_finishClass = JsonUtil.parseJson(msg, ResponseFinishClassData.class);
@@ -418,6 +415,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     mUidsList.clear();
                                 }
                                 quitCall();
+                                return;
                             }
                         }
                         ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
@@ -497,6 +495,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mDrawView.setDrawingMode(DrawingMode.values()[3]);
                                 mPresenter.drawEraserRect(mDrawView, notifyWhiteboard);
                             }
+                            if (type == ChatPresenter.ChangeDoc) {
+                                String[] split = notifyWhiteboard.NotifyParam.MethodParam.split("[|]");
+                                mPresenter.getCourseWareImageList(split[0].substring(6, split[0].length()));
+                            }
                         }
                     });
 
@@ -518,6 +520,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     }
                     quitCall();
                 }
+                if(messageID.equals(requestFinishClassTag)){
+                    Toast.makeText(mContext, "请求下课发送成功，等待老师回应", Toast.LENGTH_SHORT).show();
+
+                }
+
+
             }
 
             @Override
@@ -638,9 +646,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void showClassConsumption(String msg) {
         Log.d(TAG, "msg:" + msg);
-        if (msg != null && msg.equals("成功")) {
-
-        }
     }
 
 
@@ -676,7 +681,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
                     mDrawView.clearAnimation();
                 } else {
-
 
                     mScrollView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     mDrawView.setLayoutParams(new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
@@ -716,6 +720,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             //发送点对点 消息
             RequestFinishClass finish = new RequestFinishClass();
             finish.AccountID = mRoomInfo.getChannelStudentId() + "";
+            finish.ChannelID = mRoomInfo.getSignallingChannelId();
             String json = JsonUtil.toJson(finish);
             m_agoraAPI.messageInstantSend(peer, 0, json, requestFinishClassTag);
             Log.d(TAG, "json:" + json);
@@ -835,7 +840,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 boolean useDefaultLayout = mLayoutType == LAYOUT_TYPE_DEFAULT && mUidsList.size() != 2;
                 surfaceV.setZOrderOnTop(!useDefaultLayout);
                 surfaceV.setZOrderMediaOverlay(!useDefaultLayout);
-//设置远端视频显示属性 (setupRemoteVideo)
+                //设置远端视频显示属性 (setupRemoteVideo)
                 rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
                 switchToSmallVideoView(uid);
             }
