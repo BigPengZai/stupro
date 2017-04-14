@@ -39,6 +39,17 @@ public class CourseList {
         public String subject;
         public String teacherName;
 
+        //增加字段 是否点击
+        public boolean isClickAble=false;
+
+        public boolean isClickAble() {
+            return isClickAble;
+        }
+
+        public void setClickAble(boolean clickAble) {
+            isClickAble = clickAble;
+        }
+
         public String getUuid() {
             return uuid;
         }

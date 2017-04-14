@@ -1,47 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/size_10"
-              android:background="@drawable/selector_comm_settting_item"
-              android:orientation="horizontal"
-              android:padding="@dimen/size_10">
-
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="60dp"
-        android:background="@mipmap/pic4"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10"
+                android:background="@drawable/selector_comm_settting_item"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_10">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/size_10"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_course"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="科目"
-            android:textColor="@color/c_666666"/>
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:background="@mipmap/pic4"/>
 
-        <TextView
-            android:id="@+id/tv_auth"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="讲师"
-            android:textColor="@color/c_666666"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/size_10"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="课程时间"
-            android:textColor="@color/c_666666"/>
+            <TextView
+                android:id="@+id/tv_course"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="科目"
+                android:textColor="@color/c_666666"/>
+
+            <TextView
+                android:id="@+id/tv_auth"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="讲师"
+                android:textColor="@color/c_666666"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="课程时间"
+                android:textColor="@color/c_666666"/>
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/c_F42440"
+        android:text="上课中"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_soon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/c_F42440"
+        android:text="即将开始"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:visibility="gone"/>
+</RelativeLayout>

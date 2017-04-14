@@ -405,33 +405,31 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 initDismissDialog();
                             }
                         }
-                        switch (msg) {
-                            case requestFinishClassTag:
-                                Log.d(TAG, "requestFinishClassTag");
-                                ResponseFinishClassData notify_finishClass = mPresenter.getNotify_FinishClass(msg);
-                                if (notify_finishClass != null && notify_finishClass.mResponParamBean != null) {
-                                    String confirm = notify_finishClass.mResponParamBean.Confirm;
-                                    if ("YES".equals(confirm)) {
-                                        //老师同意下课
-                                        if (m_agoraAPI != null) {
-                                            m_agoraAPI.logout();
-                                            Log.d(TAG, "信令退出");
-                                        }
-                                        if (mUidsList != null) {
-                                            mUidsList.clear();
-                                        }
-                                        quitCall();
-                                    }
+                        ResponseFinishClassData notify_finishClass = JsonUtil.parseJson(msg, ResponseFinishClassData.class);
+                        if (notify_finishClass != null && notify_finishClass.mResponParamBean != null) {
+                            String confirm = notify_finishClass.mResponParamBean.Confirm;
+                            if ("YES".equals(confirm)) {
+                                //老师同意下课
+                                if (m_agoraAPI != null) {
+                                    m_agoraAPI.logout();
+                                    Log.d(TAG, "信令退出");
                                 }
+                                if (mUidsList != null) {
+                                    mUidsList.clear();
+                                }
+                                quitCall();
+                            }
+                        }
+                        ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
+                        if (whiteboardData.ResponseParam != null) {
+                            mPresenter.setDrawableStyle(mDrawView, whiteboardData);
+                        }
+                       /* switch (msg) {
+                            case requestFinishClassTag:
                                 break;
                             case requestWhiteBoardData:
-                                Log.d(TAG, "requestWhiteBoardData");
-                                ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
-                                if (whiteboardData.ResponseParam != null) {
-                                    mPresenter.setDrawableStyle(mDrawView, whiteboardData);
-                                }
                                 break;
-                        }
+                        }*/
 
                     }
                 });
@@ -564,7 +562,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         //测试数据 信令频道
         String channelName = mRoomInfo.getSignallingChannelId();
         Log.d(TAG, "Join channel " + channelName);
-        m_agoraAPI.channelJoin("DebugChannel_XWC");
+        m_agoraAPI.channelJoin(channelName);
     }
 
     private void initDismissDialog() {

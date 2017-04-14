@@ -2,8 +2,10 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +15,15 @@ import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
+import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
@@ -173,10 +178,13 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     public void onItemClick(int position, long itemId) {
         mItem = mAdapter.getItem(position);
         Log.d(TAG, "uuid:" + mItem.getUuid());
-        if (mItem != null) {
+        if (mItem != null /*&& mItem.isClickAble*/) {
             mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
             mPresenter.getRoomInfoList(mItem.getUuid());
+        } else {
+            Toast.makeText(mContext, "课程还没有开始哦", Toast.LENGTH_SHORT).show();
         }
+
     }
 
 
@@ -191,7 +199,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showRoomInfoSucess(RoomInfo roomInfo) {
-        if (roomInfo != null &&mItem!=null) {
+        if (roomInfo != null && mItem != null) {
             DialogUtil.dismiss(mDialog);
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
@@ -209,6 +217,5 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         DialogUtil.dismiss(mDialog);
         Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
     }
-
 
 }
