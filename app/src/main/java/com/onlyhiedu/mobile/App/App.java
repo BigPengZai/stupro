@@ -56,7 +56,7 @@ public class App extends Application {
         super.onCreate();
         instance = this;
 
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
 
         initGlide();
 
