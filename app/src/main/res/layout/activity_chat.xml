@@ -17,6 +17,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
+
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_width="match_parent"
