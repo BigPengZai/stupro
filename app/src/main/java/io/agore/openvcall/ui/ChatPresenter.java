@@ -1,6 +1,9 @@
 package io.agore.openvcall.ui;
 
 import android.graphics.Color;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -53,7 +56,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     private RetrofitHelper mRetrofitHelper;
 
-    private float mRate;
+    private float mRate;   //缩放比例
     private int mImageWidth;//半屏的时候白板宽度
 
     public void setRate(float rate) {
@@ -62,6 +65,14 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     public void setImageWidth(int imageWidth) {
         mImageWidth = imageWidth;
+    }
+
+    public int getImageWidth() {
+        return mImageWidth;
+    }
+
+    public float getRate() {
+        return mRate;
     }
 
     @Inject
@@ -90,10 +101,10 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     @Override
     public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage) {
+
         ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
 
         float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
-        setRate(rate);
 
         //设置比例转换白板的宽度和高度
         int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
@@ -117,6 +128,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         float fintSize = parseFloat(str.substring(1, str.length()));
         drawView.setFontSize(fintSize * rate);
 
+
     }
 
     @Override
@@ -135,7 +147,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         float pcBoardHeight = parseFloat(split[3].split("=")[1]);
 
         float rate = (float) mImageWidth / pcBoardWidth;
-        setRate(rate);
         int imageHeight = (int) (pcBoardHeight * rate);
 
         //设置比例转换白板的宽度和高度
@@ -336,5 +347,23 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+
+    public void startDrawViewFullAnimation(DrawView view,float rate){
+        ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
+                Animation.RELATIVE_TO_PARENT, 0,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleX.setDuration(0);
+
+        ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_PARENT, 0);
+        scaleY.setDuration(0);
+
+        AnimationSet set = new AnimationSet(true);
+        set.setFillAfter(true);
+        set.addAnimation(scaleX);
+        set.addAnimation(scaleY);
+        view.startAnimation(set);
+    }
 
 }

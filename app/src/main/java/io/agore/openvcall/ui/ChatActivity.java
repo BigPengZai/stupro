@@ -17,9 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -103,6 +100,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     Toolbar mToolbar;
     @BindView(R.id.tv_total_room)
     TextView mTv_Total_Room;
+    @BindView(R.id.image_full_screen)
+    View mImageFullScreen;
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -427,8 +426,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             }
                         }
                         ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
-                        if (whiteboardData.ResponseParam != null) {
+                        if (whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
                             mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
+                            mImageFullScreen.setVisibility(View.VISIBLE);
                         }
                        /* switch (msg) {
                             case requestFinishClassTag:
@@ -492,6 +492,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             }
                             if (type == ChatPresenter.Create) {
                                 mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
+                                mImageFullScreen.setVisibility(View.VISIBLE);
                             }
                             if (type == ChatPresenter.PaintText) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[1]);
@@ -637,17 +638,23 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public void showCourseWareImageList(List<CourseWareImageList> data, int page) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
 
-        int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
-
-        if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
-            float rate = (float) imageWidth / (float) data.get(page).width;
-            mPresenter.setRate(rate);
-            int imageHeight = (int) ((float) data.get(page).height * rate);
-            mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
-            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(page).imageUrl/*, imageWidth, imageHeight*/);
-            mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
-            mDrawView.setCanvas(imageWidth, imageHeight);
+        int imageWidth = 0;
+        if (!mSwitch) {
+            imageWidth = mPresenter.getImageWidth();
+        } else {
+            imageWidth = mScreenWidth;
         }
+//        if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
+        float rate = (float) imageWidth / (float) data.get(page).width;
+        if (!mSwitch) {
+            mPresenter.setRate(rate);
+        }
+        int imageHeight = (int) ((float) data.get(page).height * rate);
+        mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+        ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(page).imageUrl);
+        mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+        mDrawView.setCanvas(imageWidth, imageHeight);
+//        }
 
     }
 
@@ -660,6 +667,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private ViewGroup.LayoutParams mScrollViewP;
     private ViewGroup.LayoutParams mDrawViewP;
     private ViewGroup.LayoutParams mImageCourseWareP;
+
+
+    private RelativeLayout.LayoutParams mScrollViewFullP;
+    private FrameLayout.LayoutParams mDrawViewFullP;
+    private FrameLayout.LayoutParams mImageCourseWareFullP;
+
     private boolean mSwitch; //全屏半屏
     private float rate;      //缩放比例
 
@@ -673,49 +686,50 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //                MobclickAgent.onEvent(this, "finish_class");
                 break;
             case R.id.image_full_screen:
+
                 if (mScrollViewP == null) {
                     mScrollViewP = mScrollView.getLayoutParams();
                     mDrawViewP = mDrawView.getLayoutParams();
                     mImageCourseWareP = mImageCourseWare.getLayoutParams();
                     rate = (float) mScreenWidth / (float) mScrollView.getWidth();
                 }
+                if (mScrollViewFullP == null) {
+                    mScrollViewFullP = new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
+                    mScrollViewFullP.topMargin = com.onlyhiedu.mobile.Utils.ScreenUtil.getToolbarHeight(this);
 
-                if (mSwitch) {
-                    mSwitch = false;
-                    mScrollView.setLayoutParams(mScrollViewP);
-                    mDrawView.setLayoutParams(mDrawViewP);
-                    mImageCourseWare.setLayoutParams(mImageCourseWareP);
-
-                    mDrawView.clearAnimation();
-                } else {
-                    mScrollView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
-                    mDrawView.setLayoutParams(new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
-                    mImageCourseWare.setLayoutParams(params);
-                    mSwitch = true;
-
-
-                    ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
-                            Animation.RELATIVE_TO_PARENT, 0,
-                            Animation.RELATIVE_TO_SELF, 0.5f);
-                    scaleX.setDuration(0);
-
-                    ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
-                            Animation.RELATIVE_TO_SELF, 0.5f,
-                            Animation.RELATIVE_TO_PARENT, 0);
-                    scaleY.setDuration(0);
-
-                    AnimationSet set = new AnimationSet(true);
-                    set.setFillAfter(true);
-                    set.addAnimation(scaleX);
-                    set.addAnimation(scaleY);
-                    mDrawView.startAnimation(set);
-
-
+                    mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
+                    mImageCourseWareFullP = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
                 }
+
+                setBoardViewLayoutParams(mSwitch);
                 break;
         }
     }
+
+    /**
+     *  设置白板相关控件LayoutParams
+     * @param flag
+     */
+    public void setBoardViewLayoutParams(boolean flag){
+        if (flag) {
+            mSwitch = false;
+            mScrollView.setLayoutParams(mScrollViewP);
+            mDrawView.setLayoutParams(mDrawViewP);
+            mImageCourseWare.setLayoutParams(mImageCourseWareP);
+
+            mDrawView.clearAnimation();
+        } else {
+            mScrollView.setLayoutParams(mScrollViewFullP);
+            mDrawView.setLayoutParams(mDrawViewFullP);
+            mImageCourseWare.setLayoutParams(mImageCourseWareFullP);
+            mSwitch = true;
+
+            mPresenter.startDrawViewFullAnimation(mDrawView,rate);
+        }
+    }
+
+
+
 
     //请求 下课 tag
     private static final String requestFinishClassTag = "requestFinishClassTag";
@@ -795,7 +809,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mChronometer.stop();
         }
         if (mHandler != null) {
-
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }
@@ -803,7 +816,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void quitCall() {
         deInitUIandEvent();
-
     }
 
     private VideoPreProcessing mVideoPreProcessing;
