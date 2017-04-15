@@ -24,6 +24,7 @@ import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -100,6 +101,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     Chronometer mChronometer;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.tv_total_room)
+    TextView mTv_Total_Room;
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -201,9 +204,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         String startTime = mListBean.getStartTime() + ":00";
         String courseDate = mListBean.getCourseDate();
         String endTime_start = mListBean.getEndTime() + ":00";
-//        String startTime = "11:55:00";
-//        String courseDate = "2017-04-14";
-//        String endTime_start = "11:56:00";
+//        String startTime = "13:36:00";
+//        String courseDate = "2017-04-15";
+//        String endTime_start = "13:46:00";
         mTime = DateUtil.getTime(courseDate + " " + startTime);
         mEndtime1 = DateUtil.getTime(courseDate + " " + endTime_start);
         mRoomStartTime = DateUtil.getStrTime(mTime);
@@ -214,9 +217,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Date room_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             mRoomDix = room_end.getTime() - room_start.getTime();
+            DateUtil.updateTimeFormat(mTv_Total_Room,(int)mRoomDix);
             Date now = df.parse(nowTime);
             long diff = room_start.getTime() - now.getTime();
-            Log.d(TAG, "diffs:" + diff / (1000 * 60));
             //没到开始时间
             if (diff > 0) {
                 startTimer();

@@ -21,14 +21,24 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
             <Chronometer
-                android:layout_marginRight="@dimen/size_10"
+                android:textColor="@color/c_F42440"
+                android:layout_marginRight="2dp"
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
+            <TextView
+                android:layout_marginRight="2dp"
+                android:textColor="@color/c_F42440"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"/>
+            <TextView
+                android:layout_marginRight="@dimen/size_7"
+                android:id="@+id/tv_total_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01:00:00"/>
 
             <TextView
                 android:id="@+id/but_dismiss"

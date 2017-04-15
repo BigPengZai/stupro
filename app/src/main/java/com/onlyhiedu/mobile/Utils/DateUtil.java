@@ -1,11 +1,13 @@
 package com.onlyhiedu.mobile.Utils;
 
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by pengpeng on 2017/2/22.
@@ -59,6 +61,18 @@ public class DateUtil {
         re_StrTime = sdf.format(new Date(lcc_time * 1000L));
         return re_StrTime;
     }
+
+
+    // 格式化时间，并显示textView上
+    public static void updateTimeFormat(TextView tv, int millisecond) {
+        int s = millisecond / 1000;
+        int hour = s / 3600;
+        int minute = s % 3600 / 60;
+        int second = s % 60;
+        tv.setText(String.format(Locale.CHINA, "%02d:%02d:%02d", hour, minute, second));
+    }
+
+
 
     /**
      * 将Date类型转换为日期字符串
