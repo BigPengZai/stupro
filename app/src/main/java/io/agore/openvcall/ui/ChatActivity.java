@@ -221,7 +221,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Date room_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             mRoomDix = room_end.getTime() - room_start.getTime();
-            DateUtil.updateTimeFormat(mTv_Total_Room,(int)mRoomDix);
+            DateUtil.updateTimeFormat(mTv_Total_Room, (int) mRoomDix);
             Date now = df.parse(nowTime);
             long diff = room_start.getTime() - now.getTime();
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
@@ -791,11 +791,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         super.onDestroy();
         stopTimer();
         stopFinishTimer();
-        mHandler.removeCallbacksAndMessages(null);
         if (mChronometer != null) {
             mChronometer.stop();
         }
-        mHandler = null;
+        if (mHandler != null) {
+
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
+        }
     }
 
     private void quitCall() {

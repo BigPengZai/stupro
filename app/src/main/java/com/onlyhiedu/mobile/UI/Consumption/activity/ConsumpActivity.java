@@ -44,7 +44,7 @@ public class ConsumpActivity extends BaseActivity<ConsumptionPresenter> implemen
 
     @Override
     public void showSuccess(List<ConsumptionData> data) {
-        if (data != null&&data.get(0)!=null) {
+        if (data != null&&data.size()!=0) {
             mTv_Account.setText(data.get(0).classPackageName);
             mTv_Total.setText(data.get(0).totalTime);
             mTv_Remaing.setText(data.get(0).surplusTime);
