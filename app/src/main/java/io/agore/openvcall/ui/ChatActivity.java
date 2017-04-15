@@ -644,7 +644,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mPresenter.setRate(rate);
             int imageHeight = (int) ((float) data.get(page).height * rate);
             mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
-            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl/*, imageWidth, imageHeight*/);
+            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(page).imageUrl/*, imageWidth, imageHeight*/);
             mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
             mDrawView.setCanvas(imageWidth, imageHeight);
         }

@@ -1,6 +1,5 @@
 package com.onlyhiedu.mobile.UI.Consumption.activity;
 
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -9,12 +8,10 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.presenter.ConsumptionPresenter;
 import com.onlyhiedu.mobile.UI.Consumption.presenter.contract.ConsumptionContract;
-import com.onlyhiedu.mobile.Utils.WheelUtils;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by pengpeng on 2017/4/15.
@@ -49,7 +46,7 @@ public class ConsumpActivity extends BaseActivity<ConsumptionPresenter> implemen
     public void showSuccess(List<ConsumptionData> data) {
         if (data != null&&data.get(0)!=null) {
             mTv_Account.setText(data.get(0).classPackageName);
-           mTv_Total.setText(data.get(0).totalTime);
+            mTv_Total.setText(data.get(0).totalTime);
             mTv_Remaing.setText(data.get(0).surplusTime);
         }
     }
