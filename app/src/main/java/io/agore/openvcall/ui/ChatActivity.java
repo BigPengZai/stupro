@@ -24,6 +24,7 @@ import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -100,6 +101,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     Chronometer mChronometer;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.tv_total_room)
+    TextView mTv_Total_Room;
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -169,7 +172,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
-            initRoomTime();
+//            initRoomTime();
         }
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
@@ -218,6 +221,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Date room_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             mRoomDix = room_end.getTime() - room_start.getTime();
+            DateUtil.updateTimeFormat(mTv_Total_Room,(int)mRoomDix);
             Date now = df.parse(nowTime);
             long diff = room_start.getTime() - now.getTime();
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
@@ -868,6 +872,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 rtcEngine().muteLocalAudioStream(mAudioMuted);
                 worker().getRtcEngine().setEnableSpeakerphone(false);
                 mRl_bg.setVisibility(View.GONE);
+                mChronometer.start();
             }
         });
     }
@@ -1132,11 +1137,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
-        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
+       /* mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
         if (mLong > mRoomDix) {
             chronometer.stop();
             startFinishTimer();
-        }
+        }*/
 
     }
 }
