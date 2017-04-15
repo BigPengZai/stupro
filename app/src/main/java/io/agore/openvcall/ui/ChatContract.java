@@ -1,5 +1,7 @@
 package io.agore.openvcall.ui;
 
+import android.widget.ImageView;
+
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -19,18 +21,18 @@ public interface ChatContract {
 
     interface View extends BaseView {
 
-        void showCourseWareImageList(List<CourseWareImageList> data);
+        void showCourseWareImageList(List<CourseWareImageList> data,int page);
 
         void showClassConsumption(String msg);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
 
-        void getCourseWareImageList(String wareId);
+        void getCourseWareImageList(String wareId ,int page);
 
-        void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data);
+        void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage);
         void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data);
-        void setBoardCreate(DrawView drawView, NotifyWhiteboardOperator data);
+        void setBoardCreate(ImageView courseWareImage,DrawView drawView, NotifyWhiteboardOperator data);
 
         NotifyWhiteboardOperator getNotifyWhiteboard(String str);
 

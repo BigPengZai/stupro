@@ -16,7 +16,7 @@ public class RequestWhiteBoard {
 
     public String AccountID;
     public String ActionType = "Request_WhiteboardList";
-    public String ChannelID = "DebugChannel1";
+    public String ChannelID ;
     public String Keyword = "HKT";
     public String Timestamp = System.currentTimeMillis()+"";
 

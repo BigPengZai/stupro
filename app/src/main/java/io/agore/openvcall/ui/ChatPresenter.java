@@ -1,6 +1,8 @@
 package io.agore.openvcall.ui;
 
 import android.graphics.Color;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
@@ -26,6 +28,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
+import static java.lang.Float.parseFloat;
+
 /**
  * Created by Administrator on 2017/3/25.
  */
@@ -49,6 +53,17 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     private RetrofitHelper mRetrofitHelper;
 
+    private float mRate;
+    private int mImageWidth;//半屏的时候白板宽度
+
+    public void setRate(float rate) {
+        mRate = rate;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        mImageWidth = imageWidth;
+    }
+
     @Inject
     public ChatPresenter(RetrofitHelper mRetrofitHelper) {
         this.mRetrofitHelper = mRetrofitHelper;
@@ -56,7 +71,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
 
     @Override
-    public void getCourseWareImageList(String wareId) {
+    public void getCourseWareImageList(String wareId, int page) {
 
         Flowable<onlyHttpResponse<List<CourseWareImageList>>> flowable = mRetrofitHelper.fetchGetCoursewareImageList(wareId);
 
@@ -64,7 +79,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             @Override
             public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
                 if (getView() != null) {
-                    if (!data.isHasError()) getView().showCourseWareImageList(data.getData());
+                    if (!data.isHasError()) getView().showCourseWareImageList(data.getData(), page);
                     else getView().showError(data.getMessage());
                 }
             }
@@ -74,32 +89,74 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
     @Override
-    public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data) {
+    public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage) {
         ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
-        drawView.setFontSize(bean.WhiteboardPenSize);
+
+        float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
+        setRate(rate);
+
+        //设置比例转换白板的宽度和高度
+        int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
+        courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+        drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+        drawView.setCanvas(mImageWidth, imageHeight);
+
+        //设置比例转换后的画笔大小
+        drawView.setDrawWidth((float) (bean.WhiteboardPenSize) * rate);
+
+        //设置比例转换后的橡皮檫尺寸
+        drawView.setEraserSize(((float) (bean.WhiteboardEraseSize) * rate));
+
+        //设置画笔颜色
         drawView.setDrawColor(Color.parseColor("#" + bean.WhiteboardPenColor));
+
+        //设置比例转化后的字体大小
         String fontType = bean.WhiteboardFontType;
         String[] split = fontType.split(",");
-        String str = split[split.length-1];
-        float fintSize = Float.parseFloat(str.substring(1, str.length()));
-        drawView.setFontSize(fintSize);
+        String str = split[split.length - 1];
+        float fintSize = parseFloat(str.substring(1, str.length()));
+        drawView.setFontSize(fintSize * rate);
+
     }
 
     @Override
     public void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data) {
         String s = data.NotifyParam.MethodParam;
-        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraserSize"))));
-
+        drawView.setDrawWidth(Integer.parseInt(s.substring(s.indexOf("PenSize=") + 8, s.indexOf("|PenColor"))));
+        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf("PenColor=") + 9, s.indexOf("|EraserSize"))));
     }
 
     @Override
-    public void setBoardCreate(DrawView drawView, NotifyWhiteboardOperator data) {
-        String s = data.NotifyParam.MethodParam;
-        drawView.setFontSize(Integer.parseInt(s.substring(s.indexOf("PenSize=")+8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#"+s.substring(s.indexOf("PenColor=")+9, s.indexOf("|EraseSize"))));
-        String[] split = s.substring(s.indexOf("FontType=")+9, s.length()).split(",");
-        drawView.setFontSize(Float.parseFloat(split[split.length-1].replace("#","")));
+    public void setBoardCreate(ImageView courseWareImage, DrawView drawView, NotifyWhiteboardOperator data) {
+
+        //设置比例转换后的白板宽高
+        String[] split = data.NotifyParam.MethodParam.split("[|]");
+        float pcBoardWidth = parseFloat(split[2].split("=")[1]);
+        float pcBoardHeight = parseFloat(split[3].split("=")[1]);
+
+        float rate = (float) mImageWidth / pcBoardWidth;
+        setRate(rate);
+        int imageHeight = (int) (pcBoardHeight * rate);
+
+        //设置比例转换白板的宽度和高度
+        courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+        drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+        drawView.setCanvas(mImageWidth, imageHeight);
+
+        //设置比例转换后的画笔大小
+        drawView.setDrawWidth((Float.parseFloat(split[7].split("=")[1]) * rate));
+
+        //设置画笔颜色
+        drawView.setDrawColor(Color.parseColor("#" + split[8].split("=")[1]));
+
+        //设置比例转换后的橡皮檫尺寸
+        drawView.setEraserSize(((Float.parseFloat(split[9].split("=")[1]) * rate)));
+
+        //设置比例转化后的字体大小
+        String FontTypeStr = split[10].split("=")[1];
+        String fontSize = FontTypeStr.substring(FontTypeStr.lastIndexOf("#") + 1, FontTypeStr.length());
+        drawView.setFontSize(((Float.parseFloat(fontSize) * rate)));
+
     }
 
 
@@ -150,16 +207,16 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if (datas.size() > 0) {
             String[] xyAxle = datas.get(0);
-            view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
+            view.eventActionDown(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
             if (datas.size() == 2) {
                 String[] xyAxle2 = datas.get(1);
-                view.eventActionMove(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-                view.eventActionUp(Float.parseFloat(xyAxle2[0]), Float.parseFloat(xyAxle2[1]));
+                view.eventActionMove(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+                view.eventActionUp(parseFloat(xyAxle2[0]) * mRate, parseFloat(xyAxle2[1]) * mRate);
             } else {
                 for (int i = 1; i < datas.size() - 1; i++) {
-                    view.eventActionMove(Float.parseFloat(datas.get(i)[0]), Float.parseFloat(datas.get(i)[1]));
+                    view.eventActionMove(parseFloat(datas.get(i)[0]) * mRate, parseFloat(datas.get(i)[1]) * mRate);
                 }
-                view.eventActionUp(Float.parseFloat(datas.get(datas.size() - 1)[0]), Float.parseFloat(datas.get(datas.size() - 1)[1]));
+                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * mRate, parseFloat(datas.get(datas.size() - 1)[1]) * mRate);
             }
         }
     }
@@ -192,10 +249,11 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
         String s = json.NotifyParam.MethodParam;
         String[] xyAxle = s.split(",");
-        view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-        view.eventActionMove(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-        int x = Integer.parseInt(xyAxle[0]) + Integer.parseInt(xyAxle[2]);
-        int y = Integer.parseInt(xyAxle[1]) + Integer.parseInt(xyAxle[3]);
+        view.eventActionDown(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+        view.eventActionMove(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+
+        float x = parseFloat(xyAxle[0]) * mRate + parseFloat(xyAxle[2]) * mRate;
+        float y = parseFloat(xyAxle[1]) * mRate + parseFloat(xyAxle[3]) * mRate;
         view.eventActionUp(x, y);
     }
 
@@ -209,10 +267,10 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         String s = json.NotifyParam.MethodParam;
         String spit[] = s.split("[|]");
         String[] xyAxle = spit[0].split(",");
-        view.eventActionDown(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-        view.eventActionMove(Float.parseFloat(xyAxle[0]), Float.parseFloat(xyAxle[1]));
-        int x = Integer.parseInt(xyAxle[0]) + Integer.parseInt(xyAxle[2]);
-        int y = Integer.parseInt(xyAxle[1]) + Integer.parseInt(xyAxle[3]);
+        view.eventActionDown(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+        view.eventActionMove(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+        float x = parseFloat(xyAxle[0]) * mRate + parseFloat(xyAxle[2]) * mRate;
+        float y = parseFloat(xyAxle[1]) * mRate + parseFloat(xyAxle[3]) * mRate;
         view.eventActionUp(x, y);
         view.refreshLastText(spit[1]);
     }
@@ -247,13 +305,13 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         if (type.equals(MethodType.Create)) {
             return Create;
         }
-        if(type.equals(MethodType.PaintText)){
+        if (type.equals(MethodType.PaintText)) {
             return PaintText;
         }
-        if(type.equals(MethodType.EraserRect)){
+        if (type.equals(MethodType.EraserRect)) {
             return EraserRect;
         }
-        if(type.equals(MethodType.ChangeDoc)){
+        if (type.equals(MethodType.ChangeDoc)) {
             return ChangeDoc;
         }
         return 0;

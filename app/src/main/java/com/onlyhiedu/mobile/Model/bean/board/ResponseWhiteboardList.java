@@ -31,6 +31,7 @@ public class ResponseWhiteboardList {
     public String Timestamp;
 
     public static class ResponseParamBean {
+
         public List<WhiteboardListBean> WhiteboardList;
 
         public static class WhiteboardListBean {

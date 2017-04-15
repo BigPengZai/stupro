@@ -17,29 +17,18 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
-
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+
             <Chronometer
-                android:textColor="@color/c_F42440"
-                android:layout_marginRight="2dp"
+                android:layout_marginRight="@dimen/size_10"
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_marginRight="2dp"
-                android:textColor="@color/c_F42440"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"/>
-            <TextView
-                android:layout_marginRight="@dimen/size_7"
-                android:id="@+id/tv_total_room"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="01:00:00"/>
+
 
             <TextView
                 android:id="@+id/but_dismiss"
@@ -49,7 +38,7 @@
                 android:paddingLeft="@dimen/size_18"
                 android:paddingRight="@dimen/size_18"
                 android:paddingTop="@dimen/size_7"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/size_16"
                 android:paddingBottom="@dimen/size_7"
                 android:layout_height="wrap_content"
                 android:text="我要下课"/>
@@ -64,21 +53,17 @@
     <LinearLayout
         android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/ll_video"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <io.agore.openvcall.ui.TeacherVideoView
-            android:layout_marginTop="3dp"
-            android:layout_marginLeft="3dp"
             android:id="@+id/grid_video_view_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
         <ViewStub
-            android:layout_marginTop="3dp"
-            android:layout_marginLeft="3dp"
             android:id="@id/small_video_view_dock"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -89,7 +74,6 @@
 
     <!--白版-->
     <com.onlyhiedu.mobile.Widget.MyScrollView
-        android:layout_marginLeft="15dp"
         android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -140,13 +124,15 @@
         android:layout_alignParentRight="true"
         android:padding="@dimen/size_12"
         android:src="@mipmap/ic_full_screen"/>
+
     <RelativeLayout
         android:id="@+id/rl_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:visibility="gone"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <ProgressBar
             android:id="@+id/iv_loading"
             android:layout_width="50dp"

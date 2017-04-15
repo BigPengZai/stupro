@@ -24,7 +24,6 @@ import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -101,8 +100,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     Chronometer mChronometer;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.tv_total_room)
-    TextView mTv_Total_Room;
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -143,6 +140,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mScreenWidth = ScreenUtil.getScreenWidth(this);
         mRequestManager = Glide.with(this);
+
+        int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
+        mPresenter.setImageWidth(imageWidth);
+
         setToolBar();
         initRoomData();
         //登录信令系统成功后  登录通信频道
@@ -168,7 +169,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
-//            initRoomTime();
+            initRoomTime();
         }
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
@@ -204,9 +205,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         String startTime = mListBean.getStartTime() + ":00";
         String courseDate = mListBean.getCourseDate();
         String endTime_start = mListBean.getEndTime() + ":00";
-//        String startTime = "13:36:00";
-//        String courseDate = "2017-04-15";
-//        String endTime_start = "13:46:00";
+//        String startTime = "11:55:00";
+//        String courseDate = "2017-04-14";
+//        String endTime_start = "11:56:00";
         mTime = DateUtil.getTime(courseDate + " " + startTime);
         mEndtime1 = DateUtil.getTime(courseDate + " " + endTime_start);
         mRoomStartTime = DateUtil.getStrTime(mTime);
@@ -217,9 +218,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Date room_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             mRoomDix = room_end.getTime() - room_start.getTime();
-            DateUtil.updateTimeFormat(mTv_Total_Room,(int)mRoomDix);
             Date now = df.parse(nowTime);
             long diff = room_start.getTime() - now.getTime();
+            Log.d(TAG, "diffs:" + diff / (1000 * 60));
             //没到开始时间
             if (diff > 0) {
                 startTimer();
@@ -423,7 +424,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         }
                         ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
                         if (whiteboardData.ResponseParam != null) {
-                            mPresenter.setDrawableStyle(mDrawView, whiteboardData);
+                            mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
                         }
                        /* switch (msg) {
                             case requestFinishClassTag:
@@ -431,7 +432,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             case requestWhiteBoardData:
                                 break;
                         }*/
-
                     }
                 });
 
@@ -462,7 +462,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mDrawView.setDrawingMode(DrawingMode.values()[0]);
                                 mPresenter.drawPoint(mDrawView, notifyWhiteboard);
                             }
-
                             if (type == ChatPresenter.SET) {
                                 mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
                             }
@@ -488,7 +487,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                             }
                             if (type == ChatPresenter.Create) {
-                                mPresenter.setBoardCreate(mDrawView, notifyWhiteboard);
+                                mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.PaintText) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[1]);
@@ -499,8 +498,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mPresenter.drawEraserRect(mDrawView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.ChangeDoc) {
+                                mDrawView.restartDrawing();
                                 String[] split = notifyWhiteboard.NotifyParam.MethodParam.split("[|]");
-                                mPresenter.getCourseWareImageList(split[0].substring(6, split[0].length()));
+                                String docID = split[0].substring(6, split[0].length());
+                                String docPage = split[1].substring(10, split[1].length());
+                                mPresenter.getCourseWareImageList(docID, Integer.parseInt(docPage));
                             }
                         }
                     });
@@ -523,11 +525,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     }
                     quitCall();
                 }
-                if(messageID.equals(requestFinishClassTag)){
+                if (messageID.equals(requestFinishClassTag)) {
                     Toast.makeText(mContext, "请求下课发送成功，等待老师回应", Toast.LENGTH_SHORT).show();
-
                 }
-
 
             }
 
@@ -630,14 +630,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
     @Override
-    public void showCourseWareImageList(List<CourseWareImageList> data) {
+    public void showCourseWareImageList(List<CourseWareImageList> data, int page) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
 
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
 
         if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
-            float rate = (float) imageWidth / (float) data.get(0).width;
-            int imageHeight = (int) ((float) data.get(0).height * rate);
+            float rate = (float) imageWidth / (float) data.get(page).width;
+            mPresenter.setRate(rate);
+            int imageHeight = (int) ((float) data.get(page).height * rate);
             mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
             ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl/*, imageWidth, imageHeight*/);
             mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
@@ -668,7 +669,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //                MobclickAgent.onEvent(this, "finish_class");
                 break;
             case R.id.image_full_screen:
-
                 if (mScrollViewP == null) {
                     mScrollViewP = mScrollView.getLayoutParams();
                     mDrawViewP = mDrawView.getLayoutParams();
@@ -684,7 +684,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
                     mDrawView.clearAnimation();
                 } else {
-
                     mScrollView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     mDrawView.setLayoutParams(new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate)));
                     FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
@@ -788,13 +787,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         super.onDestroy();
         stopTimer();
         stopFinishTimer();
+        mHandler.removeCallbacksAndMessages(null);
         if (mChronometer != null) {
             mChronometer.stop();
         }
-        if (mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-            mHandler = null;
-        }
+        mHandler = null;
     }
 
     private void quitCall() {
@@ -871,7 +868,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 rtcEngine().muteLocalAudioStream(mAudioMuted);
                 worker().getRtcEngine().setEnableSpeakerphone(false);
                 mRl_bg.setVisibility(View.GONE);
-                mChronometer.start();
             }
         });
     }
@@ -884,6 +880,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mRoomInfo != null) {
             RequestWhiteBoard requestStr = new RequestWhiteBoard();
             requestStr.AccountID = mRoomInfo.getChannelStudentId() + "";
+            requestStr.ChannelID = mRoomInfo.getSignallingChannelId();
             String json = JsonUtil.toJson(requestStr);
             m_agoraAPI.messageInstantSend(mRoomInfo.getChannelTeacherId() + "", 0, json, requestWhiteBoardData);
         }
@@ -1135,11 +1132,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
-       /* mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
+        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
         if (mLong > mRoomDix) {
             chronometer.stop();
             startFinishTimer();
-        }*/
+        }
 
     }
 }

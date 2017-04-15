@@ -50,7 +50,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
     // VARS
     private int mDrawColor;
-    private int mDrawWidth;
+    private float mDrawWidth;
     private int mDrawAlpha;
     private boolean mAntiAlias;
     private boolean mDither;
@@ -58,6 +58,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     private Paint.Cap mLineCap;
     private Typeface mFontFamily;
     private float mFontSize;
+    private float mEraserSize;
     private int mBackgroundColor;
 
     private DrawingMode mDrawingMode;
@@ -187,7 +188,9 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                             drawMove.getDrawingPathList().size() > 0) {
                         drawMove.getPaint().setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                         for (Path path : drawMove.getDrawingPathList()) {
-                            mContentCanvas.drawPath(path, drawMove.getPaint());
+                            Paint paint = drawMove.getPaint();
+                            paint.setStrokeWidth(mEraserSize);
+                            mContentCanvas.drawPath(path, paint);
                         }
                         drawMove.getPaint().setXfermode(null);
                     }
@@ -198,6 +201,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
                         Paint paint = drawMove.getPaint();
                         paint.setStyle(Paint.Style.FILL);
+                        paint.setStrokeWidth(mEraserSize);
                         mContentCanvas.drawRect(drawMove.getStartX(), drawMove.getStartY(), drawMove.getEndX(), drawMove.getEndY(),paint);
                         drawMove.getPaint().setXfermode(null);
                     }
@@ -624,7 +628,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         return mDrawColor;
     }
 
-    public int getDrawWidth() {
+    public float getDrawWidth() {
         return mDrawWidth;
     }
 
@@ -654,6 +658,14 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
     public float getFontSize() {
         return mFontSize;
+    }
+
+    public float getEraserSize() {
+        return mEraserSize;
+    }
+
+    public void setEraserSize(float eraserSize) {
+        mEraserSize = eraserSize;
     }
 
     public boolean isAntiAlias() {
@@ -713,7 +725,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
      * @param drawWidth
      * @return this instance of the view
      */
-    public DrawView setDrawWidth(int drawWidth) {
+    public DrawView setDrawWidth(float drawWidth) {
         this.mDrawWidth = drawWidth;
         return this;
     }
@@ -794,6 +806,10 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         this.mFontSize = fontSize;
         return this;
     }
+
+
+
+
 
     /**
      * Set the current anti alias value for the view
