@@ -708,6 +708,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     set.addAnimation(scaleY);
                     mDrawView.startAnimation(set);
 
+
                 }
                 break;
         }

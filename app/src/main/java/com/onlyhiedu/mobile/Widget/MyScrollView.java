@@ -24,7 +24,6 @@ public class MyScrollView extends ScrollView {
         super(context, attrs, defStyleAttr);
     }
 
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return true;
