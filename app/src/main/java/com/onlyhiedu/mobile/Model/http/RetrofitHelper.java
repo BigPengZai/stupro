@@ -6,6 +6,7 @@ import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
+import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
@@ -211,5 +212,10 @@ public class RetrofitHelper {
     //找回密码
     public Flowable<onlyHttpResponse> fetchRetrieve(String phone,String pwd,String authcode) {
         return sOnlyApis.retrievePawword(phone,pwd,authcode);
+    }
+
+    //课时消耗
+    public Flowable<onlyHttpResponse<List<ConsumptionData>>> fetchClassTimeInfo() {
+        return sOnlyApis.getTimeInfo();
     }
 }

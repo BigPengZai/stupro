@@ -4,6 +4,7 @@ package com.onlyhiedu.mobile.Model.http;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
+import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
@@ -185,5 +186,12 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/retrievePawword")
-    Flowable<onlyHttpResponse> retrievePawword(@Field("phone") String phone,@Field("password") String password,@Field("authCode") String authCode);
+    Flowable<onlyHttpResponse> retrievePawword(@Field("phone") String phone, @Field("password") String password, @Field("authCode") String authCode);
+
+    /**
+     * 课时消耗
+     */
+    @POST("client/student/getClassTimeInfo")
+    Flowable<onlyHttpResponse<List<ConsumptionData>>> getTimeInfo();
+
 }

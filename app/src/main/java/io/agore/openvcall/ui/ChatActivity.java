@@ -165,7 +165,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
-            initRoomTime();
+//            initRoomTime();
         }
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
@@ -784,11 +784,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         super.onDestroy();
         stopTimer();
         stopFinishTimer();
-        mHandler.removeCallbacksAndMessages(null);
         if (mChronometer != null) {
             mChronometer.stop();
         }
-        mHandler = null;
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
+        }
     }
 
     private void quitCall() {
@@ -865,6 +867,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 rtcEngine().muteLocalAudioStream(mAudioMuted);
                 worker().getRtcEngine().setEnableSpeakerphone(false);
                 mRl_bg.setVisibility(View.GONE);
+                mChronometer.start();
             }
         });
     }
@@ -1128,11 +1131,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
-        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
+       /* mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
         if (mLong > mRoomDix) {
             chronometer.stop();
             startFinishTimer();
-        }
+        }*/
 
     }
 }

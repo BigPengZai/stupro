@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumpActivity;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumptionActivity;
 import com.onlyhiedu.mobile.UI.Home.presenter.MePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.MeContract;
@@ -75,7 +76,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
                 startActivity(new Intent(getContext(), AboutActivity.class));
                 break;
             case R.id.setting_consumption:
-                startActivity(new Intent(getContext(),ConsumptionActivity.class));
+                startActivity(new Intent(getContext(),ConsumpActivity.class));
                 break;
         }
     }
