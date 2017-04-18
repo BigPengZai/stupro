@@ -1,6 +1,8 @@
 package io.agore.openvcall.ui;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
@@ -106,11 +108,17 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
         float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
 
-        //设置比例转换白板的宽度和高度
-        int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
-        courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-        drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-        drawView.setCanvas(mImageWidth, imageHeight);
+        setRate(rate);
+
+        if (!TextUtils.isEmpty(bean.WhiteboardDocID) && !TextUtils.isEmpty(bean.WhiteboardDocID)) {
+            getCourseWareImageList(bean.WhiteboardDocID, Integer.parseInt(bean.WhiteboardDocPageID));
+        } else {
+            //设置比例转换白板的宽度和高度
+            int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
+            courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+            drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+            drawView.setCanvas(mImageWidth, imageHeight);
+        }
 
         //设置比例转换后的画笔大小
         drawView.setDrawWidth((float) (bean.WhiteboardPenSize) * rate);
@@ -127,7 +135,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         String str = split[split.length - 1];
         float fintSize = parseFloat(str.substring(1, str.length()));
         drawView.setFontSize(fintSize * rate);
-
 
     }
 
@@ -147,7 +154,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         float pcBoardHeight = parseFloat(split[3].split("=")[1]);
 
         float rate = (float) mImageWidth / pcBoardWidth;
+        setRate(rate);
         int imageHeight = (int) (pcBoardHeight * rate);
+
 
         //设置比例转换白板的宽度和高度
         courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
@@ -167,6 +176,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         String FontTypeStr = split[10].split("=")[1];
         String fontSize = FontTypeStr.substring(FontTypeStr.lastIndexOf("#") + 1, FontTypeStr.length());
         drawView.setFontSize(((Float.parseFloat(fontSize) * rate)));
+
 
     }
 
@@ -233,17 +243,23 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
     @Override
-    public void ScrollDrawView(MyScrollView view, NotifyWhiteboardOperator bean) {
-        //TODO
+    public void ScrollDrawView(Activity activity, MyScrollView view, NotifyWhiteboardOperator bean) {
 //        String s = "255,0,520,520";  表示为视区矩形范围,X,Y,WIDTH,HEIGHT
-        String s = bean.NotifyParam.MethodParam;
-        String[] spit = s.split(",");
-//        if(view.getScrollY()){
-
+//        String s = bean.NotifyParam.MethodParam;
+//        String[] spit = s.split(",");
+//
+//        int height = getScreenHeight(activity) - getToolbarHeight(activity);
+//
+//        int viewHeight = view.getScrollY();
+//
+//        int y = (int) (Float.parseFloat(spit[1]) * mRate);
+//        if (y > height) {
+//            view.scrollTo(0, y);
 //        }
 
-
-//        view.scrollTo(0,yAxis);
+//        int height = getScreenHeight(activity) - getToolbarHeight(activity);
+//
+//        float visibilityRegion = (float) (height) / mRate;
     }
 
     @Override
@@ -348,7 +364,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
 
-    public void startDrawViewFullAnimation(DrawView view,float rate){
+    public void startDrawViewFullAnimation(DrawView view, float rate) {
         ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
                 Animation.RELATIVE_TO_PARENT, 0,
                 Animation.RELATIVE_TO_SELF, 0.5f);

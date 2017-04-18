@@ -47,6 +47,9 @@ import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
 import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.SoftReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -391,6 +394,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             }
 
+
             //对方将收到 onMessageInstantReceive 回调。
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
@@ -398,44 +402,45 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        RequestFinishClass responseFinishClassData = JsonUtil.parseJson(msg, RequestFinishClass.class);
-                        if (responseFinishClassData != null && mRoomInfo != null) {
-                            Log.d(TAG, "responseFinishClassData");
-                            //收到老师下课请求
-                            if ("Request_FinishClass".equals(responseFinishClassData.ActionType)
-                                    &&
-                                    String.valueOf(mRoomInfo.getChannelTeacherId()).equals(responseFinishClassData.AccountID)) {
-                                initDismissDialog();
-                                return;
+
+                        try {
+                            JSONObject obj = new JSONObject(msg);
+                            String type = obj.getString("ActionType");
+                            switch (type) {
+                                case "Request_FinishClass":
+                                    initDismissDialog();
+                                    break;
+                                case "Response_FinishClass":
+
+                                    JSONObject responParamBean = obj.getJSONObject("ResponParamBean");
+                                    if (responParamBean != null) {
+                                        String confirm = responParamBean.getString("Confirm");
+                                        if ("YES".equals(confirm)) {
+                                            //老师同意下课
+                                            if (m_agoraAPI != null) {
+                                                m_agoraAPI.logout();
+                                                Log.d(TAG, "信令退出");
+                                            }
+                                            if (mUidsList != null) {
+                                                mUidsList.clear();
+                                            }
+                                            quitCall();
+                                        }
+                                    }
+
+                                    break;
+                                case "Response_WhiteboardList":
+                                    ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
+                                    if (whiteboardData != null && whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
+                                        mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
+                                        mImageFullScreen.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
                             }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        ResponseFinishClassData notify_finishClass = JsonUtil.parseJson(msg, ResponseFinishClassData.class);
-                        if (notify_finishClass != null && notify_finishClass.mResponParamBean != null) {
-                            String confirm = notify_finishClass.mResponParamBean.Confirm;
-                            if ("YES".equals(confirm)) {
-                                //老师同意下课
-                                if (m_agoraAPI != null) {
-                                    m_agoraAPI.logout();
-                                    Log.d(TAG, "信令退出");
-                                }
-                                if (mUidsList != null) {
-                                    mUidsList.clear();
-                                }
-                                quitCall();
-                                return;
-                            }
-                        }
-                        ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
-                        if (whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
-                            mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
-                            mImageFullScreen.setVisibility(View.VISIBLE);
-                        }
-                       /* switch (msg) {
-                            case requestFinishClassTag:
-                                break;
-                            case requestWhiteBoardData:
-                                break;
-                        }*/
                     }
                 });
 
@@ -470,7 +475,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.SCROLL) {
-                                mPresenter.ScrollDrawView(mScrollView, notifyWhiteboard);
+                                mPresenter.ScrollDrawView(ChatActivity.this,mScrollView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.Eraser) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[2]);
@@ -600,7 +605,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             finish.ActionType = "Response_FinishClass";
                             finish.Keyword = "HKT";
                             finish.ChannelID = mRoomInfo.getCommChannelId();
-                            finish.mResponParamBean = responParamBean;
+                            finish.ResponParamBean = responParamBean;
                             responParamBean.Confirm = "YES";
                             responParamBean.FinishTime = SystemClock.currentThreadTimeMillis() + "";
                             String json = JsonUtil.toJson(finish);
@@ -622,7 +627,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             finish.ActionType = "Response_FinishClass";
                             finish.Keyword = "HKT";
                             finish.ChannelID = mRoomInfo.getCommChannelId();
-                            finish.mResponParamBean = responParamBean;
+                            finish.ResponParamBean = responParamBean;
                             responParamBean.Confirm = "NO";
                             responParamBean.FinishTime = SystemClock.currentThreadTimeMillis() + "";
                             String json = JsonUtil.toJson(finish);
@@ -707,10 +712,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     /**
-     *  设置白板相关控件LayoutParams
+     * 设置白板相关控件LayoutParams
+     *
      * @param flag
      */
-    public void setBoardViewLayoutParams(boolean flag){
+    public void setBoardViewLayoutParams(boolean flag) {
         if (flag) {
             mSwitch = false;
             mScrollView.setLayoutParams(mScrollViewP);
@@ -724,11 +730,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(mImageCourseWareFullP);
             mSwitch = true;
 
-            mPresenter.startDrawViewFullAnimation(mDrawView,rate);
+            mPresenter.startDrawViewFullAnimation(mDrawView, rate);
         }
     }
-
-
 
 
     //请求 下课 tag

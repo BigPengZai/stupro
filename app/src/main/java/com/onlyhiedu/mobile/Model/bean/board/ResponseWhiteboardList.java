@@ -11,14 +11,14 @@ public class ResponseWhiteboardList {
 
 
     /**
-     * AccountID : 1111
+     * AccountID : 582471047
      * ActionType : Response_WhiteboardList
-     * ChannelID : DebugChannel1
+     * ChannelID : C48D14A4-FE09-44C2-99D6-17BF422622071012207187
      * Keyword : HKT
-     * ResponseParam : {"WhiteboardList":[{"Active":1,"WhiteboardDocID":"","WhiteboardDocPageID":"","WhiteboardEraseSize":5,"WhiteboardFontType":"宋体#Bold,Italic,Underline,Strikeout,#20.00","WhiteboardHeight":708,"WhiteboardID":"729EB6760AE04A94AA9A38AED417E415","WhiteboardName":"whiteboard1","WhiteboardPenColor":"FFFF0000","WhiteboardPenSize":5,"WhiteboardViewRect":"0,0,520,520","WhiteboardWidth":800}]}
+     * ResponseParam : {"WhiteboardList":[{"Active":1,"WhiteboardDocID":"","WhiteboardDocPageID":"","WhiteboardEraseSize":10,"WhiteboardFontType":"宋体#Regular,#20.00","WhiteboardHeight":803,"WhiteboardID":"4250E4A427854C2EA3023A5E1A1D803C","WhiteboardName":"default","WhiteboardPenColor":"FF000000","WhiteboardPenSize":5,"WhiteboardViewRect":"0,0,1453,803","WhiteboardWidth":1523}]}
      * Result : 1
      * ResultDesc : SUCCEED
-     * Timestamp : 1490773884
+     * Timestamp : 1492498653
      */
 
     public String AccountID;
@@ -30,8 +30,9 @@ public class ResponseWhiteboardList {
     public String ResultDesc;
     public String Timestamp;
 
-    public static class ResponseParamBean {
 
+
+    public static class ResponseParamBean {
         public List<WhiteboardListBean> WhiteboardList;
 
         public static class WhiteboardListBean {
@@ -39,15 +40,15 @@ public class ResponseWhiteboardList {
              * Active : 1
              * WhiteboardDocID :
              * WhiteboardDocPageID :
-             * WhiteboardEraseSize : 5
-             * WhiteboardFontType : 宋体#Bold,Italic,Underline,Strikeout,#20.00
-             * WhiteboardHeight : 708
-             * WhiteboardID : 729EB6760AE04A94AA9A38AED417E415
-             * WhiteboardName : whiteboard1
-             * WhiteboardPenColor : FFFF0000
+             * WhiteboardEraseSize : 10
+             * WhiteboardFontType : 宋体#Regular,#20.00
+             * WhiteboardHeight : 803
+             * WhiteboardID : 4250E4A427854C2EA3023A5E1A1D803C
+             * WhiteboardName : default
+             * WhiteboardPenColor : FF000000
              * WhiteboardPenSize : 5
-             * WhiteboardViewRect : 0,0,520,520
-             * WhiteboardWidth : 800
+             * WhiteboardViewRect : 0,0,1453,803
+             * WhiteboardWidth : 1523
              */
 
             public int Active;

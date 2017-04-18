@@ -1,5 +1,6 @@
 package io.agore.openvcall.ui;
 
+import android.app.Activity;
 import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
@@ -40,7 +41,7 @@ public interface ChatContract {
 
         void drawPoint(DrawView view, NotifyWhiteboardOperator json);
 
-        void ScrollDrawView(MyScrollView view , NotifyWhiteboardOperator yAxis);
+        void ScrollDrawView(Activity activity, MyScrollView view , NotifyWhiteboardOperator yAxis);
 
         void drawEraser(DrawView view, NotifyWhiteboardOperator json);
 

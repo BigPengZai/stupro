@@ -10,7 +10,7 @@ public class ResponseFinishClassData {
     public String ActionType;
     public String ChannelID;
     public String Keyword;
-    public ResponParamBean mResponParamBean;
+    public ResponParamBean ResponParamBean;
     public static class ResponParamBean {
         public String Confirm;
         public String FinishTime;

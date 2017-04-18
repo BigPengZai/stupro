@@ -5,12 +5,15 @@ import com.onlyhiedu.mobile.Utils.UIUtils;
 
 public class onlyHttpResponse<T> {
 
+    //token失效
+    public static final int TOKEN_LOSE = 112;
+
     private boolean hasError;
     private int code;
     private String message;
     private T data;
-    //token失效
-    public static final int TOKEN_LOSE = 112;
+
+
     public boolean isHasError() {
         return hasError;
     }
