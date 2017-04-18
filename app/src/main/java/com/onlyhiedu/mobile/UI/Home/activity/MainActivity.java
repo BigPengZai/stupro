@@ -45,7 +45,7 @@ public class MainActivity extends SimpleActivity implements BottomNavigationView
         mNavigation.setItemIconTintList(null);
 //        String deviceInfo = getDeviceInfo(this);
 //        Log.d(TAG, "deviceInfo:" + deviceInfo);
-
+        ;
     }
 
 
