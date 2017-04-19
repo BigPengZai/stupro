@@ -66,6 +66,7 @@
             android:text="80"
             android:textSize="21sp"/>
     </LinearLayout>
+
     <View
         style="@style/horizontal_line"
         android:background="#4dC9C8C8"/>

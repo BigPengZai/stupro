@@ -2,7 +2,6 @@ package com.onlyhiedu.mobile.UI.Consumption.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionList;
@@ -29,6 +28,8 @@ public class ConsumptionActivity extends SimpleActivity {
     private ConsumptionList.ListBean mE3;
 
     public static final String TAG = ConsumptionActivity.class.getSimpleName();
+
+
     @Override
     protected int getLayout() {
         return R.layout.activity_consumption;

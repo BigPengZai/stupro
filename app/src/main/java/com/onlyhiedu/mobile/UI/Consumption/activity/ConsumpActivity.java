@@ -26,6 +26,7 @@ public class ConsumpActivity extends BaseActivity<ConsumptionPresenter> implemen
     //剩余时间
     @BindView(R.id.tv_remaing)
     TextView mTv_Remaing;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -39,12 +40,12 @@ public class ConsumpActivity extends BaseActivity<ConsumptionPresenter> implemen
     @Override
     protected void initData() {
         setToolBar("课时消耗");
-       mPresenter.getClassTimeInfo();
+        mPresenter.getClassTimeInfo();
     }
 
     @Override
     public void showSuccess(List<ConsumptionData> data) {
-        if (data != null&&data.size()!=0) {
+        if (data != null && data.size() != 0) {
             mTv_Account.setText(data.get(0).classPackageName);
             mTv_Total.setText(data.get(0).totalTime);
             mTv_Remaing.setText(data.get(0).surplusTime);
