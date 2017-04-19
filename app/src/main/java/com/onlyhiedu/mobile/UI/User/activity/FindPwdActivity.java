@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -89,6 +90,14 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_code:
+                String editText = mEditNumber.getEditText();
+                if (TextUtils.isEmpty(editText)) {
+                    Toast.makeText(mContext, "请输入手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!StringUtils.isMobile(editText)) {
+                    return;
+                }
                 mTvCode.setEnabled(false);
                 mPresenter.readSecond();
                 MobclickAgent.onEvent(this, "forgot_identifying_code");
