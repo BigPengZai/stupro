@@ -178,8 +178,8 @@ public class RetrofitHelper {
         return sOnlyApis.updatePassword(oldPassword, timestamp, newPassword);
     }
 
-    public Flowable<onlyHttpResponse<UpdataVersionInfo>> fetchUpdataVersion() {
-        return sOnlyApis.updataVersion();
+    public Flowable<onlyHttpResponse<UpdataVersionInfo>> fetchUpdateVersion() {
+        return sOnlyApis.updateVersion();
     }
 
     public Flowable<onlyHttpResponse<List<CourseWareImageList>>> fetchGetCoursewareImageList(String wareId) {
@@ -195,8 +195,8 @@ public class RetrofitHelper {
     }
 
     //注册
-    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username, String phone, String pwd,String authcode) {
-        return sOnlyApis.registerInfo(username, phone, pwd,authcode);
+    public Flowable<onlyHttpResponse> fetchRegisterInfo(String username, String phone, String pwd, String authCode) {
+        return sOnlyApis.registerInfo(username, phone, pwd, authCode);
     }
 
     //验证码
@@ -210,8 +210,8 @@ public class RetrofitHelper {
     }
 
     //找回密码
-    public Flowable<onlyHttpResponse> fetchRetrieve(String phone,String pwd,String authcode) {
-        return sOnlyApis.retrievePawword(phone,pwd,authcode);
+    public Flowable<onlyHttpResponse> fetchRetrieve(String phone, String pwd, String authCode, String deviceId) {
+        return sOnlyApis.retrievePassword(phone, pwd, authCode, "Android", "student", deviceId);
     }
 
     //课时消耗

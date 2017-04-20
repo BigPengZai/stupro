@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
     <application
         android:name=".App.App"
         android:allowBackup="true"
@@ -33,14 +34,17 @@
         <activity
             android:name=".UI.User.activity.LoginActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".UI.User.activity.SmsLoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+
 
         <activity
             android:name=".UI.Home.activity.MainActivity"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
-        <activity android:name=".UI.User.activity.SmsLoginActivity"/>
+
         <activity android:name=".UI.Setting.activity.AboutActivity"/>
         <activity android:name=".UI.Setting.activity.SettingActivity"/>
         <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
@@ -58,6 +62,7 @@
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumptionActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumpActivity"/>
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="58db519a65b6d64e0e001633"/>

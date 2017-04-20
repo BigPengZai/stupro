@@ -146,7 +146,7 @@ public interface onlyApis {
      * 版本更新
      */
     @POST("client/student/getAppInfo")
-    Flowable<onlyHttpResponse<UpdataVersionInfo>> updataVersion();
+    Flowable<onlyHttpResponse<UpdataVersionInfo>> updateVersion();
 
 
     @FormUrlEncoded
@@ -185,8 +185,8 @@ public interface onlyApis {
      * 找回密码
      */
     @FormUrlEncoded
-    @POST("client/user/retrievePawword")
-    Flowable<onlyHttpResponse> retrievePawword(@Field("phone") String phone, @Field("password") String password, @Field("authCode") String authCode);
+    @POST("client/user/retrievePassword")
+    Flowable<onlyHttpResponse> retrievePassword(@Field("phone") String phone, @Field("password") String password, @Field("authCode") String authCode,@Field("deviceType") String deviceType,@Field("userType") String userType,@Field("deviceId") String deviceId);
 
     /**
      * 课时消耗

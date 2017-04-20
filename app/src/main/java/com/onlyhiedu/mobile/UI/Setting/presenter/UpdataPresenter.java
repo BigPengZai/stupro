@@ -26,7 +26,7 @@ public class UpdataPresenter extends RxPresenter<UpdataContract.View> implements
 
     @Override
     public void updataVersion() {
-        Flowable<onlyHttpResponse<UpdataVersionInfo>> flowable = mRetrofitHelper.fetchUpdataVersion();
+        Flowable<onlyHttpResponse<UpdataVersionInfo>> flowable = mRetrofitHelper.fetchUpdateVersion();
 
         MyResourceSubscriber<onlyHttpResponse<UpdataVersionInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<UpdataVersionInfo>>() {
             @Override

@@ -74,14 +74,12 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
         }
     }
 
-    @Override
-    public void showRetrievePwd() {
-        Log.d(TAG, "suce");
-
-    }
 
     @Override
     public void showError(String msg) {
+        if(msg.equals("成功")){
+            finish();
+        }
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -99,6 +97,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
                     return;
                 }
                 mTvCode.setEnabled(false);
+                mPresenter.getAuthCode(editText);
                 mPresenter.readSecond();
                 MobclickAgent.onEvent(this, "forgot_identifying_code");
                 break;

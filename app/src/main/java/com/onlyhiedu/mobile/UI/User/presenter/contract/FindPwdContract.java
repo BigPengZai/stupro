@@ -15,7 +15,6 @@ public interface FindPwdContract {
         void showSecond(int second);
         void showAuthSuccess(AuthCodeInfo info);
 
-        void showRetrievePwd();
     }
 
     interface Presenter extends BasePresenter<View> {
