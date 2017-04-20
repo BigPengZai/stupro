@@ -475,7 +475,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.SCROLL) {
-                                mPresenter.ScrollDrawView(ChatActivity.this,mScrollView, notifyWhiteboard);
+                                mPresenter.ScrollDrawView(ChatActivity.this, mScrollView, notifyWhiteboard);
                             }
                             if (type == ChatPresenter.Eraser) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[2]);
@@ -513,6 +513,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 String docID = split[0].substring(6, split[0].length());
                                 String docPage = split[1].substring(10, split[1].length());
                                 mPresenter.getCourseWareImageList(docID, Integer.parseInt(docPage));
+                            }
+                            if (type == ChatPresenter.ClearScreen) {
+                                mDrawView.restartDrawing();
                             }
                         }
                     });

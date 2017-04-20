@@ -55,6 +55,8 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final int PaintText = 10;
     public static final int EraserRect = 11;
     public static final int ChangeDoc = 12; //改变白板关联的课件
+    public static final int ClearScreen = 13;
+
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -340,6 +342,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if (type.equals(MethodType.ChangeDoc)) {
             return ChangeDoc;
+        }
+        if (type.equals(MethodType.ClearScreen)) {
+            return ClearScreen;
         }
         return 0;
     }
