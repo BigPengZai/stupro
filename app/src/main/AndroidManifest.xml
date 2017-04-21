@@ -62,7 +62,7 @@
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumptionActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumpActivity"/>
-
+        <activity android:name=".UI.User.activity.TermServiceActivity"/>
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="58db519a65b6d64e0e001633"/>

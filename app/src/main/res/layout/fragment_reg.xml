@@ -21,7 +21,6 @@
 
 
             <EditText
-                android:maxLength="4"
                 android:id="@+id/edit_code"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/edit_height"
@@ -29,6 +28,7 @@
                 android:background="@drawable/transparent"
                 android:hint="验证码"
                 android:inputType="phone"
+                android:maxLength="4"
                 android:paddingLeft="@dimen/size_5"
                 android:textColorHint="@color/text_color_hint"/>
 
@@ -126,28 +126,35 @@
             style="@style/wrap_wrap"
             android:checked="true"/>
 
-        <TextView
-            style="@style/wrap_wrap"
-            android:layout_margin="@dimen/size_5"
-            android:text="阅读并同意"
-            android:textColor="@color/c_ACABAB"
-            android:textSize="@dimen/sp_13"/>
+        <LinearLayout
+            android:id="@+id/ll_term_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+            <TextView
+                style="@style/wrap_wrap"
+                android:layout_margin="@dimen/size_5"
+                android:text="阅读并同意"
+                android:textColor="@color/c_ACABAB"
+                android:textSize="@dimen/sp_13"/>
 
-        <TextView
-            style="@style/wrap_wrap"
-            android:text="《用户条款》"
-            android:textColor="@color/c_ACABAB"
-            android:textSize="@dimen/sp_14"/>
+            <TextView
+                style="@style/wrap_wrap"
+                android:text="《用户条款》"
+                android:textColor="@color/c_ACABAB"
+                android:textSize="@dimen/sp_14"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_reg_step1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ll_reg_step2"
         android:layout_toRightOf="@+id/ll_reg_step2"
-        android:layout_toEndOf="@+id/ll_reg_step2">
+        android:orientation="vertical">
 
         <com.onlyhiedu.mobile.Widget.InputTextView
             android:id="@+id/edit_number"

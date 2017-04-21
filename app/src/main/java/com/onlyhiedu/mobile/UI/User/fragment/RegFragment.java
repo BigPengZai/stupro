@@ -15,12 +15,22 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.User.activity.TermServiceActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
+import com.onlyhiedu.mobile.Utils.AppUtil;
+import com.onlyhiedu.mobile.Utils.OpenFilesUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,6 +77,10 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     public static final String TAG = RegFragment.class.getSimpleName();
     private int mAuthCode;
 
+    @BindView(R.id.ll_term_service)
+    LinearLayout mLl_Term_Service;
+    private File mFile;
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -89,7 +103,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
 
-    @OnClick({R.id.btn_next_number, R.id.btn_next_name, R.id.btn_register, R.id.tv_code, R.id.cb_check})
+    @OnClick({R.id.btn_next_number, R.id.btn_next_name, R.id.btn_register, R.id.tv_code, R.id.cb_check,R.id.ll_term_service})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_next_number:
@@ -121,9 +135,15 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
             case R.id.cb_check:
                 MobclickAgent.onEvent(mContext, "register_clause");
                 break;
+            case R.id.ll_term_service:
+               //服务条款
+                readService();
+                break;
         }
     }
-
+    private void readService() {
+        startActivity(new Intent(mContext, TermServiceActivity.class));
+    }
     //第三步验证
     private void confirmThird() {
         String pwd = mEditPwd.getEditText();
