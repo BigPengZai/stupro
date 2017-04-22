@@ -19,6 +19,7 @@ import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
+import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -386,5 +388,37 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         set.addAnimation(scaleY);
         view.startAnimation(set);
     }
+
+
+//    String peer = mRoomInfo.getChannelTeacherId() + "";
+//    //发送点对点 消息
+//    ResponseFinishClassData finish = new ResponseFinishClassData();
+//    ResponseFinishClassData.ResponseParam responParamBean = new ResponseFinishClassData.ResponseParam();
+//    finish.AccountID = mRoomInfo.getChannelStudentId() + "";
+//    finish.ActionType = "Response_FinishClass";
+//    finish.Keyword = "HKT";
+//    finish.ChannelID = mRoomInfo.getCommChannelId();
+//    finish.ResponseParam = responParamBean;
+//    responParamBean.Confirm = "NO";
+//    responParamBean.FinishTime = SystemClock.currentThreadTimeMillis() + "";
+//    String json = JsonUtil.toJson(finish);
+//    m_agoraAPI.messageInstantSend(peer, 0, json, "stu_no");
+
+    public String responseFinishClass(String  confirm,int stuId,String channelId){
+        //发送点对点 消息
+        ResponseFinishClassData finish = new ResponseFinishClassData();
+        ResponseFinishClassData.ResponseParamBean responseParamBean = new ResponseFinishClassData.ResponseParamBean();
+        finish.AccountID = stuId + "";
+        finish.ActionType = "Response_FinishClass";
+        finish.Keyword = "HKT";
+        finish.ChannelID = channelId;
+        finish.ResponseParam = responseParamBean;
+        responseParamBean.Confirm = confirm;
+        responseParamBean.FinishTime = DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss);
+        return  JsonUtil.toJson(finish);
+    }
+
+
+
 
 }

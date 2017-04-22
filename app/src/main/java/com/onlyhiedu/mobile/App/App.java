@@ -10,7 +10,6 @@ import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.io.InputStream;
 

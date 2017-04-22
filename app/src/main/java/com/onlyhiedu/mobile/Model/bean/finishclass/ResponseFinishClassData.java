@@ -10,9 +10,13 @@ public class ResponseFinishClassData {
     public String ActionType;
     public String ChannelID;
     public String Keyword;
-    public ResponParamBean ResponParamBean;
-    public static class ResponParamBean {
+    public ResponseParamBean ResponseParam;
+    public boolean Result = true;
+    public String Timestamp = (System.currentTimeMillis() / 1000) + "";
+
+    public static class ResponseParamBean {
         public String Confirm;
-        public String FinishTime;
+        public String FinishTime ;
+
     }
 }

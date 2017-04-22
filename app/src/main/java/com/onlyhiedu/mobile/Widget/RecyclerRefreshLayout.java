@@ -42,10 +42,10 @@ public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRe
 
     @Override
     public void onRefresh() {
-        if (listener != null && !mIsOnLoading) {
+//        if (listener != null && !mIsOnLoading) {
             listener.onRefreshing();
-        } else
-            setRefreshing(false);
+//        } else
+//            setRefreshing(false);
     }
 
 

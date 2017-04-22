@@ -34,7 +34,6 @@ import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.Model.bean.finishclass.RequestFinishClass;
-import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
@@ -412,10 +411,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     break;
                                 case "Response_FinishClass":
 
-                                    JSONObject responParamBean = obj.getJSONObject("ResponParamBean");
+                                    JSONObject responParamBean = obj.getJSONObject("ResponseParam");
                                     if (responParamBean != null) {
                                         String confirm = responParamBean.getString("Confirm");
                                         if ("YES".equals(confirm)) {
+                                            Toast.makeText(mContext, "老师同意下课,已退出房间", Toast.LENGTH_SHORT).show();
                                             //老师同意下课
                                             if (m_agoraAPI != null) {
                                                 m_agoraAPI.logout();
@@ -425,6 +425,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                                 mUidsList.clear();
                                             }
                                             quitCall();
+                                        } else if ("NO".equals(confirm)) {
+                                            Toast.makeText(mContext, "老师拒绝下课", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -529,6 +531,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "发送成功");
                 if (messageID.equals("stu_ok")) {
                     Log.d(TAG, "学生同意下课");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "同意老师下课，已退出房间", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     if (m_agoraAPI != null) {
                         m_agoraAPI.logout();
                         Log.d(TAG, "信令退出");
@@ -539,9 +547,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     quitCall();
                 }
                 if (messageID.equals(requestFinishClassTag)) {
-                    Toast.makeText(mContext, "请求下课发送成功，等待老师回应", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "请求下课发送成功，等待老师回应", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-
             }
 
             @Override
@@ -575,7 +587,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 for (String str : accounts) {
                     if (Integer.parseInt(str) == mRoomInfo.getChannelTeacherId()) {
                         requestWhiteBoardData();
-                        mSendRequestWhiteBoardData = true;
                     }
                 }
             }
@@ -592,7 +603,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void initDismissDialog() {
         DialogUtil.showOnlyAlert(this,
                 ""
-                , "我要下课"
+                , "老师请求下课"
                 , "确定"
                 , "取消"
                 , true, true, new DialogListener() {
@@ -601,18 +612,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         if (mRoomInfo != null) {
                             //call  的对象 假数据即老师信令的id
                             String peer = mRoomInfo.getChannelTeacherId() + "";
-                            //发送点对点 消息
-                            ResponseFinishClassData finish = new ResponseFinishClassData();
-                            ResponseFinishClassData.ResponParamBean responParamBean = new ResponseFinishClassData.ResponParamBean();
-                            finish.AccountID = mRoomInfo.getChannelStudentId() + "";
-                            finish.ActionType = "Response_FinishClass";
-                            finish.Keyword = "HKT";
-                            finish.ChannelID = mRoomInfo.getCommChannelId();
-                            finish.ResponParamBean = responParamBean;
-                            responParamBean.Confirm = "YES";
-                            responParamBean.FinishTime = SystemClock.currentThreadTimeMillis() + "";
-                            String json = JsonUtil.toJson(finish);
-                            m_agoraAPI.messageInstantSend(peer, 0, json, "stu_ok");
+                            String data = mPresenter.responseFinishClass("YES", mRoomInfo.getChannelStudentId(), mRoomInfo.getSignallingChannelId());
+                            m_agoraAPI.messageInstantSend(peer, 0, data, "stu_ok");
                         }
                     }
 
@@ -621,20 +622,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         //取消
                         Log.d(TAG, "取消");
                         if (mRoomInfo != null) {
-                            //call  的对象 假数据即老师信令的id
                             String peer = mRoomInfo.getChannelTeacherId() + "";
-                            //发送点对点 消息
-                            ResponseFinishClassData finish = new ResponseFinishClassData();
-                            ResponseFinishClassData.ResponParamBean responParamBean = new ResponseFinishClassData.ResponParamBean();
-                            finish.AccountID = mRoomInfo.getChannelStudentId() + "";
-                            finish.ActionType = "Response_FinishClass";
-                            finish.Keyword = "HKT";
-                            finish.ChannelID = mRoomInfo.getCommChannelId();
-                            finish.ResponParamBean = responParamBean;
-                            responParamBean.Confirm = "NO";
-                            responParamBean.FinishTime = SystemClock.currentThreadTimeMillis() + "";
-                            String json = JsonUtil.toJson(finish);
-                            m_agoraAPI.messageInstantSend(peer, 0, json, "stu_no");
+                            String data = mPresenter.responseFinishClass("NO", mRoomInfo.getChannelStudentId(), mRoomInfo.getSignallingChannelId());
+                            m_agoraAPI.messageInstantSend(peer, 0, data, "stu_no");
                         }
                     }
                 }
@@ -901,7 +891,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     //请求白板数据
     private static final String requestWhiteBoardData = "requestWhiteBoardData";
-    private boolean mSendRequestWhiteBoardData;
 
     private void requestWhiteBoardData() {
         if (mRoomInfo != null) {

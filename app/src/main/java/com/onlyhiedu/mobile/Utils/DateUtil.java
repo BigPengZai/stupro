@@ -13,7 +13,7 @@ import java.util.Locale;
  * Created by pengpeng on 2017/2/22.
  */
 
-public class DateUtil {
+public  class DateUtil {
     /**
      * 日期类型 *
      */
