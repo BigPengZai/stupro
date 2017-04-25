@@ -197,6 +197,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         startRoomTime();
                         break;
                     case UPDATE_FINISH_ROOM:
+
                         finishRoom();
                         break;
                     case UPDATE_NOTIFY:
@@ -270,7 +271,22 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mUidsList != null) {
             mUidsList.clear();
         }
-        quitCall();
+        DialogUtil.showOnlyAlert(this,
+                "提示"
+                , "已超出课堂15分钟，自动关闭"
+                , "离开教室"
+                , ""
+                , false, false, new DialogListener() {
+                    @Override
+                    public void onPositive(DialogInterface dialog) {
+                        quitCall();
+                    }
+
+                    @Override
+                    public void onNegative(DialogInterface dialog) {
+                    }
+                }
+        );
     }
 
     private void startTimer() {
@@ -416,7 +432,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     if (responParamBean != null) {
                                         String confirm = responParamBean.getString("Confirm");
                                         if ("YES".equals(confirm)) {
-                                            Toast.makeText(mContext, "老师同意下课,已退出房间", Toast.LENGTH_SHORT).show();
+
                                             //老师同意下课
                                             if (m_agoraAPI != null) {
                                                 m_agoraAPI.logout();
@@ -425,9 +441,39 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                             if (mUidsList != null) {
                                                 mUidsList.clear();
                                             }
-                                            quitCall();
+
+                                            DialogUtil.showOnlyAlert(ChatActivity.this,
+                                                    "提示"
+                                                    , "老师同意了您的下课请求"
+                                                    , "离开教室"
+                                                    , ""
+                                                    , false, false, new DialogListener() {
+                                                        @Override
+                                                        public void onPositive(DialogInterface dialog) {
+                                                            quitCall();
+                                                        }
+
+                                                        @Override
+                                                        public void onNegative(DialogInterface dialog) {
+                                                        }
+                                                    }
+                                            );
                                         } else if ("NO".equals(confirm)) {
-                                            Toast.makeText(mContext, "老师拒绝下课", Toast.LENGTH_SHORT).show();
+                                            DialogUtil.showOnlyAlert(ChatActivity.this,
+                                                    "提示"
+                                                    , "老师拒绝了您的下课请求"
+                                                    , "知道了"
+                                                    , ""
+                                                    , false, false, new DialogListener() {
+                                                        @Override
+                                                        public void onPositive(DialogInterface dialog) {
+                                                        }
+
+                                                        @Override
+                                                        public void onNegative(DialogInterface dialog) {
+                                                        }
+                                                    }
+                                            );
                                         }
                                     }
 
@@ -551,7 +597,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, "请求下课发送成功，等待老师回应", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "下课请求已发送", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
