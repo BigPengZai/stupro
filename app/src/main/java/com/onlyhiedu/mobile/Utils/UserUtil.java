@@ -49,7 +49,7 @@ public class UserUtil {
     }
 
 
-    public static boolean isClassIn(CourseList.ListBean item) {
+    public static int isClassIn(CourseList.ListBean item) {
 //        String startTime = "16:07:00";
 //        String courseDate = "2017-04-14";
 //        String endTime_start = "16:20:00";
@@ -67,36 +67,15 @@ public class UserUtil {
             Date room_end = df.parse(mRoomEndTime);
             Date now = df.parse(nowTime);
             if (now.getTime() > room_start.getTime() && now.getTime() < room_end.getTime()) {
-                return true;
+                return 1;
+            }
+            if (now.getTime() < room_start.getTime() && now.getTime() > (room_start.getTime() - 5 * 60 * 1000)) {
+                return 2;
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return false;
+        return 0;
     }
 
-    public static boolean isClassISoon(CourseList.ListBean item) {
-//        String startTime = "16:07:00";
-//        String courseDate = "2017-04-14";
-//        String endTime_start = "16:20:00";
-        String startTime = item.getStartTime() + ":00";
-        String courseDate = item.getCourseDate();
-        String endTime_start = item.getEndTime() + ":00";
-        String mTime = DateUtil.getTime(courseDate + " " + startTime);
-        String mEndtime1 = DateUtil.getTime(courseDate + " " + endTime_start);
-        String mRoomStartTime = DateUtil.getStrTime(mTime);
-        String mRoomEndTime = DateUtil.getStrTime(mEndtime1);
-        String nowTime = DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss);
-        DateFormat df = new SimpleDateFormat(DateUtil.yyyyMMddHHmmss);
-        try {
-            Date room_start = df.parse(mRoomStartTime);
-            Date now = df.parse(nowTime);
-            if (now.getTime() < room_start.getTime() && now.getTime() > (room_start.getTime() - 5 * 60 * 1000)) {
-                return true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

@@ -10,13 +10,7 @@ import android.widget.TextView;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.UserUtil;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,16 +44,26 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
                 "-"+
                 item.getEndTime()
         );
-        if (UserUtil.isClassIn(item)) {
-            h.mTv_In.setVisibility(View.VISIBLE);
-            h.mTv_Soon.setVisibility(View.GONE);
-            item.setClickAble(true);
+
+        int state = UserUtil.isClassIn(item);
+        switch (state){
+            case 0:
+                h.mTv_Soon.setVisibility(View.GONE);
+                h.mTv_In.setVisibility(View.GONE);
+                item.setClickAble(false);
+                break;
+            case 1:
+                h.mTv_In.setVisibility(View.VISIBLE);
+                h.mTv_Soon.setVisibility(View.GONE);
+                item.setClickAble(true);
+                break;
+            case 2:
+                h.mTv_Soon.setVisibility(View.VISIBLE);
+                h.mTv_In.setVisibility(View.GONE);
+                item.setClickAble(true);
+                break;
         }
-        if (UserUtil.isClassISoon(item)) {
-            h.mTv_Soon.setVisibility(View.VISIBLE);
-            h.mTv_In.setVisibility(View.GONE);
-            item.setClickAble(true);
-        }
+
 //        {
 //        View view = h.itemView;
 //        view.setScaleY(0.7f);
