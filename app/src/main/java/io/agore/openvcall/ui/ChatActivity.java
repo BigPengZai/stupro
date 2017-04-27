@@ -367,13 +367,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void setToolBar() {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
-        mToolbar.setNavigationIcon(R.drawable.back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressedSupport();
-            }
-        });
+        mToolbar.setNavigationIcon(R.drawable.transparent);
     }
 
 
@@ -833,14 +827,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onBackPressedSupport() {
-        if (m_agoraAPI != null) {
-            m_agoraAPI.logout();
-            Log.d(TAG, "信令退出");
-        }
-        if (mUidsList != null) {
-            mUidsList.clear();
-        }
-        quitCall();
+//        if (m_agoraAPI != null) {
+//            m_agoraAPI.logout();
+//            Log.d(TAG, "信令退出");
+//        }
+//        if (mUidsList != null) {
+//            mUidsList.clear();
+//        }
+//        quitCall();
 
     }
 
