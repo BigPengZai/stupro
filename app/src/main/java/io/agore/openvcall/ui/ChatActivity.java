@@ -404,6 +404,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             }
 
+            @Override
+            public void onChannelUserLeaved(String account, int uid) {
+                //当有其他用户退出
+                if (uid == mRoomInfo.getChannelTeacherId()) {
+                    SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
+                }
+            }
 
             //对方将收到 onMessageInstantReceive 回调。
             @Override
