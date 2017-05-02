@@ -33,7 +33,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     protected Activity mContext;
 
     private Unbinder mUnBinder;
-    private String mPageName = "com.onlyhiedu.mobile";
+    //String name = BaseActivity.class.getSimpleName();
+    private String mPageName = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

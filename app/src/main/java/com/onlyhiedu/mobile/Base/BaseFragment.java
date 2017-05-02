@@ -34,7 +34,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     protected Context mContext;
 
     private Unbinder mUnBinder;
-    private String mPageName = "com.onlyhiedu.mobile";
+    //String name = BaseActivity.class.getSimpleName();
+    private String mPageName = this.getClass().getSimpleName();
     @Override
     public void onAttach(Context context) {
         mActivity = (Activity) context;
