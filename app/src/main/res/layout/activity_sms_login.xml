@@ -48,6 +48,7 @@
             android:src="@mipmap/iphone"/>
 
         <EditText
+            android:maxLength="11"
             android:id="@+id/edit_number"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -78,6 +79,7 @@
             android:src="@mipmap/password"/>
 
         <EditText
+            android:maxLength="4"
             android:id="@+id/edit_code"
             android:layout_width="0dp"
             android:layout_height="match_parent"
