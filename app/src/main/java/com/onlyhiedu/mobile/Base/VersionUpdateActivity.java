@@ -65,8 +65,6 @@ public abstract class VersionUpdateActivity extends BaseActivity<UpdatePresenter
                     Log.d(TAG, "onNegative");
                 }
             });
-        } else {
-            Toast.makeText(this, "已是最新版本", Toast.LENGTH_SHORT).show();
         }
     }
 
