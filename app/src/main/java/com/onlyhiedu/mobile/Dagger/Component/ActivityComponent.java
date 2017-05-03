@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumpActivity;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.FeedBackActivity;
@@ -42,4 +43,6 @@ public interface ActivityComponent {
     void inject(MyInfoActivity myInfoActivity);
 
     void inject(ConsumpActivity consumpActivity);
+
+    void inject(MainActivity mainActivity);
 }

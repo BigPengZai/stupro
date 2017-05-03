@@ -12,7 +12,7 @@ import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
-import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
+import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
@@ -178,11 +178,11 @@ public class RetrofitHelper {
         return sOnlyApis.updatePassword(oldPassword, timestamp, newPassword);
     }
 
-    public Flowable<onlyHttpResponse<UpdataVersionInfo>> fetchUpdateVersion() {
+    public Flowable<onlyHttpResponse<UpdateVersionInfo>> fetchUpdateVersion() {
         return sOnlyApis.updateVersion();
     }
 
-    public Flowable<onlyHttpResponse<List<CourseWareImageList>>> fetchGetCoursewareImageList(String wareId) {
+    public Flowable<onlyHttpResponse<List<CourseWareImageList>>> fetchGetCourseWareImageList(String wareId) {
         return sOnlyApis.getCoursewareImageList(wareId);
     }
 

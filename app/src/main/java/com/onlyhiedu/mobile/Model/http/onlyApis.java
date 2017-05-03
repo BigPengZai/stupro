@@ -10,7 +10,7 @@ import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
-import com.onlyhiedu.mobile.Model.bean.UpdataVersionInfo;
+import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 
 import java.util.List;
@@ -28,9 +28,9 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://192.168.1.252:8090/";
+    String HOST = "http://192.168.1.252:8090/";
     //公网环境
-    String HOST = "http://api.onlyeduhi.com/";
+    //String HOST = "http://api.onlyeduhi.com/";
 
     /**
      * 客户端登录
@@ -146,7 +146,7 @@ public interface onlyApis {
      * 版本更新
      */
     @POST("client/student/getAppInfo")
-    Flowable<onlyHttpResponse<UpdataVersionInfo>> updateVersion();
+    Flowable<onlyHttpResponse<UpdateVersionInfo>> updateVersion();
 
 
     @FormUrlEncoded

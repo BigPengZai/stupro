@@ -112,23 +112,23 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
         String phone = mEditNumber.getEditText();
         String password = mEditPwd.getEditText();
         String pwd = UIUtils.sha512(phone, password);
-        String authcode = mEditCode.getText().toString();
+        String authCode = mEditCode.getText().toString();
         if (!StringUtils.isMobile(phone)) {
             return;
         }
         if (!StringUtils.checkPassword(password)) {
             return;
         }
-        if (authcode.length() == 0) {
+        if (authCode.length() == 0) {
             Toast.makeText(mContext, "请输入验证码", Toast.LENGTH_SHORT).show();
             return;
         }
         String s = "" + mCodeInfo.getAuthCode();
-        if (mCodeInfo != null && !s.equals(authcode)) {
+        if (mCodeInfo != null && !s.equals(authCode)) {
             Toast.makeText(mContext, "验证码不正确", Toast.LENGTH_SHORT).show();
             return;
         }
-        mPresenter.retrievePwd(phone, pwd, authcode);
+        mPresenter.retrievePwd(phone, pwd, authCode);
     }
 
 
