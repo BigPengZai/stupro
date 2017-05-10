@@ -93,8 +93,8 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
         String number = mEdit_Num.getText().toString();
         String pwd = mEdit_Pwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-            mPresenter.getUser(number, pwd, StringUtils.getDeviceId());
-            Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
+            mPresenter.getUser(number, pwd, StringUtils.getDeviceId(mContext));
+            Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId(mContext));
         }
     }
 

@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.InputStream;
 
@@ -61,7 +62,8 @@ public class App extends Application {
 
         DaoUtil.getInstance(this);
         initWorkerThread();
-
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 
     private void initGlide() {

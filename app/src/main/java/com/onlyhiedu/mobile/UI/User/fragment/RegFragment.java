@@ -99,7 +99,6 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     @Override
     protected void initData() {
-
     }
 
 
@@ -170,19 +169,8 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
     private void nextNumber() {
-        mTvCode.setEnabled(false);
-        mPresenter.readSecond();
         mPresenter.getAuthCode(mEditNumber.getEditText());
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_left_out);
-        animation.setFillAfter(true);
-        mLlRegStep1.startAnimation(animation);
-        mBtnNextNumber.startAnimation(animation);
-        Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
-        animation.setFillAfter(true);
 
-        setAnimation(animation2, mLlRegStep2, mBtnNextName);
-
-        mEditNumber.setInputEnable(false);
     }
 
     private void nextCodeAndName() {
@@ -234,6 +222,19 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     public void showAuthSuccess(int authCode) {
         Log.d(TAG, "验证码：" + authCode);
         mAuthCode = authCode;
+
+        mTvCode.setEnabled(false);
+        mPresenter.readSecond();
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_left_out);
+        animation.setFillAfter(true);
+        mLlRegStep1.startAnimation(animation);
+        mBtnNextNumber.startAnimation(animation);
+        Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
+        animation.setFillAfter(true);
+
+        setAnimation(animation2, mLlRegStep2, mBtnNextName);
+
+        mEditNumber.setInputEnable(false);
     }
 
     @Override

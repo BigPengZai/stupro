@@ -128,8 +128,8 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
 
 
         if (StringUtils.isMobile(number)) {
-            mPresenter.authLogin(code, number, StringUtils.getDeviceId());
-            Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId());
+            mPresenter.authLogin(code, number, StringUtils.getDeviceId(this));
+            Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId(this));
         }
     }
 

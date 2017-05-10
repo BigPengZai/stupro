@@ -134,5 +134,5 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
     //友盟
     compile 'com.umeng.analytics:analytics:latest.integration'
-
+    compile files('libs/agora-rtc-sdk.jar')
 }

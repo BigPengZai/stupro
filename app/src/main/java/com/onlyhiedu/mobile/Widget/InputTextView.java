@@ -30,7 +30,6 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
 
     private boolean isPassword;
     private boolean show;
-
     public InputTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_input_text, this, true);

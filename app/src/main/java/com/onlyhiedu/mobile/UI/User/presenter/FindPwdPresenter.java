@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
@@ -64,7 +65,7 @@ public class FindPwdPresenter extends RxPresenter<FindPwdContract.View> implemen
     @Override
     public void retrievePwd(String phone, String pwd, String authCode) {
 
-        String deviceId = StringUtils.getDeviceId();
+        String deviceId = StringUtils.getDeviceId(App.getInstance());
 
         Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchRetrieve(phone, pwd, authCode, deviceId);
 

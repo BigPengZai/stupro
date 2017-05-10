@@ -5,7 +5,7 @@
 
 
     <EditText
-        android:maxLength="20"
+        android:maxLength="11"
         android:id="@+id/edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
