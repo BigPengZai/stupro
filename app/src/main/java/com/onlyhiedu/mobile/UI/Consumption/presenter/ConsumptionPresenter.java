@@ -23,6 +23,9 @@ public class ConsumptionPresenter extends RxPresenter<ConsumptionContract.View> 
     public ConsumptionPresenter(RetrofitHelper mRetrofitHelper) {
         this.mRetrofitHelper = mRetrofitHelper;
     }
+
+
+
     @Override
     public void getClassTimeInfo() {
         Flowable<onlyHttpResponse<List<ConsumptionData>>> flowable = mRetrofitHelper.fetchClassTimeInfo();
