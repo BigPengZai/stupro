@@ -128,6 +128,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private String mTime;
     private long mRoomDix;
     private long mLong;
+    private boolean mIsBack; //返回键是否可点击
 
     @Override
     protected void initInject() {
@@ -146,6 +147,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mScreenWidth = ScreenUtil.getScreenWidth(this);
         mRequestManager = Glide.with(this);
 
+
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
         mPresenter.setImageWidth(imageWidth);
 
@@ -163,6 +165,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
 
     }
+
 
     private void initRoomData() {
         mChronometer.setBase(SystemClock.elapsedRealtime());
@@ -325,6 +328,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     if (l > (mRoomDix + 3 * 60 * 1000) && l < (mRoomDix + 3 * 60 * 1000 + 1000)) {
                         sendMessage(UPDATE_NOTIFY);
                     }
+
+
                 }
             };
         }
@@ -368,7 +373,24 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void setToolBar() {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
-        mToolbar.setNavigationIcon(R.drawable.transparent);
+        mToolbar.setNavigationIcon(R.drawable.back);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsBack) {
+                    if (m_agoraAPI != null) {
+                        m_agoraAPI.logout();
+                        Log.d(TAG, "信令退出");
+                    }
+                    if (mUidsList != null) {
+                        mUidsList.clear();
+                    }
+                    quitCall();
+                }else{
+                    Toast.makeText(mContext, "课程未结束", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 
@@ -1197,11 +1219,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
-       /* mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
-        if (mLong > mRoomDix) {
-            chronometer.stop();
-            startFinishTimer();
-        }*/
+//        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
+//        if (mLong > mRoomDix) {
+//            mIsBack = true;
+//            chronometer.stop();
+//            startFinishTimer();
+//        }
 
     }
 }
