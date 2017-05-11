@@ -111,9 +111,9 @@ public class RetrofitHelper {
         builder.addInterceptor(parameters);
         builder.cache(cache).addInterceptor(cacheInterceptor);
         //设置超时
-        builder.connectTimeout(15, TimeUnit.SECONDS);
-        builder.readTimeout(20, TimeUnit.SECONDS);
-        builder.writeTimeout(20, TimeUnit.SECONDS);
+        builder.connectTimeout(6, TimeUnit.SECONDS);
+        builder.readTimeout(10, TimeUnit.SECONDS);
+        builder.writeTimeout(10, TimeUnit.SECONDS);
         //错误重连
         builder.retryOnConnectionFailure(true);
         sOkHttpClient = builder.build();
