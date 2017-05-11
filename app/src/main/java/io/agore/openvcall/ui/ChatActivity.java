@@ -40,6 +40,7 @@ import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
+import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
@@ -154,7 +155,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         initSignalling();
         event().addEventHandler(this);
         SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
-        rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_FIT, 0));
+        rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, 0));
         surfaceV.setZOrderOnTop(false);
         surfaceV.setZOrderMediaOverlay(false);
         mUidsList.put(0, new SoftReference<>(surfaceV)); // get first surface view
@@ -908,7 +909,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 surfaceV.setZOrderOnTop(false);
                 surfaceV.setZOrderMediaOverlay(false);
                 //设置远端视频显示属性 (setupRemoteVideo)
-                rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_FIT, uid));
+                rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
                 switchToSmallVideoView(uid);
             }
         });

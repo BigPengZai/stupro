@@ -8,12 +8,13 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-
-import io.agore.openvcall.model.ConstantApp;
-import io.agore.propeller.UserStatusData;
+import com.onlyhiedu.mobile.Utils.ScreenUtil;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
+
+import io.agore.openvcall.model.ConstantApp;
+import io.agore.propeller.UserStatusData;
 
 
 public class GridVideoViewContainerAdapter extends VideoViewAdapter {
@@ -27,6 +28,7 @@ public class GridVideoViewContainerAdapter extends VideoViewAdapter {
 
     @Override
     protected void customizedInit(HashMap<Integer, SoftReference<SurfaceView>> uids, boolean force) {
+
         VideoViewAdapterUtil.composeDataItem1(mUsers, uids, mLocalUid); // local uid
 
         if (force || mItemWidth == 0 || mItemHeight == 0) {
@@ -50,11 +52,8 @@ public class GridVideoViewContainerAdapter extends VideoViewAdapter {
 //            Log.d(TAG, "mItemHeight" + mItemHeight);
 
             int screenHeight = ScreenUtil.getScreenHeight(mContext)-ScreenUtil.getToolbarHeight(mContext);
-            int screenWidth = ScreenUtil.getScreenWidth(mContext);
-            mItemWidth = screenWidth/3;
+            mItemWidth = ScreenUtil.dip2px(160);
             mItemHeight = screenHeight/2;
-            Log.d(TAG, "mItemWidth:" + mItemWidth);
-            Log.d(TAG, "mItemHeight" + mItemHeight);
         }
     }
 

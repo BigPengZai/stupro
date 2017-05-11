@@ -5,6 +5,7 @@ import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.onlyhiedu.mobile.Utils.ScreenUtil;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -32,8 +33,7 @@ public class SmallVideoViewAdapter extends VideoViewAdapter {
 //            mItemHeight = outMetrics.heightPixels / 4;
 
             int screenHeight = ScreenUtil.getScreenHeight(mContext)-ScreenUtil.getToolbarHeight(mContext);
-            int screenWidth = ScreenUtil.getScreenWidth(mContext);
-            mItemWidth = screenWidth/3;
+            mItemWidth = ScreenUtil.dip2px(160);
             mItemHeight = screenHeight/2;
         }
     }

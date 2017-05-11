@@ -10,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-
 import com.onlyhiedu.mobile.R;
-import io.agore.propeller.UserStatusData;
-import io.agore.propeller.VideoInfoData;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import io.agore.propeller.UserStatusData;
+import io.agore.propeller.VideoInfoData;
 
 
 public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -81,8 +81,10 @@ public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ViewGroup) mInflater.inflate(R.layout.video_view_container, parent, false);
-        v.getLayoutParams().width = mItemWidth;
-        v.getLayoutParams().height = mItemHeight;
+        ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+        layoutParams.width = mItemWidth;
+        layoutParams.height = mItemHeight;
+        v.setLayoutParams(layoutParams);
         mDefaultChildItem = v.getChildCount();
         return new VideoUserStatusHolder(v);
     }
