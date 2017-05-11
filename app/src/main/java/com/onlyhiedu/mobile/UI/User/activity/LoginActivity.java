@@ -109,6 +109,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String pwd = mEditPwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
             mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
+            Log.d(TAG, ":"+StringUtils.getDeviceId(this));
         }
     }
 
