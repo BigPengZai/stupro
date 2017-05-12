@@ -104,7 +104,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.tv_total_room)
     TextView mTv_Total_Room;
     @BindView(R.id.image_full_screen)
-    View mImageFullScreen;
+    ImageView mImageFullScreen;
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -793,6 +793,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(mImageCourseWareP);
 
             mDrawView.clearAnimation();
+
+            mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
+
         } else {
             mScrollView.setLayoutParams(mScrollViewFullP);
             mDrawView.setLayoutParams(mDrawViewFullP);
@@ -800,6 +803,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mSwitch = true;
 
             mPresenter.startDrawViewFullAnimation(mDrawView, rate);
+
+            mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
         }
     }
 
