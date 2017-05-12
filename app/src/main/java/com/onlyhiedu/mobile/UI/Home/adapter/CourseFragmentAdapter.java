@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
@@ -44,7 +45,35 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
                 "-"+
                 item.getEndTime()
         );
-
+        switch (item.subject) {
+            case "地理":
+                h.mIv_Class.setImageResource(R.mipmap.dili);
+                break;
+            case "化学":
+                h.mIv_Class.setImageResource(R.mipmap.huaxue);
+                break;
+            case "历史":
+                h.mIv_Class.setImageResource(R.mipmap.lishi);
+                break;
+            case "生物":
+                h.mIv_Class.setImageResource(R.mipmap.shengwu);
+                break;
+            case "数学":
+                h.mIv_Class.setImageResource(R.mipmap.shuxue);
+                break;
+            case "物理":
+                h.mIv_Class.setImageResource(R.mipmap.wuli);
+                break;
+            case "英语":
+                h.mIv_Class.setImageResource(R.mipmap.yinyu);
+                break;
+            case "语文":
+                h.mIv_Class.setImageResource(R.mipmap.yuwen);
+                break;
+            case "政治":
+                h.mIv_Class.setImageResource(R.mipmap.zhengzhi);
+                break;
+        }
         int state = UserUtil.isClassIn(item);
         switch (state){
             case 0:
@@ -64,6 +93,7 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
                 break;
         }
 
+
 //        {
 //        View view = h.itemView;
 //        view.setScaleY(0.7f);
@@ -71,6 +101,7 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
 //        ViewCompat.animate(view).scaleX(1.0f).scaleY(1.0f).setDuration(500).setInterpolator(new OvershootInterpolator()).start();
 //        }
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_course)
@@ -83,6 +114,8 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
         TextView mTv_Soon;
         @BindView(R.id.tv_in)
         TextView mTv_In;
+        @BindView(R.id.iv_class)
+        ImageView mIv_Class;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
