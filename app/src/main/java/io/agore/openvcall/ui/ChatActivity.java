@@ -150,7 +150,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
         mPresenter.setImageWidth(imageWidth);
-
         setToolBar();
         initRoomData();
         //登录信令系统成功后  登录通信频道
@@ -178,6 +177,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
+            //暂时 关闭计时
 //            initRoomTime();
         }
         if (mRoomInfo != null) {
@@ -238,11 +238,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             } else if (diff < 0) {
                 //从迟到时间开始计时
                 mChronometer.setBase(SystemClock.elapsedRealtime() + diff);
-//                int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
-//                mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
                 mChronometer.start();
             } else {
-                mChronometer.start();
+//                mChronometer.start();
 
             }
         } catch (Exception e) {
@@ -325,11 +323,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         sendMessage(UPDATE_FINISH_ROOM);
                     }
                     // 提前3分钟 通知即将推出教室
-                    if (l > (mRoomDix + 3 * 60 * 1000) && l < (mRoomDix + 3 * 60 * 1000 + 1000)) {
+                    if (l > (mRoomDix + 12 * 60 * 1000) && l < (mRoomDix + 12 * 60 * 1000 + 1000)) {
                         sendMessage(UPDATE_NOTIFY);
                     }
-
-
                 }
             };
         }
@@ -367,7 +363,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void startRoomTime() {
-        mChronometer.start();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mChronometer.setBase(SystemClock.elapsedRealtime());
+                int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
+                mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
+                mChronometer.setText("00:00:00");
+                mChronometer.start();
+            }
+        });
     }
 
     private void setToolBar() {
@@ -955,7 +960,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 rtcEngine().muteLocalAudioStream(mAudioMuted);
                 worker().getRtcEngine().setEnableSpeakerphone(false);
                 mRl_bg.setVisibility(View.GONE);
-                mChronometer.start();
             }
         });
     }
@@ -1219,12 +1223,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
-//        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
-//        if (mLong > mRoomDix) {
-//            mIsBack = true;
-//            chronometer.stop();
-//            startFinishTimer();
-//        }
-
+        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
+        if (mLong > mRoomDix) {
+            chronometer.stop();
+            startFinishTimer();
+        }
     }
 }

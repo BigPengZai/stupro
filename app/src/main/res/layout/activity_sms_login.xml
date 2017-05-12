@@ -48,6 +48,7 @@
             android:src="@mipmap/iphone"/>
 
         <EditText
+            android:textColor="@color/white"
             android:maxLength="11"
             android:id="@+id/edit_number"
             android:layout_width="match_parent"
@@ -79,6 +80,7 @@
             android:src="@mipmap/password"/>
 
         <EditText
+            android:textColor="@color/white"
             android:maxLength="4"
             android:id="@+id/edit_code"
             android:layout_width="0dp"
@@ -111,6 +113,7 @@
 
 
     <Button
+        android:textColor="@color/c9"
         android:id="@+id/btn_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

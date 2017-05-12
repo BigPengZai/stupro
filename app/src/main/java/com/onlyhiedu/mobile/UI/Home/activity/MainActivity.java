@@ -60,7 +60,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mNavigation.setOnNavigationItemSelectedListener(this);
         showHideFragment(mClassFragment);
         mNavigation.setItemIconTintList(null);
-
         //        String deviceInfo = StringUtils.getDeviceId();
 //        Log.d(TAG, "deviceInfo:" + deviceInfo);
     }

@@ -66,10 +66,12 @@ public class UserUtil {
             Date room_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             Date now = df.parse(nowTime);
+            //上课中
             if (now.getTime() > room_start.getTime() && now.getTime() < room_end.getTime()) {
                 return 1;
             }
-            if (now.getTime() < room_start.getTime() && now.getTime() > (room_start.getTime() - 5 * 60 * 1000)) {
+            //即将开始
+            if (now.getTime() < room_start.getTime() && now.getTime() > (room_start.getTime() - 10 * 60 * 1000)) {
                 return 2;
             }
         } catch (ParseException e) {
