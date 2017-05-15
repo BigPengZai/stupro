@@ -11,15 +11,20 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,9 +55,11 @@ import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +75,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
+import io.agore.openvcall.model.User;
 import io.agore.propeller.Constant;
 import io.agore.propeller.UserStatusData;
 import io.agore.propeller.VideoInfoData;
@@ -105,6 +113,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     TextView mTv_Total_Room;
     @BindView(R.id.image_full_screen)
     ImageView mImageFullScreen;
+    @BindView(R.id.msg_list)
+    RecyclerView msgListView;
+    @BindView(R.id.edit)
+    EditText mEditText;
+    @BindView(R.id.ll_msg)
+    LinearLayout mLlMsg;
+    @BindView(R.id.but_im)
+    TextView mTvIm;
+
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -163,6 +180,23 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
 
+
+        initMessageList();
+    }
+
+    private InChannelMessageListAdapter mMsgAdapter;
+
+    private ArrayList<io.agore.openvcall.model.Message> mMsgList;
+
+
+    private void initMessageList() {
+        mMsgList = new ArrayList<>();
+
+        mMsgAdapter = new InChannelMessageListAdapter(this, mMsgList);
+        mMsgAdapter.setHasStableIds(true);
+        msgListView.setAdapter(mMsgAdapter);
+        msgListView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        msgListView.addItemDecoration(new MessageListDecoration());
     }
 
 
@@ -191,6 +225,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             return;
         }
     }
+
+
+
 
     private void initRoomTime() {
         mHandler = new Handler() {
@@ -750,7 +787,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean mSwitch; //全屏半屏
     private float rate;      //缩放比例
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen,R.id.but_im,R.id.tv_send})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -777,7 +814,94 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
                 setBoardViewLayoutParams(mSwitch);
                 break;
+            case R.id.but_im:
+                if(mLlMsg.getVisibility() == View.GONE){
+                    mLlMsg.setVisibility(View.VISIBLE);
+                    mTvIm.setBackgroundResource(R.drawable.im_text_bg2);
+                    mTvIm.setTextColor(getResources().getColor(R.color.im_text_color2));
+                    TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(),0,1,1);
+                    animation.setDuration(500);
+                    mLlMsg.startAnimation(animation);
+
+                }else{
+                    mLlMsg.setVisibility(View.VISIBLE);
+                    mTvIm.setBackgroundResource(R.drawable.im_text_bg);
+                    mTvIm.setTextColor(getResources().getColor(R.color.im_text_color));
+                    TranslateAnimation animation = new TranslateAnimation(0,-mLlMsg.getWidth(),1,1);
+                    animation.setDuration(500);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mLlMsg.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    mLlMsg.startAnimation(animation);
+                }
+                break;
+
+            case R.id.tv_send:
+                String msgStr = mEditText.getText().toString();
+                if (TextUtils.isEmpty(msgStr)) {
+                    return;
+                }
+                sendChannelMsg(msgStr);
+
+                mEditText.setText("");
+
+                io.agore.openvcall.model.Message msg = new io.agore.openvcall.model.Message(io.agore.openvcall.model.Message.MSG_TYPE_TEXT,
+                        new User(config().mUid, String.valueOf(config().mUid)), msgStr);
+                notifyMessageChanged(msg);
+
+                break;
         }
+    }
+
+    private int mDataStreamId;
+    private void sendChannelMsg(String msgStr) {
+        RtcEngine rtcEngine = rtcEngine();
+        if (mDataStreamId <= 0) {
+            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
+        }
+
+        if (mDataStreamId < 0) {
+            String errorMsg = "Create data stream error happened " + mDataStreamId;
+            showLongToast(errorMsg);
+            return;
+        }
+
+        byte[] encodedMsg;
+        try {
+            encodedMsg = msgStr.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            encodedMsg = msgStr.getBytes();
+        }
+
+        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
+    }
+
+    private void notifyMessageChanged(io.agore.openvcall.model.Message msg) {
+        mMsgList.add(msg);
+
+        int MAX_MESSAGE_COUNT = 16;
+
+        if (mMsgList.size() > MAX_MESSAGE_COUNT) {
+            int toRemove = mMsgList.size() - MAX_MESSAGE_COUNT;
+            for (int i = 0; i < toRemove; i++) {
+                mMsgList.remove(i);
+            }
+        }
+
+        mMsgAdapter.notifyDataSetChanged();
     }
 
     /**

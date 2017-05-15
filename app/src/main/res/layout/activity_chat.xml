@@ -17,43 +17,59 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
-            android:gravity="center"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
 
             <Chronometer
-                android:textColor="@color/c_F42440"
-                android:layout_marginRight="2dp"
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
+                android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
-                android:textColor="@color/c_F42440"
+                android:textColor="@color/c_F42440"/>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/"/>
+                android:layout_marginRight="2dp"
+                android:text="/"
+                android:textColor="@color/c_F42440"/>
+
             <TextView
-                android:layout_marginRight="@dimen/size_7"
                 android:id="@+id/tv_total_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_7"
                 android:text="01:00:00"/>
 
             <TextView
                 android:id="@+id/but_dismiss"
-                android:textColor="@color/select_log_out"
-                android:background="@drawable/select_log_out"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_log_out"
+                android:paddingBottom="@dimen/size_7"
                 android:paddingLeft="@dimen/size_18"
                 android:paddingRight="@dimen/size_18"
                 android:paddingTop="@dimen/size_7"
-                android:textSize="@dimen/size_16"
-                android:paddingBottom="@dimen/size_7"
+                android:text="我要下课"
+                android:textColor="@color/select_log_out"
+                android:textSize="@dimen/size_16"/>
+
+            <TextView
+                android:id="@+id/but_im"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我要下课"/>
+                android:background="@drawable/im_text_bg"
+                android:paddingBottom="@dimen/size_7"
+                android:layout_marginLeft="@dimen/size_15"
+                android:paddingLeft="@dimen/size_18"
+                android:paddingRight="@dimen/size_18"
+                android:paddingTop="@dimen/size_7"
+                android:text="聊天"
+                android:textColor="@color/im_text_color"
+                android:textSize="@dimen/size_16"/>
 
         </LinearLayout>
 
@@ -63,10 +79,10 @@
 
     <!--上课-->
     <LinearLayout
-        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/ll_video"
         android:layout_width="160dp"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
 
         <io.agore.openvcall.ui.TeacherVideoView
@@ -84,12 +100,13 @@
             android:layout="@layout/small_video_view_dock"/>
     </LinearLayout>
 
+
     <!--白版-->
     <com.onlyhiedu.mobile.Widget.MyScrollView
-        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_toRightOf="@+id/ll_video"
         android:background="@color/white">
 
@@ -101,8 +118,8 @@
             <ImageView
                 android:id="@+id/image_course_ware"
                 android:layout_width="match_parent"
-                android:scaleType="fitXY"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"/>
 
             <com.onlyhiedu.mobile.Widget.draw.DrawView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -125,6 +142,50 @@
 
     </com.onlyhiedu.mobile.Widget.MyScrollView>
 
+    <!-- IM -->
+    <LinearLayout
+        android:id="@+id/ll_msg"
+        android:visibility="gone"
+        android:layout_width="160dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/msg_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:transcriptMode="normal"
+            android:layout_weight="1"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:maxLines="2"
+                android:scrollbars="vertical"/>
+
+            <TextView
+                android:id="@+id/tv_send"
+                android:layout_width="45dp"
+                android:layout_height="40dp"
+                android:background="@color/c_D8D8D8"
+                android:gravity="center"
+                android:text="发送"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 
     <ImageView
@@ -132,20 +193,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:padding="@dimen/size_12"
-        android:src="@mipmap/ic_full_screen"/>
+        android:src="@mipmap/ic_full_screen"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/rl_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/white">
+
         <ProgressBar
             android:id="@+id/iv_loading"
             android:layout_width="50dp"
