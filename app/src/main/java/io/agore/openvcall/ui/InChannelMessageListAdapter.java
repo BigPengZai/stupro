@@ -28,23 +28,39 @@ public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(mMsglist.get(position).getType()==1){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = mInflater.inflate(R.layout.in_channel_message, parent, false);
-        return new MessageHolder(v);
+        if (viewType == 1) {
+            View v = mInflater.inflate(R.layout.in_channel_message, parent, false);
+            return new MessageHolder(v);
+        } else {
+            View v = mInflater.inflate(R.layout.in_channel_message2, parent, false);
+            return new MessageHolder2(v);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message msg = mMsglist.get(position);
-
-        MessageHolder myHolder = (MessageHolder) holder;
-//        String sender = msg.getSender().name;
-//        if (TextUtils.isEmpty(sender)) {
-//            myHolder.itemView.setBackgroundResource(R.drawable.rounded_bg_blue);
-//        } else {
-//            myHolder.itemView.setBackgroundResource(R.drawable.rounded_bg);
-//        }
-        myHolder.msgContent.setText(msg.getContent());
+        switch (holder.getItemViewType()) {
+            case 1:
+                MessageHolder myHolder = (MessageHolder) holder;
+                myHolder.msgContent.setText(msg.getContent());
+                break;
+            case 0:
+                MessageHolder2 myHolder2 = (MessageHolder2) holder;
+                myHolder2.msgContent.setText(msg.getContent());
+                break;
+        }
     }
 
     @Override
@@ -65,4 +81,14 @@ public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerVi
             msgContent = (TextView) v.findViewById(R.id.msg_content);
         }
     }
+
+    public class MessageHolder2 extends RecyclerView.ViewHolder {
+        public TextView msgContent;
+
+        public MessageHolder2(View v) {
+            super(v);
+            msgContent = (TextView) v.findViewById(R.id.msg_content);
+        }
+    }
+
 }

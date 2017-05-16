@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -227,8 +226,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-
-
     private void initRoomTime() {
         mHandler = new Handler() {
             @Override
@@ -428,7 +425,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         mUidsList.clear();
                     }
                     quitCall();
-                }else{
+                } else {
                     Toast.makeText(mContext, "课程未结束", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -775,19 +772,19 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-    private ViewGroup.LayoutParams mScrollViewP;
-    private ViewGroup.LayoutParams mDrawViewP;
-    private ViewGroup.LayoutParams mImageCourseWareP;
+    private RelativeLayout.LayoutParams mScrollViewP;
+    private FrameLayout.LayoutParams mDrawViewP;
+    private FrameLayout.LayoutParams mImageCourseWareP;
 
 
     private RelativeLayout.LayoutParams mScrollViewFullP;
     private FrameLayout.LayoutParams mDrawViewFullP;
     private FrameLayout.LayoutParams mImageCourseWareFullP;
 
-    private boolean mSwitch; //全屏半屏
+    private boolean mSwitch; //全屏半屏  true 全屏，false半屏
     private float rate;      //缩放比例
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen,R.id.but_im,R.id.tv_send})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.tv_send})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -799,12 +796,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             case R.id.image_full_screen:
 
                 if (mScrollViewP == null) {
-                    mScrollViewP = mScrollView.getLayoutParams();
-                    mDrawViewP = mDrawView.getLayoutParams();
-                    mImageCourseWareP = mImageCourseWare.getLayoutParams();
+                    mScrollViewP = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
+                    mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
+                    mImageCourseWareP = (FrameLayout.LayoutParams) mImageCourseWare.getLayoutParams();
                     rate = (float) mScreenWidth / (float) mScrollView.getWidth();
                 }
                 if (mScrollViewFullP == null) {
+
                     mScrollViewFullP = new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
                     mScrollViewFullP.topMargin = com.onlyhiedu.mobile.Utils.ScreenUtil.getToolbarHeight(this);
 
@@ -815,20 +813,20 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 setBoardViewLayoutParams(mSwitch);
                 break;
             case R.id.but_im:
-                if(mLlMsg.getVisibility() == View.GONE){
+                if (mLlMsg.getVisibility() == View.GONE) {
                     mLlMsg.setVisibility(View.VISIBLE);
                     mTvIm.setBackgroundResource(R.drawable.im_text_bg2);
                     mTvIm.setTextColor(getResources().getColor(R.color.im_text_color2));
-                    TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(),0,1,1);
-                    animation.setDuration(500);
+                    TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
+                    animation.setDuration(300);
                     mLlMsg.startAnimation(animation);
 
-                }else{
+                } else {
                     mLlMsg.setVisibility(View.VISIBLE);
                     mTvIm.setBackgroundResource(R.drawable.im_text_bg);
                     mTvIm.setTextColor(getResources().getColor(R.color.im_text_color));
-                    TranslateAnimation animation = new TranslateAnimation(0,-mLlMsg.getWidth(),1,1);
-                    animation.setDuration(500);
+                    TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
+                    animation.setDuration(300);
                     animation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -867,6 +865,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private int mDataStreamId;
+
     private void sendChannelMsg(String msgStr) {
         RtcEngine rtcEngine = rtcEngine();
         if (mDataStreamId <= 0) {
@@ -891,16 +890,18 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void notifyMessageChanged(io.agore.openvcall.model.Message msg) {
         mMsgList.add(msg);
-
-        int MAX_MESSAGE_COUNT = 16;
-
-        if (mMsgList.size() > MAX_MESSAGE_COUNT) {
-            int toRemove = mMsgList.size() - MAX_MESSAGE_COUNT;
-            for (int i = 0; i < toRemove; i++) {
-                mMsgList.remove(i);
-            }
+        int position = mMsgList.size() - 1;
+        LinearLayoutManager m = (LinearLayoutManager) msgListView.getLayoutManager();
+        int firstItem = m.findFirstVisibleItemPosition();
+        int lastItem = m.findLastVisibleItemPosition();
+        if (position <= firstItem) {
+            msgListView.smoothScrollToPosition(position);
+        } else if (position <= lastItem) {
+            int top = msgListView.getChildAt(position - firstItem).getTop();
+            msgListView.smoothScrollBy(0, top);
+        } else {
+            msgListView.smoothScrollToPosition(position);
         }
-
         mMsgAdapter.notifyDataSetChanged();
     }
 
@@ -1212,12 +1213,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             case AGEventHandler.EVENT_TYPE_ON_DATA_CHANNEL_MSG:
                 peerUid = (Integer) data[0];
                 final byte[] content = (byte[]) data[1];
-//                notifyMessageChanged(new Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
+                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
                 break;
             case AGEventHandler.EVENT_TYPE_ON_AGORA_MEDIA_ERROR: {
                 int error = (int) data[0];
                 String description = (String) data[1];
-//                notifyMessageChanged(new Message(new User(0, null), error + " " + description));
+                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(0, null), error + " " + description));
                 break;
             }
         }
