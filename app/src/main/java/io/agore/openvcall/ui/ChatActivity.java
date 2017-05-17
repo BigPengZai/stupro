@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewStub;
@@ -46,6 +47,7 @@ import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
+import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
@@ -145,6 +147,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private long mRoomDix;
     private long mLong;
     private boolean mIsBack; //返回键是否可点击
+//    private InputMethodManager imm;
 
     @Override
     protected void initInject() {
@@ -162,7 +165,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mScreenWidth = ScreenUtil.getScreenWidth(this);
         mRequestManager = Glide.with(this);
-
+//        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
         mPresenter.setImageWidth(imageWidth);
@@ -211,7 +214,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
             //暂时 关闭计时
-//            initRoomTime();
+            initRoomTime();
         }
         if (mRoomInfo != null) {
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
@@ -220,9 +223,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //            mChannelName = "DebugChannel_XWC";
             //学生uid
             mUid = mRoomInfo.getChannelStudentId() + "";
-        } else {
+        } /*else {
             return;
-        }
+        }*/
     }
 
 
@@ -545,7 +548,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
                                     if (whiteboardData != null && whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
                                         mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
-                                        mImageFullScreen.setVisibility(View.VISIBLE);
+                                        //TODO
+//                                        mImageFullScreen.setVisibility(View.VISIBLE);
                                     }
                                     break;
                             }
@@ -609,7 +613,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             }
                             if (type == ChatPresenter.Create) {
                                 mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
-                                mImageFullScreen.setVisibility(View.VISIBLE);
+                                //TODO
+//                                mImageFullScreen.setVisibility(View.VISIBLE);
                             }
                             if (type == ChatPresenter.PaintText) {
                                 mDrawView.setDrawingMode(DrawingMode.values()[1]);
@@ -745,6 +750,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data, int page) {
         Log.d(Constants.Async, "课件图片size : " + data.size());
+
+        if (mImageFullScreen.getVisibility() == View.GONE) {
+            mImageFullScreen.setVisibility(View.VISIBLE);
+        }
 
         int imageWidth = 0;
         if (!mSwitch) {
@@ -1345,6 +1354,32 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         mWithHeadset = plugged;
     }
+
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            if (this.getCurrentFocus() != null) {
+//                if (this.getCurrentFocus().getWindowToken() != null) {
+//                    imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+//                            InputMethodManager.HIDE_NOT_ALWAYS);
+//                }
+//            }
+//        }
+//        return super.onTouchEvent(event);
+//    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (SystemUtil.isShouldHideKeyboard(v, ev)) {
+                SystemUtil.hideKeyboard(v.getWindowToken(),this);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
 
     @Override
     public void showError(String msg) {

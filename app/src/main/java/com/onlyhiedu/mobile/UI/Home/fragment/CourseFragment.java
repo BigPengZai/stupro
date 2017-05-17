@@ -174,7 +174,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     public void onItemClick(int position, long itemId) {
         mItem = mAdapter.getItem(position);
         Log.d(TAG, "uuid:" + mItem.getUuid());
-        if (mItem != null /*&& mItem.isClickAble*/) {
+        if (mItem != null && mItem.isClickAble) {
             mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
             mPresenter.getRoomInfoList(mItem.getUuid());
         } else {
