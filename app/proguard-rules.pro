@@ -41,6 +41,14 @@
   public *;
 }
 
+# OkHttp3
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn okio.**
+
+#retrofit2
+-dontwarn retrofit2.**
+
 -keep class com.google.gson.stream.** { *; }
 -keepattributes EnclosingMethod
 
@@ -98,8 +106,8 @@ public static ** valueOf(java.lang.String);
 #   *;
 #}
 
--dontwarn okio.**
--dontwarn retrofit2.**
+
+
 # UMeng
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);

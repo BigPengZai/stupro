@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
+import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.InputStream;
@@ -56,7 +57,8 @@ public class App extends Application {
         super.onCreate();
         instance = this;
 
-//        LeakCanary.install(this);
+        LeakCanary.install(this);
+
 
         initGlide();
 

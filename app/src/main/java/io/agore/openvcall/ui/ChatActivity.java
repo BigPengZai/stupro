@@ -1,6 +1,7 @@
 package io.agore.openvcall.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -40,6 +41,7 @@ import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.Model.bean.finishclass.RequestFinishClass;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
@@ -50,8 +52,6 @@ import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
-import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
-import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,12 +121,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.ll_msg)
     LinearLayout mLlMsg;
     @BindView(R.id.but_im)
-    TextView mTvIm;
+    TextView mTvIM;
+    @BindView(R.id.im_point)
+    View mIMPoint;
+
 
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private RequestManager mRequestManager;
+
+
     //课程id
     private String mUuid;
     private CourseList.ListBean mListBean;
@@ -165,7 +170,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mScreenWidth = ScreenUtil.getScreenWidth(this);
         mRequestManager = Glide.with(this);
-//        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
 
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
         mPresenter.setImageWidth(imageWidth);
@@ -184,6 +189,21 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
         initMessageList();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this,NetworkStateService.class);
+        startService(intent);
+        }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent intent = new Intent(this,NetworkStateService.class);
+        stopService(intent);
     }
 
     private InChannelMessageListAdapter mMsgAdapter;
@@ -577,52 +597,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (type == ChatPresenter.DRAW) {
-                                mDrawView.setDrawingTool(DrawingTool.values()[0]);
-                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
-                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.Line) {
-                                mDrawView.setDrawingTool(DrawingTool.values()[1]);
-                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
-                                mPresenter.drawPoint(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.SET) {
-                                mPresenter.setDrawableStyle(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.SCROLL) {
-                                mPresenter.ScrollDrawView(ChatActivity.this, mScrollView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.Eraser) {
-                                mDrawView.setDrawingMode(DrawingMode.values()[2]);
-                                mDrawView.setDrawingTool(DrawingTool.values()[2]);
-                                mPresenter.drawEraser(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.Oval) {
-                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
-                                mDrawView.setDrawingTool(DrawingTool.values()[4]);
-                                mPresenter.drawOval(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.Rect) {
-                                mDrawView.setDrawingMode(DrawingMode.values()[0]);
-                                mDrawView.setDrawingTool(DrawingTool.values()[2]);
-                                mPresenter.drawRectangle(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.Destory) {
-                                SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
-                            }
                             if (type == ChatPresenter.Create) {
                                 mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
                                 //TODO
 //                                mImageFullScreen.setVisibility(View.VISIBLE);
                             }
-                            if (type == ChatPresenter.PaintText) {
-                                mDrawView.setDrawingMode(DrawingMode.values()[1]);
-                                mPresenter.drawText(mDrawView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.EraserRect) {
-                                mDrawView.setDrawingMode(DrawingMode.values()[3]);
-                                mPresenter.drawEraserRect(mDrawView, notifyWhiteboard);
+                            if (type == ChatPresenter.Destory) {
+                                SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                             }
                             if (type == ChatPresenter.ChangeDoc) {
                                 mDrawView.restartDrawing();
@@ -631,9 +612,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 String docPage = split[1].substring(10, split[1].length());
                                 mPresenter.getCourseWareImageList(docID, Integer.parseInt(docPage));
                             }
+                            if (type == ChatPresenter.SCROLL) {
+                                mPresenter.ScrollDrawView(ChatActivity.this, mScrollView, notifyWhiteboard);
+                            }
                             if (type == ChatPresenter.ClearScreen) {
                                 mDrawView.restartDrawing();
                             }
+                            mPresenter.startDraw(type,mDrawView,notifyWhiteboard);
+
                         }
                     });
 
@@ -823,39 +809,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 break;
             case R.id.but_im:
                 if (mLlMsg.getVisibility() == View.GONE) {
-                    mLlMsg.setVisibility(View.VISIBLE);
-                    mTvIm.setBackgroundResource(R.drawable.im_text_bg2);
-                    mTvIm.setTextColor(getResources().getColor(R.color.im_text_color2));
-                    TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
-                    animation.setDuration(300);
-                    mLlMsg.startAnimation(animation);
-
+                    mIMPoint.setVisibility(View.GONE);
+                    showIMLayout();
                 } else {
-                    mLlMsg.setVisibility(View.VISIBLE);
-                    mTvIm.setBackgroundResource(R.drawable.im_text_bg);
-                    mTvIm.setTextColor(getResources().getColor(R.color.im_text_color));
-                    TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
-                    animation.setDuration(300);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mLlMsg.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                    mLlMsg.startAnimation(animation);
+                    hindIMLayout();
                 }
                 break;
-
             case R.id.tv_send:
                 String msgStr = mEditText.getText().toString();
                 if (TextUtils.isEmpty(msgStr)) {
@@ -872,6 +831,43 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 break;
         }
     }
+
+
+    private void showIMLayout(){
+        mLlMsg.setVisibility(View.VISIBLE);
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
+        TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
+        animation.setDuration(300);
+        mLlMsg.startAnimation(animation);
+    }
+    private void hindIMLayout(){
+        mLlMsg.setVisibility(View.VISIBLE);
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
+        TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
+        animation.setDuration(300);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mLlMsg.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mLlMsg.startAnimation(animation);
+    }
+
+
+
 
     private int mDataStreamId;
 
@@ -912,6 +908,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             msgListView.smoothScrollToPosition(position);
         }
         mMsgAdapter.notifyDataSetChanged();
+
+        if(mLlMsg.getVisibility()==View.GONE){
+            mIMPoint.setVisibility(View.VISIBLE);
+        }
+
     }
 
     /**
@@ -1220,14 +1221,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 break;
             case AGEventHandler.EVENT_TYPE_ON_DATA_CHANNEL_MSG:
+
                 peerUid = (Integer) data[0];
                 final byte[] content = (byte[]) data[1];
                 notifyMessageChanged(new io.agore.openvcall.model.Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
                 break;
             case AGEventHandler.EVENT_TYPE_ON_AGORA_MEDIA_ERROR: {
-                int error = (int) data[0];
-                String description = (String) data[1];
-                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(0, null), error + " " + description));
+//                int error = (int) data[0];
+//                String description = (String) data[1];
+//                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(0, null), error + " " + description));
                 break;
             }
         }
@@ -1356,25 +1358,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            if (this.getCurrentFocus() != null) {
-//                if (this.getCurrentFocus().getWindowToken() != null) {
-//                    imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
-//                            InputMethodManager.HIDE_NOT_ALWAYS);
-//                }
-//            }
-//        }
-//        return super.onTouchEvent(event);
-//    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if (SystemUtil.isShouldHideKeyboard(v, ev)) {
-                SystemUtil.hideKeyboard(v.getWindowToken(),this);
+                SystemUtil.hideKeyboard(v.getWindowToken(), this);
             }
         }
         return super.dispatchTouchEvent(ev);

@@ -20,7 +20,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- 网络状态 -->
+     <!--   <receiver android:name=".Receiver.ChatActivityReceive">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>-->
 
+        <service android:name="com.onlyhiedu.mobile.Service.NetworkStateService" >
+            <intent-filter android:priority="1000" >
+                <action android:name="com.onlyhiedu.mobile.Service.NetworkStateService" />
+            </intent-filter>
+        </service>
         <!-- User -->
         <activity
             android:name=".UI.Home.activity.SplashActivity"
@@ -69,6 +80,9 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}"/>
+
+
+
     </application>
 
 </manifest>

@@ -56,6 +56,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     ErrorLayout mErrorLayout;
 
 
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);

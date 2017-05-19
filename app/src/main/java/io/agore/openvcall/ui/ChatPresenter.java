@@ -24,6 +24,8 @@ import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
+import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -354,6 +356,50 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         return 0;
     }
 
+
+
+
+    public void startDraw(int type, DrawView view, NotifyWhiteboardOperator data) {
+        if (type == ChatPresenter.DRAW) {
+            view.setDrawingTool(DrawingTool.values()[0]);
+            view.setDrawingMode(DrawingMode.values()[0]);
+            drawPoint(view, data);
+        }
+        if (type == ChatPresenter.Line) {
+            view.setDrawingTool(DrawingTool.values()[1]);
+            view.setDrawingMode(DrawingMode.values()[0]);
+            drawPoint(view, data);
+        }
+        if (type == ChatPresenter.SET) {
+            setDrawableStyle(view, data);
+        }
+        if (type == ChatPresenter.Eraser) {
+            view.setDrawingMode(DrawingMode.values()[2]);
+            view.setDrawingTool(DrawingTool.values()[2]);
+            drawEraser(view, data);
+        }
+        if (type == ChatPresenter.Oval) {
+            view.setDrawingMode(DrawingMode.values()[0]);
+            view.setDrawingTool(DrawingTool.values()[4]);
+            drawOval(view, data);
+        }
+        if (type == ChatPresenter.Rect) {
+            view.setDrawingMode(DrawingMode.values()[0]);
+            view.setDrawingTool(DrawingTool.values()[2]);
+            drawRectangle(view, data);
+        }
+        if (type == ChatPresenter.PaintText) {
+            view.setDrawingMode(DrawingMode.values()[1]);
+            drawText(view, data);
+        }
+        if (type == ChatPresenter.EraserRect) {
+            view.setDrawingMode(DrawingMode.values()[3]);
+            drawEraserRect(view, data);
+        }
+
+    }
+
+
     //课时消耗
     @Override
     public void uploadClassConsumption(String courseUuid) {
@@ -393,8 +439,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
 
-
-    public String responseFinishClass(String  confirm,int stuId,String channelId){
+    public String responseFinishClass(String confirm, int stuId, String channelId) {
         //发送点对点 消息
         ResponseFinishClassData finish = new ResponseFinishClassData();
         ResponseFinishClassData.ResponseParamBean responseParamBean = new ResponseFinishClassData.ResponseParamBean();
@@ -405,7 +450,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         finish.ResponseParam = responseParamBean;
         responseParamBean.Confirm = confirm;
         responseParamBean.FinishTime = DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss);
-        return  JsonUtil.toJson(finish);
+        return JsonUtil.toJson(finish);
     }
 
 
