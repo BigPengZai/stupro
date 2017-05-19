@@ -213,7 +213,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void initMessageList() {
         mMsgList = new ArrayList<>();
-
         mMsgAdapter = new InChannelMessageListAdapter(this, mMsgList);
         mMsgAdapter.setHasStableIds(true);
         msgListView.setAdapter(mMsgAdapter);
@@ -931,6 +930,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
 
+
         } else {
             mScrollView.setLayoutParams(mScrollViewFullP);
             mDrawView.setLayoutParams(mDrawViewFullP);
@@ -940,6 +940,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mPresenter.startDrawViewFullAnimation(mDrawView, rate);
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
+
         }
     }
 
@@ -1381,6 +1382,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mLong > mRoomDix) {
             chronometer.stop();
             startFinishTimer();
+        }
+        //真实数据不会 截取
+        if (chronometer.getText().toString().length() > 8) {
+            String substring = chronometer.getText().toString().substring(3);
+            chronometer.setText(substring);
         }
     }
 }

@@ -15,6 +15,7 @@ import com.onlyhiedu.mobile.Dagger.Component.DaggerActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import javax.inject.Inject;
 
@@ -40,7 +41,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-
+        //友盟  此方法与统计分析sdk中统计日活的方法无关！请务必调用此方法！
+        PushAgent.getInstance(this).onAppStart();
         //竖屏锁定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

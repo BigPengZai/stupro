@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
@@ -60,7 +61,7 @@
         <activity android:name=".UI.Setting.activity.SettingActivity"/>
         <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
         <activity android:name=".UI.Setting.activity.FeedBackActivity"/>
-
+        <activity android:name=".UI.Home.activity.KnowTitleActivity"/>
         <activity
             android:name="io.agore.openvcall.ui.ChatActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -75,14 +76,43 @@
         <activity android:name=".UI.Consumption.activity.ConsumpActivity"/>
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
         <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="58db519a65b6d64e0e001633"/>
-        <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="591d1b53677baa102c00175c" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="25e92a031cccf6e3d941b9c9d857eb2c">
+        </meta-data>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-
+                <data android:scheme="tencent1105946445" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".UI.Home.activity.KnowActivity"/>
     </application>
+
+
 
 </manifest>

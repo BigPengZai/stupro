@@ -12,7 +12,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 2
-        versionName "1.0.1"
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -44,21 +44,21 @@ android {
     productFlavors {
 //        onlyedu{}
         qihu360 {} // 360手机助手
-        yingyongbao {} // 腾讯应用宝
-       wandoujia {} // 豌豆荚
-        baidu {} // 百度手机助手
-        miui {} // 小米
-        flyme {} // 魅族
-        lenovo {} // 联想-乐商店
-        oppo {} // Oppo-可可软件商店
-        huawei {} // 华为
-        vivo {} // vivo
-        hiapk {} // 安卓市场
-        sj91 {} // 91手机助手
+//        yingyongbao {} // 腾讯应用宝
+//       wandoujia {} // 豌豆荚
+//        baidu {} // 百度手机助手
+//        miui {} // 小米
+//        flyme {} // 魅族
+//        lenovo {} // 联想-乐商店
+//        oppo {} // Oppo-可可软件商店
+//        huawei {} // 华为
+//        vivo {} // vivo
+//        hiapk {} // 安卓市场
+//        sj91 {} // 91手机助手
 //        gfan {} // 机锋
-        appchina {} // 应用汇
+//        appchina {} // 应用汇
 //        wangyi163 {} // 网易应用
-        anzhi {} // 安智市场
+//        anzhi {} // 安智市场
 //        google {} // google play
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
@@ -135,4 +135,12 @@ dependencies {
     //友盟
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/agora-rtc-sdk.jar')
+    compile files('libs/SocialSDK_QQ_Simplify.jar')
+    compile files('libs/SocialSDK_WeChat_Simplify.jar')
+    compile files('libs/umeng_shareboard_widget.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_shareboard.jar')
+    compile files('libs/umeng_social_tool.jar')
+    compile project(':PushSDK')
 }

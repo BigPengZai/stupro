@@ -36,7 +36,6 @@ public class SettingItemView extends RelativeLayout {
         mImage = (ImageView) findViewById(R.id.right_icon);
         mDividerView = findViewById(R.id.item_bottom_divider);
         mLeft_icon = (ImageView) findViewById(R.id.iv_icon);
-
         TypedArray localTypedArray = context.obtainStyledAttributes(attrs, R.styleable.setting_view);
         setTitleText(localTypedArray.getString(R.styleable.setting_view_item_titleText));
         setDetailText(localTypedArray.getString(R.styleable.setting_view_item_detailText));

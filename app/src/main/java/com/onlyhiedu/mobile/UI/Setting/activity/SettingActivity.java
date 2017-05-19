@@ -38,7 +38,7 @@ public class SettingActivity extends SimpleActivity {
     }
 
 
-    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out,R.id.ll_clean_cache})
+    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out,R.id.ll_clean_cache,R.id.setting_about})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
@@ -55,7 +55,9 @@ public class SettingActivity extends SimpleActivity {
             case R.id.ll_clean_cache:
                 cleanAppCache();
                 break;
-
+            case R.id.setting_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
         }
     }
 

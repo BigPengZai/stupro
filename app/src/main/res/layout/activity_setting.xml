@@ -61,7 +61,13 @@
             android:id="@+id/item_bottom_divider"
             style="@style/horizontal_line"/>
     </LinearLayout>
-
+    <com.onlyhiedu.mobile.Widget.SettingItemView
+        android:layout_marginLeft="@dimen/login_padding"
+        android:id="@+id/setting_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ecdemo:item_showDivider="true"
+        ecdemo:item_titleText="关于我们"/>
 
     <Button
         android:id="@+id/btn_out"

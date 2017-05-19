@@ -6,6 +6,8 @@
         <attr name="item_showDivider" format="boolean"/>
         <attr name="item_icon" format="reference|color"/>
         <attr name="item_icon_left" format="reference"/>
+        <attr name="item_toggle_btn" format="reference"/>
+
     </declare-styleable>
 
 

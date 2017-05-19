@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:src="@mipmap/right"/>
-
     </LinearLayout>
 
 
