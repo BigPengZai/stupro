@@ -24,7 +24,6 @@ public interface ChatContract {
 
         void showCourseWareImageList(List<CourseWareImageList> data,int page);
 
-        void showClassConsumption(String msg);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
@@ -53,6 +52,5 @@ public interface ChatContract {
 
         void drawText(DrawView view, NotifyWhiteboardOperator json);
 
-        void uploadClassConsumption(String courseUuid);
     }
 }

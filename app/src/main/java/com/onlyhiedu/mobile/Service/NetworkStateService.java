@@ -60,23 +60,4 @@ public class NetworkStateService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    /** 
-     * 判断网络是否可用 
-     */  
-    public static boolean isNetworkAvailable(Context context) {  
-        // 获取网络连接管理器
-        ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
-
-        // 获取当前网络状态信息
-        NetworkInfo[] info = mgr.getAllNetworkInfo();  
-        if (info != null) {  
-            for (int i = 0; i < info.length; i++) {  
-                if (info[i].getState() == NetworkInfo.State.CONNECTED) {  
-                    return true;  
-                }  
-            }  
-        }
-
-        return false;  
-    }  
 }

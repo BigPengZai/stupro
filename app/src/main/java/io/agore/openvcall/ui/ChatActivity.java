@@ -760,11 +760,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     }
 
-    @Override
-    public void showClassConsumption(String msg) {
-        Log.d(TAG, "msg:" + msg);
-    }
-
 
     private RelativeLayout.LayoutParams mScrollViewP;
     private FrameLayout.LayoutParams mDrawViewP;

@@ -103,8 +103,8 @@ public abstract class VersionUpdateActivity extends BaseActivity<UpdatePresenter
     private void downApk(String url) {
         if (mDownDialog == null) {
             mVersionUpdateHelper = new VersionUpdateHelper();
-            mDownDialog = mVersionUpdateHelper.getDialog(this);
         }
+        mDownDialog = mVersionUpdateHelper.getDialog(this);
         mDownDialog.show();
         try {
             //更新
@@ -158,17 +158,4 @@ public abstract class VersionUpdateActivity extends BaseActivity<UpdatePresenter
     }
 
 
-//    /**
-//     * 安装新版本应用
-//     */
-//    private void installApp(String path) {
-//        File appFile = new File(path);
-//        if (!appFile.exists()) {
-//            return;
-//        }
-//        // 跳转到新版本应用安装页面
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(Uri.parse("file://" + path), "application/vnd.android.package-archive");
-//        startActivity(intent);
-//    }
 }

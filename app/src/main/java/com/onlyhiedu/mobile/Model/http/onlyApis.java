@@ -3,7 +3,6 @@ package com.onlyhiedu.mobile.Model.http;
 
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
-import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -28,9 +27,9 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://192.168.1.252:8090/";
+    String HOST = "http://192.168.1.252:8090/";
     //公网环境
-    String HOST = "http://api.onlyeduhi.com/";
+    //String HOST = "http://api.onlyeduhi.com/";
 
     /**
      * 客户端登录
@@ -160,12 +159,6 @@ public interface onlyApis {
     @POST("client/user/userFeedback")
     Flowable<onlyHttpResponse<FeedBackInfo>> requestFeedBackInfo(@Field("content") String content);
 
-    /**
-     * 课时消耗
-     */
-    @FormUrlEncoded
-    @POST("client/course/updateEndTime")
-    Flowable<onlyHttpResponse<ClassConsumption>> uploadClassConsumption(@Field("courseUuid") String courseUuid);
 
     /**
      * 注册

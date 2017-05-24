@@ -22,12 +22,6 @@
         android:theme="@style/AppTheme">
 
         <!-- 网络状态 -->
-     <!--   <receiver android:name=".Receiver.ChatActivityReceive">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>-->
-
         <service android:name="com.onlyhiedu.mobile.Service.NetworkStateService" >
             <intent-filter android:priority="1000" >
                 <action android:name="com.onlyhiedu.mobile.Service.NetworkStateService" />
@@ -72,8 +66,7 @@
             android:label="@string/label_settings"
             android:screenOrientation="portrait"/>
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
-        <activity android:name=".UI.Consumption.activity.ConsumptionActivity"/>
-        <activity android:name=".UI.Consumption.activity.ConsumpActivity"/>
+        <activity android:name=".UI.Consumption.activity.ConsumeActivity"/>
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
         <meta-data
             android:name="UMENG_CHANNEL"

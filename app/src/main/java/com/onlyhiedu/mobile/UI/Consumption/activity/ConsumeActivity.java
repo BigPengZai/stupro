@@ -1,13 +1,15 @@
 package com.onlyhiedu.mobile.UI.Consumption.activity;
 
-import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Consumption.adapter.ConsumeAdapter;
 import com.onlyhiedu.mobile.UI.Consumption.presenter.ConsumptionPresenter;
 import com.onlyhiedu.mobile.UI.Consumption.presenter.contract.ConsumptionContract;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import java.util.List;
 
@@ -17,15 +19,15 @@ import butterknife.BindView;
  * Created by pengpeng on 2017/4/15.
  */
 
-public class ConsumpActivity extends BaseActivity<ConsumptionPresenter> implements ConsumptionContract.View {
-    @BindView(R.id.tv_account)
-    TextView mTv_Account;
-    //总课时
-    @BindView(R.id.tv_total)
-    TextView mTv_Total;
-    //剩余时间
-    @BindView(R.id.tv_remaing)
-    TextView mTv_Remaing;
+public class ConsumeActivity extends BaseActivity<ConsumptionPresenter> implements ConsumptionContract.View {
+
+
+    private ConsumeAdapter mAdapter;
+
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
 
     @Override
     protected void initInject() {
@@ -46,9 +48,9 @@ public class ConsumpActivity extends BaseActivity<ConsumptionPresenter> implemen
     @Override
     public void showSuccess(List<ConsumptionData> data) {
         if (data != null && data.size() != 0) {
-            mTv_Account.setText(data.get(0).classPackageName);
-            mTv_Total.setText(data.get(0).totalTime);
-            mTv_Remaing.setText(data.get(0).surplusTime);
+            mAdapter = new ConsumeAdapter(this);
+            UIUtils.setRcDecorationAndLayoutManager(mContext, mRecyclerView, mAdapter);
+            mAdapter.addAll(data);
         }
     }
 

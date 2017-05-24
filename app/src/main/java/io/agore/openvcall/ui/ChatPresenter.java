@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
-import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.board.MethodType;
 import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
@@ -397,26 +396,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             drawEraserRect(view, data);
         }
 
-    }
-
-
-    //课时消耗
-    @Override
-    public void uploadClassConsumption(String courseUuid) {
-        Flowable<onlyHttpResponse<ClassConsumption>> flowable = mRetrofitHelper.fetchUploadClassConsumption(courseUuid);
-        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
-            @Override
-            public void onNextData(onlyHttpResponse data) {
-                if (getView() != null && data != null) {
-                    if (!data.isHasError()) {
-                        getView().showClassConsumption(data.getMessage());
-                    } else {
-                        getView().showError(data.getMessage());
-                    }
-                }
-            }
-        };
-        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
 

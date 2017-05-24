@@ -10,27 +10,22 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumpActivity;
-import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumptionActivity;
+import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.KnowActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.presenter.MePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.MeContract;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
-import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.SettingActivity;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.IUmengCallback;
 import com.umeng.social.tool.UMImageMark;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -103,7 +98,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
                 startActivity(new Intent(getContext(), MyInfoActivity.class));
                 break;
             case R.id.setting_consumption:
-                startActivity(new Intent(getContext(), ConsumpActivity.class));
+                startActivity(new Intent(getContext(), ConsumeActivity.class));
                 break;
             case R.id.setting_share:
                 //分享file 文件

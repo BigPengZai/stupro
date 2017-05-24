@@ -7,11 +7,8 @@ package com.onlyhiedu.mobile.Model.bean;
 
 public class ConsumptionData {
 
-
         public String classPackageName;
         public String totalTime;
         public String surplusTime;
-
-
 
 }

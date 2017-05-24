@@ -29,7 +29,6 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-
         return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_course, parent, false));
     }
 

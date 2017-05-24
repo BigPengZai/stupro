@@ -1,7 +1,6 @@
 package com.onlyhiedu.mobile.App;
 
 import android.app.Application;
-import android.nfc.Tag;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
@@ -66,7 +65,7 @@ public class App extends Application {
         super.onCreate();
         instance = this;
 
-//        LeakCanary.install(this);
+        LeakCanary.install(this);
 
         initGlide();
         DaoUtil.getInstance(this);

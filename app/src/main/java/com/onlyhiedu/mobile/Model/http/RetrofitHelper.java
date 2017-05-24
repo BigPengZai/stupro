@@ -5,7 +5,6 @@ import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
-import com.onlyhiedu.mobile.Model.bean.ClassConsumption;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -190,9 +189,6 @@ public class RetrofitHelper {
         return sOnlyApis.requestFeedBackInfo(content);
     }
 
-    public Flowable<onlyHttpResponse<ClassConsumption>> fetchUploadClassConsumption(String uuid) {
-        return sOnlyApis.uploadClassConsumption(uuid);
-    }
 
     //注册
     public Flowable<onlyHttpResponse> fetchRegisterInfo(String username, String phone, String pwd, String authCode) {
