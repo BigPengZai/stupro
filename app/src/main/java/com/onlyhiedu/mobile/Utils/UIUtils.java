@@ -66,6 +66,18 @@ public class UIUtils {
         recyclerView.setAdapter(adapter);
     }
 
+    //横向
+    public static void setHorizontalLayoutManager(Context context, RecyclerView recyclerView, BaseRecyclerAdapter adapter) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+      recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(context)
+//                .colorResId(R.color.list_divider)
+//                .size(1)
+//                .build());
+        recyclerView.setAdapter(adapter);
+    }
     public static void setRecycleAdapter(Context context, RecyclerView recyclerView, BaseRecyclerAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);

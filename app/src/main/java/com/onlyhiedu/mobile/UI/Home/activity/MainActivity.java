@@ -18,6 +18,7 @@ import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
+import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -49,6 +50,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     BottomNavigationView mNavigation;
     public boolean mDisable;
     public boolean mEable;
+    private HomeFragment mHomeFragment;
 
     @Override
     protected void initInject() {
@@ -64,9 +66,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     protected void initView() {
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
-        loadMultipleRootFragment(R.id.fl_main_content, 0, mClassFragment, mMeFragment);
+        mHomeFragment = new HomeFragment();
+        loadMultipleRootFragment(R.id.fl_main_content, 0,mHomeFragment, mClassFragment, mMeFragment);
         mNavigation.setOnNavigationItemSelectedListener(this);
-        showHideFragment(mClassFragment);
+        showHideFragment(mHomeFragment);
         mNavigation.setItemIconTintList(null);
         //        String deviceInfo = StringUtils.getDeviceId();
 //        Log.d(TAG, "deviceInfo:" + deviceInfo);
@@ -125,9 +128,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.one) {
-            showHideFragment(mClassFragment);
+            showHideFragment(mHomeFragment);
         }
         if (item.getItemId() == R.id.tow) {
+            showHideFragment(mClassFragment);
+        }
+        if (item.getItemId() == R.id.thr) {
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }

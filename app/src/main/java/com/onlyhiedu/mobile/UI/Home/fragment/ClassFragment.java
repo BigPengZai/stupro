@@ -49,11 +49,9 @@ public class ClassFragment extends SimpleFragment implements TabLayout.OnTabSele
     public void onTabSelected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
             case 0:
-                Log.d(TAG, "000000");
                 MobclickAgent.onEvent(mContext,"tab_nostart");
                 break;
             case 1:
-                Log.d(TAG, "11111");
                 MobclickAgent.onEvent(mContext,"tab_finish");
                 break;
         }

@@ -143,4 +143,6 @@ dependencies {
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_tool.jar')
     compile project(':PushSDK')
+    //banner
+    compile 'com.youth.banner:banner:1.4.9'
 }
