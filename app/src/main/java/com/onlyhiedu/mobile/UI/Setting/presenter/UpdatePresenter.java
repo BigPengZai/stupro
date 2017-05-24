@@ -25,17 +25,19 @@ public class UpdatePresenter extends RxPresenter<UpdateContract.View> implements
     }
 
     @Override
-    public void updateVersion() {
+    public void updateVersion(boolean isMain) {
         Flowable<onlyHttpResponse<UpdateVersionInfo>> flowable = mRetrofitHelper.fetchUpdateVersion();
 
         MyResourceSubscriber<onlyHttpResponse<UpdateVersionInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<UpdateVersionInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<UpdateVersionInfo> data) {
                 if (getView() != null && data.getData() != null) {
-                    if (!data.isHasError())
+                    if (!data.isHasError()) {
+                        data.getData().setMain(isMain);
                         getView().showUpdateSuccess(data.getData());
-                    else
+                    } else {
                         getView().showError(data.getMessage());
+                    }
 
                 }
             }

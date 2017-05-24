@@ -38,6 +38,13 @@ public class KnowActivity extends SimpleActivity {
         WantKnowFragmentAdapter mAdapter = new WantKnowFragmentAdapter(this);
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         ArrayList<String> items = new ArrayList<>();
+
+//        Q1：嗨课堂APP能做什么？
+//        Q2：可以通过哪些方式上课？
+//        Q3：有哪些课程类型可供选择？
+//        Q4：一对一课程有什么优势？
+//        Q5：如何取消已经预定的课程？
+//        Q6：嗨课堂公众号有哪些主要内容？
         items.add("Q1: 嗨课堂App能做什么?");
         items.add("Q2: 可以通过哪些方式上课?");
         items.add("Q3: 有哪些课程类型可供选择?");

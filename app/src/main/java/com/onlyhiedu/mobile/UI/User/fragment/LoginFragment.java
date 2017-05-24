@@ -18,6 +18,7 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,8 +81,14 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     @Override
     public void showUser() {
+        mPresenter.setPushToken(PushAgent.getInstance(mContext).getRegistrationId());
         startActivity(new Intent(getActivity(), MainActivity.class));
         getActivity().finish();
+    }
+
+    @Override
+    public void setPush() {
+
     }
 
     @Override

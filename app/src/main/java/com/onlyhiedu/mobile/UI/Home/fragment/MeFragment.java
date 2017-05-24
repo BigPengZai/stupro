@@ -114,7 +114,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
                 startActivity(new Intent(getContext(), KnowActivity.class));
                 break;
             case R.id.toggle_btn:
-                initPushState();
+//                initPushState();
                 break;
         }
     }

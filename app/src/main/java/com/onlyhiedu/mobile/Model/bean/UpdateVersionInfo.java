@@ -13,6 +13,15 @@ public class UpdateVersionInfo {
 
     private String url;
     private String version;
+    private boolean isMain;
+
+    public boolean isMain() {
+        return isMain;
+    }
+
+    public void setMain(boolean main) {
+        isMain = main;
+    }
 
     public String getUrl() {
         return url;

@@ -28,7 +28,7 @@ public interface onlyApis {
 
 
     //测试环境
-    //String HOST = "http://192.168.1.252:8090/";
+//    String HOST = "http://192.168.1.252:8090/";
     //公网环境
     String HOST = "http://api.onlyeduhi.com/";
 
@@ -194,4 +194,10 @@ public interface onlyApis {
     @POST("client/student/getClassTimeInfo")
     Flowable<onlyHttpResponse<List<ConsumptionData>>> getTimeInfo();
 
+    /**
+     * 设置推送
+     * */
+    @FormUrlEncoded
+    @POST("client/student/bingAccount")
+    Flowable<onlyHttpResponse> getPushInfo(@Field("deviceToken") String deviceToken);
 }

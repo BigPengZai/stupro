@@ -50,4 +50,13 @@ public class KnowTitleActivity extends SimpleActivity {
         //http://www.onlyeduhi.com/app/problem5.html
         mWb_Service.loadUrl("http://www.onlyeduhi.com/app/problem"+position+".html");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mWb_Service != null) {
+            mWb_Service.removeAllViews();
+            mWb_Service.destroy();
+        }
+    }
 }

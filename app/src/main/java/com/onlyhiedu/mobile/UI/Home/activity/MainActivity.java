@@ -75,7 +75,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void initData() {
         super.initData();
-        mPresenter.updateVersion();
+        mPresenter.updateVersion(true);
     }
 
     //关闭 推送

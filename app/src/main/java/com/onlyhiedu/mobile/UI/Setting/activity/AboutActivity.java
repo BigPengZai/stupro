@@ -5,11 +5,14 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.Utils.AppUtil;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import butterknife.BindView;
@@ -29,7 +32,10 @@ public class AboutActivity extends VersionUpdateActivity {
     RelativeLayout mRl_Update;
     @BindView(R.id.rl_line)
     RelativeLayout mRl_Line;
-
+    @BindView(R.id.tv_vc)
+    TextView mTv_Vc;
+    @BindView(R.id.tv_vc_def)
+    TextView mTv_vc_def;
     public static final String PHONE_NUM = "400-876-3300";
 
     @Override
@@ -45,13 +51,15 @@ public class AboutActivity extends VersionUpdateActivity {
     @Override
     protected void initView() {
         setToolBar("关于我们");
+        mTv_vc_def.setText("嗨课堂V"+AppUtil.getVerName(AboutActivity.this));
+        mTv_Vc.setText(AppUtil.getVerName(AboutActivity.this));
     }
 
     @OnClick({R.id.rl_update, R.id.rl_line})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_update:
-                mPresenter.updateVersion();
+                mPresenter.updateVersion(false);
                 break;
             case R.id.rl_line:
                 if (UIUtils.requestPermission(this, MainActivity.CALL_REQUEST_CODE, new String[]{Manifest.permission.CALL_PHONE})) {

@@ -20,6 +20,7 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -115,8 +116,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showUser() {
+        mPresenter.setPushToken(PushAgent.getInstance(this).getRegistrationId());
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    @Override
+    public void setPush() {
+        Toast.makeText(this,""+PushAgent.getInstance(this).getRegistrationId(),Toast.LENGTH_SHORT).show();
     }
 
     @Override

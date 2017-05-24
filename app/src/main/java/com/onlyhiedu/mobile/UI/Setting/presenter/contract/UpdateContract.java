@@ -13,6 +13,6 @@ public interface UpdateContract {
         void showUpdateSuccess(UpdateVersionInfo versionInfo);
     }
     interface Presenter extends BasePresenter<UpdateContract.View>{
-        void updateVersion();
+        void updateVersion(boolean isMain);
     }
 }

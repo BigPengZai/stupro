@@ -12,6 +12,8 @@ public interface LoginContract {
     interface View extends BaseView {
 
         void showUser();
+
+        void setPush();
     }
 
     interface Presenter extends BasePresenter<LoginContract.View> {

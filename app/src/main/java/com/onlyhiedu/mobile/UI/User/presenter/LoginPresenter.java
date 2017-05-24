@@ -55,4 +55,25 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+
+    /*
+    * 推送
+    * */
+
+    public void setPushToken(String device_token) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchPushToken(device_token);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().setPush();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
 }

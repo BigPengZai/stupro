@@ -80,6 +80,7 @@ public class App extends Application {
         UMShareAPI.get(this);
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(false);
+        Config.isJumptoAppStore = true;
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
 
@@ -111,7 +112,7 @@ public class App extends Application {
 
     {
         //配置 微信 以及 QQ app_id
-        PlatformConfig.setWeixin("wx2b401a5aaf830bf1", "wx2b401a5aaf830bf1");
+        PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "wxfeb18b738b0c2f1c");
         PlatformConfig.setQQZone("1105946445", "1105946445");
     }
 
