@@ -16,8 +16,12 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
+import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
+import com.umeng.message.common.inter.ITagManager;
+import com.umeng.message.tag.TagManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -77,12 +81,34 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     public void showAuthLoginSuccess(AuthUserDataBean info) {
         if (info != null) {
             Log.d(TAG, "" + info.getDeviceId());
+            addUTag();
             startActivity(new Intent(this, MainActivity.class));
             AppManager.getAppManager().finishActivity(LoginActivity.class);
             finish();
         }
     }
 
+    @Override
+    public void setPush() {
+
+    }
+
+
+    private void addUTag() {
+        //tag 手机号码 md5
+        String tag = Encrypt.getMD5(mEditNumber.getText().toString());
+        Log.d(TAG, "tag:"+tag+"长度："+tag.length());
+        PushAgent.getInstance(mContext).getTagManager().add(new TagManager.TCallBack() {
+            @Override
+            public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
+                //isSuccess表示操作是否成功
+                Log.d(TAG, "ITag:" + result);
+                if (isSuccess) {
+                    mPresenter.setPushToken(PushAgent.getInstance(mContext).getRegistrationId(), tag);
+                }
+            }
+        }, tag);
+    }
     @Override
     public void showError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();

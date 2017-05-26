@@ -16,6 +16,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
+import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -125,16 +126,19 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     private void addUTag() {
+        //tag 手机号码 md5
+        String tag = Encrypt.getMD5(mEditNumber.getText().toString());
+        Log.d(TAG, "tag:"+tag+"长度："+tag.length());
         PushAgent.getInstance(this).getTagManager().add(new TagManager.TCallBack() {
             @Override
             public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
                 //isSuccess表示操作是否成功
                 Log.d(TAG, "ITag:" + result);
                 if (isSuccess) {
-                    mPresenter.setPushToken(PushAgent.getInstance(LoginActivity.this).getRegistrationId(), SPUtil.getToken());
+                    mPresenter.setPushToken(PushAgent.getInstance(LoginActivity.this).getRegistrationId(), tag);
                 }
             }
-        }, SPUtil.getToken());
+        }, tag);
     }
 
     @Override

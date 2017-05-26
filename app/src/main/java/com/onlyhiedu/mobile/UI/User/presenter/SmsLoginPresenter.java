@@ -84,5 +84,27 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+    /*
+    * 推送
+    * */
+
+    public void setPushToken(String device_token,String tag) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchPushToken(device_token,tag);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().setPush();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+
 
 }

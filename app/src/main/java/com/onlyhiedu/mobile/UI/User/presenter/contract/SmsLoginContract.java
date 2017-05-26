@@ -17,6 +17,8 @@ public interface SmsLoginContract {
         void showAuthSuccess(int info);
 
         void showAuthLoginSuccess(AuthUserDataBean info);
+
+        void setPush();
     }
 
     interface Presenter extends BasePresenter<View> {
