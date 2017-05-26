@@ -215,7 +215,7 @@ public class RetrofitHelper {
         return sOnlyApis.getTimeInfo();
     }
     //设置 推送token
-    public Flowable<onlyHttpResponse> fetchPushToken(String deviceToken) {
-        return sOnlyApis.getPushInfo(deviceToken);
+    public Flowable<onlyHttpResponse> fetchPushToken(String deviceToken,String tag) {
+        return sOnlyApis.getPushInfo(deviceToken,tag);
     }
 }

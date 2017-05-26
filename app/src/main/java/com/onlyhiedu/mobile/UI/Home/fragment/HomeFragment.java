@@ -61,9 +61,14 @@ public class HomeFragment extends SimpleFragment {
     }
 
     private void initData() {
-        mSmellFragmentAdapter.addItem("");
-        mSmellFragmentAdapter.addItem("");
-        mSmellFragmentAdapter.addItem("");
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("");
+        arrayList.add("");
+        arrayList.add("");
+        arrayList.add("");
+        arrayList.add("");
+        arrayList.add("");
+        mSmellFragmentAdapter.addAll(arrayList);
         UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Teacher, mSmellFragmentAdapter);
         UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Good, mSmellFragmentAdapter);
 

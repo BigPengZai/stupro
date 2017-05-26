@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 
 public class SmellFragmentAdapter extends BaseRecyclerAdapter {
     public SmellFragmentAdapter(Context context) {
-        super(context, ONLY_FOOTER);
+        super(context, VIEW_TYPE_NORMAL);
     }
 
     @Override

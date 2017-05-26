@@ -60,8 +60,8 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
     * 推送
     * */
 
-    public void setPushToken(String device_token) {
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchPushToken(device_token);
+    public void setPushToken(String device_token,String tag) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchPushToken(device_token,tag);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {

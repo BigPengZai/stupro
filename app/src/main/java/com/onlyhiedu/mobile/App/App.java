@@ -1,8 +1,11 @@
 package com.onlyhiedu.mobile.App;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
@@ -10,11 +13,15 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -39,6 +46,7 @@ public class App extends Application {
         return instance;
     }
 
+    public boolean isTag;
     static {
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);
@@ -87,6 +95,7 @@ public class App extends Application {
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
                 Log.d("App", "pushToken:" + deviceToken);
+
             }
 
             @Override
@@ -94,6 +103,20 @@ public class App extends Application {
                 Log.d("App", "onFailure:" + s+s1);
             }
         });
+
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                isTag = true;
+                Intent intent = new Intent(App.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+//                Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
+            }
+        };
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
+
+
     }
 
     private void initGlide() {
@@ -114,5 +137,4 @@ public class App extends Application {
         PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "wxfeb18b738b0c2f1c");
         PlatformConfig.setQQZone("1105946445", "1105946445");
     }
-
 }

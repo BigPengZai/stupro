@@ -67,12 +67,16 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
         mHomeFragment = new HomeFragment();
-        loadMultipleRootFragment(R.id.fl_main_content, 0,mHomeFragment, mClassFragment, mMeFragment);
+        if (App.getInstance().isTag) {
+            mNavigation.setSelectedItemId(R.id.tow);
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment, mMeFragment);
+            App.getInstance().isTag = false;
+        } else {
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment, mMeFragment);
+//            showHideFragment(mHomeFragment);
+        }
         mNavigation.setOnNavigationItemSelectedListener(this);
-        showHideFragment(mHomeFragment);
         mNavigation.setItemIconTintList(null);
-        //        String deviceInfo = StringUtils.getDeviceId();
-//        Log.d(TAG, "deviceInfo:" + deviceInfo);
     }
 
     @Override
@@ -90,7 +94,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                     @Override
                     public void run() {
                         mDisable = true;
-                        Log.d(TAG, "关闭状态："+mDisable);
+                        Log.d(TAG, "关闭状态：" + mDisable);
                     }
                 });
             }
@@ -101,7 +105,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                     @Override
                     public void run() {
                         mDisable = false;
-                        Log.d(TAG, "关闭状态："+mDisable);
+                        Log.d(TAG, "关闭状态：" + mDisable);
                     }
                 });
             }
@@ -114,13 +118,13 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             @Override
             public void onSuccess() {
                 mEable = true;
-                Log.d(TAG, "打开状态："+mDisable);
+                Log.d(TAG, "打开状态：" + mDisable);
             }
 
             @Override
             public void onFailure(String s, String s1) {
                 mEable = false;
-                Log.d(TAG, "打开状态："+mDisable);
+                Log.d(TAG, "打开状态：" + mDisable);
             }
         });
     }

@@ -21,6 +21,9 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.common.inter.ITagManager;
+import com.umeng.message.tag.TagManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -110,20 +113,33 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String pwd = mEditPwd.getText().toString();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
             mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
-            Log.d(TAG, ":"+StringUtils.getDeviceId(this));
+            Log.d(TAG, ":" + StringUtils.getDeviceId(this));
         }
     }
 
     @Override
     public void showUser() {
-        mPresenter.setPushToken(PushAgent.getInstance(this).getRegistrationId());
+        addUTag();
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
+    private void addUTag() {
+        PushAgent.getInstance(this).getTagManager().add(new TagManager.TCallBack() {
+            @Override
+            public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
+                //isSuccess表示操作是否成功
+                Log.d(TAG, "ITag:" + result);
+                if (isSuccess) {
+                    mPresenter.setPushToken(PushAgent.getInstance(LoginActivity.this).getRegistrationId(), SPUtil.getToken());
+                }
+            }
+        }, SPUtil.getToken());
+    }
+
     @Override
     public void setPush() {
-        Toast.makeText(this,""+PushAgent.getInstance(this).getRegistrationId(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "" + PushAgent.getInstance(this).getRegistrationId(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -146,4 +162,5 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             }
         }
     }
+
 }

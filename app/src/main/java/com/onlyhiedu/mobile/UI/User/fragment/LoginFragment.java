@@ -12,6 +12,7 @@ import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
+import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.SPUtil;
@@ -19,6 +20,8 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
+import com.umeng.message.common.inter.ITagManager;
+import com.umeng.message.tag.TagManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -81,11 +84,24 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     @Override
     public void showUser() {
-        mPresenter.setPushToken(PushAgent.getInstance(mContext).getRegistrationId());
+//        mPresenter.setPushToken(PushAgent.getInstance(mContext).getRegistrationId());
+        addUTag();
         startActivity(new Intent(getActivity(), MainActivity.class));
         getActivity().finish();
     }
 
+    private void addUTag() {
+        PushAgent.getInstance(mContext).getTagManager().add(new TagManager.TCallBack() {
+            @Override
+            public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
+                //isSuccess表示操作是否成功
+                Log.d(TAG, "ITag:" + result);
+                if (isSuccess) {
+                    mPresenter.setPushToken(PushAgent.getInstance(mContext).getRegistrationId(), "onlyhi");
+                }
+            }
+        }, "onlyhi");
+    }
     @Override
     public void setPush() {
 
