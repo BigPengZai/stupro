@@ -75,9 +75,18 @@
                     android:text="官网进行咨询预约课程"
                     android:textColor="#999999"
                     android:textSize="@dimen/sp_14" />
+
             </LinearLayout>
 
-
+            <TextView
+                android:text="刷新"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_marginTop="3dp"
+                android:background="@color/c_F42440"
+                android:textColor="@color/white"
+                android:layout_width="70dp"
+                android:layout_height="30dp"/>
 
         </LinearLayout>
     </RelativeLayout>

@@ -111,22 +111,6 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         }
 
-//        if (mSwipeRefresh.isRefreshing()) {
-//            mAdapter.clear();
-//            mAdapter.addAll(data);
-//            mSwipeRefresh.setRefreshing(false);
-//
-//        } else {
-//            mAdapter.addAll(data);
-//            mSwipeRefresh.setOnLoading(false);  //设置可加加载
-//        }
-//        if (data == null || data.size() < 10) {
-//            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-//            mSwipeRefresh.setOnLoading(true);  //设置不可加更多
-//        } else {
-//            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_MORE, true);
-//        }
-
         if (isRefresh) {  //刷新
             mSwipeRefresh.setRefreshing(false);
             if (data.size() == 0) { //没有数据

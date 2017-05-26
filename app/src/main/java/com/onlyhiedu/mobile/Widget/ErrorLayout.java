@@ -198,6 +198,7 @@ public class ErrorLayout extends LinearLayout implements
                 mLoading.setVisibility(View.VISIBLE);
                 img.setVisibility(View.GONE);
                 tv.setText(R.string.error_view_loading);
+
                 clickEnable = false;
                 break;
             case NODATA:

@@ -829,16 +829,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void showIMLayout(){
         mLlMsg.setVisibility(View.VISIBLE);
-        mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
-        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
         TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
         animation.setDuration(300);
         mLlMsg.startAnimation(animation);
     }
     private void hindIMLayout(){
         mLlMsg.setVisibility(View.VISIBLE);
-        mTvIM.setBackgroundResource(R.drawable.im_text_bg);
-        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
         TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
         animation.setDuration(300);
         animation.setAnimationListener(new Animation.AnimationListener() {

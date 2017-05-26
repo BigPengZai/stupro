@@ -66,14 +66,14 @@
                     android:id="@+id/but_im"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/im_text_bg"
+                    android:background="@drawable/im_text_bg2"
                     android:paddingBottom="@dimen/size_7"
                     android:layout_marginLeft="@dimen/size_15"
                     android:paddingLeft="@dimen/size_18"
                     android:paddingRight="@dimen/size_18"
                     android:paddingTop="@dimen/size_7"
                     android:text="聊天"
-                    android:textColor="@color/im_text_color"
+                    android:textColor="@color/im_text_color2"
                     android:textSize="@dimen/size_16"/>
 
                     <View

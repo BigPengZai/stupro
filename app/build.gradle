@@ -123,26 +123,18 @@ dependencies {
     compile 'com.google.dagger:dagger:2.11-rc2'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.5.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'me.yokeyword:fragmentation:0.10.1'
-    //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
     //Widget
     compile 'com.contrarywind:Android-PickerView:3.0.4'
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
+    compile 'com.youth.banner:banner:1.4.9'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     //友盟
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile files('libs/agora-rtc-sdk.jar')
-    compile files('libs/SocialSDK_QQ_Simplify.jar')
-    compile files('libs/SocialSDK_WeChat_Simplify.jar')
-    compile files('libs/umeng_shareboard_widget.jar')
-    compile files('libs/umeng_social_api.jar')
-    compile files('libs/umeng_social_net.jar')
-    compile files('libs/umeng_social_shareboard.jar')
-    compile files('libs/umeng_social_tool.jar')
     compile project(':PushSDK')
-    //banner
-    compile 'com.youth.banner:banner:1.4.9'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
