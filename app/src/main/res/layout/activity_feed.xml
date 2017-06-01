@@ -58,6 +58,9 @@
 
 
     <EditText
+        android:hint="请填写内容"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
         android:id="@+id/et_feed_back"
         android:layout_width="match_parent"
         android:layout_height="0dp"

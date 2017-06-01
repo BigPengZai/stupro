@@ -25,6 +25,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UmengTool;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -48,8 +49,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
-    public boolean mDisable;
-    public boolean mEable;
+
     private HomeFragment mHomeFragment;
 
     @Override
@@ -67,16 +67,24 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
         mHomeFragment = new HomeFragment();
+        //隐藏首页
+       /* if (App.getInstance().isTag) {
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mClassFragment, mMeFragment);
+            App.getInstance().isTag = false;
+        } else {
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mClassFragment, mMeFragment);
+        }*/
+        //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
             loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment, mMeFragment);
             App.getInstance().isTag = false;
         } else {
             loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment, mMeFragment);
-//            showHideFragment(mHomeFragment);
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
+
     }
 
     @Override
@@ -85,52 +93,19 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mPresenter.updateVersion(true);
     }
 
-    //关闭 推送
-    public void disablePush() {
-        PushAgent.getInstance(this).disable(new IUmengCallback() {
-            @Override
-            public void onSuccess() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDisable = true;
-                        Log.d(TAG, "关闭状态：" + mDisable);
-                    }
-                });
-            }
 
-            @Override
-            public void onFailure(String s, String s1) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDisable = false;
-                        Log.d(TAG, "关闭状态：" + mDisable);
-                    }
-                });
-            }
-        });
-    }
-
-    //打开推送
-    public void enablePush() {
-        PushAgent.getInstance(this).enable(new IUmengCallback() {
-            @Override
-            public void onSuccess() {
-                mEable = true;
-                Log.d(TAG, "打开状态：" + mDisable);
-            }
-
-            @Override
-            public void onFailure(String s, String s1) {
-                mEable = false;
-                Log.d(TAG, "打开状态：" + mDisable);
-            }
-        });
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        //隐藏首页
+       /* if (item.getItemId() == R.id.one) {
+            showHideFragment(mClassFragment);
+        }
+        if (item.getItemId() == R.id.tow) {
+            showHideFragment(mMeFragment);
+            MobclickAgent.onEvent(this, "me_me");
+        }*/
+        //不隐藏首页
         if (item.getItemId() == R.id.one) {
             showHideFragment(mHomeFragment);
         }
@@ -201,6 +176,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
+
 
     @Override
     protected void onDestroy() {

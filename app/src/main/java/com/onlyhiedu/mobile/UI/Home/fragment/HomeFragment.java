@@ -15,6 +15,7 @@ import com.onlyhiedu.mobile.UI.Home.adapter.SmellFragmentAdapter;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.GlideImageLoader;
 import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
@@ -51,6 +52,9 @@ public class HomeFragment extends SimpleFragment {
         images.add(R.mipmap.ic_launcher);
         images.add(R.mipmap.ic_launcher);
         images.add(R.mipmap.ic_launcher);
+
+
+
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setImages(images);
         mBanner.setDelayTime(3000);

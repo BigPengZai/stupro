@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -54,8 +55,8 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
     SettingItemView mSettingItemKnow;
     private String name = "";
     private final int SHARE_REQUEST_CODE = 1;
-    @BindView(R.id.toggle_btn)
-    ToggleButton mToggle_btn;
+
+    private UMImage mUmImage;
 
     @Override
     protected void initInject() {
@@ -87,7 +88,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
         }
     }
 
-    @OnClick({R.id.toggle_btn, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know})
+    @OnClick({ R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_setting:
@@ -108,32 +109,8 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
             case R.id.setting_know:
                 startActivity(new Intent(getContext(), KnowActivity.class));
                 break;
-            case R.id.toggle_btn:
-//                initPushState();
-                break;
         }
     }
-
-    private void initPushState() {
-        MainActivity activity = (MainActivity) getActivity();
-        if (mToggle_btn.isChecked()) {
-            activity.enablePush();
-            if (activity.mDisable) {
-                mToggle_btn.setChecked(true);
-            } else {
-                mToggle_btn.setChecked(false);
-            }
-        } else {
-            activity.disablePush();
-            if (activity.mDisable) {
-                Toast.makeText(getActivity(), "关闭上课提醒了哦。", Toast.LENGTH_SHORT).show();
-                mToggle_btn.setChecked(false);
-            } else {
-                mToggle_btn.setChecked(true);
-            }
-        }
-    }
-
     private void requestSharePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -167,10 +144,12 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
         umImageMark.setMarkBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.logoicon));
         UMWeb web = new UMWeb("http://www.onlyhiedu.com/");
         web.setTitle(name + "邀您体验[嗨课堂]");
-        web.setThumb(new UMImage(mContext, R.mipmap.logoicon));
+        mUmImage = new UMImage(mContext, R.mipmap.logoicon);
+        mUmImage.compressFormat = Bitmap.CompressFormat.PNG;
+        web.setThumb(mUmImage);
         web.setDescription("嗨，快去体验嗨课堂一对一辅导吧！");
         new ShareAction(getActivity()).withMedia(web)
-                .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE/*, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE*/)
+                .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .setCallback(umShareListener).open();
     }
 
@@ -191,10 +170,10 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             String plat = initPlatform(platform);
-            Toast.makeText(mContext, plat + " 分享失败啦,请检查是否安装应用哦。", Toast.LENGTH_SHORT).show();
             if (t != null) {
                 Log.d("throw", "throw:" + t.getMessage());
             }
+            Toast.makeText(mContext, plat + " 分享失败啦,请检查是否安装应用哦。", Toast.LENGTH_SHORT).show();
         }
 
         @Override

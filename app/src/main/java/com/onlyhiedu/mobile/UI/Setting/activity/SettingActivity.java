@@ -2,16 +2,23 @@ package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.IUmengCallback;
+import com.umeng.message.PushAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,9 +32,11 @@ public class SettingActivity extends SimpleActivity {
 
     @BindView(R.id.tv_cache_size)
     TextView mTvCacheSize;
+    @BindView(R.id.toggle_btn)
+    ToggleButton mToggle_btn;
+    public static final String TAG = SettingActivity.class.getSimpleName();
     @Override
     protected int getLayout() {
-
         return R.layout.activity_setting;
     }
 
@@ -35,15 +44,25 @@ public class SettingActivity extends SimpleActivity {
     protected void initEventAndData() {
         setToolBar("设置");
         mTvCacheSize.setText(UIUtils.calculateCacheSize(this));
+        mToggle_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    enablePush();
+                } else {
+                    disablePush();
+                }
+            }
+        });
     }
 
 
-    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out,R.id.ll_clean_cache,R.id.setting_about})
+    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out, R.id.ll_clean_cache, R.id.setting_about})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
                 startActivity(new Intent(this, ModifyPwActivity.class));
-                MobclickAgent.onEvent(this,"setting_modify_pw");
+                MobclickAgent.onEvent(this, "setting_modify_pw");
                 break;
             case R.id.setting_feedback:
                 startActivity(new Intent(this, FeedBackActivity.class));
@@ -61,7 +80,7 @@ public class SettingActivity extends SimpleActivity {
         }
     }
 
-    private void cleanAppCache(){
+    private void cleanAppCache() {
         DialogUtil.showOnlyAlert(this,
                 "提示"
                 , "是否清空缓存?"
@@ -81,6 +100,61 @@ public class SettingActivity extends SimpleActivity {
                 }
         );
     }
+    //关闭 推送
+    public void disablePush() {
+        PushAgent.getInstance(this).disable(new IUmengCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SettingActivity.this, "关闭上课提醒了哦。", Toast.LENGTH_SHORT).show();
+                        mToggle_btn.setChecked(false);
+                        Log.d(TAG, "关闭 推送：  success");
+                    }
+                });
+            }
 
+            @Override
+            public void onFailure(String s, String s1) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mToggle_btn.setChecked(true);
+                        Log.d(TAG, "关闭 推送：  failure");
+                    }
+                });
+            }
+        });
+    }
 
+    //打开推送
+    public void enablePush() {
+        PushAgent.getInstance(this).enable(new IUmengCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SettingActivity.this, "上课提醒已经打开。", Toast.LENGTH_SHORT).show();
+                        mToggle_btn.setChecked(true);
+                        Log.d(TAG, "打开推送：success" );
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mToggle_btn.setChecked(false);
+                        Log.d(TAG, "打开推送：failure" );
+                    }
+                });
+
+            }
+        });
+    }
 }

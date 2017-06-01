@@ -134,7 +134,8 @@ public class App extends Application {
 
     {
         //配置 微信 以及 QQ app_id
-        PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "wxfeb18b738b0c2f1c");
+        PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "bed2a2109e97ec3b280eaff88dd0a03f");
         PlatformConfig.setQQZone("1105946445", "1105946445");
     }
+
 }

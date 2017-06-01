@@ -227,3 +227,13 @@ public static final ** CREATOR;
    public static *** i(...);
    public static *** w(...);
 }
+#微信分享
+-keep class com.tencent.mm.opensdk.** {
+   *;
+}
+-keep class com.tencent.wxop.** {
+   *;
+}
+-keep class com.tencent.mm.sdk.** {
+   *;
+}

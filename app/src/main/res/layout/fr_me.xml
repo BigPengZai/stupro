@@ -77,36 +77,5 @@
         ecdemo:item_icon_left="@mipmap/share"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="分享嗨课堂"/>
-    <!--上课通知-->
-    <LinearLayout
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="11dp"
-            android:src="@mipmap/share"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_weight="1"
-            android:text="上课通知"/>
-        <ToggleButton
-            android:id="@+id/toggle_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@android:color/transparent"
-            android:button="@drawable/selector_toggle_btn"
-            android:checked="true"
-            android:text=""
-            android:textOff=""
-            android:textOn=""
-        />
-    </LinearLayout>
+
 </LinearLayout>
