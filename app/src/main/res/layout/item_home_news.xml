@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="170dp"
+                android:layout_height="90dp"
+                android:paddingRight="@dimen/size_10"
+                android:background="@drawable/selector_comm_settting_item">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/news1"/>
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#80000000"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/white"/>
+
+</RelativeLayout>

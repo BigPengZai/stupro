@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -8,14 +9,14 @@ import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
+import com.onlyhiedu.mobile.Model.bean.HomeNews;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Home.adapter.SmellFragmentAdapter;
+import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
+import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.GlideImageLoader;
 import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
@@ -27,17 +28,22 @@ import butterknife.BindView;
  */
 
 public class HomeFragment extends SimpleFragment {
+
+
+    private HomeNewsAdapter mNewsAdapter;
+
+
     @BindView(R.id.banner)
     Banner mBanner;
     @BindView(R.id.swipe)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.scroll_view)
     ScrollView mScrollView;
-    @BindView(R.id.recycler_teacher)
-    RecyclerView mRecyclerView_Teacher;
     @BindView(R.id.recycler_good)
     RecyclerView mRecyclerView_Good;
-    private SmellFragmentAdapter mSmellFragmentAdapter;
+    @BindView(R.id.viewpager)
+    ViewPager mViewPager;
+
 
     @Override
     protected int getLayoutId() {
@@ -47,14 +53,10 @@ public class HomeFragment extends SimpleFragment {
     @Override
     protected void initEventAndData() {
         initScrollView();
-        mSmellFragmentAdapter = new SmellFragmentAdapter(mContext);
-        ArrayList images = new ArrayList();
-        images.add(R.mipmap.ic_launcher);
-        images.add(R.mipmap.ic_launcher);
-        images.add(R.mipmap.ic_launcher);
-
-
-
+        ArrayList<Integer> images = new ArrayList<>();
+        images.add(R.mipmap.page1);
+        images.add(R.mipmap.page2);
+        images.add(R.mipmap.page3);
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setImages(images);
         mBanner.setDelayTime(3000);
@@ -65,17 +67,12 @@ public class HomeFragment extends SimpleFragment {
     }
 
     private void initData() {
-        ArrayList arrayList = new ArrayList();
-        arrayList.add("");
-        arrayList.add("");
-        arrayList.add("");
-        arrayList.add("");
-        arrayList.add("");
-        arrayList.add("");
-        mSmellFragmentAdapter.addAll(arrayList);
-        UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Teacher, mSmellFragmentAdapter);
-        UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Good, mSmellFragmentAdapter);
-
+        mViewPager.setAdapter(new TeacherPageAdapter(mContext));
+        mViewPager.setOffscreenPageLimit(5);
+        mNewsAdapter = new HomeNewsAdapter(mContext);
+        UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Good, mNewsAdapter);
+        new HomeNews();
+        mNewsAdapter.addAll(HomeNews.datas);
 
     }
 
@@ -129,4 +126,6 @@ public class HomeFragment extends SimpleFragment {
         super.onStop();
         mBanner.stopAutoPlay();
     }
+
+
 }

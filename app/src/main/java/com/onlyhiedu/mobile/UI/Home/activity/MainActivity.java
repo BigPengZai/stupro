@@ -1,15 +1,10 @@
 package com.onlyhiedu.mobile.UI.Home.activity;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -22,16 +17,7 @@ import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.IUmengCallback;
-import com.umeng.message.PushAgent;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UmengTool;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Method;
 
 import butterknife.BindView;
 
@@ -84,6 +70,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
+
+
+
+
+
 
     }
 

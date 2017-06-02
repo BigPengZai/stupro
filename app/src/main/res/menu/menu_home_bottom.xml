@@ -12,7 +12,7 @@
     <!--不隐藏首页-->
     <item
         android:id="@+id/one"
-        android:icon="@drawable/main_radio_button1"
+        android:icon="@drawable/main_radio_button"
         android:title="首页"/>
     <item
         android:id="@+id/tow"

@@ -78,6 +78,8 @@ public class UIUtils {
 //                .build());
         recyclerView.setAdapter(adapter);
     }
+
+
     public static void setRecycleAdapter(Context context, RecyclerView recyclerView, BaseRecyclerAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
