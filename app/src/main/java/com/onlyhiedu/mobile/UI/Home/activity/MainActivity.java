@@ -28,8 +28,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     public static final int CALL_REQUEST_CODE = 110;
 
     private ClassFragment mClassFragment;
-    private
-    MeFragment mMeFragment;
+    private MeFragment mMeFragment;
     private long mExitTime = 0;
 
 
@@ -72,10 +71,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mNavigation.setItemIconTintList(null);
 
 
-
-
-
-
     }
 
     @Override
@@ -83,7 +78,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.initData();
         mPresenter.updateVersion(true);
     }
-
 
 
     @Override
@@ -167,7 +161,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
-
 
 
     @Override
