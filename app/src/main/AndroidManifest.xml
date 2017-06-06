@@ -22,12 +22,11 @@
         android:theme="@style/AppTheme">
 
         <!-- 网络状态 -->
-        <service android:name="com.onlyhiedu.mobile.Service.NetworkStateService" >
-            <intent-filter android:priority="1000" >
-                <action android:name="com.onlyhiedu.mobile.Service.NetworkStateService" />
+        <service android:name=".Service.NetworkStateService">
+            <intent-filter android:priority="1000">
+                <action android:name="com.onlyhiedu.mobile.Service.NetworkStateService"/>
             </intent-filter>
         </service>
-
 
         <!-- UMENG -->
         <meta-data
@@ -35,42 +34,38 @@
             android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="591d1b53677baa102c00175c" >
+            android:value="591d1b53677baa102c00175c">
         </meta-data>
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
             android:value="25e92a031cccf6e3d941b9c9d857eb2c">
         </meta-data>
+
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="tencent1105946445" />
+                <data android:scheme="tencent1105946445"/>
             </intent-filter>
         </activity>
         <activity
             android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".UI.Home.activity.KnowActivity"/>
-
-
-
-
-
 
         <!-- User -->
         <activity
@@ -89,13 +84,9 @@
         <activity
             android:name=".UI.User.activity.SmsLoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-
-
-        <activity
-            android:name=".UI.Home.activity.MainActivity"/>
+        <activity android:name=".UI.Home.activity.MainActivity"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
-
         <activity android:name=".UI.Setting.activity.AboutActivity"/>
         <activity android:name=".UI.Setting.activity.SettingActivity"/>
         <activity android:name=".UI.Setting.activity.ModifyPwActivity"/>
@@ -113,9 +104,8 @@
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumeActivity"/>
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
-
+        <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
+        </activity>
     </application>
-
-
 
 </manifest>

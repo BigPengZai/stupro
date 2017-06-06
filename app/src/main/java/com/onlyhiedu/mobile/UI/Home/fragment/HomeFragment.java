@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,9 +10,11 @@ import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.Model.bean.HomeNews;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -22,6 +25,7 @@ import com.youth.banner.listener.OnBannerListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+
 
 /**
  * Created by pengpeng on 2017/5/24.
@@ -73,8 +77,16 @@ public class HomeFragment extends SimpleFragment {
         UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Good, mNewsAdapter);
         new HomeNews();
         mNewsAdapter.addAll(HomeNews.datas);
-
+        mNewsAdapter.setOnItemClickListener(itemClickListener);
     }
+
+    BaseRecyclerAdapter.OnItemClickListener itemClickListener = new BaseRecyclerAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(int position, long itemId) {
+            startActivity(new Intent(mContext, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, mNewsAdapter.getItem(position).url));
+        }
+    };
+
 
     private void initScrollView() {
         if (mScrollView != null) {

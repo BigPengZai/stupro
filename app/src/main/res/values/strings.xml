@@ -2,7 +2,6 @@
     <string name="app_name">嗨课堂</string>
 
 
-
     <string name="state_network_error">网络错误</string>
     <string name="state_loading">正在加载…</string>
     <string name="state_not_more">没有更多数据</string>
@@ -22,7 +21,7 @@
     <!--Login-->
     <string name="text_get_verification_code">获取验证码</string>
     <string name="text_get_verification_code_again">重新获取(%1$s)</string>
-<!--session  需要删除无用-->
+    <!--session  需要删除无用-->
 
 
     <string name="label_settings">Settings</string>
