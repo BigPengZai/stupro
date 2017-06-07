@@ -18,7 +18,7 @@ import butterknife.BindView;
 public class KnowTitleActivity extends SimpleActivity {
     @BindView(R.id.web_view)
     WebView mWb_Service;
-    ProgressDialog dialog = null;
+    ProgressDialog dialog;
     @Override
     protected int getLayout() {
         return R.layout.activity_know_tile;
@@ -35,7 +35,9 @@ public class KnowTitleActivity extends SimpleActivity {
         mWb_Service.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
-                dialog.dismiss();
+                if(dialog.isShowing()){
+                    dialog.dismiss();
+                }
             }
         });
         WebSettings wSet = mWb_Service.getSettings();

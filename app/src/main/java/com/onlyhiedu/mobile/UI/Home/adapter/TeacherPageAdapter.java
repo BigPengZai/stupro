@@ -23,6 +23,7 @@ public class TeacherPageAdapter extends PagerAdapter {
     private SparseArray<ImageView> mViews;
     private Context ctx;
 
+
     public TeacherPageAdapter(Context ctx) {
         mData = new ArrayList<>();
         mData.add(R.mipmap.teacher1);
@@ -50,7 +51,7 @@ public class TeacherPageAdapter extends PagerAdapter {
             mViews.put(position, view);
             view.setImageResource(getItem(position));
             view.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setPadding(0,0, ScreenUtil.dip2px(10),0);
+            view.setPadding(0, 0, ScreenUtil.dip2px(10), 0);
         }
         container.addView(view);
         return view;

@@ -10,9 +10,11 @@
 
     <include layout="@layout/layout_toolbar"/>
 
+
     <com.onlyhiedu.mobile.Widget.ProgressWebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 
 </LinearLayout>

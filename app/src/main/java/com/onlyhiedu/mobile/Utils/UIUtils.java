@@ -28,6 +28,7 @@ import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -47,6 +48,10 @@ public class UIUtils {
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();
         context.startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public static void startHomeNewsWebViewAct(Context context, String url,String title) {
+        context.startActivity(new Intent(context, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, url).putExtra(HomeNewsWebViewActivity.TITLE,title));
     }
 
     public static void initCursor(EditText mEdit) {
@@ -71,7 +76,7 @@ public class UIUtils {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-      recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(context)
 //                .colorResId(R.color.list_divider)
 //                .size(1)
@@ -280,7 +285,7 @@ public class UIUtils {
     }
 
 
-    public static  boolean requestPermission(Activity context, int code,String[] permission) {
+    public static boolean requestPermission(Activity context, int code, String[] permission) {
         if (Build.VERSION.SDK_INT >= 23) {
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
@@ -295,7 +300,7 @@ public class UIUtils {
     }
 
 
-    public static void callLine(Activity activity,String phoneNum) {
+    public static void callLine(Activity activity, String phoneNum) {
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum));
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             return;

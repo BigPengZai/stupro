@@ -11,6 +11,7 @@ import butterknife.BindView;
 public class HomeNewsWebViewActivity extends SimpleActivity {
 
     public static final String URL = "url";
+    public static final String TITLE = "title";
 
     @BindView(R.id.web_view)
     WebView mWebView;
@@ -22,7 +23,14 @@ public class HomeNewsWebViewActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
-        setToolBar("精选好闻");
+
+
+
+        String title = getIntent().getStringExtra(TITLE);
+        if(!TextUtils.isEmpty(title)){
+            setToolBar(title);
+        }
+
         String url = getIntent().getStringExtra(URL);
         if(!TextUtils.isEmpty(url)){
             mWebView.loadUrl(url);
