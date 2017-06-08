@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="40dp">
 
         <ImageView
             android:src="@mipmap/home_top"
@@ -17,8 +17,9 @@
             android:layout_height="30dp"/>
 
             <TextView
-                android:textSize="@dimen/sp_20"
+                android:textSize="@dimen/sp_17"
                 android:text="嗨课堂"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -56,8 +57,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/size_10"
-                        android:layout_marginTop="@dimen/size_10"
+                        android:layout_marginBottom="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_20"
                         android:orientation="horizontal"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp">
@@ -65,23 +66,27 @@
 
                         <TextView
                             android:id="@+id/tv_hear"
+                            android:textSize="@dimen/sp_12"
                             style="@style/home_text"
                             android:drawableTop="@mipmap/ic_headset"
                             android:text="免费试听"/>
 
                         <TextView
                             android:id="@+id/tv_consume"
+                            android:textSize="@dimen/sp_12"
                             style="@style/home_text"
                             android:drawableTop="@mipmap/ic_hourglass_full"
                             android:text="课时消耗"/>
 
                         <TextView
+                            android:textSize="@dimen/sp_12"
                             android:id="@+id/tv_service"
                             style="@style/home_text"
                             android:drawableTop="@mipmap/ic_perm_phone_msg"
                             android:text="客服咨询"/>
 
                         <TextView
+                            android:textSize="@dimen/sp_12"
                             android:id="@+id/tv_information"
                             style="@style/home_text"
                             android:drawableTop="@mipmap/ic_assignment"
@@ -96,7 +101,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/size_10"
@@ -108,7 +113,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="@dimen/size_10"
                         android:gravity="center_vertical"
-                        android:text="老师介绍"
+                        android:text="教师风采"
                         android:textSize="@dimen/sp_15"/>
 
                     <FrameLayout
@@ -130,7 +135,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/size_10"
@@ -141,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/size_10"
                         android:gravity="center_vertical"
-                        android:text="精选好闻"
+                        android:text="热门资讯"
                         android:textSize="@dimen/sp_15"/>
 
                     <android.support.v7.widget.RecyclerView
