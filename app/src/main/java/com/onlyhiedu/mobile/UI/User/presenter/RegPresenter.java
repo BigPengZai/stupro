@@ -43,8 +43,9 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
                     getView().showSecond(60 - new Long(value).intValue());
             }
         };
-
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+
+
     }
 
 
