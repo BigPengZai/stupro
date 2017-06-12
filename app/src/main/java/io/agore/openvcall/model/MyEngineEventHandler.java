@@ -11,6 +11,7 @@ import io.agora.rtc.RtcEngine;
 
 public class MyEngineEventHandler {
     public static final String TAG = MyEngineEventHandler.class.getSimpleName();
+
     public MyEngineEventHandler(Context ctx, EngineConfig config) {
         this.mContext = ctx;
         this.mConfig = config;
@@ -31,12 +32,8 @@ public class MyEngineEventHandler {
     }
 
     final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
-//        private final Logger log = LoggerFactory.getLogger(this.getClass());
-
         @Override
         public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-//            log.debug("onFirstRemoteVideoDecoded " + (uid & 0xFFFFFFFFL) + " " + width + " " + height + " " + elapsed);
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -46,9 +43,9 @@ public class MyEngineEventHandler {
 
         @Override
         public void onFirstLocalVideoFrame(int width, int height, int elapsed) {
-//            log.debug("onFirstLocalVideoFrame " + " " + width + " " + height + " " + elapsed);
         }
-//其他用户加入当前频道回调 (onUserJoined)
+
+        //其他用户加入当前频道回调 (onUserJoined)
         @Override
         public void onUserJoined(int uid, int elapsed) {
             Log.d(TAG, "onUserJoined:" + uid);
@@ -58,11 +55,10 @@ public class MyEngineEventHandler {
                 handler.onUserJoined(uid, elapsed);
             }
         }
-//其他用户离开当前频道回调 (onUserOffline)
+
+        //其他用户离开当前频道回调 (onUserOffline)
         @Override
         public void onUserOffline(int uid, int reason) {
-//            log.debug("onUserOffline " + (uid & 0xFFFFFFFFL) + " " + reason);
-
             // FIXME this callback may return times
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
@@ -73,8 +69,6 @@ public class MyEngineEventHandler {
 
         @Override
         public void onUserMuteVideo(int uid, boolean muted) {
-//            log.debug("onUserMuteVideo " + (uid & 0xFFFFFFFFL) + " " + muted);
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -89,8 +83,6 @@ public class MyEngineEventHandler {
         //远端视频统计回调 (onRemoteVideoStats)
         @Override
         public void onRemoteVideoStats(RemoteVideoStats stats) {
-//            log.debug("onRemoteVideoStats " + stats.uid + " " + stats.delay + " " + stats.receivedBitrate + " " + stats.receivedFrameRate + " " + stats.width + " " + stats.height);
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -116,18 +108,14 @@ public class MyEngineEventHandler {
 
         @Override
         public void onLeaveChannel(RtcStats stats) {
-
         }
 
         @Override
         public void onLastmileQuality(int quality) {
-//            log.debug("onLastmileQuality " + quality);
         }
 
         @Override
         public void onError(int error) {
-//            log.debug("onError " + error + " " + RtcEngine.getErrorDescription(error));
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -137,8 +125,6 @@ public class MyEngineEventHandler {
 
         @Override
         public void onStreamMessage(int uid, int streamId, byte[] data) {
-//            log.debug("onStreamMessage " + (uid & 0xFFFFFFFFL) + " " + streamId + " " + Arrays.toString(data));
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -147,8 +133,6 @@ public class MyEngineEventHandler {
         }
 
         public void onStreamMessageError(int uid, int streamId, int error, int missed, int cached) {
-//            log.warn("onStreamMessageError " + (uid & 0xFFFFFFFFL) + " " + streamId + " " + error + " " + missed + " " + cached);
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -158,8 +142,6 @@ public class MyEngineEventHandler {
 
         @Override
         public void onConnectionLost() {
-//            log.debug("onConnectionLost");
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -169,8 +151,6 @@ public class MyEngineEventHandler {
 
         @Override
         public void onConnectionInterrupted() {
-//            log.debug("onConnectionInterrupted");
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -180,10 +160,7 @@ public class MyEngineEventHandler {
 
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-//            log.debug("onJoinChannelSuccess " + channel + " " + uid + " " + (uid & 0xFFFFFFFFL) + " " + elapsed);
-
             mConfig.mUid = uid;
-
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -192,10 +169,8 @@ public class MyEngineEventHandler {
         }
 
         public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
-//            log.debug("onRejoinChannelSuccess " + channel + " " + uid + " " + elapsed);
         }
 
-        //onAudioRouteChanged
 
         @Override
         public void onAudioRouteChanged(int routing) {
@@ -203,7 +178,6 @@ public class MyEngineEventHandler {
         }
 
         public void onWarning(int warn) {
-//            log.debug("onWarning " + warn);
         }
     };
 

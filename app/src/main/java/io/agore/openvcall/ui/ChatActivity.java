@@ -208,12 +208,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Log.d(TAG, "item:" + mRoomInfo.getSignallingChannelId());
             //课程频道
             mChannelName = mRoomInfo.getCommChannelId();
-//            mChannelName = "DebugChannel_XWC";
             //学生uid
             mUid = mRoomInfo.getChannelStudentId() + "";
-        } /*else {
-            return;
-        }*/
+        }
     }
 
 
@@ -663,7 +660,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void joinSignalling() {
-        //测试数据 信令频道
+        // 信令频道
         String channelName = mRoomInfo.getSignallingChannelId();
         Log.d(TAG, "Join channel " + channelName);
         m_agoraAPI.channelJoin(channelName);
@@ -985,8 +982,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     return;
                 }
                 mUidsList.put(uid, local);
-                rtcEngine().muteLocalAudioStream(mAudioMuted);
-                worker().getRtcEngine().setEnableSpeakerphone(false);
                 mRl_bg.setVisibility(View.GONE);
             }
         });

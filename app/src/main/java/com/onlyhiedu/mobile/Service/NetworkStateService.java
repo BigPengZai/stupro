@@ -29,7 +29,6 @@ public class NetworkStateService extends Service {
             if(mobNetInfo.isConnected()&&!wifiNetInfo.isConnected()){
                 Toast.makeText(context, "正在使用数据流量", Toast.LENGTH_LONG).show();
             }
-
         }
     };
 
