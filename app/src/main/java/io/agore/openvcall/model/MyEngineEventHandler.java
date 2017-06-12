@@ -195,6 +195,13 @@ public class MyEngineEventHandler {
 //            log.debug("onRejoinChannelSuccess " + channel + " " + uid + " " + elapsed);
         }
 
+        //onAudioRouteChanged
+
+        @Override
+        public void onAudioRouteChanged(int routing) {
+            super.onAudioRouteChanged(routing);
+        }
+
         public void onWarning(int warn) {
 //            log.debug("onWarning " + warn);
         }

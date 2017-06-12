@@ -254,7 +254,11 @@ public class WorkerThread extends Thread {
             //关闭视频模式 (disableVideo)
 //            mRtcEngine.disableVideo();
             mRtcEngine.enableVideo();
-            mRtcEngine.enableAudioVolumeIndication(200, 3); // 200 ms
+            mRtcEngine.setDefaultAudioRoutetoSpeakerphone(true);
+            //setEnableSpeakerphone
+            mRtcEngine.setEnableSpeakerphone(true);
+            mRtcEngine.setSpeakerphoneVolume(180);
+//            mRtcEngine.enableAudioVolumeIndication(200, 250); // 200 ms
             mRtcEngine.setLogFile(Environment.getExternalStorageDirectory()
                     + File.separator + mContext.getPackageName() + "/log/agora-rtc.log");
         }
