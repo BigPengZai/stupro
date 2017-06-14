@@ -12,15 +12,20 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +60,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +76,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
+import io.agore.openvcall.model.User;
 import io.agore.propeller.Constant;
 import io.agore.propeller.UserStatusData;
 import io.agore.propeller.VideoInfoData;
@@ -107,9 +114,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     TextView mTv_Total_Room;
     @BindView(R.id.image_full_screen)
     ImageView mImageFullScreen;
-
-
-
+    @BindView(R.id.msg_list)
+    RecyclerView msgListView;
+    @BindView(R.id.edit)
+    EditText mEditText;
+    @BindView(R.id.ll_msg)
+    LinearLayout mLlMsg;
+    @BindView(R.id.but_im)
+    TextView mTvIM;
+    @BindView(R.id.im_point)
+    View mIMPoint;
 
     private AgoraAPIOnlySignal m_agoraAPI;
     private String mChannelName;
@@ -137,7 +151,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private long mRoomDix;
     private long mLong;
     private boolean mIsBack; //返回键是否可点击
-//    private InputMethodManager imm;
+
+    private ResponseWhiteboardList mResponseWhiteboardList;  //学生后进来白板数据
+    private NotifyWhiteboardOperator mNotifyWhiteboardOperator; //学生先进来白板数据
 
     @Override
     protected void initInject() {
@@ -172,21 +188,37 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
 
+
+        initMessageList();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this,NetworkStateService.class);
+        Intent intent = new Intent(this, NetworkStateService.class);
         startService(intent);
-        }
+    }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        Intent intent = new Intent(this,NetworkStateService.class);
+        Intent intent = new Intent(this, NetworkStateService.class);
         stopService(intent);
+    }
+
+    private InChannelMessageListAdapter mMsgAdapter;
+
+    private ArrayList<io.agore.openvcall.model.Message> mMsgList;
+
+
+    private void initMessageList() {
+        mMsgList = new ArrayList<>();
+        mMsgAdapter = new InChannelMessageListAdapter(this, mMsgList);
+        mMsgAdapter.setHasStableIds(true);
+        msgListView.setAdapter(mMsgAdapter);
+        msgListView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        msgListView.addItemDecoration(new MessageListDecoration());
     }
 
 
@@ -532,6 +564,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 case "Response_WhiteboardList":
                                     ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
                                     if (whiteboardData != null && whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
+
+                                        mResponseWhiteboardList = whiteboardData;
                                         mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
                                         //TODO
 //                                        mImageFullScreen.setVisibility(View.VISIBLE);
@@ -563,6 +597,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         @Override
                         public void run() {
                             if (type == ChatPresenter.Create) {
+                                mNotifyWhiteboardOperator = notifyWhiteboard;
                                 mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
                                 //TODO
 //                                mImageFullScreen.setVisibility(View.VISIBLE);
@@ -583,7 +618,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             if (type == ChatPresenter.ClearScreen) {
                                 mDrawView.restartDrawing();
                             }
-                            mPresenter.startDraw(type,mDrawView,notifyWhiteboard);
+                            mPresenter.startDraw(type, mDrawView, notifyWhiteboard);
 
                         }
                     });
@@ -653,6 +688,18 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 for (String str : accounts) {
                     if (Integer.parseInt(str) == mRoomInfo.getChannelTeacherId()) {
                         requestWhiteBoardData();
+                    }
+                    if (Integer.parseInt(str) == mRoomInfo.getChannelStudentId()) {
+                        String json = null;
+                        if (mResponseWhiteboardList != null) {
+                            json = JsonUtil.toJson(mResponseWhiteboardList);
+                        }
+                        if (mNotifyWhiteboardOperator != null) {
+                            json = JsonUtil.toJson(mNotifyWhiteboardOperator);
+                        }
+                        if (json != null) {
+                            m_agoraAPI.messageInstantSend(mRoomInfo.getChannelPatriarchId() + "", 0, json, sendPatriarch);
+                        }
                     }
                 }
             }
@@ -767,9 +814,65 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
                 setBoardViewLayoutParams(mSwitch);
                 break;
+            case R.id.but_im:
+                if (mLlMsg.getVisibility() == View.GONE) {
+                    mIMPoint.setVisibility(View.GONE);
+                    showIMLayout();
+                } else {
+                    hindIMLayout();
+                }
+                break;
+            case R.id.tv_send:
+                String msgStr = mEditText.getText().toString();
+                if (TextUtils.isEmpty(msgStr)) {
+                    return;
+                }
+                sendChannelMsg(msgStr);
 
+                mEditText.setText("");
+
+                io.agore.openvcall.model.Message msg = new io.agore.openvcall.model.Message(io.agore.openvcall.model.Message.MSG_TYPE_TEXT,
+                        new User(config().mUid, String.valueOf(config().mUid)), msgStr);
+                notifyMessageChanged(msg);
+
+                break;
         }
     }
+
+
+    private void showIMLayout(){
+        mLlMsg.setVisibility(View.VISIBLE);
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
+        TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
+        animation.setDuration(300);
+        mLlMsg.startAnimation(animation);
+    }
+    private void hindIMLayout(){
+        mLlMsg.setVisibility(View.VISIBLE);
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
+        TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
+        animation.setDuration(300);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mLlMsg.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mLlMsg.startAnimation(animation);
+    }
+
 
 
 
@@ -797,6 +900,27 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
     }
 
+    private void notifyMessageChanged(io.agore.openvcall.model.Message msg) {
+        mMsgList.add(msg);
+        int position = mMsgList.size() - 1;
+        LinearLayoutManager m = (LinearLayoutManager) msgListView.getLayoutManager();
+        int firstItem = m.findFirstVisibleItemPosition();
+        int lastItem = m.findLastVisibleItemPosition();
+        if (position <= firstItem) {
+            msgListView.smoothScrollToPosition(position);
+        } else if (position <= lastItem) {
+            int top = msgListView.getChildAt(position - firstItem).getTop();
+            msgListView.smoothScrollBy(0, top);
+        } else {
+            msgListView.smoothScrollToPosition(position);
+        }
+        mMsgAdapter.notifyDataSetChanged();
+
+        if(mLlMsg.getVisibility()==View.GONE){
+            mIMPoint.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     /**
      * 设置白板相关控件LayoutParams
@@ -989,6 +1113,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     //请求白板数据
     private static final String requestWhiteBoardData = "requestWhiteBoardData";
+    //发送家长白板数据
+    private static final String sendPatriarch = "sendPatriarch";
+
 
     private void requestWhiteBoardData() {
         if (mRoomInfo != null) {
@@ -1105,9 +1232,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 break;
             case AGEventHandler.EVENT_TYPE_ON_DATA_CHANNEL_MSG:
 
-//                peerUid = (Integer) data[0];
-//                final byte[] content = (byte[]) data[1];
-//                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
+                peerUid = (Integer) data[0];
+                final byte[] content = (byte[]) data[1];
+                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
                 break;
             case AGEventHandler.EVENT_TYPE_ON_AGORA_MEDIA_ERROR: {
 //                int error = (int) data[0];
