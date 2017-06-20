@@ -7,7 +7,6 @@ import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Setting.presenter.ModifyPwPresenter;
 import com.onlyhiedu.mobile.UI.Setting.presenter.contract.ModifyPwContract;
-import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -62,16 +61,10 @@ public class ModifyPwActivity extends BaseActivity<ModifyPwPresenter> implements
 
     @Override
     public void showUpdate(String msg) {
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
         mEdit_Old_Number.clean();
         mEdit_New_Pw.clean();
         mEdit_Confirm_Pw.clean();
-        DialogUtil.showOnlyAlert(this,
-                "提示"
-                , msg
-                , ""
-                , ""
-                , true, true, null
-        );
     }
 
     @Override

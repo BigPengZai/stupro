@@ -90,7 +90,7 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (charSequence.toString().length() != 0 && mEditText.hasFocus()) {
+        if (charSequence.toString().length() != 0 ) {
             mImageClose.setVisibility(VISIBLE);
         } else {
             mImageClose.setVisibility(GONE);
