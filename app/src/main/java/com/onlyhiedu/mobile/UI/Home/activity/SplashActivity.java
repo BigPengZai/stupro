@@ -27,6 +27,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(new Runnable() {
+
             @Override
             public void run() {
                 if (TextUtils.isEmpty(SPUtil.getToken())) {
@@ -37,6 +38,6 @@ public class SplashActivity extends Activity {
                     finish();
                 }
             }
-        }, 2000);
+        }, 1000);
     }
 }
