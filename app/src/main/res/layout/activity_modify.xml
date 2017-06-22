@@ -49,6 +49,9 @@
     <Button
         android:id="@+id/btn_confirm"
         style="@style/select_log_out"
+        android:enabled="false"
+        android:textColor="@color/white"
+        android:background="@drawable/selector_reg_btn"
         android:text="确认修改"/>
 
 </LinearLayout>

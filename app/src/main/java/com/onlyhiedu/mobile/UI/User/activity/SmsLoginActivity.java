@@ -2,9 +2,13 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +28,12 @@ import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements SmsLoginContract.View {
+
+    public static final String TAG = SmsLoginActivity.class.getSimpleName();
 
     @BindView(R.id.edit_number)
     EditText mEditNumber;
@@ -34,8 +41,10 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     EditText mEditCode;
     @BindView(R.id.tv_code)
     TextView mTvCode;
+    @BindView(R.id.btn_sign)
+    Button mBtnSign;
 
-    public static final String TAG = SmsLoginActivity.class.getSimpleName();
+
     private int mAuthCode;
 
     @Override
@@ -59,6 +68,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
 
     @Override
     protected void initData() {
+        mEditNumber.addTextChangedListener(mTextWatcher);
     }
 
     @Override
@@ -97,7 +107,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     private void addUTag() {
         //tag 手机号码 md5
         String tag = Encrypt.getMD5(mEditNumber.getText().toString());
-        Log.d(TAG, "tag:"+tag+"长度："+tag.length());
+        Log.d(TAG, "tag:" + tag + "长度：" + tag.length());
         PushAgent.getInstance(mContext).getTagManager().add(new TagManager.TCallBack() {
             @Override
             public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
@@ -109,6 +119,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             }
         }, tag);
     }
+
     @Override
     public void showError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
@@ -166,6 +177,27 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             mPresenter.readSecond();
         }
     }
+
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if (charSequence.length() == 0) {
+                mBtnSign.setEnabled(false);
+                mBtnSign.setTextColor(getResources().getColor(R.color.c_FFAEBA));
+            } else {
+                mBtnSign.setEnabled(true);
+                mBtnSign.setTextColor(getResources().getColor(R.color.c9));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    };
 
 
 }

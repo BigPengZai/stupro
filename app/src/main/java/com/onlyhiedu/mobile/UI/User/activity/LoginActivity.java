@@ -2,11 +2,15 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,7 +26,6 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
 import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
 
@@ -40,6 +43,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     EditText mEditPwd;
     @BindView(R.id.img_show)
     ImageView mImg_Show;
+    @BindView(R.id.btn_sign)
+    Button mButton;
     private int REQUEST_CODE = 11;
     public static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -60,10 +65,39 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
+
         mEditNumber.setText(SPUtil.getPhone());
+        mEditNumber.addTextChangedListener(mTextWatcher);
         UIUtils.initCursor(mEditNumber);
+
+        if (!TextUtils.isEmpty(mEditNumber.getText().toString())) {
+            mButton.setEnabled(true);
+            mButton.setTextColor(getResources().getColor(R.color.c9));
+        }
     }
 
+
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if (charSequence.length() == 0) {
+                mButton.setEnabled(false);
+                mButton.setTextColor(getResources().getColor(R.color.c_FFAEBA));
+            } else {
+                mButton.setEnabled(true);
+                mButton.setTextColor(getResources().getColor(R.color.c9));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    };
 
     @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number})
     public void onClick(View view) {
@@ -128,7 +162,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private void addUTag() {
         //tag 手机号码 md5
         String tag = Encrypt.getMD5(mEditNumber.getText().toString());
-        Log.d(TAG, "tag:"+tag+"长度："+tag.length());
+        Log.d(TAG, "tag:" + tag + "长度：" + tag.length());
         PushAgent.getInstance(this).getTagManager().add(new TagManager.TCallBack() {
             @Override
             public void onMessage(final boolean isSuccess, final ITagManager.Result result) {

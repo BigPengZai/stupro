@@ -1,10 +1,12 @@
 package com.onlyhiedu.mobile.UI.User.fragment;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -12,7 +14,6 @@ import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
-import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
@@ -33,10 +34,11 @@ import butterknife.OnClick;
 
 public class LoginFragment extends BaseFragment<LoginPresenter> implements LoginContract.View {
 
+
     /* @BindView(R.id.edit_pwd)
-     InputTextView mEditPwd;
-     @BindView(R.id.edit_confirm_pwd)
-     InputTextView mEditConfirmPwd;*/
+         InputTextView mEditPwd;
+         @BindView(R.id.edit_confirm_pwd)
+         InputTextView mEditConfirmPwd;*/
     private boolean isChecked = true;
     @BindView(R.id.edit_number)
     EditText mEdit_Num;
@@ -44,6 +46,8 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     EditText mEdit_Pwd;
     @BindView(R.id.img_show)
     ImageView mImg_Show;
+    @BindView(R.id.btn_sign)
+    Button mBtnSign;
     public static final String TAG = LoginFragment.class.getSimpleName();
 
     @Override
@@ -60,6 +64,10 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     protected void initView() {
         mEdit_Num.setText(SPUtil.getPhone());
         UIUtils.initCursor(mEdit_Num);
+        UIUtils.setTextChanged(mBtnSign, mEdit_Num);
+        if (!TextUtils.isEmpty(mEdit_Num.getText().toString())) {
+            mBtnSign.setEnabled(true);
+        }
     }
 
     @Override
@@ -94,7 +102,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     private void addUTag() {
         //tag 手机号码 md5
         String tag = Encrypt.getMD5(mEdit_Num.getText().toString());
-        Log.d(TAG, "tag:"+tag+"长度："+tag.length());
+        Log.d(TAG, "tag:" + tag + "长度：" + tag.length());
         PushAgent.getInstance(mContext).getTagManager().add(new TagManager.TCallBack() {
             @Override
             public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
@@ -106,6 +114,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
             }
         }, tag);
     }
+
     @Override
     public void setPush() {
 
@@ -139,4 +148,6 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
         }
         UIUtils.initCursor(mEdit_Pwd);
     }
+
+
 }

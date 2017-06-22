@@ -13,6 +13,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,11 +26,13 @@ import com.onlyhiedu.mobile.R;
 
 public class InputTextView extends RelativeLayout implements TextWatcher, View.OnClickListener {
 
-    private EditText mEditText;
+    public EditText mEditText;
     private ImageView mImageClose;
+    private Button mButton;
 
     private boolean isPassword;
     private boolean show;
+
     public InputTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_input_text, this, true);
@@ -53,6 +56,10 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         } else {
             mImageClose.setVisibility(GONE);
         }
+    }
+
+    public void setButton(Button button) {
+        mButton = button;
     }
 
     public void setInputType(int inputType) {
@@ -90,9 +97,15 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (charSequence.toString().length() != 0 ) {
+        if (charSequence.toString().length() != 0) {
+            if (mButton != null) {
+                mButton.setEnabled(true);
+            }
             mImageClose.setVisibility(VISIBLE);
         } else {
+            if (mButton != null) {
+                mButton.setEnabled(false);
+            }
             mImageClose.setVisibility(GONE);
         }
     }
@@ -149,8 +162,13 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         }
     }
 
-    public void clean(){
+    public void clean() {
         mEditText.setText("");
+    }
+
+
+    public EditText getEditTextView() {
+        return mEditText;
     }
 
 }

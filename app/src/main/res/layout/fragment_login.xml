@@ -58,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:enabled="false"
             android:background="@drawable/selector_reg_btn"
             android:text="登录"
             android:textColor="@color/white"

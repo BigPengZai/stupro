@@ -113,12 +113,13 @@
 
 
     <Button
-        android:textColor="@color/c9"
+        android:textColor="@color/c_FFAEBA"
         android:id="@+id/btn_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_40"
-        android:background="@drawable/shape_login_ben_radius"
+        android:enabled="false"
+        android:background="@drawable/selector_login"
         android:text="登录"
         android:textSize="@dimen/sp_18"/>
 

@@ -18,19 +18,10 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.activity.TermServiceActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
-import com.onlyhiedu.mobile.Utils.AppUtil;
-import com.onlyhiedu.mobile.Utils.OpenFilesUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -79,7 +70,6 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
 
     @BindView(R.id.ll_term_service)
     LinearLayout mLl_Term_Service;
-    private File mFile;
 
     @Override
     protected void initInject() {
@@ -95,6 +85,10 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     protected void initView() {
         mEditPwd.setPassword(true);
         mEditConfirmPwd.setPassword(true);
+
+        mEditNumber.setButton(mBtnNextNumber);
+        mEditName.setButton(mBtnNextName);
+        mEditPwd.setButton(mBtnRegister);
     }
 
     @Override

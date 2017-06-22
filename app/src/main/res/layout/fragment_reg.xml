@@ -97,12 +97,14 @@
     <Button
         android:id="@+id/btn_next_number"
         style="@style/register_btn"
+        android:enabled="false"
         android:layout_centerVertical="true"
         android:text="下一步"/>
 
     <Button
         android:id="@+id/btn_next_name"
         style="@style/register_btn"
+        android:enabled="false"
         android:layout_centerVertical="true"
         android:text="下一步"
         android:visibility="gone"/>
@@ -110,6 +112,7 @@
     <Button
         android:id="@+id/btn_register"
         style="@style/register_btn"
+        android:enabled="false"
         android:layout_centerVertical="true"
         android:text="注册"
         android:visibility="gone"/>

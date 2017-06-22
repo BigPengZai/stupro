@@ -79,6 +79,7 @@
 
     <Button
         android:id="@+id/btn_sign_in"
+        android:enabled="false"
         style="@style/register_btn"
         android:layout_marginTop="@dimen/size_20"
         android:text="重置密码"/>

@@ -1,8 +1,10 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements FindPwdContract.View {
@@ -32,8 +35,11 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
     EditText mEditCode;
     @BindView(R.id.tv_code)
     TextView mTvCode;
+    @BindView(R.id.btn_sign_in)
+    Button mBtnSignIn;
 
     public static final String TAG = FindPwdActivity.class.getSimpleName();
+
     private AuthCodeInfo mCodeInfo;
 
     @Override
@@ -53,6 +59,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
 
         mEditPwd.setPassword(true);
         mCodeInfo = new AuthCodeInfo();
+        mEditNumber.setButton(mBtnSignIn);
     }
 
 
@@ -77,7 +84,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
 
     @Override
     public void showError(String msg) {
-        if(msg.equals("成功")){
+        if (msg.equals("成功")) {
             finish();
         }
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
@@ -130,6 +137,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
         }
         mPresenter.retrievePwd(phone, pwd, authCode);
     }
+
 
 
 }

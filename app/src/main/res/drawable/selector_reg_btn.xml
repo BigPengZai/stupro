@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/shape_im_text_radius_nor3" android:state_enabled="false"/>
     <item android:drawable="@drawable/shape_reg_btn_radius_sel" android:state_pressed="true"/>
     <item android:drawable="@drawable/shape_reg_btn_radius_nor"/>
 </selector>
