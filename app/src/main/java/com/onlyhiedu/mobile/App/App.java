@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
@@ -15,11 +14,9 @@ import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
-import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.Config;
@@ -77,7 +74,7 @@ public class App extends Application {
 
         initGlide();
         DaoUtil.getInstance(this);
-        initWorkerThread();
+//        initWorkerThread();
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
