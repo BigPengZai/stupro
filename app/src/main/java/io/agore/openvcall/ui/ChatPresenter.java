@@ -88,6 +88,22 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         this.mRetrofitHelper = mRetrofitHelper;
     }
 
+    //流统计
+    @Override
+    public void uploadStatistics(String classTime, String courseUuid) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchStatics(classTime,courseUuid);
+        MyResourceSubscriber<onlyHttpResponse> subscriber = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+                    if (!data.isHasError()) getView().showFlowStatistics();
+                    else getView().showError(data.getMessage());
+                }
+            }
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
+    }
 
     @Override
     public void getCourseWareImageList(String wareId, int page) {

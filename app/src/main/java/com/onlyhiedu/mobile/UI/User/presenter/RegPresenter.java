@@ -86,6 +86,8 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
     }
 
 
+
+
     public boolean confirmThird(String code, String name, int serviceCode) {
         if (TextUtils.isEmpty(code)) {
             Toast.makeText(App.getInstance().getApplicationContext(), "请填写验证码信息", Toast.LENGTH_SHORT).show();
@@ -102,4 +104,24 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
         return StringUtils.checkAccountMark(name);
     }
 
+    /**
+     * 号码是否注册
+     * */
+    @Override
+    public void isRegister(String phone) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchIsReg(phone);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().showRegState((boolean)data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
 }

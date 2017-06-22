@@ -100,6 +100,10 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
                     Toast.makeText(mContext, "请输入手机号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (TextUtils.isEmpty(mEditPwd.getEditText().toString())) {
+                    Toast.makeText(mContext, "请输入新密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!StringUtils.isMobile(editText)) {
                     return;
                 }

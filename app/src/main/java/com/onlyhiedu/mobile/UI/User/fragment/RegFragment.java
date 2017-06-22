@@ -163,7 +163,7 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     }
 
     private void nextNumber() {
-        mPresenter.getAuthCode(mEditNumber.getEditText());
+        mPresenter.isRegister(mEditNumber.getEditText().toString());
 
     }
 
@@ -229,6 +229,15 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
         setAnimation(animation2, mLlRegStep2, mBtnNextName);
 
         mEditNumber.setInputEnable(false);
+    }
+
+    @Override
+    public void showRegState(boolean isReg) {
+        if (!isReg) {
+            mPresenter.getAuthCode(mEditNumber.getEditText());
+        } else {
+            Toast.makeText(mActivity, "手机号码已经注册", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

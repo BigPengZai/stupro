@@ -15,6 +15,8 @@ public interface RegContract {
         void showSuccess(String info);
 
         void showAuthSuccess(int authCode);
+
+        void showRegState(boolean isReg);
     }
 
     interface Presenter extends BasePresenter<RegContract.View> {
@@ -23,5 +25,7 @@ public interface RegContract {
         void registerUser(String userName,String phone, String pwd,String authcode);
 
         void getAuthCode(String phone);
+
+        void isRegister(String phone);
     }
 }

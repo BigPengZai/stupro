@@ -218,4 +218,14 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse> fetchPushToken(String deviceToken,String tag) {
         return sOnlyApis.getPushInfo(deviceToken,tag);
     }
+
+    //号码是否注册
+    public Flowable<onlyHttpResponse> fetchIsReg(String phone) {
+        return sOnlyApis.getRegState(phone);
+    }
+
+    //流统计
+    public Flowable<onlyHttpResponse> fetchStatics(String classTime,String uuid) {
+        return sOnlyApis.getStatics(classTime,uuid);
+    }
 }
