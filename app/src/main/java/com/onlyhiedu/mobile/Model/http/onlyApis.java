@@ -27,9 +27,9 @@ public interface onlyApis {
 
 
     //测试环境
-    String HOST = "http://192.168.1.252:8090/";
+//    String HOST = "http://192.168.1.252:8090/";
     //公网环境
-//    String HOST = "http://api.onlyeduhi.com/";
+    String HOST = "http://api.onlyeduhi.com/";
 
     /**
      * 客户端登录
@@ -189,8 +189,24 @@ public interface onlyApis {
 
     /**
      * 设置推送
-     * */
+     */
     @FormUrlEncoded
     @POST("client/student/bingAccount")
-    Flowable<onlyHttpResponse> getPushInfo(@Field("deviceToken") String deviceToken,@Field("tag") String tag);
+    Flowable<onlyHttpResponse> getPushInfo(@Field("deviceToken") String deviceToken, @Field("tag") String tag);
+
+    /**
+     * 号码是否注册
+     */
+    @FormUrlEncoded
+    @POST(" client/student/isRegister")
+    Flowable<onlyHttpResponse> getRegState(@Field("phone") String phone);
+
+    /**
+     *
+     * 流统计
+     * */
+
+    @FormUrlEncoded
+    @POST(" client/course/statisticsClassTime")
+    Flowable<onlyHttpResponse> getStatics(@Field("classTime") String classTime, @Field("courseUuid") String uuid);
 }

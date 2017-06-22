@@ -1,5 +1,7 @@
 package io.agore.openvcall.model;
 
+import io.agora.rtc.IRtcEngineEventHandler;
+
 public interface AGEventHandler {
     void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed);
 
@@ -9,6 +11,7 @@ public interface AGEventHandler {
 
     void onUserJoined(int uid, int elapsed);
     void onExtraCallback(int type, Object... data);
+
 
     int EVENT_TYPE_ON_DATA_CHANNEL_MSG = 3;
 
@@ -23,4 +26,6 @@ public interface AGEventHandler {
     int EVENT_TYPE_ON_USER_VIDEO_STATS = 10;
 
     int EVENT_TYPE_ON_APP_ERROR = 13;
+
+    void onLeaveChannel(IRtcEngineEventHandler.RtcStats stats);
 }

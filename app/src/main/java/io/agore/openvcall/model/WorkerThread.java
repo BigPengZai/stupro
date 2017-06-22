@@ -252,13 +252,10 @@ public class WorkerThread extends Thread {
             mRtcEngine = RtcEngineEx.create(mContext, appId, mEngineEventHandler.mRtcEventHandler);
             mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
             //关闭视频模式 (disableVideo)
-//            mRtcEngine.disableVideo();
             mRtcEngine.enableVideo();
             mRtcEngine.setDefaultAudioRoutetoSpeakerphone(true);
-            //setEnableSpeakerphone
             mRtcEngine.setEnableSpeakerphone(true);
             mRtcEngine.setSpeakerphoneVolume(180);
-//            mRtcEngine.enableAudioVolumeIndication(200, 250); // 200 ms
             mRtcEngine.setLogFile(Environment.getExternalStorageDirectory()
                     + File.separator + mContext.getPackageName() + "/log/agora-rtc.log");
         }

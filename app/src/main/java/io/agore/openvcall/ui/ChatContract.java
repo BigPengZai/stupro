@@ -24,10 +24,13 @@ public interface ChatContract {
 
         void showCourseWareImageList(List<CourseWareImageList> data,int page);
 
+        //流统计 Flow statistics
+        void showFlowStatistics();
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
-
+        //上传流统计
+        void uploadStatistics(String classTime,String courseUuid);
         void getCourseWareImageList(String wareId ,int page);
 
         void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage);

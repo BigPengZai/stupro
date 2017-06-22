@@ -108,6 +108,11 @@ public class MyEngineEventHandler {
 
         @Override
         public void onLeaveChannel(RtcStats stats) {
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onLeaveChannel(stats);
+            }
         }
 
         @Override
@@ -165,6 +170,7 @@ public class MyEngineEventHandler {
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
                 handler.onJoinChannelSuccess(channel, uid, elapsed);
+
             }
         }
 

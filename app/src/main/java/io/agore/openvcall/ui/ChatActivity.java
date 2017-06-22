@@ -58,7 +58,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -124,8 +126,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     TextView mTvIM;
     @BindView(R.id.im_point)
     View mIMPoint;
-
+    @BindView(R.id.but_dismiss)
+    TextView mButDismiss;
     private AgoraAPIOnlySignal m_agoraAPI;
+
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private RequestManager mRequestManager;
@@ -151,7 +155,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private long mRoomDix;
     private long mLong;
     private boolean mIsBack; //返回键是否可点击
-
+    private boolean isStartTime;
+    private boolean isTeacherJoined;
     private ResponseWhiteboardList mResponseWhiteboardList;  //学生后进来白板数据
     private NotifyWhiteboardOperator mNotifyWhiteboardOperator; //学生先进来白板数据
 
@@ -176,10 +181,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
         mPresenter.setImageWidth(imageWidth);
         setToolBar();
+        event().addEventHandler(this);
         initRoomData();
         //登录信令系统成功后  登录通信频道
         initSignalling();
-        event().addEventHandler(this);
         SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
         rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, 0));
         surfaceV.setZOrderOnTop(false);
@@ -233,7 +238,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
-            //暂时 关闭计时
+            //计时
             initRoomTime();
         }
         if (mRoomInfo != null) {
@@ -255,7 +260,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         startRoomTime();
                         break;
                     case UPDATE_FINISH_ROOM:
-
                         finishRoom();
                         break;
                     case UPDATE_NOTIFY:
@@ -437,19 +441,23 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onClick(View v) {
                 if (mIsBack) {
-                    if (m_agoraAPI != null) {
-                        m_agoraAPI.logout();
-                        Log.d(TAG, "信令退出");
-                    }
-                    if (mUidsList != null) {
-                        mUidsList.clear();
-                    }
-                    quitCall();
+                    finishClassRoom();
                 } else {
                     Toast.makeText(mContext, "课程未结束", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void finishClassRoom() {
+        if (m_agoraAPI != null) {
+            m_agoraAPI.logout();
+            Log.d(TAG, "信令退出");
+        }
+        if (mUidsList != null) {
+            mUidsList.clear();
+        }
+        quitCall();
     }
 
 
@@ -638,14 +646,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             Toast.makeText(mContext, "同意老师下课，已退出房间", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    if (m_agoraAPI != null) {
-                        m_agoraAPI.logout();
-                        Log.d(TAG, "信令退出");
-                    }
-                    if (mUidsList != null) {
-                        mUidsList.clear();
-                    }
-                    quitCall();
+                    finishClassRoom();
                 }
                 if (messageID.equals(requestFinishClassTag)) {
                     runOnUiThread(new Runnable() {
@@ -772,6 +773,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //        }
 
     }
+    //上传流时长完成
+    @Override
+    public void showFlowStatistics() {
+        Log.d(TAG, "上传流时长完成");
+        Toast.makeText(ChatActivity.this, "上传流时长完成", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
 
     private RelativeLayout.LayoutParams mScrollViewP;
@@ -790,13 +798,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
-                //学生点击我要下课
-                requestFinishClass();
-//                mPresenter.uploadClassConsumption(mUuid);
-//                MobclickAgent.onEvent(this, "finish_class");
+                canFinshClass();
                 break;
             case R.id.image_full_screen:
-
                 if (mScrollViewP == null) {
                     mScrollViewP = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
                     mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
@@ -839,8 +843,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    private void canFinshClass() {
+        if (isStartTime && (isTeacherJoined == false) || mIsBack) {
+            finishClassRoom();
+        } else {
+            //学生点击我要下课
+            requestFinishClass();
+        }
+    }
 
-    private void showIMLayout(){
+
+    private void showIMLayout() {
         mLlMsg.setVisibility(View.VISIBLE);
         mTvIM.setBackgroundResource(R.drawable.im_text_bg);
         mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
@@ -848,7 +861,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         animation.setDuration(300);
         mLlMsg.startAnimation(animation);
     }
-    private void hindIMLayout(){
+
+    private void hindIMLayout() {
         mLlMsg.setVisibility(View.VISIBLE);
         mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
         mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
@@ -872,8 +886,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         });
         mLlMsg.startAnimation(animation);
     }
-
-
 
 
     private int mDataStreamId;
@@ -916,7 +928,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         mMsgAdapter.notifyDataSetChanged();
 
-        if(mLlMsg.getVisibility()==View.GONE){
+        if (mLlMsg.getVisibility() == View.GONE) {
             mIMPoint.setVisibility(View.VISIBLE);
         }
 
@@ -999,14 +1011,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     protected void deInitUIandEvent() {
         doLeaveChannel();
-        event().removeEventHandler(this);
-        finish();
     }
 
     private void doLeaveChannel() {
         worker().leaveChannel(mChannelName);
         worker().preview(false, null, 0);
-
     }
 
     @Override
@@ -1034,6 +1043,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }
+        isStartTime = false;
     }
 
     private void quitCall() {
@@ -1041,6 +1051,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private VideoPreProcessing mVideoPreProcessing;
+
 
     private void doHideTargetView(int targetUid, boolean hide) {
         HashMap<Integer, Integer> status = new HashMap<>();
@@ -1127,6 +1138,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    //其他用户加入当前频道回调
     @Override
     public void onUserJoined(int uid, int elapsed) {
         Log.d(TAG, "uid:onUserJoined " + uid);
@@ -1134,15 +1146,30 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 mRl_bg.setVisibility(View.GONE);
+                if (uid == mRoomInfo.getChannelTeacherId()) {
+                    isTeacherJoined = true;
+                }
             }
         });
 
     }
 
+    //其他用户离开当前频道回调
     @Override
     public void onUserOffline(int uid, int reason) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                isTeacherJoined = false;
+                //当有其他用户退出
+                if (uid == mRoomInfo.getChannelTeacherId()) {
+                    SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
+                }
+            }
+        });
         doRemoveRemoteUi(uid);
     }
+
 
     @Override
     public void onExtraCallback(final int type, final Object... data) {
@@ -1154,6 +1181,21 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     return;
                 }
                 doHandleExtraCallback(type, data);
+            }
+        });
+    }
+
+    @Override
+    public void onLeaveChannel(IRtcEngineEventHandler.RtcStats stats) {
+        //totalDuration：通话时长（秒），累计值
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                BigDecimal b = new BigDecimal((double)stats.totalDuration / 60.00);
+                float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                mPresenter.uploadStatistics(String.valueOf(f1),mRoomInfo.getCommChannelId());
+                event().removeEventHandler(ChatActivity.this);
+                Toast.makeText(ChatActivity.this, "流统计时长: " + f1 + " 分钟", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -1387,11 +1429,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onChronometerTick(Chronometer chronometer) {
+        isStartTime = true;
         mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
         if (mLong > mRoomDix) {
             mIsBack = true;
             chronometer.stop();
             startFinishTimer();
+            mButDismiss.setText("退出教室");
         }
         //真实数据不会 截取
         if (chronometer.getText().toString().length() > 8) {

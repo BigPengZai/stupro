@@ -26,7 +26,7 @@ public class NetworkStateService extends Service {
             NetworkInfo  wifiNetInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 
-            if(mobNetInfo.isConnected()&&!wifiNetInfo.isConnected()){
+            if(mobNetInfo!=null&&wifiNetInfo!=null&&mobNetInfo.isConnected()&&!wifiNetInfo.isConnected()){
                 Toast.makeText(context, "正在使用数据流量", Toast.LENGTH_LONG).show();
             }
         }
