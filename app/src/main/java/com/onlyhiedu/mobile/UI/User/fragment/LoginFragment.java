@@ -48,6 +48,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     ImageView mImg_Show;
     @BindView(R.id.btn_sign)
     Button mBtnSign;
+
     public static final String TAG = LoginFragment.class.getSimpleName();
 
     @Override

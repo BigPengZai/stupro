@@ -31,6 +31,7 @@
     <color name="c_F5F5F5">#F5F5F5</color>
     <color name="c_FFAEBA">#FFAEBA</color>
     <color name="c_D2D0D0">#D2D0D0</color>
+    <color name="c_EDEDED">#EDEDED</color>
 
     <!--wheelview-->
     <color name="c3">#dedede</color>
@@ -48,6 +49,7 @@
     <color name="transparent_75_white">#ACFFFFFF</color>
 
     <color name="dark_gray">#FF55585A</color>
+
 
 
 </resources>

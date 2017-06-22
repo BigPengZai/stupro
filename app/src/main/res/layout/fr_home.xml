@@ -1,35 +1,34 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
+        android:layout_height="40dp"
         android:gravity="center"
-        android:layout_height="40dp">
+        android:orientation="horizontal">
 
         <ImageView
-            android:src="@mipmap/home_top"
             android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_height="30dp"
+            android:src="@mipmap/home_top"/>
 
-            <TextView
-                android:textSize="@dimen/sp_17"
-                android:text="嗨课堂"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="嗨课堂"
+            android:textSize="@dimen/sp_17"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
     <com.onlyhiedu.mobile.Widget.VpSwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#eeeeee">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:id="@+id/scroll_view"
@@ -50,71 +49,69 @@
                     android:layout_height="190dp"/>
                 <!--广告栏-->
 
-                <android.support.v7.widget.CardView
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/size_20"
-                        android:layout_marginTop="@dimen/size_20"
-                        android:orientation="horizontal"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/size_10"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
 
 
-                        <TextView
-                            android:id="@+id/tv_hear"
-                            android:textSize="@dimen/sp_12"
-                            style="@style/home_text"
-                            android:drawableTop="@mipmap/ic_headset"
-                            android:text="免费试听"/>
+                    <TextView
+                        android:id="@+id/tv_hear"
+                        style="@style/home_text"
+                        android:drawableTop="@mipmap/ic_headset"
+                        android:text="免费试听"
+                        android:textSize="@dimen/sp_12"/>
 
-                        <TextView
-                            android:id="@+id/tv_consume"
-                            android:textSize="@dimen/sp_12"
-                            style="@style/home_text"
-                            android:drawableTop="@mipmap/ic_hourglass_full"
-                            android:text="课时消耗"/>
+                    <TextView
+                        android:id="@+id/tv_consume"
+                        style="@style/home_text"
+                        android:drawableTop="@mipmap/ic_hourglass_full"
+                        android:text="课时消耗"
+                        android:textSize="@dimen/sp_12"/>
 
-                        <TextView
-                            android:textSize="@dimen/sp_12"
-                            android:id="@+id/tv_service"
-                            style="@style/home_text"
-                            android:drawableTop="@mipmap/ic_perm_phone_msg"
-                            android:text="客服咨询"/>
+                    <TextView
+                        android:id="@+id/tv_service"
+                        style="@style/home_text"
+                        android:drawableTop="@mipmap/ic_perm_phone_msg"
+                        android:text="客服咨询"
+                        android:textSize="@dimen/sp_12"/>
 
-                        <TextView
-                            android:textSize="@dimen/sp_12"
-                            android:id="@+id/tv_information"
-                            style="@style/home_text"
-                            android:drawableTop="@mipmap/ic_assignment"
-                            android:text="学员信息"/>
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_information"
+                        style="@style/home_text"
+                        android:drawableTop="@mipmap/ic_assignment"
+                        android:text="学员信息"
+                        android:textSize="@dimen/sp_12"/>
+                </LinearLayout>
 
-                </android.support.v7.widget.CardView>
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/c_EDEDED"/>
 
                 <!--老师简介-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/size_10"
                     android:paddingTop="@dimen/size_10">
 
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="@dimen/size_10"
-                        android:gravity="center_vertical"
                         android:text="教师风采"
-                        android:textSize="@dimen/sp_15"/>
+                        android:textSize="@dimen/sp_16"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -124,9 +121,9 @@
                         <android.support.v4.view.ViewPager
                             android:id="@+id/viewpager"
                             android:layout_width="match_parent"
-                            android:layout_height="160dp"
+                            android:layout_height="150dp"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="30dp"
                             android:clipChildren="false"/>
                     </FrameLayout>
                 </LinearLayout>
@@ -135,26 +132,28 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/white"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/size_10"
-                    android:paddingTop="@dimen/size_10">
+                    android:paddingBottom="@dimen/size_10">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/c_EDEDED"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_10"
-                        android:gravity="center_vertical"
-                        android:text="热门资讯"
-                        android:textSize="@dimen/sp_15"/>
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="@dimen/size_10"
+                        android:text="教育头条"
+                        android:textSize="@dimen/sp_16"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_good"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_10"
-                        android:layout_marginTop="10dp"/>
+                        android:layout_marginLeft="@dimen/size_10"/>
 
                 </LinearLayout>
 
