@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -45,8 +46,9 @@
                 <!--banner-->
                 <com.youth.banner.Banner
                     android:id="@+id/banner"
+                    app:image_scale_type="fit_xy"
                     android:layout_width="match_parent"
-                    android:layout_height="190dp"/>
+                    android:layout_height="160dp"/>
                 <!--广告栏-->
 
 
@@ -110,7 +112,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
-                        android:text="教师风采"
+                        android:text="名师推荐"
+                        android:textColor="@color/c_070707"
                         android:textSize="@dimen/sp_16"/>
 
                     <FrameLayout
@@ -147,6 +150,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="@dimen/size_10"
                         android:text="教育头条"
+                        android:textColor="@color/c_070707"
                         android:textSize="@dimen/sp_16"/>
 
                     <android.support.v7.widget.RecyclerView

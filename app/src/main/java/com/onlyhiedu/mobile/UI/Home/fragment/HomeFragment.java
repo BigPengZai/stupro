@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter.OnItemClickListener;
@@ -50,8 +49,6 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
     Banner mBanner;
     @BindView(R.id.swipe)
     SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.scroll_view)
-    ScrollView mScrollView;
     @BindView(R.id.recycler_good)
     RecyclerView mRecyclerView_Good;
     @BindView(R.id.viewpager)
@@ -84,7 +81,7 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
         images.add(R.mipmap.page3);
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setImages(images);
-        mBanner.setDelayTime(3000);
+        mBanner.setDelayTime(5000);
         mBanner.start();
     }
 
@@ -100,7 +97,7 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
     OnItemClickListener itemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(int position, long itemId) {
-            UIUtils.startHomeNewsWebViewAct(mContext, mNewsAdapter.getItem(position).url, " 精选好闻");
+            UIUtils.startHomeNewsWebViewAct(mContext, mNewsAdapter.getItem(position).url, " 教育头条");
         }
     };
 
