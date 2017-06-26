@@ -149,7 +149,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
         web.setThumb(mUmImage);
         web.setDescription("嗨，快去体验嗨课堂一对一辅导吧！");
         new ShareAction(getActivity()).withMedia(web)
-                .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA)
                 .setCallback(umShareListener).open();
     }
 
@@ -179,7 +179,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             String plat = initPlatform(platform);
-            Toast.makeText(mContext, plat + " 分享取消了", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, plat + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
 

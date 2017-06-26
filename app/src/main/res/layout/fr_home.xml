@@ -97,7 +97,7 @@
                     android:layout_height="20dp"
                     android:background="@color/c_EDEDED"/>
 
-                <!--老师简介-->
+                <!--教师风采-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,7 +131,7 @@
                     </FrameLayout>
                 </LinearLayout>
 
-                <!--精选好闻-->
+                <!--教育头条-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

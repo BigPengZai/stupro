@@ -745,6 +745,27 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         );
     }
 
+    private void initFinishClassDialog() {
+        DialogUtil.showOnlyAlert(this,
+                ""
+                , "确定下课将结束本节课程！"
+                , "确定"
+                , "取消"
+                , true, true, new DialogListener() {
+                    @Override
+                    public void onPositive(DialogInterface dialog) {
+                        finishClassRoom();
+                    }
+
+                    @Override
+                    public void onNegative(DialogInterface dialog) {
+                        //取消
+                        Log.d(TAG, "取消");
+
+                    }
+                }
+        );
+    }
 
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data, int page) {
@@ -773,6 +794,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //        }
 
     }
+
     //上传流时长完成
     @Override
     public void showFlowStatistics() {
@@ -845,7 +867,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void canFinshClass() {
         if (isStartTime && (isTeacherJoined == false) || mIsBack) {
-            finishClassRoom();
+            initFinishClassDialog();
+
         } else {
             //学生点击我要下课
             requestFinishClass();
@@ -1191,9 +1214,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                BigDecimal b = new BigDecimal((double)stats.totalDuration / 60.00);
+                BigDecimal b = new BigDecimal((double) stats.totalDuration / 60.00);
                 float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                mPresenter.uploadStatistics(String.valueOf(f1),mRoomInfo.getCommChannelId());
+                mPresenter.uploadStatistics(String.valueOf(f1), mRoomInfo.getCommChannelId());
                 event().removeEventHandler(ChatActivity.this);
                 Toast.makeText(ChatActivity.this, "流统计时长: " + f1 + " 分钟", Toast.LENGTH_SHORT).show();
             }
