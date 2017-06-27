@@ -10,12 +10,12 @@
     tools:context="com.onlyhiedu.mobile.UI.User.activity.LoginActivity">
 
     <TextView
-        android:padding="10dp"
         android:id="@+id/btn_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginTop="@dimen/size_18"
+        android:padding="10dp"
         android:text="注册"
         android:textColor="@android:color/white"
         android:textSize="@dimen/sp_18"/>
@@ -42,7 +42,6 @@
             android:src="@mipmap/iphone"/>
 
         <EditText
-            android:textColor="@color/white"
             android:id="@+id/edit_number"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -51,6 +50,7 @@
             android:hint="手机"
             android:inputType="phone"
             android:maxLength="11"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"/>
 
     </LinearLayout>
@@ -74,7 +74,6 @@
             android:src="@mipmap/password"/>
 
         <EditText
-            android:textColor="@color/white"
             android:id="@+id/edit_pwd"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -83,6 +82,7 @@
             android:background="@drawable/transparent"
             android:hint="密码"
             android:inputType="textPassword"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"/>
 
         <ImageView
@@ -101,20 +101,21 @@
 
 
     <Button
-        android:textColor="@color/c_FFAEBA"
         android:id="@+id/btn_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_40"
         android:background="@drawable/selector_login"
-        android:text="登录"
         android:enabled="false"
+        android:text="登录"
+        android:textColor="@color/c_FFAEBA"
         android:textSize="@dimen/sp_18"/>
 
     <RelativeLayout
         style="@style/match_wrap"
         android:layout_marginTop="@dimen/size_10"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/tv_sms_sign"
             android:layout_width="wrap_content"
@@ -128,10 +129,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:padding="@dimen/size_10"
             android:text="忘记密码"
-            android:textColor="#80ffffff"
-            android:layout_alignParentTop="true"/>
+            android:textColor="#80ffffff"/>
     </RelativeLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btn_openid_qq"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/umeng_socialize_qq"
+            android:text="QQ"/>
+
+        <ImageView
+            android:id="@+id/btn_openid_wx"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/umeng_socialize_wechat"
+            android:text="VX"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

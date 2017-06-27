@@ -137,34 +137,25 @@ public class RegFragment extends BaseFragment<RegPresenter> implements RegContra
     private void readService() {
         startActivity(new Intent(mContext, TermServiceActivity.class));
     }
+
     //第三步验证
     private void confirmThird() {
         String pwd = mEditPwd.getEditText();
         String confirmPwd =  mEditConfirmPwd.getEditText();
         String phone = mEditNumber.getEditText();
 
-        if (TextUtils.isEmpty(pwd)) {
-            Toast.makeText(mContext, "请输入密码", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(confirmPwd)) {
-            Toast.makeText(mContext, "请再次输入确认密码", Toast.LENGTH_SHORT).show();
+        if (!pwd.equals(confirmPwd)) {
+            Toast.makeText(mContext, "两次密码不一致", Toast.LENGTH_SHORT).show();
             return;
         }
         if(!StringUtils.checkPassword(pwd) || !StringUtils.checkPassword(confirmPwd)){
             return;
         }
-        if (!pwd.equals(confirmPwd)) {
-            Toast.makeText(mContext, "两次密码不一致", Toast.LENGTH_SHORT).show();
-            return;
-        }
         mPresenter.registerUser(mEditName.getEditText(), phone, UIUtils.sha512(phone, pwd),mEditCode.getText().toString());
-
     }
 
     private void nextNumber() {
         mPresenter.isRegister(mEditNumber.getEditText().toString());
-
     }
 
     private void nextCodeAndName() {

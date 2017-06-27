@@ -1,7 +1,5 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +18,6 @@ import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements FindPwdContract.View {
@@ -95,53 +92,32 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_code:
-                String editText = mEditNumber.getEditText();
-                if (TextUtils.isEmpty(editText)) {
-                    Toast.makeText(mContext, "请输入手机号码", Toast.LENGTH_SHORT).show();
-                    return;
+                String phone = mEditNumber.getEditText();
+                if (StringUtils.isMobile(phone)) {
+                    mTvCode.setEnabled(false);
+                    mPresenter.getAuthCode(phone);
+                    mPresenter.readSecond();
+                    MobclickAgent.onEvent(this, "forgot_identifying_code");
                 }
-                if (TextUtils.isEmpty(mEditPwd.getEditText().toString())) {
-                    Toast.makeText(mContext, "请输入新密码", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!StringUtils.isMobile(editText)) {
-                    return;
-                }
-                mTvCode.setEnabled(false);
-                mPresenter.getAuthCode(editText);
-                mPresenter.readSecond();
-                MobclickAgent.onEvent(this, "forgot_identifying_code");
+
                 break;
             case R.id.btn_sign_in:
-                retrievePwd();
-                MobclickAgent.onEvent(this, "forgot_register");
+                String phone2 = mEditNumber.getEditText();
+                String pwd = mEditPwd.getEditText();
+                String authCode = mEditCode.getText().toString();
+                if (StringUtils.isMobile(phone2) && StringUtils.checkPassword(pwd)) {
+                    String s = "" + mCodeInfo.getAuthCode();
+                    if (mCodeInfo != null && !s.equals(authCode)) {
+                        Toast.makeText(mContext, "验证码不正确", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mPresenter.retrievePwd(phone2, UIUtils.sha512(phone2, pwd), authCode);
+                        MobclickAgent.onEvent(this, "forgot_register");
+                    }
+                }
+
                 break;
         }
     }
-
-    private void retrievePwd() {
-        String phone = mEditNumber.getEditText();
-        String password = mEditPwd.getEditText();
-        String pwd = UIUtils.sha512(phone, password);
-        String authCode = mEditCode.getText().toString();
-        if (!StringUtils.isMobile(phone)) {
-            return;
-        }
-        if (!StringUtils.checkPassword(password)) {
-            return;
-        }
-        if (authCode.length() == 0) {
-            Toast.makeText(mContext, "请输入验证码", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String s = "" + mCodeInfo.getAuthCode();
-        if (mCodeInfo != null && !s.equals(authCode)) {
-            Toast.makeText(mContext, "验证码不正确", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mPresenter.retrievePwd(phone, pwd, authCode);
-    }
-
 
 
 }

@@ -42,7 +42,7 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
 
 
     private HomeNewsAdapter mNewsAdapter;
-    private String urls[] = {"http://www.onlyhi.cn/", "http://www.onlyhi.cn/z/summer.html", "http://www.onlyhi.cn/z/StarCourse.html"};
+    private String urls[] = {"http://www.onlyhi.cn/", "http://www.onlyhi.cn/", "http://www.onlyhi.cn/"};
     private String titles[] = {"首页", "暑期课程", "明星课程"};
 
     @BindView(R.id.banner)

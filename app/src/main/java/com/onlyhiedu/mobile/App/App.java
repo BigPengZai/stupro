@@ -74,7 +74,7 @@ public class App extends Application {
 
         initGlide();
         DaoUtil.getInstance(this);
-//        initWorkerThread();
+        initWorkerThread();
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 

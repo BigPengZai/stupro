@@ -25,7 +25,6 @@ import com.onlyhiedu.mobile.Base.BasePresenter;
 
 import io.agora.rtc.RtcEngine;
 import io.agore.openvcall.model.ConstantApp;
-import io.agore.openvcall.model.CurrentUserSettings;
 import io.agore.openvcall.model.EngineConfig;
 import io.agore.openvcall.model.MyEngineEventHandler;
 import io.agore.openvcall.model.WorkerThread;
@@ -192,9 +191,6 @@ public abstract class BaseActivity<T extends BasePresenter>extends com.onlyhiedu
         }
     }
 
-    protected CurrentUserSettings vSettings() {
-        return App.mVideoSettings;
-    }
 
     protected int virtualKeyHeight() {
         boolean hasPermanentMenuKey = ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplication()));

@@ -70,8 +70,7 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
                 mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
                 break;
             case 2:
-                mEditText.setTransformationMethod(PasswordTransformationMethod
-                        .getInstance());
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 break;
         }
 

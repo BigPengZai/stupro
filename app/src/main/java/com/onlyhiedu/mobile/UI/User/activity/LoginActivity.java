@@ -28,14 +28,20 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
 
+    public static final String TAG = LoginActivity.class.getSimpleName();
 
-    private boolean isChecked = true;
 
     @BindView(R.id.edit_number)
     EditText mEditNumber;
@@ -45,8 +51,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     ImageView mImg_Show;
     @BindView(R.id.btn_sign)
     Button mButton;
+
     private int REQUEST_CODE = 11;
-    public static final String TAG = LoginActivity.class.getSimpleName();
+    private boolean isChecked = true;
+    private UMShareAPI mShareAPI;
 
     @Override
     protected void initInject() {
@@ -66,7 +74,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-
+        mShareAPI = UMShareAPI.get( this );
         mEditNumber.setText(SPUtil.getPhone());
         mEditNumber.addTextChangedListener(mTextWatcher);
         UIUtils.initCursor(mEditNumber);
@@ -99,7 +107,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     };
 
-    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number})
+    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number, R.id.btn_openid_qq,R.id.btn_openid_wx})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_sign:
@@ -124,6 +132,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case R.id.img_show:
                 showPwd();
+                break;
+            case R.id.btn_openid_qq:
+                mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ,umAuthListener);
+                break;
+            case R.id.btn_openid_wx:
+                mShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN,umAuthListener);
                 break;
         }
     }
@@ -186,8 +200,38 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         Log.d(TAG, "msg:" + msg);
     }
 
+
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+
+        }
+
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
+            Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
+            if (map!=null){
+                Log.d("auth callbacl","getting data");
+                Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            Toast.makeText( getApplicationContext(), "授权失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+            Toast.makeText( getApplicationContext(), "授权取消", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mShareAPI.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
             String username = data.getStringExtra("username");
             switch (requestCode) {

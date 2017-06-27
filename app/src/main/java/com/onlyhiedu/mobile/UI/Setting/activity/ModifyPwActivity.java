@@ -11,6 +11,8 @@ import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Setting.presenter.ModifyPwPresenter;
 import com.onlyhiedu.mobile.UI.Setting.presenter.contract.ModifyPwContract;
+import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -133,12 +135,14 @@ public class ModifyPwActivity extends BaseActivity<ModifyPwPresenter> implements
                 String newPwd = mEdit_New_Pw.getEditText();
                 String configPwd = mEdit_Confirm_Pw.getEditText();
 
-                if (newPwd.equals(configPwd)) {
-                    mPresenter.updatePassword(mEdit_Old_Number.getEditText(), System.currentTimeMillis(), newPwd);
-                } else {
-                    Toast.makeText(mContext, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+                if(StringUtils.checkPassword(newPwd) && StringUtils.checkPassword(configPwd)){
+                    if(newPwd.equals(configPwd)){
+                        MobclickAgent.onEvent(this, "modify_confirm_pw");
+                        mPresenter.updatePassword(mEdit_Old_Number.getEditText(), System.currentTimeMillis(), newPwd);
+                    }else{
+                        Toast.makeText(mContext, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                MobclickAgent.onEvent(this, "modify_confirm_pw");
                 break;
         }
     }
@@ -147,9 +151,7 @@ public class ModifyPwActivity extends BaseActivity<ModifyPwPresenter> implements
     @Override
     public void showUpdate(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-        mEdit_Old_Number.clean();
-        mEdit_New_Pw.clean();
-        mEdit_Confirm_Pw.clean();
+        UIUtils.startLoginActivity(this);
     }
 
     @Override

@@ -57,7 +57,7 @@ public class StringUtils {
     }
 
     /**
-     * 校验密码 ：密码要求6-12位,非纯数字,非纯字母
+     * 校验密码 ：密码要求6-20位,非纯数字,非纯字母
      *
      * @param
      * @param password
@@ -70,14 +70,13 @@ public class StringUtils {
             return false;
         }
 
-        // 判断一个字符串是否含有中文
-        if (isContainsChinese(password)) {
-            Toast.makeText(App.getInstance().getApplicationContext(), "不能包含中文", Toast.LENGTH_SHORT).show();
+        if (password.length() < 6 || password.length() > 20) {
+            Toast.makeText(App.getInstance().getApplicationContext(), "密码要在6-20位之间", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (password.length() < 6 || password.length() > 20) {
-            Toast.makeText(App.getInstance().getApplicationContext(), "密码要在6-20位之间", Toast.LENGTH_SHORT).show();
+        if (compileExChar(password)) {
+            Toast.makeText(App.getInstance().getApplicationContext(), "不允许输入特殊符号！", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -88,6 +87,13 @@ public class StringUtils {
 
         return true;
     }
+
+
+
+
+
+
+
 
     // 判断一个字符串是否含有中文
     public static boolean isContainsChinese(String str) {
@@ -100,6 +106,25 @@ public class StringUtils {
         }
         return flg;
     }
+
+    /**
+     * @prama: str 要判断是否包含特殊字符的目标字符串
+     */
+
+    private static boolean compileExChar(String str) {
+
+        String limitEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+
+        Pattern pattern = Pattern.compile(limitEx);
+        Matcher m = pattern.matcher(str);
+
+        if (m.find()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     //检查字符串是否数字
     public static boolean isNumeric(String str) {
@@ -131,7 +156,6 @@ public class StringUtils {
         }
         return id;
     }*/
-
     public static String getDeviceId(Context context) {
         try {
             android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
@@ -144,7 +168,7 @@ public class StringUtils {
                 device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),
                         android.provider.Settings.Secure.ANDROID_ID);
             }
-            return  device_id;
+            return device_id;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,7 +199,6 @@ public class StringUtils {
         }
         return result;
     }
-
 
 
 }

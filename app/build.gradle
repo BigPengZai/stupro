@@ -135,5 +135,4 @@ dependencies {
     compile project(':PushSDK')
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile files('libs/SocialSDK_Sina_Simplify.jar')
 }

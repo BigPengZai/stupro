@@ -32,6 +32,7 @@
             android:layout_marginTop="@dimen/size_30"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
             <EditText
                 android:background="@color/transparent"
                 android:id="@+id/edit_pwd"
@@ -42,6 +43,7 @@
                 android:hint="密码"
                 android:inputType="textPassword"
                 />
+
             <ImageView
                 android:id="@+id/img_show"
                 android:layout_width="wrap_content"

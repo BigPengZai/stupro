@@ -60,7 +60,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -816,7 +815,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
     private float rate;      //缩放比例
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen,R.id.but_im})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -876,15 +875,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-    private void showIMLayout() {
-        mLlMsg.setVisibility(View.VISIBLE);
-        mTvIM.setBackgroundResource(R.drawable.im_text_bg);
-        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
-        TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
-        animation.setDuration(300);
-        mLlMsg.startAnimation(animation);
-    }
-
     private void hindIMLayout() {
         mLlMsg.setVisibility(View.VISIBLE);
         mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
@@ -907,6 +897,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             }
         });
+        mLlMsg.startAnimation(animation);
+    }
+
+    private void showIMLayout() {
+        mLlMsg.setVisibility(View.VISIBLE);
+        mTvIM.setBackgroundResource(R.drawable.im_text_bg);
+        mTvIM.setTextColor(getResources().getColor(R.color.im_text_color));
+        TranslateAnimation animation = new TranslateAnimation(-mLlMsg.getWidth(), 0, 1, 1);
+        animation.setDuration(300);
         mLlMsg.startAnimation(animation);
     }
 

@@ -2,7 +2,6 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,7 +27,6 @@ import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements SmsLoginContract.View {
@@ -132,7 +130,6 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
                 //获取验证码
                 getMsgCode();
                 if ("获取验证码".equals(mTvCode.getText().toString())) {
-                    mPresenter.getAuthCode(mEditNumber.getText().toString());
                     MobclickAgent.onEvent(mContext, "register_identifying_code");
                 }
                 break;
@@ -141,15 +138,12 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
                 MobclickAgent.onEvent(this, "sms_login");
                 break;
             case R.id.ic_delete:
-
                 finish();
                 break;
             case R.id.rl_pwd_login:
-
                 finish();
                 break;
             case R.id.btn_sign_in:
-
                 startActivity(new Intent(this, RegActivity.class));
                 break;
         }
@@ -175,6 +169,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
         if (StringUtils.isMobile(number)) {
             mTvCode.setEnabled(false);
             mPresenter.readSecond();
+            mPresenter.getAuthCode(mEditNumber.getText().toString());
         }
     }
 
