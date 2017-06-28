@@ -76,7 +76,7 @@ public class StringUtils {
         }
 
         if (compileExChar(password)) {
-            Toast.makeText(App.getInstance().getApplicationContext(), "不允许输入特殊符号！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getInstance().getApplicationContext(), "仅支持大小写字母和数字，请勿输入特殊字符。", Toast.LENGTH_SHORT).show();
             return false;
         }
 

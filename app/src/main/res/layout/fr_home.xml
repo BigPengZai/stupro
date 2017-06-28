@@ -48,7 +48,7 @@
                     android:id="@+id/banner"
                     app:image_scale_type="fit_xy"
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"/>
+                    android:layout_height="140dp"/>
                 <!--广告栏-->
 
 
