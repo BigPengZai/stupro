@@ -77,7 +77,7 @@
             android:id="@+id/edit_pwd"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/size_30"
+            android:layout_marginLeft="@dimen/size_24"
             android:layout_weight="1"
             android:background="@drawable/transparent"
             android:hint="密码"

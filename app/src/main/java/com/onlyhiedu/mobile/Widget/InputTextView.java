@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.Spannable;
@@ -70,7 +71,10 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
                 mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
                 break;
             case 2:
-                mEditText.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                mEditText.setTransformationMethod(PasswordTransformationMethod
+                        .getInstance());
+                //个人中心 修改密码maxLength 20
+                mEditText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(20) });
                 break;
         }
 

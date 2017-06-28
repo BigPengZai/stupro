@@ -23,6 +23,7 @@ import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
@@ -121,6 +122,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 MobclickAgent.onEvent(this, "login_forget_pw");
                 break;
             case R.id.btn_sign:
+                SystemUtil.hideKeyboard(mButton,this);
                 //登录
                 toLogin();
                 MobclickAgent.onEvent(this, "login_login");
