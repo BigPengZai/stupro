@@ -142,7 +142,7 @@ public class MeFragment extends BaseFragment<MePresenter> implements MeContract.
         UMImageMark umImageMark = new UMImageMark();
         umImageMark.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
         umImageMark.setMarkBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.logoicon));
-        UMWeb web = new UMWeb("http://www.onlyhiedu.com/");
+        UMWeb web = new UMWeb("http://www.onlyhi.cn/");
         web.setTitle(name + "邀您体验[嗨课堂]");
         mUmImage = new UMImage(mContext, R.mipmap.logoicon);
         mUmImage.compressFormat = Bitmap.CompressFormat.PNG;
