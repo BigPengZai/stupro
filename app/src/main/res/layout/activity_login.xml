@@ -135,8 +135,9 @@
             android:textColor="#80ffffff"/>
     </RelativeLayout>
 
-
+<!--第三方登录-->
     <LinearLayout
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
