@@ -129,9 +129,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             case R.id.tv_code:
                 //获取验证码
                 getMsgCode();
-                if ("获取验证码".equals(mTvCode.getText().toString())) {
-                    MobclickAgent.onEvent(mContext, "register_identifying_code");
-                }
+
                 break;
             case R.id.btn_sign:
                 toLogin();
@@ -167,6 +165,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     private void getMsgCode() {
         String number = mEditNumber.getText().toString();
         if (StringUtils.isMobile(number)) {
+            MobclickAgent.onEvent(mContext, "register_identifying_code");
             mTvCode.setEnabled(false);
             mPresenter.readSecond();
             mPresenter.getAuthCode(mEditNumber.getText().toString());

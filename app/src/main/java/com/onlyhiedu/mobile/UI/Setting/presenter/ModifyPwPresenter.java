@@ -37,7 +37,14 @@ public class ModifyPwPresenter extends RxPresenter<ModifyPwContract.View> implem
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
-                if (getView() != null) getView().showUpdate(data.getMessage());
+                if (getView() != null) {
+                    if (!data.isHasError()) {
+                        getView().showUpdate(data.getMessage());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+
             }
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));

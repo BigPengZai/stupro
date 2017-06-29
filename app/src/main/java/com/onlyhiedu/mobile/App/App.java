@@ -133,7 +133,7 @@ public class App extends Application {
         //配置 微信 以及 QQ app_id
         PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "bed2a2109e97ec3b280eaff88dd0a03f");
         PlatformConfig.setQQZone("1105946445", "yp52LFZMgwMx35h2");
-        PlatformConfig.setSinaWeibo("3139333765", "65fe958da4bcd72a1c701c98fec4f91e","http://www.onlyhiedu.com/");
+        PlatformConfig.setSinaWeibo("3139333765", "65fe958da4bcd72a1c701c98fec4f91e","http://www.onlyhi.cn/");
     }
 
 }

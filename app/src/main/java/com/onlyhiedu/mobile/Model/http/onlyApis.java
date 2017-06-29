@@ -27,7 +27,7 @@ public interface onlyApis {
 
 
     //测试环境
-    String HOST = "http://192.168.1.252:8090/";
+    String HOST = "http://192.168.1.219/";
     //公网环境
 //    String HOST = "http://api.onlyeduhi.com/";
 

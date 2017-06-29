@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     };
 
-    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number, R.id.btn_openid_qq,R.id.btn_openid_wx})
+    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number, R.id.btn_openid_qq,R.id.btn_openid_wx,R.id.btn_openid_sina})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_sign:
@@ -139,7 +139,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ,umAuthListener);
                 break;
             case R.id.btn_openid_wx:
+//                mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, null);
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN,umAuthListener);
+                break;
+            case R.id.btn_openid_sina:
+                mShareAPI.doOauthVerify(this, SHARE_MEDIA.SINA,umAuthListener);
                 break;
         }
     }
@@ -247,4 +251,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //防止内存泄漏
+        UMShareAPI.get(this).release();
+    }
 }
