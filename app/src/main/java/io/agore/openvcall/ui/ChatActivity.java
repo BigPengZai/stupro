@@ -798,7 +798,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void showFlowStatistics() {
         Log.d(TAG, "上传流时长完成");
-        Toast.makeText(ChatActivity.this, "上传流时长完成", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ChatActivity.this, "上传流时长完成", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -1217,7 +1217,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                 mPresenter.uploadStatistics(String.valueOf(f1), mRoomInfo.getCommChannelId());
                 event().removeEventHandler(ChatActivity.this);
-                Toast.makeText(ChatActivity.this, "流统计时长: " + f1 + " 分钟", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ChatActivity.this, "流统计时长: " + f1 + " 分钟", Toast.LENGTH_SHORT).show();
             }
         });
     }
