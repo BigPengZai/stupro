@@ -15,6 +15,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
+import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
@@ -95,10 +96,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mHomeFragment);
         }
         if (item.getItemId() == R.id.tow) {
-            showHideFragment(mClassFragment);
+            if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
+            else showHideFragment(mClassFragment);
         }
         if (item.getItemId() == R.id.thr) {
-            showHideFragment(mMeFragment);
+            if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
+            else showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
         return true;

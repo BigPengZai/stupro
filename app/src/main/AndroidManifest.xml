@@ -106,6 +106,8 @@
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
         <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
         </activity>
+        <activity android:name=".UI.User.activity.BindActivity">
+        </activity>
     </application>
 
 </manifest>

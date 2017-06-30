@@ -15,12 +15,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
+import com.onlyhiedu.mobile.Utils.MyUMAuthListener;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
@@ -139,8 +141,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ,umAuthListener);
                 break;
             case R.id.btn_openid_wx:
-//                mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, null);
-                mShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN,umAuthListener);
+                mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, wxAuthLister);
                 break;
             case R.id.btn_openid_sina:
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.SINA,umAuthListener);
@@ -207,30 +208,24 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
 
-    private UMAuthListener umAuthListener = new UMAuthListener() {
+    private UMAuthListener wxAuthLister = new MyUMAuthListener() {
         @Override
-        public void onStart(SHARE_MEDIA share_media) {
-
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            mShareAPI.doOauthVerify(LoginActivity.this, SHARE_MEDIA.WEIXIN,umAuthListener);
         }
+    };
 
+    private UMAuthListener umAuthListener = new MyUMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
             Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
             if (map!=null){
+                App.bIsGuestLogin = true;  //设置为游客
+                startActivity(new Intent(LoginActivity.this,BindActivity.class));
                 Log.d("auth callbacl","getting data");
                 Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
             }
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-            Toast.makeText( getApplicationContext(), "授权失败", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media, int i) {
-            Toast.makeText( getApplicationContext(), "授权取消", Toast.LENGTH_SHORT).show();
         }
     };
 

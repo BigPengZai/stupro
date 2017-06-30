@@ -44,6 +44,7 @@ public class App extends Application {
     }
 
     public boolean isTag;
+    public static boolean bIsGuestLogin = true;//是否游客登录
     static {
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);

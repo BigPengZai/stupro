@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
-import com.onlyhiedu.mobile.Model.bean.CourseEndList;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.UserUtil;
