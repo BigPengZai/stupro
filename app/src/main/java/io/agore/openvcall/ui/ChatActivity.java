@@ -1215,8 +1215,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void run() {
                 BigDecimal b = new BigDecimal((double) stats.totalDuration / 60.00);
                 float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                mPresenter.uploadStatistics(String.valueOf(f1), mRoomInfo.getCommChannelId());
-                event().removeEventHandler(ChatActivity.this);
+                if (mListBean != null) {
+                    mUuid = mListBean.getUuid();
+                    mPresenter.uploadStatistics(String.valueOf(f1), mUuid);
+                    event().removeEventHandler(ChatActivity.this);
+                }
 //                Toast.makeText(ChatActivity.this, "流统计时长: " + f1 + " 分钟", Toast.LENGTH_SHORT).show();
             }
         });
