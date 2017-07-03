@@ -137,8 +137,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     //环信
-    compile 'com.google.android.gms:play-services-gcm:9.4.0'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.hyphenate:hyphenate-sdk:3.3.0'
-    compile 'com.parse:parse-android:1.13.1'
+//    compile 'com.android.support:multidex:1.0.1'
+//    compile 'com.hyphenate:hyphenate-sdk:3.3.0'
+    compile project( ':easeui')
 }
