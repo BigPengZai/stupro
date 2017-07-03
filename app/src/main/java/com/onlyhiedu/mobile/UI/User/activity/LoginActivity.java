@@ -1,7 +1,11 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.animation.Keyframe;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -10,9 +14,11 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
@@ -80,8 +86,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         mShareAPI = UMShareAPI.get( this );
         mEditNumber.setText(SPUtil.getPhone());
         mEditNumber.addTextChangedListener(mTextWatcher);
-        UIUtils.initCursor(mEditNumber);
 
+        UIUtils.initCursor(mEditNumber);
         if (!TextUtils.isEmpty(mEditNumber.getText().toString())) {
             mButton.setEnabled(true);
             mButton.setTextColor(getResources().getColor(R.color.c9));
@@ -110,7 +116,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     };
 
-    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number, R.id.btn_openid_qq,R.id.btn_openid_wx,R.id.btn_openid_sina})
+    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number, R.id.btn_openid_qq, R.id.btn_openid_wx, R.id.btn_openid_sina})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_sign:
@@ -124,7 +130,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 MobclickAgent.onEvent(this, "login_forget_pw");
                 break;
             case R.id.btn_sign:
-                SystemUtil.hideKeyboard(mButton,this);
+                SystemUtil.hideKeyboard(mButton, this);
                 //登录
                 toLogin();
                 MobclickAgent.onEvent(this, "login_login");
@@ -138,13 +144,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 showPwd();
                 break;
             case R.id.btn_openid_qq:
-                mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ,umAuthListener);
+                mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, umAuthListener);
                 break;
             case R.id.btn_openid_wx:
                 mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, wxAuthLister);
                 break;
             case R.id.btn_openid_sina:
-                mShareAPI.doOauthVerify(this, SHARE_MEDIA.SINA,umAuthListener);
+                mShareAPI.doOauthVerify(this, SHARE_MEDIA.SINA, umAuthListener);
                 break;
         }
     }
@@ -175,6 +181,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showUser() {
+        if (TextUtils.isEmpty(SPUtil.getToken())) {
+            App.bIsGuestLogin = true;
+        }else{
+            App.bIsGuestLogin = false;
+        }
         addUTag();
         startActivity(new Intent(this, MainActivity.class));
         finish();
@@ -253,4 +264,5 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         //防止内存泄漏
         UMShareAPI.get(this).release();
     }
+
 }

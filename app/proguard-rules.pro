@@ -237,3 +237,6 @@ public static final ** CREATOR;
 -keep class com.tencent.mm.sdk.** {
    *;
 }
+#环信
+-keep class com.hyphenate.** {*;}
+-dontwarn  com.hyphenate.**
