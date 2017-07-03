@@ -1,11 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
-import android.animation.Keyframe;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -14,17 +10,18 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
@@ -46,24 +43,43 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.onlyhiedu.mobile.R.id.btn_cancel;
+import static com.onlyhiedu.mobile.R.id.btn_guest;
+import static com.onlyhiedu.mobile.R.id.btn_openid_qq;
+import static com.onlyhiedu.mobile.R.id.btn_openid_sina;
+import static com.onlyhiedu.mobile.R.id.btn_openid_wx;
+import static com.onlyhiedu.mobile.R.id.btn_sign;
+import static com.onlyhiedu.mobile.R.id.btn_sign_in;
+import static com.onlyhiedu.mobile.R.id.edit_number;
+import static com.onlyhiedu.mobile.R.id.img_show;
+import static com.onlyhiedu.mobile.R.id.tv_find_pwd;
+import static com.onlyhiedu.mobile.R.id.tv_sms_sign;
+
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
 
     public static final String TAG = LoginActivity.class.getSimpleName();
+    public static final String cancelShow = "cancelShow";  //取消按钮是否可见
+    public static final String information = "information"; //游客模式下，是否点击各人信息进入的首页
 
-
-    @BindView(R.id.edit_number)
+    @BindView(edit_number)
     EditText mEditNumber;
     @BindView(R.id.edit_pwd)
     EditText mEditPwd;
-    @BindView(R.id.img_show)
+    @BindView(img_show)
     ImageView mImg_Show;
-    @BindView(R.id.btn_sign)
+    @BindView(btn_sign)
     Button mButton;
+    @BindView(R.id.btn_cancel)
+    TextView mTvCancel;
+    @BindView(R.id.btn_guest)
+    TextView mBtnGuest;
+
 
     private int REQUEST_CODE = 11;
     private boolean isChecked = true;
     private UMShareAPI mShareAPI;
+    private boolean mBooleanExtra;
 
     @Override
     protected void initInject() {
@@ -82,8 +98,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        boolean extra = getIntent().getBooleanExtra(cancelShow, false);
+        mBooleanExtra = getIntent().getBooleanExtra(information, false);
 
-        mShareAPI = UMShareAPI.get( this );
+
+        if (extra) mTvCancel.setVisibility(View.VISIBLE);
+        else mTvCancel.setVisibility(View.GONE);
+        if (extra) mBtnGuest.setVisibility(View.GONE);
+        else mBtnGuest.setVisibility(View.VISIBLE);
+
+        mShareAPI = UMShareAPI.get(this);
         mEditNumber.setText(SPUtil.getPhone());
         mEditNumber.addTextChangedListener(mTextWatcher);
 
@@ -116,41 +140,48 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     };
 
-    @OnClick({R.id.tv_sms_sign, R.id.tv_find_pwd, R.id.btn_sign, R.id.btn_sign_in, R.id.img_show, R.id.edit_number, R.id.btn_openid_qq, R.id.btn_openid_wx, R.id.btn_openid_sina})
+    @OnClick({tv_sms_sign, tv_find_pwd, btn_sign, btn_sign_in, img_show, edit_number, btn_openid_qq, btn_openid_wx, btn_openid_sina, btn_guest, btn_cancel})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_sms_sign:
+            case tv_sms_sign:
                 //短信验证码登录
                 startActivity(new Intent(this, SmsLoginActivity.class));
                 MobclickAgent.onEvent(this, "login_sms_login");
                 break;
-            case R.id.tv_find_pwd:
+            case tv_find_pwd:
                 //忘记密码
                 startActivity(new Intent(this, FindPwdActivity.class));
                 MobclickAgent.onEvent(this, "login_forget_pw");
                 break;
-            case R.id.btn_sign:
+            case btn_sign:
                 SystemUtil.hideKeyboard(mButton, this);
                 //登录
                 toLogin();
                 MobclickAgent.onEvent(this, "login_login");
                 break;
-            case R.id.btn_sign_in:
+            case btn_sign_in:
                 //注册
 //                startActivity(new Intent(this, RegActivity.class));
                 startActivityForResult(new Intent(this, RegActivity.class), REQUEST_CODE);
                 break;
-            case R.id.img_show:
+            case img_show:
                 showPwd();
                 break;
-            case R.id.btn_openid_qq:
+            case btn_openid_qq:
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, umAuthListener);
                 break;
-            case R.id.btn_openid_wx:
+            case btn_openid_wx:
                 mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, wxAuthLister);
                 break;
-            case R.id.btn_openid_sina:
+            case btn_openid_sina:
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.SINA, umAuthListener);
+                break;
+            case btn_guest:
+                App.bIsGuestLogin = true;
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                break;
+            case btn_cancel:
+                finish();
                 break;
         }
     }
@@ -181,13 +212,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showUser() {
-        if (TextUtils.isEmpty(SPUtil.getToken())) {
-            App.bIsGuestLogin = true;
-        }else{
-            App.bIsGuestLogin = false;
-        }
         addUTag();
-        startActivity(new Intent(this, MainActivity.class));
+        App.bIsGuestLogin = false;
+        if (mBooleanExtra) {
+            startActivity(new Intent(this, MyInfoActivity.class));
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         finish();
     }
 
@@ -222,7 +253,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private UMAuthListener wxAuthLister = new MyUMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            mShareAPI.doOauthVerify(LoginActivity.this, SHARE_MEDIA.WEIXIN,umAuthListener);
+            mShareAPI.doOauthVerify(LoginActivity.this, SHARE_MEDIA.WEIXIN, umAuthListener);
         }
     };
 
@@ -230,11 +261,33 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
+//            Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
+            if (map != null) {
+                mShareAPI.getPlatformInfo(LoginActivity.this, share_media, umAuthListener2);
+
+//                App.bIsGuestLogin = true;  //设置为游客
+//                startActivity(new Intent(LoginActivity.this,BindActivity.class));
+//                Log.d("auth callbacl","getting data");
+//
+//                Log.d(Constants.Async,map.toString());
+//
+//                Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private UMAuthListener umAuthListener2 = new MyUMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
             Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
-            if (map!=null){
+            if (map != null) {
                 App.bIsGuestLogin = true;  //设置为游客
-                startActivity(new Intent(LoginActivity.this,BindActivity.class));
-                Log.d("auth callbacl","getting data");
+                startActivity(new Intent(LoginActivity.this, BindActivity.class));
+                Log.d("auth callbacl", "getting data");
+
+                Log.d(Constants.Async, map.toString());
+
                 Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
             }
         }

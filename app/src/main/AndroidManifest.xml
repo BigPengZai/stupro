@@ -89,23 +89,22 @@
         <activity
             android:name=".UI.Home.activity.SplashActivity"
             android:theme="@style/SplashTheme">
-          <!--  <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity android:name=".UI.User.activity.ECLoginActivity"
         >
-            <intent-filter>
+          <!--  <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <activity
             android:name=".UI.User.activity.LoginActivity"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".UI.User.activity.SmsLoginActivity"

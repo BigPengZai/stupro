@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter.OnItemClickListener;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.Model.bean.HomeNews;
@@ -20,6 +21,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
+import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.GlideImageLoader;
 import com.youth.banner.Banner;
@@ -149,7 +151,12 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
                 }
                 break;
             case R.id.tv_information:
-                startActivity(new Intent(mContext, MyInfoActivity.class));
+                if (App.bIsGuestLogin) {
+                    startActivity(new Intent(mContext, LoginActivity.class).putExtra(LoginActivity.cancelShow, true).putExtra(LoginActivity.information,true));
+                } else {
+                    startActivity(new Intent(mContext, MyInfoActivity.class));
+                }
+
                 break;
         }
     }

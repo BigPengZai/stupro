@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 
 
@@ -31,11 +31,10 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(SPUtil.getToken())) {
-                    App.bIsGuestLogin = true;
-                }else{
-                    App.bIsGuestLogin = false;
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                } else {
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
         }, 2000);

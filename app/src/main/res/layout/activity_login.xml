@@ -9,16 +9,33 @@
     android:padding="@dimen/login_padding"
     tools:context="com.onlyhiedu.mobile.UI.User.activity.LoginActivity">
 
-    <TextView
-        android:id="@+id/btn_sign_in"
-        android:layout_width="wrap_content"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="@dimen/size_18"
-        android:padding="10dp"
-        android:text="注册"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/sp_18"/>
+        android:layout_marginTop="@dimen/size_15">
+
+        <TextView
+            android:id="@+id/btn_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:text="注册"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_18"/>
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="取消"
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_18"/>
+    </RelativeLayout>
+
 
     <ImageView
         android:layout_width="wrap_content"
@@ -136,6 +153,12 @@
             android:textColor="#80ffffff"/>
     </RelativeLayout>
 
+
+    <Button
+        android:id="@+id/btn_guest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="游客"/>
     <!--第三方登录-->
     <LinearLayout
         android:layout_width="match_parent"

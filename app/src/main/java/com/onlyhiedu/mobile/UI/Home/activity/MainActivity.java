@@ -15,12 +15,13 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
-import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
+import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment2;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
+import me.yokeyword.fragmentation.SupportFragment;
 
 
 public class MainActivity extends VersionUpdateActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -29,7 +30,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     public static final int CALL_REQUEST_CODE = 110;
 
     private ClassFragment mClassFragment;
-    private MeFragment mMeFragment;
+    private SupportFragment mMeFragment;
+
     private long mExitTime = 0;
 
 
@@ -51,7 +53,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void initView() {
         mClassFragment = new ClassFragment();
-        mMeFragment = new MeFragment();
+        if (App.bIsGuestLogin) {
+            mMeFragment = new MeFragment2();
+        } else {
+            mMeFragment = new MeFragment();
+        }
+
         mHomeFragment = new HomeFragment();
         //隐藏首页
        /* if (App.getInstance().isTag) {
@@ -96,12 +103,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mHomeFragment);
         }
         if (item.getItemId() == R.id.tow) {
-            if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
-            else showHideFragment(mClassFragment);
+            showHideFragment(mClassFragment);
         }
         if (item.getItemId() == R.id.thr) {
-            if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
-            else showHideFragment(mMeFragment);
+          /*  if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
+            else*/
+            showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
         return true;
