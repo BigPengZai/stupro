@@ -151,7 +151,7 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
                 }
                 break;
             case R.id.tv_information:
-                if (App.bIsGuestLogin) {
+                if (App. bIsGuestLogin) {
                     startActivity(new Intent(mContext, LoginActivity.class).putExtra(LoginActivity.cancelShow, true).putExtra(LoginActivity.information,true));
                 } else {
                     startActivity(new Intent(mContext, MyInfoActivity.class));

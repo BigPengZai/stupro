@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.FeedBackActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.ModifyPwActivity;
+import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity;
@@ -45,4 +46,6 @@ public interface ActivityComponent {
     void inject(ConsumeActivity consumeActivity);
 
     void inject(MainActivity mainActivity);
+
+    void inject(BindActivity bindActivity);
 }

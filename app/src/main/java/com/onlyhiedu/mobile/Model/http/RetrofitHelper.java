@@ -13,8 +13,10 @@ import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
+import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.io.File;
 import java.io.IOException;
@@ -214,18 +216,42 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<List<ConsumptionData>>> fetchClassTimeInfo() {
         return sOnlyApis.getTimeInfo();
     }
+
     //设置 推送token
-    public Flowable<onlyHttpResponse> fetchPushToken(String deviceToken,String tag) {
-        return sOnlyApis.getPushInfo(deviceToken,tag);
+    public Flowable<onlyHttpResponse> fetchPushToken(String deviceToken, String tag) {
+        return sOnlyApis.getPushInfo(deviceToken, tag);
     }
 
     //号码是否注册
-    public Flowable<onlyHttpResponse> fetchIsReg(String phone) {
+    public Flowable<onlyHttpResponse<UserIsRegister>> fetchIsReg(String phone) {
         return sOnlyApis.getRegState(phone);
     }
 
     //流统计
-    public Flowable<onlyHttpResponse> fetchStatics(String classTime,String uuid) {
-        return sOnlyApis.getStatics(classTime,uuid);
+    public Flowable<onlyHttpResponse> fetchStatics(String classTime, String uuid) {
+        return sOnlyApis.getStatics(classTime, uuid);
     }
+
+    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchIsBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country, String deviceId) {
+
+        if (share_media == SHARE_MEDIA.WEIXIN) {
+            return sOnlyApis.wechatLogin(uid, openid, name,gender,iconurl,city,province,country,"Android", deviceId);
+        } else if (share_media == SHARE_MEDIA.QQ) {
+            return sOnlyApis.qqLogin(uid, openid,name, gender,iconurl,city,province,"Android", deviceId);
+        } else {
+            return sOnlyApis.sinaLogin(uid,name,gender,iconurl, city,"Android", deviceId);
+        }
+    }
+
+    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchBindUser(SHARE_MEDIA share_media, String uid, String phone, String username, String deviceId) {
+        if (share_media == SHARE_MEDIA.WEIXIN) {
+            return sOnlyApis.wechatBind(uid, phone, username, "Android", deviceId);
+        } else if (share_media == SHARE_MEDIA.QQ) {
+            return sOnlyApis.qqBind(uid, phone, username, "Android", deviceId);
+        } else {
+            return sOnlyApis.sinaBind(uid, phone, username, "Android", deviceId);
+        }
+    }
+
+
 }

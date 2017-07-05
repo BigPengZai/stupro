@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.KnowActivity;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
@@ -55,7 +56,7 @@ public class MeFragment2 extends SimpleFragment {
 
     }
 
-    @OnClick({R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know})
+    @OnClick({R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_setting:
@@ -72,13 +73,16 @@ public class MeFragment2 extends SimpleFragment {
                 showGuestLoginActivity(mContext);
                 break;
             case R.id.setting_know:
-                startActivity(new Intent(getContext(), KnowActivity.class));
+                startActivity(new Intent(mContext, KnowActivity.class));
+                break;
+            case R.id.tv_name:
+                showGuestLoginActivity(mContext);
                 break;
         }
     }
 
     public static void showGuestLoginActivity(Context ctx) {
-        ctx.startActivity(new Intent(ctx, LoginActivity.class).putExtra(LoginActivity.cancelShow, true));
+        ctx.startActivity(new Intent(ctx, LoginActivity.class).putExtra(LoginActivity.cancelShow, true).putExtra(MainActivity.showPagePosition,3));
     }
 
 }

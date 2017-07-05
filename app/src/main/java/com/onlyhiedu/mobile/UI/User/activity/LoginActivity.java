@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
-import com.onlyhiedu.mobile.App.Constants;
+import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
@@ -80,6 +80,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private boolean isChecked = true;
     private UMShareAPI mShareAPI;
     private boolean mBooleanExtra;
+    private int mIntExtra;
 
     @Override
     protected void initInject() {
@@ -100,7 +101,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
         boolean extra = getIntent().getBooleanExtra(cancelShow, false);
         mBooleanExtra = getIntent().getBooleanExtra(information, false);
-
+        mIntExtra = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
 
         if (extra) mTvCancel.setVisibility(View.VISIBLE);
         else mTvCancel.setVisibility(View.GONE);
@@ -178,8 +179,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case btn_guest:
                 App.bIsGuestLogin = true;
-//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                startActivity(new Intent(LoginActivity.this, ECLoginActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
                 break;
             case btn_cancel:
                 finish();
@@ -209,24 +210,22 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
             Log.d(TAG, ":" + StringUtils.getDeviceId(this));
         }
+
+
     }
 
     @Override
     public void showUser() {
         addUTag();
         App.bIsGuestLogin = false;
+        mPresenter.emcLogin(mEditNumber.getText().toString(),mEditPwd.getText().toString(),this);
         if (mBooleanExtra) {
             startActivity(new Intent(this, MyInfoActivity.class));
         } else {
-//            startActivity(new Intent(this, MainActivity.class));
-            mPresenter.emcLogin(mEditNumber.getText().toString(),mEditPwd.getText().toString(),this);
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.showPagePosition, mIntExtra));
         }
-        finish();
+        AppManager.getAppManager().AppExit();
     }
-
-
-
 
     private void addUTag() {
         //tag 手机号码 md5
@@ -249,7 +248,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 //        Toast.makeText(this, "" + PushAgent.getInstance(this).getRegistrationId(), Toast.LENGTH_SHORT).show();
     }
 
-
+    @Override
+    public void isShowBingActivity(String token, SHARE_MEDIA share_media, String uid) {
+        Log.d(TAG, "token : " + token);
+        if (token == null) {
+            startActivity(new Intent(this, BindActivity.class).putExtra(BindActivity.share_media, share_media).putExtra(BindActivity.share_media_uid, uid));
+        } else {
+            SPUtil.setToken(token);
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
 
     @Override
     public void showError(String msg) {
@@ -272,14 +280,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 //            Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
             if (map != null) {
                 mShareAPI.getPlatformInfo(LoginActivity.this, share_media, umAuthListener2);
-
-//                App.bIsGuestLogin = true;  //设置为游客
-//                startActivity(new Intent(LoginActivity.this,BindActivity.class));
-//                Log.d("auth callbacl","getting data");
-//
-//                Log.d(Constants.Async,map.toString());
-//
-//                Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -288,15 +288,49 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
-            Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "成功", Toast.LENGTH_SHORT).show();
             if (map != null) {
-                App.bIsGuestLogin = true;  //设置为游客
-                startActivity(new Intent(LoginActivity.this, BindActivity.class));
-                Log.d("auth callbacl", "getting data");
+                String uid = null;
+                String openid = null;
+                String name = null;
+                String gender = null;
+                String iconurl = null;
+                String city = null;
+                String province = null;
+                String country = null;
+                switch (share_media) {
+                    case WEIXIN:
+                        uid = map.get("unionid");
+                        openid = map.get("openid");
+                        name = map.get("screen_name");
+                        gender = map.get("gender");
+                        iconurl = map.get("iconurl");
+                        city = map.get("city");
+                        province = map.get("province");
+                        country = map.get("country");
+                        break;
+                    case QQ:
+                        uid = map.get("uid");
+                        openid = map.get("openid");
+                        name = map.get("screen_name");
+                        gender = map.get("gender");
+                        iconurl = map.get("iconurl");
+                        city = map.get("city");
+                        province = map.get("province");
+                        break;
+                    case SINA:
+                        uid = map.get("uid");
+                        name = map.get("screen_name");
+                        gender = map.get("gender");
+                        iconurl = map.get("iconurl");
+                        city = map.get("location");
+                        break;
+                }
+                Log.d(TAG, "uid : " + uid+"openid : " + openid+" name : " +name +"_______name : " +name+"_______gender : " +gender
+                        +"_______iconurl : " +iconurl+"_______city : " +city+"_______province : " +province+"_______country : " +country);
 
-                Log.d(Constants.Async, map.toString());
+                mPresenter.isBindUser(share_media, uid, openid,name,gender,iconurl,city,province,country);
 
-                Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
             }
         }
     };

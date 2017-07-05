@@ -24,6 +24,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -121,7 +122,10 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     }
 
+    @Override
+    public void isShowBingActivity(String token, SHARE_MEDIA share_media, String uid) {
 
+    }
 
     @Override
     public void showError(String msg) {

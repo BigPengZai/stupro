@@ -28,7 +28,6 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
@@ -42,6 +41,8 @@ import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment2;
+import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
+import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -60,23 +61,25 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int CALL_REQUEST_CODE = 110;
+    public static final String showPagePosition = "showPagePosition";
     private ClassFragment mClassFragment;
     private SupportFragment mMeFragment;
-    private long mExitTime = 0;
-    @BindView(R.id.navigation)
-    BottomNavigationView mNavigation;
     private HomeFragment mHomeFragment;
-
     // user logged into another device
     public boolean isConflict = false;
     // user account was removed
     private boolean isCurrentAccountRemoved = false;
+    private long mExitTime = 0;
+    private int currentTabIndex;
+    //    private ContactListFragment contactListFragment;
+
+    @BindView(R.id.navigation)
+    BottomNavigationView mNavigation;
     @BindView(R.id.unread_msg_number)
     TextView unreadLabel;
-    private int currentTabIndex;
     @BindView(R.id.unread_address_number)
     TextView unreadAddressLable;
-//    private ContactListFragment contactListFragment;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -91,7 +94,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
@@ -108,7 +111,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         //make sure activity will not in background if user is logged into another device or removed
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
-            DemoHelper.getInstance().logout(false,null);
+            DemoHelper.getInstance().logout(false, null);
             finish();
 //            startActivity(new Intent(this, LoginActivity.class));
             return;
@@ -139,10 +142,14 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment,conversationListFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment, conversationListFragment,mMeFragment);
+            int intExtra = getIntent().getIntExtra(showPagePosition, 0);
+            if (intExtra != 0) {
+                mNavigation.setSelectedItemId(R.id.thr);
+            }
+            loadMultipleRootFragment(R.id.fl_main_content, intExtra, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -166,14 +173,19 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mHomeFragment);
         }
         if (item.getItemId() == R.id.tow) {
-            showHideFragment(mClassFragment);
+            if (App.bIsGuestLogin) {
+                startActivity(new Intent(this, LoginActivity.class).putExtra(LoginActivity.cancelShow, true));
+            } else {
+                showHideFragment(mClassFragment);
+            }
         }
         if (item.getItemId() == R.id.thr) {
-            showHideFragment(conversationListFragment);
+            if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
+            else
+                showHideFragment(conversationListFragment);
+
         }
         if (item.getItemId() == R.id.fou) {
-          /*  if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
-            else*/
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
@@ -209,6 +221,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             }
         });
     }
+
     public void requestPermissions(Activity context, int code, String[] permission) {
         if (UIUtils.requestPermission(context, code, permission)) {
             UIUtils.callLine(this, "400-876-3300");
@@ -232,6 +245,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
     }
+
     EMMessageListener messageListener = new EMMessageListener() {
 
         @Override
@@ -266,7 +280,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
 
         @Override
-        public void onMessageChanged(EMMessage message, Object change) {}
+        public void onMessageChanged(EMMessage message, Object change) {
+        }
     };
 
     public void onResume() {
@@ -490,6 +505,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             }
         });
     }
+
     /**
      * get unread event notification count, including application, accepted, etc
      *
@@ -525,7 +541,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 //                    }
                 }
                 String action = intent.getAction();
-                if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
+                if (action.equals(Constant.ACTION_GROUP_CHANAGED)) {
 //                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
 //                        GroupsActivity.instance.onResume();
 //                    }
@@ -535,9 +551,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
+
     public class MyContactListener implements EMContactListener {
         @Override
-        public void onContactAdded(String username) {}
+        public void onContactAdded(String username) {
+        }
+
         @Override
         public void onContactDeleted(final String username) {
             runOnUiThread(new Runnable() {
@@ -553,12 +572,18 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             });
             updateUnreadAddressLable();
         }
+
         @Override
-        public void onContactInvited(String username, String reason) {}
+        public void onContactInvited(String username, String reason) {
+        }
+
         @Override
-        public void onFriendRequestAccepted(String username) {}
+        public void onFriendRequestAccepted(String username) {
+        }
+
         @Override
-        public void onFriendRequestDeclined(String username) {}
+        public void onFriendRequestDeclined(String username) {
+        }
     }
 
 }

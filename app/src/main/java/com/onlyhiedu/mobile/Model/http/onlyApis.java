@@ -11,6 +11,7 @@ import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
+import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
 
 import java.util.List;
 
@@ -199,7 +200,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST(" client/student/isRegister")
-    Flowable<onlyHttpResponse> getRegState(@Field("phone") String phone);
+    Flowable<onlyHttpResponse<UserIsRegister>> getRegState(@Field("phone") String phone);
 
     /**
      *
@@ -209,4 +210,76 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST(" client/course/statisticsClassTime")
     Flowable<onlyHttpResponse> getStatics(@Field("classTime") String classTime, @Field("courseUuid") String uuid);
+
+
+     /*↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓第三方登录↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓*/
+
+    /**
+     * 微信登录
+     */
+    @FormUrlEncoded
+    @POST("client/wechat/login")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> wechatLogin(@Field("uid") String uid,
+                                                             @Field("openid") String openid,
+                                                             @Field("name") String name,
+                                                             @Field("gender") String gender,
+                                                             @Field("iconurl") String iconurl,
+                                                             @Field("city") String city,
+                                                             @Field("province") String province,
+                                                             @Field("country") String country,
+                                                             @Field("deviceType") String deviceType,
+                                                             @Field("deviceId") String deviceId);
+
+    /**
+     * 微信登录
+     */
+    @FormUrlEncoded
+    @POST("client/qq/login")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> qqLogin(@Field("uid") String uid,
+                                                         @Field("openid") String openid,
+                                                         @Field("name") String name,
+                                                         @Field("gender") String gender,
+                                                         @Field("iconurl") String iconurl,
+                                                         @Field("city") String city,
+                                                         @Field("province") String province,
+                                                         @Field("deviceType") String deviceType,
+                                                         @Field("deviceId") String deviceId);
+
+    /**
+     * 微博   登录
+     */
+    @FormUrlEncoded
+    @POST("client/sinamicroblog/login")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> sinaLogin(@Field("uid") String uid,
+                                                           @Field("name") String name,
+                                                           @Field("gender") String gender,
+                                                           @Field("iconurl") String iconurl,
+                                                           @Field("location") String location,
+                                                           @Field("deviceType") String deviceType,
+                                                           @Field("deviceId") String deviceId);
+
+
+    /**
+     * 微信绑定
+     */
+    @FormUrlEncoded
+    @POST("client/wechat/bing")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> wechatBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+
+    /**
+     * QQ绑定
+     */
+    @FormUrlEncoded
+    @POST("client/qq/bing")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> qqBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+
+    /**
+     * QQ绑定
+     */
+    @FormUrlEncoded
+    @POST("client/sinamicroblog/bing")
+    Flowable<onlyHttpResponse<AuthUserDataBean>> sinaBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+
+
+    /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑第三方登录↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
 }

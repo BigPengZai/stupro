@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
+import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
@@ -106,16 +107,16 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
 
     /**
      * 号码是否注册
-     * */
+     */
     @Override
     public void isRegister(String phone) {
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchIsReg(phone);
-        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+        Flowable<onlyHttpResponse<UserIsRegister>> flowable = mRetrofitHelper.fetchIsReg(phone);
+        MyResourceSubscriber<onlyHttpResponse<UserIsRegister>> observer = new MyResourceSubscriber<onlyHttpResponse<UserIsRegister>>() {
             @Override
-            public void onNextData(onlyHttpResponse data) {
+            public void onNextData(onlyHttpResponse<UserIsRegister> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showRegState((boolean)data.getData());
+                        getView().showRegState(data.getData().registerFlag);
                     } else {
                         getView().showError(data.getMessage());
                     }
