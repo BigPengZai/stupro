@@ -1,13 +1,18 @@
 package com.onlyhiedu.mobile.Base;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.hyphenate.easeui.EaseUI;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Dagger.Component.ActivityComponent;
@@ -36,7 +41,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     private Unbinder mUnBinder;
     //String name = BaseActivity.class.getSimpleName();
     private String mPageName = this.getClass().getSimpleName();
-
+    protected InputMethodManager inputMethodManager;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +59,21 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         if (mPresenter != null)
             mPresenter.attachView(this);
         AppManager.getAppManager().addActivity(this);
+        //环信
+        if(!isTaskRoot()){
+            Intent intent = getIntent();
+            String action = intent.getAction();
+            if(intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action.equals(Intent.ACTION_MAIN)){
+                finish();
+                return;
+            }
+        }
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+
+
+
+
         initView();
         initData();
     }
@@ -62,6 +82,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         super.onResume();
         MobclickAgent.onPageStart(mPageName);
         MobclickAgent.onResume(mContext);
+        EaseUI.getInstance().getNotifier().reset();
     }
 
     @Override
@@ -136,5 +157,13 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     }
 
     protected void initData() {
+    }
+
+    protected void hideSoftKeyboard() {
+        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null)
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }

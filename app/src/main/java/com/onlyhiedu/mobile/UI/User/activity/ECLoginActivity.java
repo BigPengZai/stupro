@@ -1,243 +1,215 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.ui.EaseBaseActivity;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Home.activity.SplashActivity;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.db.DemoDBManager;
 
 /**
  * Created by pengpeng on 2017/7/3.
  */
 
-public class ECLoginActivity extends SimpleActivity {
+public class ECLoginActivity extends EaseBaseActivity {
 
-    // 弹出框
-    private ProgressDialog mDialog;
+    private static final String TAG = "LoginActivity";
+    public static final int REQUEST_CODE_SETNICK = 1;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
 
-    // username 输入框
-    private EditText mUsernameEdit;
-    // 密码输入框
-    private EditText mPasswordEdit;
-
-    // 注册按钮
-    private Button mSignUpBtn;
-    // 登录按钮
-    private Button mSignInBtn;
+    private boolean progressShow;
+    private boolean autoLogin = false;
 
     @Override
-    protected int getLayout() {
-        return R.layout.activity_eclogin;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    protected void initEventAndData() {
-        mUsernameEdit = (EditText) findViewById(R.id.ec_edit_username);
-        mPasswordEdit = (EditText) findViewById(R.id.ec_edit_password);
+        // enter the main activity if already logged in
+        if (DemoHelper.getInstance().isLoggedIn()) {
+            autoLogin = true;
+//            startActivity(new Intent(ECLoginActivity.this, LoginActivity.class));
+            startActivity(new Intent(ECLoginActivity.this, MainActivity.class));
 
-        mSignUpBtn = (Button) findViewById(R.id.ec_btn_sign_up);
-        mSignUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUp();
-            }
-        });
-
-        mSignInBtn = (Button) findViewById(R.id.ec_btn_sign_in);
-        mSignInBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
-    }
-
-    /**
-     * 注册方法
-     */
-    private void signUp() {
-        // 注册是耗时过程，所以要显示一个dialog来提示下用户
-        mDialog = new ProgressDialog(this);
-        mDialog.setMessage("注册中，请稍后...");
-        mDialog.show();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String username = mUsernameEdit.getText().toString().trim();
-                    String password = mPasswordEdit.getText().toString().trim();
-                    EMClient.getInstance().createAccount(username, password);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!ECLoginActivity.this.isFinishing()) {
-                                mDialog.dismiss();
-                            }
-                            Toast.makeText(ECLoginActivity.this, "注册成功", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } catch (final HyphenateException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!ECLoginActivity.this.isFinishing()) {
-                                mDialog.dismiss();
-                            }
-                            /**
-                             * 关于错误码可以参考官方api详细说明
-                             * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1_e_m_error.html
-                             */
-                            int errorCode = e.getErrorCode();
-                            String message = e.getMessage();
-                            Log.d("lzan13", String.format("sign up - errorCode:%d, errorMsg:%s", errorCode, e.getMessage()));
-                            switch (errorCode) {
-                                // 网络错误
-                                case EMError.NETWORK_ERROR:
-                                    Toast.makeText(ECLoginActivity.this, "网络错误 code: " + errorCode + ", message:" + message, Toast.LENGTH_LONG).show();
-                                    break;
-                                // 用户已存在
-                                case EMError.USER_ALREADY_EXIST:
-                                    Toast.makeText(ECLoginActivity.this, "用户已存在 code: " + errorCode + ", message:" + message, Toast.LENGTH_LONG).show();
-                                    break;
-                                // 参数不合法，一般情况是username 使用了uuid导致，不能使用uuid注册
-                                case EMError.USER_ILLEGAL_ARGUMENT:
-                                    Toast.makeText(ECLoginActivity.this, "参数不合法，一般情况是username 使用了uuid导致，不能使用uuid注册 code: " + errorCode + ", message:" + message, Toast.LENGTH_LONG).show();
-                                    break;
-                                // 服务器未知错误
-                                case EMError.SERVER_UNKNOWN_ERROR:
-                                    Toast.makeText(ECLoginActivity.this, "服务器未知错误 code: " + errorCode + ", message:" + message, Toast.LENGTH_LONG).show();
-                                    break;
-                                case EMError.USER_REG_FAILED:
-                                    Toast.makeText(ECLoginActivity.this, "账户注册失败 code: " + errorCode + ", message:" + message, Toast.LENGTH_LONG).show();
-                                    break;
-                                default:
-                                    Toast.makeText(ECLoginActivity.this, "ml_sign_up_failed code: " + errorCode + ", message:" + message, Toast.LENGTH_LONG).show();
-                                    break;
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    /**
-     * 登录方法
-     */
-    private void signIn() {
-        mDialog = new ProgressDialog(this);
-        mDialog.setMessage("正在登陆，请稍后...");
-        mDialog.show();
-        String username = mUsernameEdit.getText().toString().trim();
-        String password = mPasswordEdit.getText().toString().trim();
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            Toast.makeText(ECLoginActivity.this, "用户名和密码不能为空", Toast.LENGTH_LONG).show();
             return;
         }
-        EMClient.getInstance().login(username, password, new EMCallBack() {
-            /**
-             * 登陆成功的回调
-             */
+        setContentView(R.layout.em_activity_login);
+
+        usernameEditText = (EditText) findViewById(R.id.username);
+        passwordEditText = (EditText) findViewById(R.id.password);
+
+        // if user changed, clear the password
+        usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onSuccess() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDialog.dismiss();
-
-                        // 加载所有会话到内存
-                        EMClient.getInstance().chatManager().loadAllConversations();
-                        // 加载所有群组到内存，如果使用了群组的话
-                        // EMClient.getInstance().groupManager().loadAllGroups();
-
-                        // 登录成功跳转界面
-                        Intent intent = new Intent(ECLoginActivity.this, SplashActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            }
-
-            /**
-             * 登陆错误的回调
-             * @param i
-             * @param s
-             */
-            @Override
-            public void onError(final int i, final String s) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDialog.dismiss();
-                        Log.d("lzan13", "登录失败 Error code:" + i + ", message:" + s);
-                        /**
-                         * 关于错误码可以参考官方api详细说明
-                         * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1_e_m_error.html
-                         */
-                        switch (i) {
-                            // 网络异常 2
-                            case EMError.NETWORK_ERROR:
-                                Toast.makeText(ECLoginActivity.this, "网络错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 无效的用户名 101
-                            case EMError.INVALID_USER_NAME:
-                                Toast.makeText(ECLoginActivity.this, "无效的用户名 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 无效的密码 102
-                            case EMError.INVALID_PASSWORD:
-                                Toast.makeText(ECLoginActivity.this, "无效的密码 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 用户认证失败，用户名或密码错误 202
-                            case EMError.USER_AUTHENTICATION_FAILED:
-                                Toast.makeText(ECLoginActivity.this, "用户认证失败，用户名或密码错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 用户不存在 204
-                            case EMError.USER_NOT_FOUND:
-                                Toast.makeText(ECLoginActivity.this, "用户不存在 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 无法访问到服务器 300
-                            case EMError.SERVER_NOT_REACHABLE:
-                                Toast.makeText(ECLoginActivity.this, "无法访问到服务器 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 等待服务器响应超时 301
-                            case EMError.SERVER_TIMEOUT:
-                                Toast.makeText(ECLoginActivity.this, "等待服务器响应超时 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 服务器繁忙 302
-                            case EMError.SERVER_BUSY:
-                                Toast.makeText(ECLoginActivity.this, "服务器繁忙 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 未知 Server 异常 303 一般断网会出现这个错误
-                            case EMError.SERVER_UNKNOWN_ERROR:
-                                Toast.makeText(ECLoginActivity.this, "未知的服务器异常 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            default:
-                                Toast.makeText(ECLoginActivity.this, "ml_sign_in_failed code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                        }
-                    }
-                });
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                passwordEditText.setText(null);
             }
 
             @Override
-            public void onProgress(int i, String s) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
+
+        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN ))) {
+                    login(null);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        });
+
+        if (DemoHelper.getInstance().getCurrentUsernName() != null) {
+            usernameEditText.setText(DemoHelper.getInstance().getCurrentUsernName());
+        }
+    }
+
+    /**
+     * login
+     *
+     * @param view
+     */
+    public void login(View view) {
+        if (!EaseCommonUtils.isNetWorkConnected(this)) {
+            Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String currentUsername = usernameEditText.getText().toString().trim();
+        String currentPassword = passwordEditText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(currentUsername)) {
+            Toast.makeText(this, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(currentPassword)) {
+            Toast.makeText(this, R.string.Password_cannot_be_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressShow = true;
+        final ProgressDialog pd = new ProgressDialog(ECLoginActivity.this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Log.d(TAG, "EMClient.getInstance().onCancel");
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.Is_landing));
+        pd.show();
+
+        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+        // close it before login to make sure DemoDB not overlap
+        DemoDBManager.getInstance().closeDB();
+
+        // reset current user name before login
+        DemoHelper.getInstance().setCurrentUserName(currentUsername);
+
+        final long start = System.currentTimeMillis();
+        // call login method
+        Log.d(TAG, "EMClient.getInstance().login");
+        EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "login: onSuccess");
+
+
+                // ** manually load all local groups and conversation
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+
+                // update current user's display name for APNs
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        App.currentUserNick.trim());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
+
+                if (!ECLoginActivity.this.isFinishing() && pd.isShowing()) {
+                    pd.dismiss();
+                }
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+
+                Intent intent = new Intent(ECLoginActivity.this,
+                        LoginActivity.class);
+                startActivity(intent);
+
+                finish();
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                Log.d(TAG, "login: onProgress");
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+                Log.d(TAG, "login: onError: " + code);
+                if (!progressShow) {
+                    return;
+                }
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pd.dismiss();
+                        Toast.makeText(getApplicationContext(), getString(R.string.Login_failed) + message,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+
+    /**
+     * register
+     *
+     * @param view
+     */
+    public void register(View view) {
+//        startActivityForResult(new Intent(this, RegisterActivity.class), 0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (autoLogin) {
+            return;
+        }
     }
 }

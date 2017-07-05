@@ -240,3 +240,7 @@ public static final ** CREATOR;
 #环信
 -keep class com.hyphenate.** {*;}
 -dontwarn  com.hyphenate.**
+-keep class com.superrtc.** {*;}
+-keep class android.support.design.internal.BottomNavigationMenuView {
+    *;
+}

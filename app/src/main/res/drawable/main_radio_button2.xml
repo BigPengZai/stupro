@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@mipmap/use_sel"/>
-    <item android:state_checked="true" android:drawable="@mipmap/use_sel" />
-    <item android:state_selected="true" android:drawable="@mipmap/use_sel" />
-    <item android:drawable="@mipmap/use" />
+    <item android:state_pressed="true" android:drawable="@drawable/em_conversation_selected"/>
+    <item android:state_checked="true" android:drawable="@drawable/em_conversation_selected" />
+    <item android:state_selected="true" android:drawable="@drawable/em_conversation_selected" />
+    <item android:drawable="@drawable/em_conversation_selected" />
+
 </selector>

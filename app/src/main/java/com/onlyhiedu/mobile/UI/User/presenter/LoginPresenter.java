@@ -1,17 +1,33 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
+import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
+import com.onlyhiedu.mobile.UI.User.activity.ECLoginActivity;
+import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
+import com.onlyhiedu.mobile.db.DemoDBManager;
 
 import javax.inject.Inject;
 
@@ -33,10 +49,10 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
 
     @Override
-    public void getUser(String phone, String pwd,String deviceid) {
+    public void getUser(String phone, String pwd, String deviceid) {
         long timeMillis = System.currentTimeMillis();
         String password = Encrypt.SHA512(UIUtils.sha512(phone, pwd) + timeMillis);
-        Flowable<onlyHttpResponse<UserDataBean>> flowable = mRetrofitHelper.fetchUser(phone, password, timeMillis,deviceid);
+        Flowable<onlyHttpResponse<UserDataBean>> flowable = mRetrofitHelper.fetchUser(phone, password, timeMillis, deviceid);
         MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<UserDataBean>>() {
             @Override
             public void onNextData(onlyHttpResponse<UserDataBean> data) {
@@ -60,8 +76,8 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
     * 推送
     * */
 
-    public void setPushToken(String device_token,String tag) {
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchPushToken(device_token,tag);
+    public void setPushToken(String device_token, String tag) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchPushToken(device_token, tag);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
@@ -76,4 +92,61 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+
+    /**
+     * 环信注册登录  后端配置后可忽略
+     */
+    @Override
+    public void emcLogin(String currentUsername, String currentPassword, Context context) {
+        if (!EaseCommonUtils.isNetWorkConnected(context)) {
+            Toast.makeText(context, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(currentUsername)) {
+            Toast.makeText(context, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(currentPassword)) {
+            Toast.makeText(context, R.string.Password_cannot_be_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+        // close it before login to make sure DemoDB not overlap
+        DemoDBManager.getInstance().closeDB();
+
+        // reset current user name before login
+        DemoHelper.getInstance().setCurrentUserName(currentUsername);
+
+        final long start = System.currentTimeMillis();
+        EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                // ** manually load all local groups and conversation
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                // update current user's display name for APNs
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        App.currentUserNick.trim());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+                Toast.makeText(context, context.getString(R.string.Login_failed) + message,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

@@ -4,7 +4,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-//import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
@@ -17,6 +17,7 @@ import com.hyphenate.easeui.EaseUI;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.umeng.analytics.MobclickAgent;
@@ -69,22 +70,18 @@ public class App extends Application {
         }
     }
 
-    public synchronized WorkerThread getWorkerThread() {
+    public  synchronized WorkerThread getWorkerThread() {
         return mWorkerThread;
     }
-    // 记录是否已经初始化
-    private boolean isInit = false;
-    // 上下文菜单
-    private Context mContext;
+    public static String currentUserNick = "";
     @Override
     public void onCreate() {
-//        MultiDex.install(this);
+        MultiDex.install(this);
         super.onCreate();
         instance = this;
-        mContext = this;
 
 //        LeakCanary.install(this);
-
+        EaseUI.getInstance().init(this, null);
         initGlide();
         DaoUtil.getInstance(this);
         initWorkerThread();
@@ -125,8 +122,7 @@ public class App extends Application {
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
-        // 初始化环信SDK
-        EaseUI.getInstance().init(this, null);
+        DemoHelper.getInstance().init(this);
 
     }
 

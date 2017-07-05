@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 

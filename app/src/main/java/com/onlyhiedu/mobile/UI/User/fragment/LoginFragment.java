@@ -121,6 +121,8 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     }
 
+
+
     @Override
     public void showError(String msg) {
 

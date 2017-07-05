@@ -178,7 +178,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case btn_guest:
                 App.bIsGuestLogin = true;
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, ECLoginActivity.class));
                 break;
             case btn_cancel:
                 finish();
@@ -217,10 +218,15 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         if (mBooleanExtra) {
             startActivity(new Intent(this, MyInfoActivity.class));
         } else {
+//            startActivity(new Intent(this, MainActivity.class));
+            mPresenter.emcLogin(mEditNumber.getText().toString(),mEditPwd.getText().toString(),this);
             startActivity(new Intent(this, MainActivity.class));
         }
         finish();
     }
+
+
+
 
     private void addUTag() {
         //tag 手机号码 md5
@@ -242,6 +248,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void setPush() {
 //        Toast.makeText(this, "" + PushAgent.getInstance(this).getRegistrationId(), Toast.LENGTH_SHORT).show();
     }
+
+
 
     @Override
     public void showError(String msg) {

@@ -18,7 +18,6 @@
     <View
         style="@style/horizontal_line"
         android:background="@color/c_CCCCCC"/>
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
@@ -26,5 +25,32 @@
         android:layout_gravity="start"
         app:itemTextColor="@drawable/tab_text_color"
         app:menu="@menu/menu_home_bottom"/>
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--会话列表 提示原点-->
+        <TextView
+            android:id="@+id/unread_msg_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/em_unread_count_bg"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="gone"/>
+        <!--通讯录 提示原点-->
+        <TextView
+            android:id="@+id/unread_address_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/em_unread_dot"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </LinearLayout>

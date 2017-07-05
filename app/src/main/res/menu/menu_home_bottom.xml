@@ -11,5 +11,9 @@
     <item
         android:id="@+id/thr"
         android:icon="@drawable/main_radio_button2"
+        android:title="会话"/>
+    <item
+        android:id="@+id/fou"
+        android:icon="@drawable/main_radio_button3"
         android:title="我的"/>
 </menu>
