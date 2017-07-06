@@ -235,11 +235,11 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchIsBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country, String deviceId) {
 
         if (share_media == SHARE_MEDIA.WEIXIN) {
-            return sOnlyApis.wechatLogin(uid, openid, name,gender,iconurl,city,province,country,"Android", deviceId);
+            return sOnlyApis.wechatLogin(uid, openid, name, gender, iconurl, city, province, country, "Android", deviceId);
         } else if (share_media == SHARE_MEDIA.QQ) {
-            return sOnlyApis.qqLogin(uid, openid,name, gender,iconurl,city,province,"Android", deviceId);
+            return sOnlyApis.qqLogin(uid, openid, name, gender, iconurl, city, province, "Android", deviceId);
         } else {
-            return sOnlyApis.sinaLogin(uid,name,gender,iconurl, city,"Android", deviceId);
+            return sOnlyApis.sinaLogin(uid, name, gender, iconurl, city, "Android", deviceId);
         }
     }
 
@@ -253,5 +253,11 @@ public class RetrofitHelper {
         }
     }
 
+    public Flowable<onlyHttpResponse> fetchaddFriends(String username) {
+        return sOnlyApis.addFriend(SPUtil.getToken(), SPUtil.getPhone(), username);
+    }
 
+    public Flowable<onlyHttpResponse> fetchDeleteFriend(String username) {
+        return sOnlyApis.deleteFriend(SPUtil.getToken(), SPUtil.getPhone(), username);
+    }
 }

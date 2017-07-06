@@ -15,7 +15,7 @@ public interface LoginContract {
     interface View extends BaseView {
         void showUser();
         void setPush();
-        void isShowBingActivity(String token, SHARE_MEDIA share_media, String uid);
+        void isShowBingActivity(String token, String phone, SHARE_MEDIA share_media, String uid);
     }
 
     interface Presenter extends BasePresenter<LoginContract.View> {

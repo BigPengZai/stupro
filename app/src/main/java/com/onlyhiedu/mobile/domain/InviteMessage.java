@@ -93,7 +93,19 @@ public class InviteMessage {
 	    return groupInviter;	    
 	}
 
-
+	@Override
+	public String toString() {
+		return "InviteMessage{" +
+				"from='" + from + '\'' +
+				", time=" + time +
+				", reason='" + reason + '\'' +
+				", status=" + status +
+				", groupId='" + groupId + '\'' +
+				", groupName='" + groupName + '\'' +
+				", groupInviter='" + groupInviter + '\'' +
+				", id=" + id +
+				'}';
+	}
 
 	public enum InviteMesageStatus{
 	    

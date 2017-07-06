@@ -249,12 +249,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     @Override
-    public void isShowBingActivity(String token, SHARE_MEDIA share_media, String uid) {
+    public void isShowBingActivity(String token, String phone, SHARE_MEDIA share_media, String uid) {
         Log.d(TAG, "token : " + token);
         if (token == null) {
             startActivity(new Intent(this, BindActivity.class).putExtra(BindActivity.share_media, share_media).putExtra(BindActivity.share_media_uid, uid));
         } else {
             SPUtil.setToken(token);
+            SPUtil.setPhone(phone);
             startActivity(new Intent(this, MainActivity.class));
         }
     }

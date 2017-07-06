@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
+import com.onlyhiedu.mobile.UI.Emc.NewFriendsMsgActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
@@ -48,4 +49,6 @@ public interface ActivityComponent {
     void inject(MainActivity mainActivity);
 
     void inject(BindActivity bindActivity);
+
+    void inject(NewFriendsMsgActivity newFriendsMsgActivity);
 }
