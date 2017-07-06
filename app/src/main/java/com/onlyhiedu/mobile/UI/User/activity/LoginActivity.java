@@ -337,6 +337,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     };
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mShareAPI.onActivityResult(requestCode, resultCode, data);
