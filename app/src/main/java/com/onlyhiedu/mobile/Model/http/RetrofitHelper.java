@@ -261,4 +261,9 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse> fetchDeleteFriend(String username) {
         return sOnlyApis.deleteFriend(SPUtil.getToken(), SPUtil.getPhone(), username);
     }
+
+    //环信注册
+    public Flowable<onlyHttpResponse> fetchEmcRegister(String name,String pwd) {
+        return sOnlyApis.emcRegister(name, pwd);
+    }
 }

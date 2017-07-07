@@ -16,10 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
@@ -30,6 +33,7 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
+import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -217,15 +221,62 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showUser() {
         addUTag();
-        App.bIsGuestLogin = false;
-        mPresenter.emcLogin(mEditNumber.getText().toString(),mEditPwd.getText().toString(),this);
-        if (mBooleanExtra) {
-            startActivity(new Intent(this, MyInfoActivity.class));
-        } else {
-            startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.showPagePosition, mIntExtra));
-        }
-        AppManager.getAppManager().AppExit();
+        mPresenter.emcRegister(mEditNumber.getText().toString());
     }
+
+
+    @Override
+    public void emcRegisterSucess() {
+        LoginApp();
+    }
+
+    private void LoginApp() {
+        String currentUsername = mEditNumber.getText().toString();
+        String pwd = Encrypt.SHA512(currentUsername + "&" + "123456" + ":onlyhi");
+        DemoDBManager.getInstance().closeDB();
+        DemoHelper.getInstance().setCurrentUserName(currentUsername);
+        EMClient.getInstance().login(currentUsername, pwd, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                // ** manually load all local groups and conversation
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                // update current user's display name for APNs
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        App.currentUserNick.trim());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        App.bIsGuestLogin = false;
+                        if (mBooleanExtra) {
+                            startActivity(new Intent(LoginActivity.this, MyInfoActivity.class));
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra(MainActivity.showPagePosition, mIntExtra));
+                        }
+                        AppManager.getAppManager().AppExit();
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+                Log.d(TAG, "emcloginerror: "+getString(R.string.Login_failed) + message);
+                Toast.makeText(LoginActivity.this, getString(R.string.Login_failed) + message,
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
 
     private void addUTag() {
         //tag 手机号码 md5
@@ -259,6 +310,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             startActivity(new Intent(this, MainActivity.class));
         }
     }
+
+
 
     @Override
     public void showError(String msg) {

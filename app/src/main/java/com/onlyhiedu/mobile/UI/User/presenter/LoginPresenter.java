@@ -90,61 +90,27 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+
     /**
-     * 环信注册登录  后端配置后可忽略
+     * 环信注册
      */
     @Override
-    public void emcLogin(String currentUsername, String currentPassword, Context context) {
-        if (!EaseCommonUtils.isNetWorkConnected(context)) {
-            Toast.makeText(context, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(currentUsername)) {
-            Toast.makeText(context, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(currentPassword)) {
-            Toast.makeText(context, R.string.Password_cannot_be_empty, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
-        // close it before login to make sure DemoDB not overlap
-        DemoDBManager.getInstance().closeDB();
-
-        // reset current user name before login
-        DemoHelper.getInstance().setCurrentUserName(currentUsername);
-
-        final long start = System.currentTimeMillis();
-        EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
-
+    public void emcRegister(String username) {
+        String pwd = Encrypt.SHA512(username + "&" + "123456" + ":onlyhi");
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(username, pwd);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
-            public void onSuccess() {
-                // ** manually load all local groups and conversation
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                // update current user's display name for APNs
-                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-                        App.currentUserNick.trim());
-                if (!updatenick) {
-                    Log.e("LoginActivity", "update current user nick fail");
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        getView().emcRegisterSucess();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
                 }
-                // get user's info (this should be get from App's server or 3rd party service)
-                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-
             }
-
-            @Override
-            public void onProgress(int progress, String status) {
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-//                Toast.makeText(context, context.getString(R.string.Login_failed) + message,
-//                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
     @Override
@@ -168,5 +134,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+
+
 
 }

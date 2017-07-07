@@ -289,6 +289,12 @@ public interface onlyApis {
 
      /*↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓     环信IM   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓*/
 
+    /**
+     * 注册
+     */
+    @FormUrlEncoded
+    @POST("client/chat/register")
+    Flowable<onlyHttpResponse> emcRegister(@Field("userName") String userName,@Field("password") String password);
 
     /**
      * 添加好友

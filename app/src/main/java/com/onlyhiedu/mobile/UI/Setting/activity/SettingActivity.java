@@ -10,8 +10,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
@@ -68,8 +71,7 @@ public class SettingActivity extends SimpleActivity {
                 startActivity(new Intent(this, FeedBackActivity.class));
                 break;
             case R.id.btn_out:
-                UIUtils.startLoginActivity(this);
-
+                logoutApp();
                 break;
             case R.id.ll_clean_cache:
                 cleanAppCache();
@@ -79,6 +81,36 @@ public class SettingActivity extends SimpleActivity {
                 break;
         }
     }
+
+    private void logoutApp() {
+        DemoHelper.getInstance().logout(false,new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        // show login screen
+                        UIUtils.startLoginActivity(SettingActivity.this);
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+               runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SettingActivity.this, "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
 
     private void cleanAppCache() {
         DialogUtil.showOnlyAlert(this,
