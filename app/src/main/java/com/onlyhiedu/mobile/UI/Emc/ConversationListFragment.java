@@ -47,7 +47,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
         titleBar.setRightLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(),ContactListActivity.class));
+                startActivity(new Intent(getContext(), ContactListActivity.class));
             }
         });
         // register context menu
@@ -63,11 +63,11 @@ public class ConversationListFragment extends EaseConversationListFragment {
                 else {
                     // start chat acitivity
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    if(conversation.isGroup()){
-                        if(conversation.getType() == EMConversation.EMConversationType.ChatRoom){
+                    if (conversation.isGroup()) {
+                        if (conversation.getType() == EMConversation.EMConversationType.ChatRoom) {
                             // it's group chat
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
-                        }else{
+                        } else {
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
 
@@ -85,7 +85,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
     @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
-        if (NetUtils.hasNetwork(getActivity())){
+        if (NetUtils.hasNetwork(getActivity())) {
             errorText.setText(R.string.can_not_connect_chat_server_connection);
         } else {
             errorText.setText(R.string.the_current_network);
@@ -110,7 +110,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
         if (tobeDeleteCons == null) {
             return true;
         }
-        if(tobeDeleteCons.getType() == EMConversation.EMConversationType.GroupChat){
+        if (tobeDeleteCons.getType() == EMConversation.EMConversationType.GroupChat) {
             EaseAtMessageHelper.get().removeAtMeGroup(tobeDeleteCons.conversationId());
         }
         try {
@@ -126,5 +126,13 @@ public class ConversationListFragment extends EaseConversationListFragment {
         // update unread count
         ((MainActivity) getActivity()).updateUnreadLabel();
         return true;
+    }
+
+    public void setRightBar(boolean unread) {
+        if (unread) {
+            titleBar.setRightImageResource(R.mipmap.ic_launcher);
+        } else {
+            titleBar.setRightImageResource(R.drawable.em_contact_list_normal);
+        }
     }
 }

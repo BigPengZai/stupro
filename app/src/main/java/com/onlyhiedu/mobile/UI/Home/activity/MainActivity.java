@@ -72,14 +72,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     private boolean isCurrentAccountRemoved = false;
     private long mExitTime = 0;
     private int currentTabIndex;
-    //    private ContactListFragment contactListFragment;
 
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
-    @BindView(R.id.unread_msg_number)
-    TextView unreadLabel;
-    @BindView(R.id.unread_address_number)
-    TextView unreadAddressLable;
 
     @Override
     protected void initInject() {
@@ -196,9 +191,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         return true;
     }
 
+
     @Override
     public void onBackPressedSupport() {
-//        super.onBackPressedSupport();
         exit();
     }
 
@@ -317,7 +312,21 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (exceptionBuilder != null) {
+            exceptionBuilder.create().dismiss();
+            exceptionBuilder = null;
+            isExceptionDialogShow = false;
+        }
+        unregisterBroadcastReceiver();
+        try {
+            unregisterReceiver(internalDebugReceiver);
+        } catch (Exception e) {
+        }
         UMShareAPI.get(this).release();
+    }
+
+    private void unregisterBroadcastReceiver() {
+        broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
     /**
@@ -326,10 +335,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
         if (count > 0) {
-            unreadLabel.setText(String.valueOf(count));
-            unreadLabel.setVisibility(View.VISIBLE);
+            mNavigation.getMenu().getItem(2).setIcon(R.mipmap.ic_launcher);
         } else {
-//            unreadLabel.setVisibility(View.INVISIBLE);
+            mNavigation.getMenu().getItem(2).setIcon(R.drawable.em_conversation_selected);
         }
     }
 
@@ -342,9 +350,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 if (count > 0) {
-                    unreadAddressLable.setVisibility(View.VISIBLE);
+                    conversationListFragment.setRightBar(true);
                 } else {
-                    unreadAddressLable.setVisibility(View.INVISIBLE);
+                    conversationListFragment.setRightBar(false);
                 }
             }
         });
