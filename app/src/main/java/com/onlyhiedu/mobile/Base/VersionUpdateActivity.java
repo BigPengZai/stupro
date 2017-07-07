@@ -70,6 +70,7 @@ public abstract class VersionUpdateActivity extends BaseActivity<UpdatePresenter
                 Toast.makeText(VersionUpdateActivity.this, "已是最新版本", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
 

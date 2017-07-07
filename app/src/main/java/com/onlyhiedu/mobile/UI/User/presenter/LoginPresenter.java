@@ -1,6 +1,5 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -58,7 +57,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setToken(data.getData().token);
                         SPUtil.setPhone(data.getData().phone);
-                        getView().showUser();
+                        emcRegister(phone);
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -68,6 +67,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+
 
     /*
     * 推送
@@ -92,6 +92,62 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
 
     /**
+     * 环信注册登录  后端配置后可忽略
+     */
+    @Override
+    public void emcLogin(String currentUsername, String currentPassword) {
+        if (!EaseCommonUtils.isNetWorkConnected(App.getInstance().getApplicationContext())) {
+            Toast.makeText(App.getInstance().getApplicationContext(), R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(currentUsername)) {
+            Toast.makeText(App.getInstance().getApplicationContext(), R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(currentPassword)) {
+            Toast.makeText(App.getInstance().getApplicationContext(), R.string.Password_cannot_be_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+        // close it before login to make sure DemoDB not overlap
+        DemoDBManager.getInstance().closeDB();
+
+        // reset current user name before login
+        DemoHelper.getInstance().setCurrentUserName(currentUsername);
+
+        EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                // ** manually load all local groups and conversation
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                // update current user's display name for APNs
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        App.currentUserNick.trim());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+
+                getView().showUser();
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+                getView().IMLoginFailure("登录失败:" + message);
+            }
+        });
+    }
+
+    /**
      * 环信注册
      */
     @Override
@@ -103,7 +159,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
             public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().emcRegisterSucess();
+                        emcLogin(username, pwd);
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -114,17 +170,17 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
     }
 
     @Override
-    public void isBindUser(SHARE_MEDIA share_media, String uid, String openid,String name,String gender,String iconurl,String city,String province,String country) {
+    public void isBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country) {
 
 
-        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchIsBindUser(share_media, uid, openid, name,gender,iconurl,city,province,country, StringUtils.getDeviceId(App.getInstance()));
+        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchIsBindUser(share_media, uid, openid, name, gender, iconurl, city, province, country, StringUtils.getDeviceId(App.getInstance()));
 
         MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>>() {
             @Override
             public void onNextData(onlyHttpResponse<AuthUserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().isShowBingActivity(data.getData().token,data.getData().phone,share_media,uid);
+                        getView().isShowBingActivity(data.getData().token, data.getData().phone, share_media, uid);
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -134,7 +190,5 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
-
-
 
 }

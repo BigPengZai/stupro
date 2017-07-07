@@ -109,7 +109,7 @@
         <activity
             android:name=".UI.User.activity.SmsLoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".UI.Home.activity.MainActivity"/>
+        <activity android:name=".UI.Home.activity.MainActivity" android:launchMode="singleTask"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
         <activity android:name=".UI.Setting.activity.AboutActivity"/>

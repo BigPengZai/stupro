@@ -93,6 +93,13 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
         }
     }
 
+
+
+    @Override
+    public void IMLoginFailure(String s) {
+
+    }
+
     @Override
     public void showUser() {
 //        mPresenter.setPushToken(PushAgent.getInstance(mContext).getRegistrationId());
@@ -127,10 +134,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     }
 
-    @Override
-    public void emcRegisterSucess() {
 
-    }
 
     @Override
     public void showError(String msg) {

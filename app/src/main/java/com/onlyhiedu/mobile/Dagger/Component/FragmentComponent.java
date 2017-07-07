@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.onlyhiedu.mobile.Dagger.FragmentScope;
 import com.onlyhiedu.mobile.Dagger.Modul.FragmentModule;
+import com.onlyhiedu.mobile.UI.Emc.ContactListFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseRecordFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
@@ -27,4 +28,6 @@ public interface FragmentComponent {
     void inject(CourseRecordFragment fragment);
 
     void inject(LoginFragment loginFragment);
+
+    void inject(ContactListFragment contactListFragment);
 }

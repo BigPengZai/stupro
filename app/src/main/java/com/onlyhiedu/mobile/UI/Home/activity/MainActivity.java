@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,6 +127,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Override
     protected void initView() {
+
+        Log.d("xwc","进来了");
+
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
         mClassFragment = new ClassFragment();
         showExceptionDialogFromIntent(getIntent());
@@ -325,7 +329,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             unreadLabel.setText(String.valueOf(count));
             unreadLabel.setVisibility(View.VISIBLE);
         } else {
-            unreadLabel.setVisibility(View.INVISIBLE);
+//            unreadLabel.setVisibility(View.INVISIBLE);
         }
     }
 

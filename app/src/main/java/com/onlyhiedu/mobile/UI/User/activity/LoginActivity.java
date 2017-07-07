@@ -16,13 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
-import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
@@ -33,7 +29,6 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
-import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -214,67 +209,30 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
             Log.d(TAG, ":" + StringUtils.getDeviceId(this));
         }
+    }
 
-
+    @Override
+    public void IMLoginFailure(String s) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void showUser() {
         addUTag();
-        mPresenter.emcRegister(mEditNumber.getText().toString());
-    }
+        App.bIsGuestLogin = false;
 
+        if (mBooleanExtra) {
+            startActivity(new Intent(this, MyInfoActivity.class));
+        } else {
+            startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.showPagePosition, mIntExtra));
 
-    @Override
-    public void emcRegisterSucess() {
-        LoginApp();
-    }
-
-    private void LoginApp() {
-        String currentUsername = mEditNumber.getText().toString();
-        String pwd = Encrypt.SHA512(currentUsername + "&" + "123456" + ":onlyhi");
-        DemoDBManager.getInstance().closeDB();
-        DemoHelper.getInstance().setCurrentUserName(currentUsername);
-        EMClient.getInstance().login(currentUsername, pwd, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                // ** manually load all local groups and conversation
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                // update current user's display name for APNs
-                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-                        App.currentUserNick.trim());
-                if (!updatenick) {
-                    Log.e("LoginActivity", "update current user nick fail");
-                }
-                // get user's info (this should be get from App's server or 3rd party service)
-                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        App.bIsGuestLogin = false;
-                        if (mBooleanExtra) {
-                            startActivity(new Intent(LoginActivity.this, MyInfoActivity.class));
-                        } else {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra(MainActivity.showPagePosition, mIntExtra));
-                        }
-                        AppManager.getAppManager().AppExit();
-                    }
-                });
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-                Log.d(TAG, "emcloginerror: "+getString(R.string.Login_failed) + message);
-                Toast.makeText(LoginActivity.this, getString(R.string.Login_failed) + message,
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        }
+        finish();
     }
 
 
@@ -310,8 +268,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             startActivity(new Intent(this, MainActivity.class));
         }
     }
-
-
 
     @Override
     public void showError(String msg) {
@@ -380,15 +336,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                         city = map.get("location");
                         break;
                 }
-                Log.d(TAG, "uid : " + uid+"openid : " + openid+" name : " +name +"_______name : " +name+"_______gender : " +gender
-                        +"_______iconurl : " +iconurl+"_______city : " +city+"_______province : " +province+"_______country : " +country);
+                Log.d(TAG, "uid : " + uid + "openid : " + openid + " name : " + name + "_______name : " + name + "_______gender : " + gender
+                        + "_______iconurl : " + iconurl + "_______city : " + city + "_______province : " + province + "_______country : " + country);
 
-                mPresenter.isBindUser(share_media, uid, openid,name,gender,iconurl,city,province,country);
+                mPresenter.isBindUser(share_media, uid, openid, name, gender, iconurl, city, province, country);
 
             }
         }
     };
-
 
 
     @Override

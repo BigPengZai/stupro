@@ -26,7 +26,7 @@
         app:itemTextColor="@drawable/tab_text_color"
         app:menu="@menu/menu_home_bottom"/>
     <RelativeLayout
-        android:visibility="gone"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--会话列表 提示原点-->
@@ -41,7 +41,7 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
         <!--通讯录 提示原点-->
         <TextView
             android:id="@+id/unread_address_number"
@@ -50,7 +50,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/em_unread_dot"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
     </RelativeLayout>
 
 </LinearLayout>
