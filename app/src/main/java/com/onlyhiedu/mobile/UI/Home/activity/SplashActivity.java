@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
@@ -31,6 +33,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(SPUtil.getToken())) {
+                    Log.d(Constants.TAG,SPUtil.getToken());
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 } else {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));

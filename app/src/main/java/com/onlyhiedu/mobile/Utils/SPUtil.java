@@ -18,6 +18,7 @@ public class SPUtil {
         return App.getInstance().getSharedPreferences(shared_preferences_name, Context.MODE_PRIVATE);
     }
 
+
     public static void AppSpClean() {
         App.getInstance().getSharedPreferences(shared_preferences_name, Context.MODE_PRIVATE).edit().clear().apply();
     }
@@ -40,6 +41,14 @@ public class SPUtil {
 
     public static void setPhone(String phone) {
         getAppSp().edit().putString(Constants.PHONE, phone).apply();
+    }
+
+    public static String getName() {
+        return getAppSp().getString(Constants.USERNAME, "");
+    }
+
+    public static void setName(String name) {
+        getAppSp().edit().putString(Constants.USERNAME, name).apply();
     }
 
 }

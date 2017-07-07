@@ -16,14 +16,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -33,6 +28,7 @@ import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
+import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.ChatActivity;
 import com.onlyhiedu.mobile.UI.Emc.Constant;
@@ -41,9 +37,6 @@ import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
-import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment2;
-import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
-import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -52,19 +45,22 @@ import com.onlyhiedu.mobile.runtimepermissions.PermissionsResultAction;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
 
 
 public class MainActivity extends VersionUpdateActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int CALL_REQUEST_CODE = 110;
-    public static final String showPagePosition = "showPagePosition";
+    public static String showPagePosition = "showPagePosition";
     private ClassFragment mClassFragment;
-    private SupportFragment mMeFragment;
+    private MeFragment mMeFragment;
     private HomeFragment mHomeFragment;
     // user logged into another device
     public boolean isConflict = false;
@@ -90,6 +86,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -123,32 +121,27 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void initView() {
 
-        Log.d("xwc","进来了");
+        mClassFragment = new ClassFragment();
+        mMeFragment = new MeFragment();
+        mHomeFragment = new HomeFragment();
+        conversationListFragment = new ConversationListFragment();
+
 
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
-        mClassFragment = new ClassFragment();
         showExceptionDialogFromIntent(getIntent());
         inviteMessgeDao = new InviteMessgeDao(this);
         UserDao userDao = new UserDao(this);
-        conversationListFragment = new ConversationListFragment();
+
 //        contactListFragment = new ContactListFragment();
-        if (App.bIsGuestLogin) {
-            mMeFragment = new MeFragment2();
-        } else {
-            mMeFragment = new MeFragment();
-        }
-        mHomeFragment = new HomeFragment();
+
+
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
             loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
             App.getInstance().isTag = false;
         } else {
-            int intExtra = getIntent().getIntExtra(showPagePosition, 0);
-            if (intExtra != 0) {
-                mNavigation.setSelectedItemId(R.id.thr);
-            }
-            loadMultipleRootFragment(R.id.fl_main_content, intExtra, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -173,15 +166,17 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         if (item.getItemId() == R.id.tow) {
             if (App.bIsGuestLogin) {
-                startActivity(new Intent(this, LoginActivity.class).putExtra(LoginActivity.cancelShow, true));
-            } else {
-                showHideFragment(mClassFragment);
-            }
+                UIUtils.startGuestLoginActivity(this, 1);
+                return false;
+            } else showHideFragment(mClassFragment);
+
         }
         if (item.getItemId() == R.id.thr) {
-            if (App.bIsGuestLogin) startActivity(new Intent(this, BindActivity.class));
-            else
-                showHideFragment(conversationListFragment);
+            if (App.bIsGuestLogin) {
+                UIUtils.startGuestLoginActivity(this, 2);
+                return false;
+            } else showHideFragment(conversationListFragment);
+
 
         }
         if (item.getItemId() == R.id.fou) {
@@ -194,6 +189,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Override
     public void onBackPressedSupport() {
+//        super.onBackPressedSupport();
         exit();
     }
 
@@ -317,12 +313,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             exceptionBuilder = null;
             isExceptionDialogShow = false;
         }
-        unregisterBroadcastReceiver();
-        try {
-            unregisterReceiver(internalDebugReceiver);
-        } catch (Exception e) {
-        }
+//        unregisterBroadcastReceiver();
+
         UMShareAPI.get(this).release();
+        EventBus.getDefault().unregister(this);
     }
 
     private void unregisterBroadcastReceiver() {
@@ -341,6 +335,26 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMain(MainActivityTabSelectPos event) {
+
+        mMeFragment.setTextStyle();
+
+        switch (event.tabPosition) {
+            case 1:
+                mNavigation.setSelectedItemId(R.id.tow);
+                showHideFragment(mClassFragment);
+                break;
+            case 2:
+                mNavigation.setSelectedItemId(R.id.thr);
+                showHideFragment(conversationListFragment);
+                break;
+            case 3:
+                mNavigation.setSelectedItemId(R.id.fou);
+                showHideFragment(mMeFragment);
+                break;
+        }
+    }
 
     /**
      * update the total unread count
@@ -387,15 +401,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         outState.putBoolean("isConflict", isConflict);
         outState.putBoolean(Constant.ACCOUNT_REMOVED, isCurrentAccountRemoved);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(false);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private android.app.AlertDialog.Builder exceptionBuilder;
@@ -469,39 +474,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         showExceptionDialogFromIntent(intent);
     }
 
-    /**
-     * debug purpose only, you can ignore this
-     */
-    private void registerInternalDebugReceiver() {
-        internalDebugReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                DemoHelper.getInstance().logout(false, new EMCallBack() {
-
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                finish();
-//                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {
-                    }
-
-                    @Override
-                    public void onError(int code, String message) {
-                    }
-                });
-            }
-        };
-        IntentFilter filter = new IntentFilter(getPackageName() + ".em_internal_debug");
-        registerReceiver(internalDebugReceiver, filter);
-    }
 
     private void refreshUIWithMessage() {
         runOnUiThread(new Runnable() {

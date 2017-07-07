@@ -57,6 +57,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setToken(data.getData().token);
                         SPUtil.setPhone(data.getData().phone);
+                        SPUtil.setName(data.getData().userName);
                         emcRegister(phone);
                     } else {
                         getView().showError(data.getMessage());
@@ -180,7 +181,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
             public void onNextData(onlyHttpResponse<AuthUserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().isShowBingActivity(data.getData().token, data.getData().phone, share_media, uid);
+                        getView().isShowBingActivity(data.getData().token, data.getData().phone,data.getData().userName, share_media, uid);
                     } else {
                         getView().showError(data.getMessage());
                     }

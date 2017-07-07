@@ -60,6 +60,7 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
                     if (!data.isHasError()) {
                         SPUtil.setToken(data.getData().token);
                         SPUtil.setPhone(data.getData().phone);
+                        SPUtil.setName(data.getData().userName);
                         getView().showBindUser(data.getData());
                         getView().showError(data.getMessage());
                     } else {

@@ -32,6 +32,7 @@ import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -55,6 +56,12 @@ public class UIUtils {
 
     public static void startHomeNewsWebViewAct(Context context, String url, String title) {
         context.startActivity(new Intent(context, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, url).putExtra(HomeNewsWebViewActivity.TITLE, title));
+    }
+
+    public static void startGuestLoginActivity(Context cxt, int tabPisition) {
+        cxt.startActivity(new Intent(cxt, LoginActivity.class)
+                .putExtra(LoginActivity.cancelShow, true)
+                .putExtra(MainActivity.showPagePosition, tabPisition));
     }
 
     public static void initCursor(EditText mEdit) {

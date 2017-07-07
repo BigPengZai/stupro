@@ -1,7 +1,5 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.text.Editable;
@@ -18,13 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
-import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
+import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
@@ -35,7 +30,6 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
-import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -43,6 +37,8 @@ import com.umeng.message.tag.TagManager;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -238,8 +234,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         if (mBooleanExtra) {
             startActivity(new Intent(this, MyInfoActivity.class));
         } else {
-            startActivity(new Intent(this, MainActivity.class).putExtra(MainActivity.showPagePosition, mIntExtra));
-
+            startActivity(new Intent(this,MainActivity.class));
+            EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
         }
         finish();
     }
@@ -267,13 +263,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     @Override
-    public void isShowBingActivity(String token, String phone, SHARE_MEDIA share_media, String uid) {
+    public void isShowBingActivity(String token, String phone,String name, SHARE_MEDIA share_media, String uid) {
         Log.d(TAG, "token : " + token);
         if (token == null) {
             startActivity(new Intent(this, BindActivity.class).putExtra(BindActivity.share_media, share_media).putExtra(BindActivity.share_media_uid, uid));
         } else {
             SPUtil.setToken(token);
             SPUtil.setPhone(phone);
+            SPUtil.setName(name);
             startActivity(new Intent(this, MainActivity.class));
         }
     }

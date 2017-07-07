@@ -31,4 +31,5 @@ public class Constants {
     public static final String TOKEN = "token";
     public static final String PHONE = "phone";
     public static final String PASSWORD = "Password";
+    public static final String USERNAME = "userName";
 }

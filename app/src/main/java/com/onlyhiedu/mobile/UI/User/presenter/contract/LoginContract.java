@@ -15,7 +15,7 @@ public interface LoginContract {
         void IMLoginFailure(String s);
         void showUser();
         void setPush();
-        void isShowBingActivity(String token, String phone, SHARE_MEDIA share_media, String uid);
+        void isShowBingActivity(String token, String phone,String name, SHARE_MEDIA share_media, String uid);
 
     }
 

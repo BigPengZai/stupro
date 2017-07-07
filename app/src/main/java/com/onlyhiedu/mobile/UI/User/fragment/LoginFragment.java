@@ -130,10 +130,9 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     }
 
     @Override
-    public void isShowBingActivity(String token, String phone, SHARE_MEDIA share_media, String uid) {
+    public void isShowBingActivity(String token, String phone, String name, SHARE_MEDIA share_media, String uid) {
 
     }
-
 
 
     @Override
