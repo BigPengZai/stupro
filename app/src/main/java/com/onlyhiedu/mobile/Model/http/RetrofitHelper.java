@@ -255,11 +255,11 @@ public class RetrofitHelper {
     }
 
     public Flowable<onlyHttpResponse> fetchaddFriends(String username) {
-        return sOnlyApis.addFriend(SPUtil.getToken(), SPUtil.getPhone(), username);
+        return sOnlyApis.addFriend( SPUtil.getPhone(), username);
     }
 
     public Flowable<onlyHttpResponse> fetchDeleteFriend(String username) {
-        return sOnlyApis.deleteFriend(SPUtil.getToken(), SPUtil.getPhone(), username);
+        return sOnlyApis.deleteFriend( SPUtil.getPhone(), username);
     }
 
     //环信注册

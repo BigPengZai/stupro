@@ -1,5 +1,7 @@
 package com.onlyhiedu.mobile.UI.Emc.presenter;
 
+import android.util.Log;
+
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
@@ -31,9 +33,16 @@ public class ContactListPresenter extends RxPresenter<ContactListContract.View> 
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
-                if (getView() != null) {
-                    getView().showError(data.getMessage());
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        Log.d("asd", "asd");
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
                 }
+               /* if (getView() != null) {
+                    getView().showError(data.getMessage());
+                }*/
             }
         };
 

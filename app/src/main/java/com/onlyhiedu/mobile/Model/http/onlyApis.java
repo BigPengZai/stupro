@@ -301,14 +301,14 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/chat/addFriend")
-    Flowable<onlyHttpResponse> addFriend(@Field("token") String token, @Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
+    Flowable<onlyHttpResponse> addFriend( @Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
 
     /**
      * 删除好友
      */
     @FormUrlEncoded
     @POST("client/chat/deleteFriend")
-    Flowable<onlyHttpResponse> deleteFriend(@Field("token") String token, @Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
+    Flowable<onlyHttpResponse> deleteFriend( @Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
 
 
 
