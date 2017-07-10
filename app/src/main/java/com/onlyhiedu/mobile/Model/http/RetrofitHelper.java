@@ -244,26 +244,26 @@ public class RetrofitHelper {
         }
     }
 
-    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchBindUser(SHARE_MEDIA share_media, String uid, String phone, String username, String deviceId) {
+    public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchBindUser(SHARE_MEDIA share_media, String uid, String phone, String username, String code, String deviceId) {
         if (share_media == SHARE_MEDIA.WEIXIN) {
-            return sOnlyApis.wechatBind(uid, phone, username, "Android", deviceId);
+            return sOnlyApis.wechatBind(uid, phone, username, code, "Android", deviceId);
         } else if (share_media == SHARE_MEDIA.QQ) {
-            return sOnlyApis.qqBind(uid, phone, username, "Android", deviceId);
+            return sOnlyApis.qqBind(uid, phone, username, code, "Android", deviceId);
         } else {
-            return sOnlyApis.sinaBind(uid, phone, username, "Android", deviceId);
+            return sOnlyApis.sinaBind(uid, phone, username, code, "Android", deviceId);
         }
     }
 
     public Flowable<onlyHttpResponse> fetchaddFriends(String username) {
-        return sOnlyApis.addFriend( SPUtil.getPhone(), username);
+        return sOnlyApis.addFriend(SPUtil.getPhone(), username);
     }
 
     public Flowable<onlyHttpResponse> fetchDeleteFriend(String username) {
-        return sOnlyApis.deleteFriend( SPUtil.getPhone(), username);
+        return sOnlyApis.deleteFriend(SPUtil.getPhone(), username);
     }
 
     //环信注册
-    public Flowable<onlyHttpResponse> fetchEmcRegister(String name,String pwd) {
+    public Flowable<onlyHttpResponse> fetchEmcRegister(String name, String pwd) {
         return sOnlyApis.emcRegister(name, pwd);
     }
 }

@@ -265,21 +265,21 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/wechat/bing")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> wechatBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse<AuthUserDataBean>> wechatBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName,String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
 
     /**
      * QQ绑定
      */
     @FormUrlEncoded
     @POST("client/qq/bing")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> qqBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse<AuthUserDataBean>> qqBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName,String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
 
     /**
      * QQ绑定
      */
     @FormUrlEncoded
     @POST("client/sinamicroblog/bing")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> sinaBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse<AuthUserDataBean>> sinaBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, String code,@Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
 
 
     /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑第三方登录↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/

@@ -68,7 +68,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         ecdemo:item_icon_left="@mipmap/help"
         ecdemo:item_showDivider="true"
-        ecdemo:item_titleText="你可能想知道"/>
+        ecdemo:item_titleText="使用帮助"/>
     <!--分享嗨课堂-->
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_share"

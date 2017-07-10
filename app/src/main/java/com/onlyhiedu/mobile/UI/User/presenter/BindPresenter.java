@@ -2,8 +2,8 @@ package com.onlyhiedu.mobile.UI.User.presenter;
 
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.RxPresenter;
+import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
-import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
@@ -30,15 +30,16 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
         this.mRetrofitHelper = mRetrofitHelper;
     }
 
+
     @Override
-    public void getRegState(String phone) {
-        Flowable<onlyHttpResponse<UserIsRegister>> flowable = mRetrofitHelper.fetchIsReg(phone);
-        MyResourceSubscriber<onlyHttpResponse<UserIsRegister>> observer = new MyResourceSubscriber<onlyHttpResponse<UserIsRegister>>() {
+    public void getAuthCode(String phone) {
+        Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
+        MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
             @Override
-            public void onNextData(onlyHttpResponse<UserIsRegister> data) {
+            public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showRegState(data.getData());
+                        getView().getAuthCodeSuccess(data.getData().getAuthCode());
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -49,9 +50,9 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
     }
 
     @Override
-    public void bindUser(SHARE_MEDIA share_media, String uid, String phone, String name) {
+    public void bindUser(SHARE_MEDIA share_media, String uid, String phone, String name,String code) {
 
-        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchBindUser(share_media, uid, phone, name, StringUtils.getDeviceId(App.getInstance().getApplicationContext()));
+        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchBindUser(share_media, uid, phone, name, StringUtils.getDeviceId(App.getInstance().getApplicationContext()),code);
 
         MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>>() {
             @Override

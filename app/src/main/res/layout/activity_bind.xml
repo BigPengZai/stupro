@@ -1,33 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.onlyhiedu.mobile.UI.User.activity.BindActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ecdemo="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
 
+    <include layout="@layout/layout_toolbar"/>
 
-    <EditText
-        android:hint="手机"
-        android:id="@+id/edit_phone"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
+        android:layout_marginTop="@dimen/size_20"
+        android:orientation="vertical"
+        tools:context="com.onlyhiedu.mobile.UI.User.activity.BindActivity">
 
-    <EditText
-        android:hint="名字"
-        android:id="@+id/edit_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/btn_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="获取验证码"/>
-    <Button
-        android:id="@+id/btn_bind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="绑定"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/size_5"
+            android:text="若已注册过手机号，绑定后合并所有数据"
+            android:textColor="@color/c_999999"/>
+
+
+        <com.onlyhiedu.mobile.Widget.InputTextView
+            android:id="@+id/edit_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            ecdemo:item_InputType="phone"
+            ecdemo:item_close_icon="@mipmap/close_text"
+            ecdemo:item_hint_text="手机号码"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_8"
+            android:paddingLeft="@dimen/size_5"
+            android:text="验证码会发送到您填写的手机号上"
+            android:textColor="@color/text_color_hint"/>
+
+
+        <LinearLayout
+            android:id="@+id/ll_reg_step2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_15"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/edit_code"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/edit_height"
+                    android:layout_weight="1"
+                    android:background="@drawable/transparent"
+                    android:hint="验证码"
+                    android:inputType="phone"
+                    android:maxLength="4"
+                    android:paddingLeft="@dimen/size_5"
+                    android:textColorHint="@color/text_color_hint"/>
+
+                <View
+                    style="@style/vertical_line"
+                    android:layout_margin="@dimen/size_10"/>
+
+                <TextView
+                    android:id="@+id/tv_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/size_10"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:gravity="center_vertical"
+                    android:text="@string/text_get_verification_code"
+                    android:textColor="@color/c_F74D64"
+                    android:textSize="@dimen/sp_17"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line"/>
+
+            <com.onlyhiedu.mobile.Widget.InputTextView
+                android:id="@+id/edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_15"
+                ecdemo:item_close_icon="@mipmap/close_text"
+                ecdemo:item_hint_text="姓名"/>
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_bind"
+            style="@style/register_btn"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="@dimen/size_20"
+            android:enabled="false"
+            android:text="绑定"/>
+
+    </LinearLayout>
 </LinearLayout>

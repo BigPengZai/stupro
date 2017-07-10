@@ -1,6 +1,5 @@
 package com.onlyhiedu.mobile.App;
 
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +10,6 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.EaseUI;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
@@ -31,8 +28,6 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.common.QueuedWork;
 
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
 
 import io.agore.openvcall.model.CurrentUserSettings;
 import io.agore.openvcall.model.WorkerThread;
