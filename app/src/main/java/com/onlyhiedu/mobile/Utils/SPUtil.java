@@ -50,5 +50,11 @@ public class SPUtil {
     public static void setName(String name) {
         getAppSp().edit().putString(Constants.USERNAME, name).apply();
     }
+    public static String getEmcRegName() {
+        return getAppSp().getString(Constants.EMCREGNAME, "");
+    }
 
+    public static void setEmcRegName(String name) {
+        getAppSp().edit().putString(Constants.EMCREGNAME, name).apply();
+    }
 }

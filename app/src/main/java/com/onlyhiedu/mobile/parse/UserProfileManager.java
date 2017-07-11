@@ -8,6 +8,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,7 +147,7 @@ public class UserProfileManager {
 			@Override
 			public void onSuccess(EaseUser value) {
 			    if(value != null){
-    				setCurrentUserNick(value.getNick());
+    				setCurrentUserNick(SPUtil.getName());
     				setCurrentUserAvatar(value.getAvatar());
 			    }
 			}

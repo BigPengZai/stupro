@@ -32,6 +32,7 @@ import com.onlyhiedu.mobile.UI.Emc.base.EaseRxBaseActivity;
 import com.onlyhiedu.mobile.UI.Emc.presenter.UploadAvatarPresenter;
 import com.onlyhiedu.mobile.UI.Emc.presenter.contract.UploadAvatarContract;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -68,6 +69,8 @@ public class UserProfileActivity extends EaseRxBaseActivity<UploadAvatarPresente
     @Override
     protected void initData() {
         super.initData();
+        boolean b = DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(SPUtil.getName());
+        Log.d(TAG, "b: "+b);
         initListener();
     }
 

@@ -27,7 +27,7 @@ public interface LoginContract {
 
         void isBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country);
 
-        void emcRegister(String username,String pwd);
+        void emcRegister(String username);
     }
 
 }

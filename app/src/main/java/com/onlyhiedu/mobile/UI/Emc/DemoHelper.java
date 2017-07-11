@@ -44,6 +44,7 @@ import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.db.DbOpenHelper;
 import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
@@ -147,9 +148,6 @@ public class DemoHelper {
 	public void init(Context context) {
 	    demoModel = new DemoModel(context);
 	    EMOptions options = initChatOptions();
-//        options.setRestServer("103.241.230.122:31111");
-//        options.setIMServer("103.241.230.122");
-//        options.setImPort(31097);
 
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
@@ -325,11 +323,14 @@ public class DemoHelper {
 
     	// set profile provider if you want easeUI to handle avatar and nickname
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
-            
             @Override
             public EaseUser getUser(String username) {
                 EaseUser userInfo = getUserInfo(username);
+                Log.d(TAG, "username:" + username);
+                Log.d(TAG, "userInfo:" + userInfo.getUsername());
                 userInfo.setAvatar(PreferenceManager.getInstance().getCurrentUserAvatar());
+                userInfo.setNick(SPUtil.getName());
+                userInfo.setNickname(SPUtil.getName());
                 return userInfo;
             }
         });

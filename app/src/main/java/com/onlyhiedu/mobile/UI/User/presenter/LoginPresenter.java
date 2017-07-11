@@ -39,6 +39,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
     private RetrofitHelper mRetrofitHelper;
 
     public static final String TAG = LoginPresenter.class.getSimpleName();
+
     @Inject
     public LoginPresenter(RetrofitHelper mRetrofitHelper) {
         this.mRetrofitHelper = mRetrofitHelper;
@@ -55,20 +56,21 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
             public void onNextData(onlyHttpResponse<UserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
+                        if (data.getData().userUuid.contains("-")) {
+                            String emcRegName = data.getData().userUuid.replaceAll("-", "");
+                            SPUtil.setEmcRegName(emcRegName);
+                        } else {
+                            String emcRegName = data.getData().userUuid;
+                            SPUtil.setEmcRegName(emcRegName);
+                        }
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setToken(data.getData().token);
                         SPUtil.setPhone(data.getData().phone);
                         SPUtil.setName(data.getData().userName);
-                        if (!data.getData().isIm && data.getData().userUuid != null) {
-                            if (data.getData().userUuid.contains("-")) {
-                                String emcName = data.getData().userUuid.replaceAll("-", "");
-                                Log.d(TAG, "emcName: " + emcName);
-                                emcRegister(emcName, phone);
-                            } else {
-                                emcRegister(data.getData().userUuid, phone);
-                            }
+                        if (!data.getData().registerIMFlag && data.getData().userUuid != null) {
+                            emcRegister(SPUtil.getEmcRegName());
                         } else {
-                            emcLogin(phone);
+                            emcLogin(SPUtil.getEmcRegName());
                         }
                     } else {
                         getView().showError(data.getMessage());
@@ -108,12 +110,12 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      */
     @Override
     public void emcLogin(String currentUsername) {
-        String pwd = Encrypt.SHA512(currentUsername + "&" + "123456" + ":onlyhi");
+        String pwd = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
         // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
         DemoDBManager.getInstance().closeDB();
         // reset current user name before login
-        DemoHelper.getInstance().setCurrentUserName(currentUsername);
+        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
         EMClient.getInstance().login(currentUsername, pwd, new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -148,15 +150,15 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      * 环信注册
      */
     @Override
-    public void emcRegister(String username,String pwd) {
-        String pw = Encrypt.SHA512(username + "&" + "123456" + ":onlyhi");
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(username, pw);
+    public void emcRegister(String phone) {
+        String pw = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(phone, pw);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        emcLogin(username);
+                        emcLogin(SPUtil.getEmcRegName());
                     } else {
                         getView().showError(data.getMessage());
                     }
