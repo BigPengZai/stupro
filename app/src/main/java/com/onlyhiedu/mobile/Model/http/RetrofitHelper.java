@@ -5,6 +5,7 @@ import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
+import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -33,6 +34,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -180,8 +182,8 @@ public class RetrofitHelper {
         return sOnlyApis.updatePassword(oldPassword, timestamp, newPassword);
     }
 
-    public Flowable<onlyHttpResponse<UpdateVersionInfo>> fetchUpdateVersion() {
-        return sOnlyApis.updateVersion();
+    public Flowable<onlyHttpResponse<UpdateVersionInfo>> fetchUpdateVersion(String deviceType) {
+        return sOnlyApis.updateVersion(deviceType);
     }
 
     public Flowable<onlyHttpResponse<List<CourseWareImageList>>> fetchGetCourseWareImageList(String wareId) {
@@ -265,5 +267,20 @@ public class RetrofitHelper {
     //环信注册
     public Flowable<onlyHttpResponse> fetchEmcRegister(String name, String pwd) {
         return sOnlyApis.emcRegister(name, pwd);
+    }
+
+    //环信登录
+    public Flowable<onlyHttpResponse> fetchEmcLogin(String name, String password) {
+        return sOnlyApis.emcLogin(name, password);
+    }
+
+    //上传图片
+    public Flowable<onlyHttpResponse<Avatar>> fetchUploadAvatar(RequestBody body, File file) {
+        return sOnlyApis.uploadAvatar(body,file);
+    }
+
+    //保存图片
+    public Flowable<onlyHttpResponse> fetchSavaAvatar(String url,String imgname) {
+        return sOnlyApis.saveAvatar(url, imgname);
     }
 }

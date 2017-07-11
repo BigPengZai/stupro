@@ -38,6 +38,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
     private RetrofitHelper mRetrofitHelper;
 
+    public static final String TAG = LoginPresenter.class.getSimpleName();
     @Inject
     public LoginPresenter(RetrofitHelper mRetrofitHelper) {
         this.mRetrofitHelper = mRetrofitHelper;
@@ -58,7 +59,17 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         SPUtil.setToken(data.getData().token);
                         SPUtil.setPhone(data.getData().phone);
                         SPUtil.setName(data.getData().userName);
-                        emcRegister(phone);
+                        if (!data.getData().isIm && data.getData().userUuid != null) {
+                            if (data.getData().userUuid.contains("-")) {
+                                String emcName = data.getData().userUuid.replaceAll("-", "");
+                                Log.d(TAG, "emcName: " + emcName);
+                                emcRegister(emcName, phone);
+                            } else {
+                                emcRegister(data.getData().userUuid, phone);
+                            }
+                        } else {
+                            emcLogin(phone);
+                        }
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -93,32 +104,17 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
 
     /**
-     * 环信注册登录  后端配置后可忽略
+     * 环信登录  后端配置后可忽略
      */
     @Override
-    public void emcLogin(String currentUsername, String currentPassword) {
-        if (!EaseCommonUtils.isNetWorkConnected(App.getInstance().getApplicationContext())) {
-            Toast.makeText(App.getInstance().getApplicationContext(), R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(currentUsername)) {
-            Toast.makeText(App.getInstance().getApplicationContext(), R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(currentPassword)) {
-            Toast.makeText(App.getInstance().getApplicationContext(), R.string.Password_cannot_be_empty, Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void emcLogin(String currentUsername) {
+        String pwd = Encrypt.SHA512(currentUsername + "&" + "123456" + ":onlyhi");
         // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
         DemoDBManager.getInstance().closeDB();
-
         // reset current user name before login
         DemoHelper.getInstance().setCurrentUserName(currentUsername);
-
-        EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
-
+        EMClient.getInstance().login(currentUsername, pwd, new EMCallBack() {
             @Override
             public void onSuccess() {
                 // ** manually load all local groups and conversation
@@ -152,15 +148,15 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      * 环信注册
      */
     @Override
-    public void emcRegister(String username) {
-        String pwd = Encrypt.SHA512(username + "&" + "123456" + ":onlyhi");
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(username, pwd);
+    public void emcRegister(String username,String pwd) {
+        String pw = Encrypt.SHA512(username + "&" + "123456" + ":onlyhi");
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(username, pw);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        emcLogin(username, pwd);
+                        emcLogin(username);
                     } else {
                         getView().showError(data.getMessage());
                     }

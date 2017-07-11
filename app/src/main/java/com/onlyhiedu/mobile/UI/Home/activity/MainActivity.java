@@ -16,9 +16,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -93,8 +98,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
                 try {
-                    //some device doesn't has activity to handle this intent
-                    //so add try catch
                     Intent intent = new Intent();
                     intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
                     intent.setData(Uri.parse("package:" + packageName));
@@ -198,6 +201,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
+            EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+            DemoHelper sdkHelper = DemoHelper.getInstance();
+            sdkHelper.popActivity(this);
             AppManager.getAppManager().AppExit();
         }
     }
@@ -313,7 +319,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             exceptionBuilder = null;
             isExceptionDialogShow = false;
         }
-//        unregisterBroadcastReceiver();
+        unregisterBroadcastReceiver();
 
         UMShareAPI.get(this).release();
         EventBus.getDefault().unregister(this);
@@ -388,20 +394,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
 
     @Override
-    protected void onStop() {
-        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
-        DemoHelper sdkHelper = DemoHelper.getInstance();
-        sdkHelper.popActivity(this);
-
-        super.onStop();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean("isConflict", isConflict);
         outState.putBoolean(Constant.ACCOUNT_REMOVED, isCurrentAccountRemoved);
         super.onSaveInstanceState(outState);
     }
+
 
     private android.app.AlertDialog.Builder exceptionBuilder;
     private boolean isExceptionDialogShow = false;

@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.Model.http;
 
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
+import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -13,12 +14,17 @@ import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -146,8 +152,9 @@ public interface onlyApis {
     /**
      * 版本更新
      */
+    @FormUrlEncoded
     @POST("client/student/getAppInfo")
-    Flowable<onlyHttpResponse<UpdateVersionInfo>> updateVersion();
+    Flowable<onlyHttpResponse<UpdateVersionInfo>> updateVersion(@Field("deviceType") String deviceType );
 
 
     @FormUrlEncoded
@@ -297,6 +304,13 @@ public interface onlyApis {
     Flowable<onlyHttpResponse> emcRegister(@Field("userName") String userName,@Field("password") String password);
 
     /**
+     * 登录
+     */
+    @FormUrlEncoded
+    @POST("lient/chat/imLoginByJson")
+    Flowable<onlyHttpResponse> emcLogin(@Field("userName") String userName,@Field("password") String password);
+
+    /**
      * 添加好友
      */
     @FormUrlEncoded
@@ -315,6 +329,18 @@ public interface onlyApis {
      /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑   环信IM   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
 
 
+    /**
+     * 上传图片
+     */
+    @Multipart
+    @POST("client/upload/upload")
+    Flowable<onlyHttpResponse<Avatar>> uploadAvatar(@Part("file\"; filename=\"image.jpg") RequestBody imgs, @Part("file") File file);
 
+    /**
+     * 保存图片
+     */
+    @FormUrlEncoded
+    @POST("client/student/saveAvatar")
+    Flowable<onlyHttpResponse> saveAvatar(@Field("imagePath") String imagePath,@Field("imageName") String imageName);
 
 }

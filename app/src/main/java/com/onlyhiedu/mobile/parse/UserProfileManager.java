@@ -132,12 +132,12 @@ public class UserProfileManager {
 		return isSuccess;
 	}
 
-	public String uploadUserAvatar(byte[] data) {
-		String avatarUrl = ParseManager.getInstance().uploadParseAvatar(data);
-		if (avatarUrl != null) {
-			setCurrentUserAvatar(avatarUrl);
+	public String uploadUserAvatar(String url) {
+//		String avatarUrl = ParseManager.getInstance().uploadParseAvatar(data);
+		if (url != null) {
+			setCurrentUserAvatar(url);
 		}
-		return avatarUrl;
+		return url;
 	}
 
 	public void asyncGetCurrentUserInfo() {

@@ -9,5 +9,7 @@ public class UserDataBean {
     public String userName;
     public String userType;
     public String phone;
+    public boolean isIm;
+    public String userUuid;
 
 }

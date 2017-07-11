@@ -159,11 +159,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     protected void initData() {
     }
 
-    protected void hideSoftKeyboard() {
-        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-            if (getCurrentFocus() != null)
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-        }
+    @Override
+    public void onBackPressedSupport() {
+        super.onBackPressedSupport();
     }
 }

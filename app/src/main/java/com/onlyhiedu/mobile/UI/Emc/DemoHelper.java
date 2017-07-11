@@ -44,6 +44,7 @@ import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
+import com.onlyhiedu.mobile.db.DbOpenHelper;
 import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -327,7 +328,9 @@ public class DemoHelper {
             
             @Override
             public EaseUser getUser(String username) {
-                return getUserInfo(username);
+                EaseUser userInfo = getUserInfo(username);
+                userInfo.setAvatar(PreferenceManager.getInstance().getCurrentUserAvatar());
+                return userInfo;
             }
         });
 

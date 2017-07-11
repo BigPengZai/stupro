@@ -26,8 +26,8 @@ public class UpdatePresenter extends RxPresenter<UpdateContract.View> implements
 
     @Override
     public void updateVersion(boolean isMain) {
-        Flowable<onlyHttpResponse<UpdateVersionInfo>> flowable = mRetrofitHelper.fetchUpdateVersion();
-
+        String deviceType = "Android";
+        Flowable<onlyHttpResponse<UpdateVersionInfo>> flowable = mRetrofitHelper.fetchUpdateVersion(deviceType);
         MyResourceSubscriber<onlyHttpResponse<UpdateVersionInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<UpdateVersionInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<UpdateVersionInfo> data) {
