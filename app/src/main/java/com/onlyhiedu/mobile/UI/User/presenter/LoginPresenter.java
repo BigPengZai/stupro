@@ -56,21 +56,16 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
             public void onNextData(onlyHttpResponse<UserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        if (data.getData().userUuid.contains("-")) {
-                            String emcRegName = data.getData().userUuid.replaceAll("-", "");
-                            SPUtil.setEmcRegName(emcRegName);
-                        } else {
-                            String emcRegName = data.getData().userUuid;
-                            SPUtil.setEmcRegName(emcRegName);
-                        }
+                        String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
+                        SPUtil.setEmcRegName(emcRegName);
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setToken(data.getData().token);
                         SPUtil.setPhone(data.getData().phone);
                         SPUtil.setName(data.getData().userName);
-                        if (!data.getData().registerIMFlag && data.getData().userUuid != null) {
-                            emcRegister(SPUtil.getEmcRegName());
+                        if (!data.getData().registerIMFlag) {
+                            emcRegister();
                         } else {
-                            emcLogin(SPUtil.getEmcRegName());
+                            emcLogin();
                         }
                     } else {
                         getView().showError(data.getMessage());
@@ -106,17 +101,17 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
 
     /**
-     * 环信登录  后端配置后可忽略
+     * 环信登录
      */
     @Override
-    public void emcLogin(String currentUsername) {
+    public void emcLogin() {
         String pwd = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
         // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
         DemoDBManager.getInstance().closeDB();
         // reset current user name before login
         DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
-        EMClient.getInstance().login(currentUsername, pwd, new EMCallBack() {
+        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
             @Override
             public void onSuccess() {
                 // ** manually load all local groups and conversation
@@ -150,15 +145,15 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      * 环信注册
      */
     @Override
-    public void emcRegister(String phone) {
+    public void emcRegister() {
         String pw = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(phone, pw);
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(SPUtil.getEmcRegName(), pw);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        emcLogin(SPUtil.getEmcRegName());
+                        emcLogin();
                     } else {
                         getView().showError(data.getMessage());
                     }

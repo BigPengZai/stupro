@@ -22,12 +22,12 @@ public interface LoginContract {
     interface Presenter extends BasePresenter<LoginContract.View> {
         void getUser(String phone, String pwd,String deviceid);
 
-        void emcLogin(String currentUsername);
+        void emcLogin();
 
 
         void isBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country);
 
-        void emcRegister(String username);
+        void emcRegister();
     }
 
 }
