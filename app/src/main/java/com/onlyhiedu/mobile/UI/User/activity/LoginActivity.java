@@ -1,11 +1,8 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -52,7 +49,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @BindView(btn_sign)
     Button mButton;
 
-    private ProgressDialog mProgressDialog;
     private boolean mBooleanExtra;
     private int mIntExtra;
 
@@ -69,10 +65,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void initView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
 
         setToolBar("手机号登录");
 
@@ -119,7 +111,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     }
 
-
+    @Override
     public void IMLoginFailure(String s) {
         runOnUiThread(new Runnable() {
             @Override

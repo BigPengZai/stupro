@@ -4,8 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.RxPresenter;
@@ -15,12 +13,10 @@ import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
-import com.onlyhiedu.mobile.db.DemoDBManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -145,12 +141,9 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
                         String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
-                        SPUtil.setEmcRegName(emcRegName);
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
-                        SPUtil.setToken(data.getData().token);
-                        SPUtil.setPhone(data.getData().phone);
-                        SPUtil.setName(data.getData().userName);
-                        emcRegister();
+                        SPUtil.setUserInfo(emcRegName,data.getData().token,data.getData().phone,data.getData().userName);
+                        emcRegister(mRetrofitHelper,getView());
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -184,68 +177,68 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
     }
 
 
-    /**
-     * 环信登录
-     */
-    @Override
-    public void emcLogin() {
-        String pwd = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
-        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
-        // close it before login to make sure DemoDB not overlap
-        DemoDBManager.getInstance().closeDB();
-        // reset current user name before login
-        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
-        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                // ** manually load all local groups and conversation
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                // update current user's display name for APNs
-                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-                        App.currentUserNick.trim());
-                if (!updatenick) {
-                    Log.e("LoginActivity", "update current user nick fail");
-                }
-                // get user's info (this should be get from App's server or 3rd party service)
-                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-
-                getView().showUser();
-
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-                getView().IMLoginFailure("登录失败:" + message);
-            }
-        });
-    }
-
-    /**
-     * 环信注册
-     */
-    @Override
-    public void emcRegister() {
-        String pw = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(SPUtil.getEmcRegName(), pw);
-        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
-            @Override
-            public void onNextData(onlyHttpResponse data) {
-                if (getView() != null && data != null) {
-                    if (!data.isHasError()) {
-                        emcLogin();
-                    } else {
-                        getView().showError(data.getMessage());
-                    }
-                }
-            }
-        };
-        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
-    }
+//    /**
+//     * 环信登录
+//     */
+//    @Override
+//    public void emcLogin() {
+//        String pwd = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
+//        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+//        // close it before login to make sure DemoDB not overlap
+//        DemoDBManager.getInstance().closeDB();
+//        // reset current user name before login
+//        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
+//        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
+//            @Override
+//            public void onSuccess() {
+//                // ** manually load all local groups and conversation
+//                EMClient.getInstance().groupManager().loadAllGroups();
+//                EMClient.getInstance().chatManager().loadAllConversations();
+//                // update current user's display name for APNs
+//                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+//                        App.currentUserNick.trim());
+//                if (!updatenick) {
+//                    Log.e("LoginActivity", "update current user nick fail");
+//                }
+//                // get user's info (this should be get from App's server or 3rd party service)
+//                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+//
+//                getView().showUser();
+//
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//            }
+//
+//            @Override
+//            public void onError(final int code, final String message) {
+//                getView().IMLoginFailure("登录失败:" + message);
+//            }
+//        });
+//    }
+//
+//    /**
+//     * 环信注册
+//     */
+//    @Override
+//    public void emcRegister() {
+//        String pw = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
+//        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(SPUtil.getEmcRegName(), pw);
+//        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
+//            @Override
+//            public void onNextData(onlyHttpResponse data) {
+//                if (getView() != null && data != null) {
+//                    if (!data.isHasError()) {
+//                        emcLogin();
+//                    } else {
+//                        getView().showError(data.getMessage());
+//                    }
+//                }
+//            }
+//        };
+//        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+//    }
 
 
 }

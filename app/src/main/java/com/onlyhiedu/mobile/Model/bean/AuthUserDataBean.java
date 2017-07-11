@@ -17,6 +17,9 @@ public class AuthUserDataBean {
     public String userName;
     public String phone;
     public String deviceId;
+    public String userUuid;
+    public boolean registerIMFlag;
+
 
     public String getToken() {
         return token;

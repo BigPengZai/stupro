@@ -57,4 +57,20 @@ public class SPUtil {
     public static void setEmcRegName(String name) {
         getAppSp().edit().putString(Constants.EMCREGNAME, name).apply();
     }
+
+
+
+    //============================================= 设置基本信息
+    public static void  setUserInfo(String emcRegName,String token,String phone,String userName){
+        SPUtil.setEmcRegName(emcRegName);
+        SPUtil.setToken(token);
+        SPUtil.setPhone(phone);
+        SPUtil.setName(userName);
+    }
+
+
+
+
+
+
 }

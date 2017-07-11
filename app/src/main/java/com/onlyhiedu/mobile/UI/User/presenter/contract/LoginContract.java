@@ -1,7 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.presenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
-import com.onlyhiedu.mobile.Base.BaseView;
+import com.onlyhiedu.mobile.Base.IMBaseView;
 
 /**
  * Created by Administrator on 2017/3/17.
@@ -9,18 +9,14 @@ import com.onlyhiedu.mobile.Base.BaseView;
 
 public interface LoginContract {
 
-    interface View extends BaseView {
+    interface View extends IMBaseView {
 
-        void IMLoginFailure(String s);
-        void showUser();
         void setPush();
 
     }
 
     interface Presenter extends BasePresenter<LoginContract.View> {
         void getUser(String phone, String pwd,String deviceid);
-        void emcLogin();
-        void emcRegister();
     }
 
 }

@@ -52,6 +52,7 @@ public class UIUtils {
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();
         context.startActivity(new Intent(context, OpenIDActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
     }
 
     public static void startHomeNewsWebViewAct(Context context, String url, String title) {

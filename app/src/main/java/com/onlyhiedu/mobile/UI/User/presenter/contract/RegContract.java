@@ -1,7 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.presenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
-import com.onlyhiedu.mobile.Base.BaseView;
+import com.onlyhiedu.mobile.Base.IMBaseView;
 
 /**
  * Created by Administrator on 2017/3/3.
@@ -9,7 +9,7 @@ import com.onlyhiedu.mobile.Base.BaseView;
 
 public interface RegContract {
 
-    interface View extends BaseView {
+    interface View extends IMBaseView {
 
         void showSecond(int second);
 
@@ -36,8 +36,5 @@ public interface RegContract {
 
         void getUser(String phone, String pwd,String deviceid);
 
-        void emcLogin( );
-
-        void emcRegister( );
     }
 }

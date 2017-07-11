@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -8,9 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
-import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.BindPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.BindContract;
 import com.onlyhiedu.mobile.Utils.StringUtils;
@@ -19,7 +21,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
 
 
 public class BindActivity extends BaseActivity<BindPresenter> implements BindContract.View {
@@ -65,12 +66,24 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
 
 
     @Override
-    public void showBindUser(AuthUserDataBean data) {
-        Log.d(TAG, data.toString());
+    public void showUser() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void IMLoginFailure(String error) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(BindActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void getAuthCodeSuccess(int data) {
+        Log.d(Constants.Async, "验证码 : " + data);
         mServeCode = data;
     }
 
@@ -107,21 +120,21 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
                 String name = mEditName.getEditText();
                 String phone2 = mEditPhone.getEditText();
                 String code = mEditCode.getText().toString();
-                if(!StringUtils.isMobile(phone2)  ){
+                if (!StringUtils.isMobile(phone2)) {
                     return;
                 }
-                if(TextUtils.isEmpty(code)){
+                if (TextUtils.isEmpty(code)) {
                     mEditCode.setError("验证码不能为空");
                     return;
                 }
-                if(TextUtils.isEmpty(name)){
+                if (TextUtils.isEmpty(name)) {
                     mEditName.getEditTextView().setError("姓名不能为空");
                     return;
                 }
-                if(!code.equals(mServeCode)){
+                if (Integer.valueOf(code) != mServeCode) {
                     Toast.makeText(this, "验证码不正确", Toast.LENGTH_SHORT).show();
                 }
-                mPresenter.bindUser(mBindType,uid,phone2,name,code);
+                mPresenter.bindUser(mBindType, uid, phone2, name, code);
                 break;
         }
     }

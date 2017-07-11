@@ -1,7 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.presenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
-import com.onlyhiedu.mobile.Base.BaseView;
+import com.onlyhiedu.mobile.Base.IMBaseView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
@@ -10,8 +10,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 public interface OpenIDContract {
 
-    interface View extends BaseView {
-        void isShowBingActivity(String token, String phone, String name, SHARE_MEDIA share_media, String uid);
+    interface View extends IMBaseView {
+        void isShowBingActivity(SHARE_MEDIA share_media, String uid);
 
     }
 

@@ -18,7 +18,6 @@ import java.io.File;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -55,7 +54,6 @@ public interface onlyApis {
                                                      @Field("deviceType") String deviceType,
                                                      @Field("userType") String userType,
                                                      @Field("deviceId") String deviceId);
-
 
 
     /**
@@ -154,7 +152,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/student/getAppInfo")
-    Flowable<onlyHttpResponse<UpdateVersionInfo>> updateVersion(@Field("deviceType") String deviceType );
+    Flowable<onlyHttpResponse<UpdateVersionInfo>> updateVersion(@Field("deviceType") String deviceType);
 
 
     @FormUrlEncoded
@@ -174,7 +172,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/register")
-    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password,@Field("authCode") String authCode);
+    Flowable<onlyHttpResponse> registerInfo(@Field("userName") String userName, @Field("phone") String phone, @Field("password") String password, @Field("authCode") String authCode);
 
     /**
      * 验证码
@@ -188,7 +186,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/retrievePassword")
-    Flowable<onlyHttpResponse> retrievePassword(@Field("phone") String phone, @Field("password") String password, @Field("authCode") String authCode,@Field("deviceType") String deviceType,@Field("userType") String userType,@Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse> retrievePassword(@Field("phone") String phone, @Field("password") String password, @Field("authCode") String authCode, @Field("deviceType") String deviceType, @Field("userType") String userType, @Field("deviceId") String deviceId);
 
     /**
      * 课时消耗
@@ -211,9 +209,8 @@ public interface onlyApis {
     Flowable<onlyHttpResponse<UserIsRegister>> getRegState(@Field("phone") String phone);
 
     /**
-     *
      * 流统计
-     * */
+     */
 
     @FormUrlEncoded
     @POST(" client/course/statisticsClassTime")
@@ -272,21 +269,21 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/wechat/bing")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> wechatBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName,String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse<AuthUserDataBean>> wechatBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("authCode") String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
 
     /**
      * QQ绑定
      */
     @FormUrlEncoded
     @POST("client/qq/bing")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> qqBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName,String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse<AuthUserDataBean>> qqBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("authCode") String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
 
     /**
      * QQ绑定
      */
     @FormUrlEncoded
     @POST("client/sinamicroblog/bing")
-    Flowable<onlyHttpResponse<AuthUserDataBean>> sinaBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, String code,@Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
+    Flowable<onlyHttpResponse<AuthUserDataBean>> sinaBind(@Field("uid") String uid, @Field("phone") String phone, @Field("userName") String userName, @Field("authCode") String code, @Field("deviceType") String deviceType, @Field("deviceId") String deviceId);
 
 
     /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑第三方登录↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
@@ -301,28 +298,28 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/chat/register")
-    Flowable<onlyHttpResponse> emcRegister(@Field("userName") String userName,@Field("password") String password);
+    Flowable<onlyHttpResponse> emcRegister(@Field("userName") String userName, @Field("password") String password);
 
     /**
      * 登录
      */
     @FormUrlEncoded
     @POST("lient/chat/imLoginByJson")
-    Flowable<onlyHttpResponse> emcLogin(@Field("userName") String userName,@Field("password") String password);
+    Flowable<onlyHttpResponse> emcLogin(@Field("userName") String userName, @Field("password") String password);
 
     /**
      * 添加好友
      */
     @FormUrlEncoded
     @POST("client/chat/addFriend")
-    Flowable<onlyHttpResponse> addFriend( @Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
+    Flowable<onlyHttpResponse> addFriend(@Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
 
     /**
      * 删除好友
      */
     @FormUrlEncoded
     @POST("client/chat/deleteFriend")
-    Flowable<onlyHttpResponse> deleteFriend( @Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
+    Flowable<onlyHttpResponse> deleteFriend(@Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
 
 
 
@@ -341,6 +338,6 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/student/saveAvatar")
-    Flowable<onlyHttpResponse> saveAvatar(@Field("imagePath") String imagePath,@Field("imageName") String imageName);
+    Flowable<onlyHttpResponse> saveAvatar(@Field("imagePath") String imagePath, @Field("imageName") String imageName);
 
 }

@@ -1,6 +1,9 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
+import android.util.Log;
+
 import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
@@ -18,7 +21,7 @@ import io.reactivex.Flowable;
  * Created by Administrator on 2017/7/10.
  */
 
-public class OpenIDPresenter  extends RxPresenter<OpenIDContract.View> implements OpenIDContract.Presenter{
+public class OpenIDPresenter extends RxPresenter<OpenIDContract.View> implements OpenIDContract.Presenter {
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -37,7 +40,13 @@ public class OpenIDPresenter  extends RxPresenter<OpenIDContract.View> implement
             public void onNextData(onlyHttpResponse<AuthUserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().isShowBingActivity(data.getData().token, data.getData().phone, data.getData().userName, share_media, uid);
+                        if (data.getData().token == null) {
+                            getView().isShowBingActivity(share_media, uid);
+                        } else {
+                            Log.d(Constants.Async, "token : " + data.getData().token);
+                            emcRegister(mRetrofitHelper, getView());
+                        }
+
                     } else {
                         getView().showError(data.getMessage());
                     }

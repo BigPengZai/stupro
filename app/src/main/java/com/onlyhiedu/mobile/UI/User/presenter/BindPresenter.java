@@ -70,18 +70,22 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
     @Override
     public void bindUser(SHARE_MEDIA share_media, String uid, String phone, String name,String code) {
 
-        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchBindUser(share_media, uid, phone, name, StringUtils.getDeviceId(App.getInstance().getApplicationContext()),code);
+        Flowable<onlyHttpResponse<AuthUserDataBean>> flowable = mRetrofitHelper.fetchBindUser(share_media, uid, phone, name, code,StringUtils.getDeviceId(App.getInstance().getApplicationContext()));
 
         MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthUserDataBean>>() {
             @Override
             public void onNextData(onlyHttpResponse<AuthUserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        SPUtil.setToken(data.getData().token);
-                        SPUtil.setPhone(data.getData().phone);
-                        SPUtil.setName(data.getData().userName);
-                        getView().showBindUser(data.getData());
-                        getView().showError(data.getMessage());
+                        String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
+
+                        SPUtil.setUserInfo(emcRegName,data.getData().token,data.getData().getPhone(),data.getData().userName);
+
+                        if (!data.getData().registerIMFlag) {
+                            emcRegister(mRetrofitHelper,getView());
+                        } else {
+                            emcLogin(getView());
+                        }
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -89,7 +93,6 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
             }
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
-
     }
 
 

@@ -1,8 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.presenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
-import com.onlyhiedu.mobile.Base.BaseView;
-import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
+import com.onlyhiedu.mobile.Base.IMBaseView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
@@ -11,13 +10,14 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 public interface BindContract {
 
-    interface View extends BaseView {
+    interface View extends IMBaseView {
 
-        void showBindUser(AuthUserDataBean data);
+        void showUser();
 
         void getAuthCodeSuccess(int data);
 
         void showSecond(int i);
+
     }
 
     interface Presenter extends BasePresenter<View> {

@@ -15,7 +15,6 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.OpenIDPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.OpenIDContract;
 import com.onlyhiedu.mobile.Utils.MyUMAuthListener;
-import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -72,18 +71,15 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     }
 
     @Override
-    public void isShowBingActivity(String token, String phone, String name, SHARE_MEDIA share_media, String uid) {
-        Log.d(TAG, "token : " + token);
-        if (token == null) {
-            startActivity(new Intent(this, BindActivity.class).putExtra(BindActivity.share_media, share_media).putExtra(BindActivity.share_media_uid, uid));
-        } else {
-            SPUtil.setToken(token);
-            SPUtil.setPhone(phone);
-            SPUtil.setName(name);
-            startActivity(new Intent(this, MainActivity.class));
-        }
+    public void isShowBingActivity(SHARE_MEDIA share_media, String uid) {
+        startActivity(new Intent(this, BindActivity.class).putExtra(BindActivity.share_media, share_media).putExtra(BindActivity.share_media_uid, uid));
+        finish();
     }
 
+    @Override
+    public void showUser() {
+        startActivity(new Intent(this, MainActivity.class));
+    }
 
     private UMAuthListener wxAuthLister = new MyUMAuthListener() {
         @Override
@@ -107,7 +103,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
-            Toast.makeText(getApplicationContext(), "成功", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "成功", Toast.LENGTH_SHORT).show();
             if (map != null) {
                 String uid = null;
                 String openid = null;
@@ -155,14 +151,14 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     };
 
 
-    @OnClick({R.id.mobile_login, R.id.register, guest, R.id.btn_openid_wx, R.id.btn_openid_qq, R.id.btn_openid_sina,R.id.tv_cancel})
+    @OnClick({R.id.mobile_login, R.id.register, guest, R.id.btn_openid_wx, R.id.btn_openid_qq, R.id.btn_openid_sina, R.id.tv_cancel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.mobile_login:
-                startActivity(new Intent(this,LoginActivity.class).putExtra(information,mBooleanExtra).putExtra(MainActivity.showPagePosition,mIntExtra));
+                startActivity(new Intent(this, LoginActivity.class).putExtra(information, mBooleanExtra).putExtra(MainActivity.showPagePosition, mIntExtra));
                 break;
             case R.id.register:
-                startActivity(new Intent(this,RegActivity.class));
+                startActivity(new Intent(this, RegActivity.class));
                 break;
             case guest:
                 App.bIsGuestLogin = true;
@@ -199,5 +195,15 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
         super.onDestroy();
         //防止内存泄漏
         mShareAPI.release();
+    }
+
+    @Override
+    public void IMLoginFailure(String error) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(OpenIDActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
