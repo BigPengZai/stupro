@@ -16,11 +16,15 @@ public interface BindContract {
         void showBindUser(AuthUserDataBean data);
 
         void getAuthCodeSuccess(int data);
+
+        void showSecond(int i);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void  getAuthCode(String phone);
+        void getAuthCode(String phone);
 
-        void bindUser(SHARE_MEDIA share_media, String uid, String phone, String name,String code);
+        void readSecond();
+
+        void bindUser(SHARE_MEDIA share_media, String uid, String phone, String name, String code);
     }
 }

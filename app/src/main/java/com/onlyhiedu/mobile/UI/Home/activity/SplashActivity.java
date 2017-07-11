@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
+import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 
 
@@ -34,7 +34,7 @@ public class SplashActivity extends Activity {
             public void run() {
                 if (TextUtils.isEmpty(SPUtil.getToken())) {
                     Log.d(Constants.TAG,SPUtil.getToken());
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    startActivity(new Intent(SplashActivity.this, OpenIDActivity.class));
                 } else {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }

@@ -33,7 +33,7 @@ import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
-import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
+import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.io.File;
@@ -51,7 +51,7 @@ public class UIUtils {
     public static void startLoginActivity(Context context) {
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();
-        context.startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        context.startActivity(new Intent(context, OpenIDActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     public static void startHomeNewsWebViewAct(Context context, String url, String title) {
@@ -59,8 +59,8 @@ public class UIUtils {
     }
 
     public static void startGuestLoginActivity(Context cxt, int tabPisition) {
-        cxt.startActivity(new Intent(cxt, LoginActivity.class)
-                .putExtra(LoginActivity.cancelShow, true)
+        cxt.startActivity(new Intent(cxt, OpenIDActivity.class)
+                .putExtra(OpenIDActivity.cancelShow, true)
                 .putExtra(MainActivity.showPagePosition, tabPisition));
     }
 

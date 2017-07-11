@@ -16,14 +16,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -348,8 +343,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
         switch (event.tabPosition) {
             case 1:
-                mNavigation.setSelectedItemId(R.id.tow);
                 showHideFragment(mClassFragment);
+                mNavigation.setSelectedItemId(R.id.tow);
                 break;
             case 2:
                 mNavigation.setSelectedItemId(R.id.thr);

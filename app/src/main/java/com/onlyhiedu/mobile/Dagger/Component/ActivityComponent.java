@@ -15,6 +15,8 @@ import com.onlyhiedu.mobile.UI.Setting.activity.ModifyPwActivity;
 import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
 import com.onlyhiedu.mobile.UI.User.activity.FindPwdActivity;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
+import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
+import com.onlyhiedu.mobile.UI.User.activity.RegActivity;
 import com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity;
 
 import dagger.Component;
@@ -54,4 +56,8 @@ public interface ActivityComponent {
     void inject(NewFriendsMsgActivity newFriendsMsgActivity);
 
     void inject(UserProfileActivity userProfileActivity);
+
+    void inject(OpenIDActivity openIDActivity);
+
+    void inject(RegActivity activity);
 }

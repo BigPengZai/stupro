@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/background"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/size_20"
+    android:paddingRight="@dimen/size_20"
+    tools:context="com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_24"
+            android:padding="10dp"
+            android:text="取消"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_18"
+            android:visibility="gone"/>
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:src="@mipmap/logo"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/mobile_login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_45"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/shape_storke_white_1px"
+        android:gravity="center"
+        android:text="手机号登录"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_45"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_storke_white_1px"
+        android:gravity="center"
+        android:text="注册"
+        android:textColor="@color/white"/>
+
+    <TextView android:id="@+id/guest" android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal" android:layout_marginTop="70dp"
+              android:background="@drawable/selector_bottom_line"
+              android:paddingBottom="@dimen/size_2"
+              android:text="游客使用"
+              android:textColor="@color/white"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_20"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/line"/>
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="其他登录方式"
+                android:textColor="@color/white"/>
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/line2"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_30"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_openid_wx"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:src="@mipmap/logo_wechat"/>
+
+            <ImageView
+                android:id="@+id/btn_openid_qq"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:src="@mipmap/logo_qq"/>
+
+            <ImageView
+                android:id="@+id/btn_openid_sina"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:src="@mipmap/logo_weibo"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

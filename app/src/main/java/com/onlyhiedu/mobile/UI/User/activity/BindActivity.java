@@ -76,6 +76,17 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
 
 
     @Override
+    public void showSecond(int second) {
+        if (second == 0) {
+            mTvCode.setEnabled(true);
+            mTvCode.setText(getString(R.string.text_get_verification_code));
+            return;
+        }
+        mTvCode.setText(getString(R.string.text_get_verification_code_again, second));
+    }
+
+
+    @Override
     public void showError(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
@@ -87,7 +98,9 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
             case R.id.tv_code:
                 String phone = mEditPhone.getEditText();
                 if (StringUtils.isMobile(phone)) {
+                    mTvCode.setEnabled(false);
                     mPresenter.getAuthCode(phone);
+                    mPresenter.readSecond();
                 }
                 break;
             case R.id.btn_bind:
