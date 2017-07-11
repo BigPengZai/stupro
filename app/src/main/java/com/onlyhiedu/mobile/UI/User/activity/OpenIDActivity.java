@@ -73,12 +73,12 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     @Override
     public void isShowBingActivity(SHARE_MEDIA share_media, String uid) {
         startActivity(new Intent(this, BindActivity.class).putExtra(BindActivity.share_media, share_media).putExtra(BindActivity.share_media_uid, uid));
-        finish();
     }
 
     @Override
     public void showUser() {
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private UMAuthListener wxAuthLister = new MyUMAuthListener() {

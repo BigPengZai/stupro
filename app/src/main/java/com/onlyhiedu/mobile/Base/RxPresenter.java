@@ -74,7 +74,7 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
                     if (!data.isHasError()) {
                         emcLogin(v);
                     } else {
-                        getView().showError(data.getMessage());
+                        v.showError(data.getMessage());
                     }
                 }
             }

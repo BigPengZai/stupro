@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.R;
@@ -69,6 +70,7 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
     public void showUser() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
+        AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }
 
     @Override
