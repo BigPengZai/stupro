@@ -16,6 +16,7 @@ package com.onlyhiedu.mobile.UI.Emc.adapter;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.NewFriendsMsgActivity;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
@@ -203,6 +205,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                             buttonAgree.setEnabled(false);
 
                             buttonRefuse.setVisibility(View.INVISIBLE);
+
+                            Log.d(Constants.Async, "添加好友的ID:" + msg.getFrom());
                             mActivity.addFriend(msg.getFrom());
 
                         }

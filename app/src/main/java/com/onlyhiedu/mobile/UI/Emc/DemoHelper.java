@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -45,7 +44,6 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
 import com.onlyhiedu.mobile.Utils.SPUtil;
-import com.onlyhiedu.mobile.db.DbOpenHelper;
 import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -164,7 +162,7 @@ public class DemoHelper {
 			//initialize profile manager
 			getUserProfileManager().init(context);
             //set Call options
-            setCallOptions();
+//            setCallOptions();
 
             // TODO: set Call options
             // min video kbps
@@ -216,10 +214,11 @@ public class DemoHelper {
 
             // enabled fixed sample rate
             boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
-            EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
-
+            //TODO 注释了
+//            EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
+            //TODO 注释了
             // Offline call push
-            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+//            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
             setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
@@ -521,13 +520,13 @@ public class DemoHelper {
             }
         };
 
-        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-        if(callReceiver == null){
-            callReceiver = new CallReceiver();
-        }
+//        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+//        if(callReceiver == null){
+//            callReceiver = new CallReceiver();
+//        }
 
         //register incoming call receiver
-        appContext.registerReceiver(callReceiver, callFilter);    
+//        appContext.registerReceiver(callReceiver, callFilter);
         //register connection listener
         EMClient.getInstance().addConnectionListener(connectionListener);
         //register group and contact event listener
@@ -990,7 +989,7 @@ public class DemoHelper {
 	 *            callback
 	 */
 	public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
-		endCall();
+//		endCall();
 		Log.d(TAG, "logout: " + unbindDeviceToken);
 		EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
