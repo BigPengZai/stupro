@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
+import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
@@ -28,6 +29,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -234,6 +237,9 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 Toast.makeText(RegActivity.this, s, Toast.LENGTH_SHORT).show();
             }
         });
@@ -242,7 +248,13 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     @Override
     public void showUser() {
         addUTag();
-        App.bIsGuestLogin = false;
+        if (App.bIsGuestLogin) {
+            App.bIsGuestLogin = false;
+            EventBus.getDefault().post(new MainActivityTabSelectPos(0));
+        }
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
         startActivity(new Intent(this, MainActivity.class));
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
@@ -276,5 +288,13 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
             mProgressDialog.dismiss();
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }

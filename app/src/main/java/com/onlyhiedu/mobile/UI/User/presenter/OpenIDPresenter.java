@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.OpenIDContract;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -44,10 +45,13 @@ public class OpenIDPresenter extends RxPresenter<OpenIDContract.View> implements
                             getView().isShowBingActivity(share_media, uid);
                         } else {
                             Log.d(Constants.Async, "token : " + data.getData().token);
+                            String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
+                            SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName);
                             emcRegister(mRetrofitHelper, getView());
                         }
 
                     } else {
+                        Log.d(Constants.Async, data.getMessage());
                         getView().showError(data.getMessage());
                     }
                 }

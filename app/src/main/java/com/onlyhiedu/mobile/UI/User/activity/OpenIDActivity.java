@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseActivity;
+import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.OpenIDPresenter;
@@ -18,6 +19,8 @@ import com.onlyhiedu.mobile.Utils.MyUMAuthListener;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -77,6 +80,11 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
     @Override
     public void showUser() {
+        if( App.bIsGuestLogin){  //如果之前是游客
+            App.bIsGuestLogin = false;
+            EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
+        }
+
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

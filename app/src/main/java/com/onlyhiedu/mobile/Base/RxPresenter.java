@@ -5,6 +5,7 @@ import android.util.Log;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
@@ -74,6 +75,7 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
                     if (!data.isHasError()) {
                         emcLogin(v);
                     } else {
+                        Log.d(Constants.Async, "RxPresenter - emcRegister :" + data.getMessage());
                         v.showError(data.getMessage());
                     }
                 }

@@ -338,7 +338,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(MainActivityTabSelectPos event) {
-
+        App.bIsGuestLogin = false;
         mMeFragment.setTextStyle();
 
         switch (event.tabPosition) {

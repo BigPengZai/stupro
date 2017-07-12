@@ -39,7 +39,9 @@ import butterknife.OnClick;
  */
 
 public class MeFragment extends SimpleFragment {
+
     public static final String TAG = MeFragment.class.getSimpleName();
+
     @BindView(R.id.tv_name)
     TextView mTvName;
     @BindView(R.id.setting_me)
@@ -50,9 +52,9 @@ public class MeFragment extends SimpleFragment {
     SettingItemView mSettingItemShare;
     @BindView(R.id.setting_know)
     SettingItemView mSettingItemKnow;
+
     private String name = "";
     private final int SHARE_REQUEST_CODE = 1;
-
     private UMImage mUmImage;
 
 
@@ -80,6 +82,8 @@ public class MeFragment extends SimpleFragment {
 
 
     public void setTextStyle() {
+        Log.d(TAG, "Method : setTextStyle()");
+
         mTvName.setText(SPUtil.getName());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
         params.topMargin = ScreenUtil.dip2px(10);
@@ -90,7 +94,7 @@ public class MeFragment extends SimpleFragment {
     }
 
 
-    @OnClick({R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know,R.id.tv_name})
+    @OnClick({R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name})
     public void onClick(View view) {
         if (App.bIsGuestLogin) {
             if (view.getId() != R.id.setting_know) {
@@ -120,8 +124,6 @@ public class MeFragment extends SimpleFragment {
                     break;
             }
         }
-
-
     }
 
 
