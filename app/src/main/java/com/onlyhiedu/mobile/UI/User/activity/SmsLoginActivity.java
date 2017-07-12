@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
@@ -92,6 +93,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             addUTag();
             startActivity(new Intent(this, MainActivity.class));
             AppManager.getAppManager().finishActivity(LoginActivity.class);
+            AppManager.getAppManager().finishActivity(OpenIDActivity.class);
             finish();
         }
     }
@@ -100,7 +102,6 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     public void setPush() {
 
     }
-
 
     private void addUTag() {
         //tag 手机号码 md5
@@ -194,4 +195,21 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     };
 
 
+    @Override
+    public void showUser() {
+        addUTag();
+        startActivity(new Intent(this, MainActivity.class));
+        AppManager.getAppManager().finishActivity(LoginActivity.class);
+        finish();
+    }
+
+    @Override
+    public void IMLoginFailure(String error) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(SmsLoginActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
