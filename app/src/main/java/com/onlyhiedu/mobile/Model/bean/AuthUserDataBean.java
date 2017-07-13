@@ -19,6 +19,7 @@ public class AuthUserDataBean {
     public String deviceId;
     public String userUuid;
     public boolean registerIMFlag;
+    public String avatarUrl;
 
 
     public String getToken() {

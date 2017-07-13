@@ -46,7 +46,7 @@ public class OpenIDPresenter extends RxPresenter<OpenIDContract.View> implements
                         } else {
                             Log.d(Constants.Async, "token : " + data.getData().token);
                             String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
-                            SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName);
+                            SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName,data.getData().avatarUrl);
                             emcRegister(mRetrofitHelper, getView());
                         }
 

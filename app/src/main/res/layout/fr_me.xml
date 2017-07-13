@@ -4,7 +4,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/c_F2F2F2"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:id="@+id/ll_me"
+>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/iv_portrait"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:src="@mipmap/head_portrait"/>
 
             <TextView

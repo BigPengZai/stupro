@@ -26,7 +26,12 @@ android {
         }
     }
 
-
+    allprojects {
+        repositories {
+            jcenter()
+            maven { url "https://jitpack.io" }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
@@ -135,4 +140,7 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile project(':easeui')
     compile 'com.parse:parse-android:1.15.8'
+    //裁剪
+    compile 'com.github.yalantis:ucrop:2.2.1'
+    compile 'com.j256.ormlite:ormlite-android:5.0'
 }

@@ -11,5 +11,6 @@ public class UserDataBean {
     public String phone;
     public boolean registerIMFlag;
     public String userUuid;
+    public String avatarUrl;
 
 }

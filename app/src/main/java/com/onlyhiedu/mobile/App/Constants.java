@@ -33,4 +33,5 @@ public class Constants {
     public static final String PASSWORD = "Password";
     public static final String USERNAME = "userName";
     public static final String EMCREGNAME = "emcregname";
+    public static final String EMCAVATARURL = "emcavatarurl";
 }
