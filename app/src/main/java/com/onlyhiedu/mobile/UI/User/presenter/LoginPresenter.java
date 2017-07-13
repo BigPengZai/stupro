@@ -46,7 +46,6 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                     if (!data.isHasError()) {
                         String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
-                        Log.d(TAG,emcRegName);
                         SPUtil.setUserInfo(emcRegName,data.getData().token,data.getData().phone,data.getData().userName,data.getData().avatarUrl);
 
                         if (!data.getData().registerIMFlag) {
