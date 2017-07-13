@@ -1,5 +1,8 @@
 package com.onlyhiedu.mobile.UI.User.presenter;
 
+import android.util.Log;
+
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
@@ -46,6 +49,7 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
 
     @Override
     public void getAuthCode(String phone) {
+
         Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
         MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
             @Override
@@ -72,9 +76,16 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
             public void onNextData(onlyHttpResponse<AuthUserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        SPUtil.setToken(data.getData().getToken());
-                        SPUtil.setPhone(data.getData().getPhone());
-                        getView().showAuthLoginSuccess(data.getData());
+
+                        String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
+                        Log.d(Constants.TAG, "Token : " + data.getData().token);
+                        SPUtil.setUserInfo(emcRegName,data.getData().token,data.getData().phone,data.getData().userName);
+
+                        if (!data.getData().registerIMFlag) {
+                            emcRegister(mRetrofitHelper,getView());
+                        } else {
+                            emcLogin(getView());
+                        }
                     } else {
                         getView().showError(data.getMessage());
                     }
