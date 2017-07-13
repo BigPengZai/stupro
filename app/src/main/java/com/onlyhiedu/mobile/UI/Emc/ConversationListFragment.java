@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Emc;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,11 +12,8 @@ import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
-import com.hyphenate.easeui.widget.EaseConversationList;
-import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.util.NetUtils;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
@@ -74,6 +72,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
                     }
                     // it's single chat
                     intent.putExtra(Constant.EXTRA_USER_ID, username);
+                    Log.d("xwc",username);
                     startActivity(intent);
                 }
             }

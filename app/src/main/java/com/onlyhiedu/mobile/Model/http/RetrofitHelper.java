@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
@@ -283,4 +284,10 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse> fetchSavaAvatar(String url,String imgname) {
         return sOnlyApis.saveAvatar(url, imgname);
     }
+
+    //保存图片
+    public Flowable<onlyHttpResponse<IMUserInfo>> fetchQueryIMUserInfo(String phone) {
+        return sOnlyApis.queryIMUserInfo(phone);
+    }
+
 }

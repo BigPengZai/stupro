@@ -122,7 +122,7 @@
     <string name="agree">同意</string>
     <string name="Group_chat">群聊:</string>
     <string name="not_download">未下载:</string>
-	<string name="Please_enter_a_username">请输入用户名</string>
+	<string name="Please_enter_a_username">请输入手机号</string>
     <string name="is_down_please_wait">正在下载视频请稍候</string>
     <string name="Exit_the_group_chat">退出群聊</string>
     <string name="all_members">所有成员</string>

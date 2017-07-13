@@ -120,7 +120,7 @@
     <string name="not_download">Did not download:</string>
     <string name="is_down_please_wait">Downloading video, please wait a moment</string>
     <string name="Exit_the_group_chat">Exit the group</string>
-    <string name="Please_enter_a_username">Please enter a username</string>
+    <string name="Please_enter_a_username">Please enter a phone number</string>
 
     <string name="not_add_myself">"Can't add myself"</string>
     <string name="This_user_is_already_your_friend">This user is already your friend</string>

@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
+import com.onlyhiedu.mobile.UI.Emc.AddContactActivity;
 import com.onlyhiedu.mobile.UI.Emc.NewFriendsMsgActivity;
 import com.onlyhiedu.mobile.UI.Emc.UserProfileActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
@@ -60,4 +61,6 @@ public interface ActivityComponent {
     void inject(OpenIDActivity openIDActivity);
 
     void inject(RegActivity activity);
+
+    void inject(AddContactActivity activity);
 }

@@ -42,7 +42,6 @@ public class EaseUser extends EMContact {
 		this.initialLetter = initialLetter;
 	}
 
-
 	public String getAvatar() {
         return avatar;
     }

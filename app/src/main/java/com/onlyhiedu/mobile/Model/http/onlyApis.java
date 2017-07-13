@@ -8,6 +8,7 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
@@ -321,6 +322,13 @@ public interface onlyApis {
     @POST("client/chat/deleteFriend")
     Flowable<onlyHttpResponse> deleteFriend(@Field("ownerUserName") String ownerUserName, @Field("friendUserName") String friendUserName);
 
+
+    /**
+     * 删除好友
+     */
+    @FormUrlEncoded
+    @POST("client/chat/queryIMUserInfo")
+    Flowable<onlyHttpResponse<IMUserInfo>> queryIMUserInfo(@Field("phone") String phone);
 
 
      /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑   环信IM   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
