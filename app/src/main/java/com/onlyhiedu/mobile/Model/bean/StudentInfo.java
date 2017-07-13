@@ -12,5 +12,6 @@ public class StudentInfo {
     public String grade;
     public String examArea;
     public Integer sex;
+    public   String iconurl;
 
 }

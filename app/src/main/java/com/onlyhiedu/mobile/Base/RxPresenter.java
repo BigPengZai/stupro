@@ -6,6 +6,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.Constants;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
@@ -64,7 +65,26 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
         }
         mDisposables.add(disposable);
     }
+    //获得学生信息
+    protected <V extends IMBaseView>void getStuInfo(RetrofitHelper mRetrofitHelper,V v) {
+        Flowable<onlyHttpResponse<StudentInfo>> flowable = mRetrofitHelper.fetchStudentInfo();
 
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<StudentInfo>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<StudentInfo> data) {
+                if (getView() != null ) {
+                    if (!data.isHasError()) {
+                        SPUtil.setAvatarUrl(data.getData().iconurl);
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    //注册环信
     protected  <V extends IMBaseView>void emcRegister(RetrofitHelper mRetrofitHelper,V v) {
         String pw = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
         Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(SPUtil.getEmcRegName(), pw);

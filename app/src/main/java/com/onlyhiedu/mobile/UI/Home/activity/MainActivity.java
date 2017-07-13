@@ -185,11 +185,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     }
 
 
-//    @Override
-//    public void onBackPressedSupport() {
-////        super.onBackPressedSupport();
-////        exit();
-//    }
+    @Override
+    public void onBackPressedSupport() {
+//        super.onBackPressedSupport();
+        exit();
+    }
 
     private void exit() {
         if (System.currentTimeMillis() - mExitTime > 2000) {
