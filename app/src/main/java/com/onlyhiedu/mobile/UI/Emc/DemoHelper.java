@@ -161,6 +161,7 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
+
             //set Call options
 //            setCallOptions();
 

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\Moblie_Only_1.0\android-client\PushSDK\assets"/><source path="D:\Moblie_Only_1.0\android-client\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\Moblie_Only_1.0\android-client\PushSDK\build-types\debug\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Vcs\android-client\PushSDK\assets"/><source path="D:\Vcs\android-client\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\Vcs\android-client\PushSDK\build-types\debug\assets"/></dataSet></merger>
