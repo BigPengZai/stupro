@@ -34,6 +34,7 @@ import com.hyphenate.util.PathUtil;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Widget.ChatRowVoiceCall;
+import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.onlyhiedu.mobile.domain.EmojiconExampleGroupData;
 import com.onlyhiedu.mobile.domain.RobotUser;
 
@@ -210,6 +211,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             //set message extension
             message.setAttribute("em_robot_message", isRobot);
         }
+        // 设置消息的扩展属性，携带昵称头像
+        UserCacheManager.setMsgExt(message);
     }
     
     @Override
