@@ -15,15 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_24"
             android:padding="10dp"
-            android:text="取消"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/sp_18"
+            android:src="@mipmap/close_white"
             android:visibility="gone"/>
 
 

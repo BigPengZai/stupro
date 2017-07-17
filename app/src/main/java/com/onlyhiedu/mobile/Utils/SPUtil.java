@@ -50,6 +50,7 @@ public class SPUtil {
     public static void setName(String name) {
         getAppSp().edit().putString(Constants.USERNAME, name).apply();
     }
+
     public static String getEmcRegName() {
         return getAppSp().getString(Constants.EMCREGNAME, "");
     }
@@ -61,20 +62,20 @@ public class SPUtil {
     public static void setAvatarUrl(String avatarUrl) {
         getAppSp().edit().putString(Constants.EMCAVATARURL, avatarUrl).apply();
     }
+
     public static String getAvatarUrl() {
         return getAppSp().getString(Constants.EMCAVATARURL, "");
     }
 
 
     //============================================= 设置基本信息
-    public static void  setUserInfo(String emcRegName,String token,String phone,String userName,String avatarUrl){
+    public static void setUserInfo(String emcRegName, String token, String phone, String userName, String avatarUrl) {
         SPUtil.setEmcRegName(emcRegName);
         SPUtil.setToken(token);
         SPUtil.setPhone(phone);
         SPUtil.setName(userName);
         SPUtil.setAvatarUrl(avatarUrl);
     }
-
 
 
 }

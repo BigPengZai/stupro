@@ -64,7 +64,6 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
 
     @Override
     protected void initEventAndData() {
-
         initBanner();
         initData();
         initListener();

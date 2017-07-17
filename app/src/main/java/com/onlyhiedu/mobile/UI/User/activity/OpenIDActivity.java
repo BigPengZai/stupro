@@ -5,6 +5,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
 
     @BindView(R.id.tv_cancel)
-    TextView mTvCancel;
+    ImageView mTvCancel;
     @BindView(R.id.guest)
     TextView mTvGuest;
 

@@ -99,6 +99,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".UI.Home.activity.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
