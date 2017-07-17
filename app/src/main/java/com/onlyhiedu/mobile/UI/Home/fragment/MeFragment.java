@@ -37,6 +37,7 @@ import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
 import com.onlyhiedu.mobile.Widget.TakePhotoPopWin;
+import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.social.tool.UMImageMark;
 import com.umeng.socialize.ShareAction;
@@ -348,8 +349,8 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     public void saveAvatarSucess() {
         dialog.dismiss();
         if (mFileOut != null) {
+            UserCacheManager.updateMyAvatar(SPUtil.getAvatarUrl());
             ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
-
             Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_success),
                     Toast.LENGTH_SHORT).show();
         } else {

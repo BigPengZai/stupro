@@ -47,6 +47,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
 import com.onlyhiedu.mobile.Utils.SPUtil;
+import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -900,18 +901,9 @@ public class DemoHelper {
     }
 
     private EaseUser getUserInfo(String username) {
-        // To get instance of EaseUser, here we get it from the user list in memory
-        // You'd better cache it if you get it from your server
-        EaseUser user = null;
-        if (username.equals(EMClient.getInstance().getCurrentUser()))
-            return getUserProfileManager().getCurrentUserInfo();
-        user = getContactList().get(username);
-        if (user == null && getRobotList() != null) {
-            user = getRobotList().get(username);
-        }
-
-        // if user is not in your contacts, set inital letter for him/her
-        if (user == null) {
+        // 从本地缓存中获取用户昵称头像
+        EaseUser user = UserCacheManager.getEaseUser(username);
+        if(user == null){
             user = new EaseUser(username);
             EaseCommonUtils.setUserInitialLetter(user);
         }
@@ -931,6 +923,8 @@ public class DemoHelper {
             public void onMessageReceived(List<EMMessage> messages) {
                 for (EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    // 从消息的扩展属性里获取昵称头像
+                    UserCacheManager.save(message.ext());
                     // in background, do not refresh UI, notify it in notification bar
                     if (!easeUI.hasForegroundActivies()) {
                         getNotifier().onNewMsg(message);
