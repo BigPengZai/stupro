@@ -86,8 +86,8 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
 
     //注册环信
     protected  <V extends IMBaseView>void emcRegister(RetrofitHelper mRetrofitHelper,V v) {
-        String pw = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(SPUtil.getEmcRegName(), pw);
+        String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchEmcRegister(SPUtil.getEmcRegName(), pwd);
         MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
@@ -105,7 +105,7 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
     }
 
     protected <V extends IMBaseView> void emcLogin(V v) {
-        String pwd = Encrypt.SHA512(SPUtil.getPhone() + "&" + "123456" + ":onlyhi");
+        String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
         // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
         DemoDBManager.getInstance().closeDB();
@@ -123,9 +123,9 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
                 if (!updatenick) {
                     Log.e("LoginActivity", "update current user nick fail");
                 }
+
                 // get user's info (this should be get from App's server or 3rd party service)
                 DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-
                 v.showUser();
             }
 
