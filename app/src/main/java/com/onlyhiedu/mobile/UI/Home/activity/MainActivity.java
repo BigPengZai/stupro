@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
+import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -104,11 +106,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         //make sure activity will not in background if user is logged into another device or removed
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
             DemoHelper.getInstance().logout(false, null);
-            finish();
-//            startActivity(new Intent(this, LoginActivity.class));
+//            finish();
+            startActivity(new Intent(this, LoginActivity.class));
             return;
         } else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
-            finish();
+//            finish();
 //            startActivity(new Intent(this, LoginActivity.class));
             return;
         }
@@ -118,6 +120,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Override
     protected void initView() {
+        Log.d("xwc","Main");
+
 
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
@@ -513,9 +517,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                         conversationListFragment.refresh();
                     }
                 } else if (currentTabIndex == 1) {
-//                    if(contactListFragment != null) {
-//                        contactListFragment.refresh();
-//                    }
+                    if(conversationListFragment != null) {
+                        conversationListFragment.refresh();
+                    }
                 }
                 String action = intent.getAction();
                 if (action.equals(Constant.ACTION_GROUP_CHANAGED)) {

@@ -145,7 +145,7 @@
     <string name="Open_group_members_invited">Allow members to invite</string>
     <string name="Open_the_equipment_failure">Open the equipment failure!</string>
     <string name="Password_cannot_be_empty">Password cannot be empty!</string>
-    <string name="Please_enter_a_username">Please enter a username</string>
+    <string name="Please_enter_a_username">Please enter a phone number</string>
     <string name="Recording_without_permission">Recording without permission</string>
     <string name="Refused">Refused</string>
     <string name="Registered_successfully">Registered successfully</string>

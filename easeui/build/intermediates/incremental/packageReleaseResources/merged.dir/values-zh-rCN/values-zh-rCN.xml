@@ -70,7 +70,7 @@
     <string name="Open_group_members_invited">开放群成员邀请</string>
     <string name="Open_the_equipment_failure">打开设备失败!</string>
     <string name="Password_cannot_be_empty">密码不能为空！</string>
-    <string name="Please_enter_a_username">请输入用户名</string>
+    <string name="Please_enter_a_username">请输入手机号</string>
     <string name="Recording_without_permission">无录音权限</string>
     <string name="Refused">已拒绝</string>
     <string name="Registered_successfully">注册成功</string>

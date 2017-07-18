@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseFragment;
-import com.onlyhiedu.mobile.Base.SimpleFragment;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
@@ -27,7 +26,6 @@ import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Emc.presenter.UploadAvatarPresenter;
 import com.onlyhiedu.mobile.UI.Emc.presenter.contract.UploadAvatarContract;
 import com.onlyhiedu.mobile.UI.Home.activity.KnowActivity;
-import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.SettingActivity;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
@@ -37,7 +35,6 @@ import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
 import com.onlyhiedu.mobile.Widget.TakePhotoPopWin;
-import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.social.tool.UMImageMark;
 import com.umeng.socialize.ShareAction;
@@ -349,7 +346,6 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     public void saveAvatarSucess() {
         dialog.dismiss();
         if (mFileOut != null) {
-            UserCacheManager.updateMyAvatar(SPUtil.getAvatarUrl());
             ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
             Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_success),
                     Toast.LENGTH_SHORT).show();
