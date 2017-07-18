@@ -44,12 +44,12 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
             public void onNextData(onlyHttpResponse<UserDataBean> data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
+                        String emcRegName = data.getData().userUuid.replace("-", "");
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
-                        SPUtil.setUserInfo(emcRegName,data.getData().token,data.getData().phone,data.getData().userName,data.getData().avatarUrl);
-                        getStuInfo(mRetrofitHelper,getView());
+                        SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName, data.getData().avatarUrl);
+                        getStuInfo(mRetrofitHelper, getView());
                         if (!data.getData().registerIMFlag) {
-                            emcRegister(mRetrofitHelper,getView());
+                            emcRegister(mRetrofitHelper, getView());
                         } else {
                             emcLogin(getView());
                         }

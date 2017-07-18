@@ -21,7 +21,6 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
-import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -134,7 +133,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             startActivity(new Intent(this, MainActivity.class));
             EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
         }
-        UserCacheManager.save(SPUtil.getEmcRegName(), SPUtil.getName(), SPUtil.getAvatarUrl());
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }
