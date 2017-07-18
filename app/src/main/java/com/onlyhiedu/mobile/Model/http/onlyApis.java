@@ -8,6 +8,7 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -324,12 +325,30 @@ public interface onlyApis {
 
 
     /**
-     * 删除好友
+     * 获取所有好友
+     */
+    @FormUrlEncoded
+    @POST("client/chat/getIMUserFriendList")
+    Flowable<onlyHttpResponse<IMAllUserInfo>> getIMUserFriendList(@Field("pageSize") int pageSize, @Field("userName") String userName);
+
+
+    /**
+     * 查询好友
      */
     @FormUrlEncoded
     @POST("client/chat/queryIMUserInfo")
     Flowable<onlyHttpResponse<IMUserInfo>> queryIMUserInfo(@Field("phone") String phone);
 
+
+    /**
+     * 根据多个username获取用户信息
+     *
+     * @param phone
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/chat/getIMUserList")
+    Flowable<onlyHttpResponse<IMAllUserInfo>> getIMUserList(@Field("userNames") List<String> userNames);
 
      /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑   环信IM   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
 

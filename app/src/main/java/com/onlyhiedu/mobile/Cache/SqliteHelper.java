@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.cache;
+package com.onlyhiedu.mobile.Cache;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -10,6 +10,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 
 
 /**
@@ -22,14 +24,14 @@ public class SqliteHelper extends OrmLiteSqliteOpenHelper {
     private final String LOG_TAG = getClass().getSimpleName();
 
     // 数据库名字
-    private static final String DATABASE_NAME = "im_user_cache.db";
+    private static final String DATABASE_NAME = SPUtil.getEmcRegName()+".db";
 
     // 版本号
     private static final int DATABASE_VERSION = 1;
 
     private static SqliteHelper mInstance;
 
-    private Dao<UserCacheInfo, Integer> mUserInfoDao = null;
+    private Dao<IMUserInfo, Integer> mUserInfoDao = null;
 
     public SqliteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,7 +51,7 @@ public class SqliteHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, UserCacheInfo.class);
+            TableUtils.createTable(connectionSource, IMUserInfo.class);
         } catch (SQLException e) {
             Log.e(LOG_TAG, "Unable to create datbases", e);
         } catch (java.sql.SQLException e) {
@@ -67,7 +69,7 @@ public class SqliteHelper extends OrmLiteSqliteOpenHelper {
             int oldVer,
             int newVer) {
         try {
-            TableUtils.dropTable(connectionSource, UserCacheInfo.class, true);
+            TableUtils.dropTable(connectionSource, IMUserInfo.class, true);
 
             onCreate(sqliteDatabase, connectionSource);
         } catch (SQLException e) {
@@ -79,10 +81,10 @@ public class SqliteHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    public Dao<UserCacheInfo,Integer> getUserDao() throws SQLException{
+    public Dao<IMUserInfo,Integer> getUserDao() throws SQLException{
         if(mUserInfoDao == null){
             try {
-                mUserInfoDao = getDao(UserCacheInfo.class);
+                mUserInfoDao = getDao(IMUserInfo.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }

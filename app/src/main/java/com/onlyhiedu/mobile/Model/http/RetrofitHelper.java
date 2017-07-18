@@ -10,6 +10,7 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -277,11 +278,11 @@ public class RetrofitHelper {
 
     //上传图片
     public Flowable<onlyHttpResponse<Avatar>> fetchUploadAvatar(RequestBody body, File file) {
-        return sOnlyApis.uploadAvatar(body,file);
+        return sOnlyApis.uploadAvatar(body, file);
     }
 
     //保存图片
-    public Flowable<onlyHttpResponse> fetchSavaAvatar(String url,String imgname) {
+    public Flowable<onlyHttpResponse> fetchSavaAvatar(String url, String imgname) {
         return sOnlyApis.saveAvatar(url, imgname);
     }
 
@@ -290,4 +291,11 @@ public class RetrofitHelper {
         return sOnlyApis.queryIMUserInfo(phone);
     }
 
+    public Flowable<onlyHttpResponse<IMAllUserInfo>> fetchGetIMUserFriendList() {
+        return sOnlyApis.getIMUserFriendList(Integer.MAX_VALUE, SPUtil.getEmcRegName());
+    }
+
+    public Flowable<onlyHttpResponse<IMAllUserInfo>> fetchGetIMUserList(List<String> names) {
+        return sOnlyApis.getIMUserList(names);
+    }
 }

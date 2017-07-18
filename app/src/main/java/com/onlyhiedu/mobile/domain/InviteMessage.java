@@ -22,7 +22,12 @@ public class InviteMessage {
 	private String groupId;
 	private String groupName;
 	private String groupInviter;
-	
+
+	//=========== 后加入的
+	public String userName;
+	public String iconurl;
+	public String phone;
+	//===========
 
 	private int id;
 	
