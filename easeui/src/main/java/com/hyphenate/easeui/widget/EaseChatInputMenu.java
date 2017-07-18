@@ -38,8 +38,8 @@ public class EaseChatInputMenu extends LinearLayout {
     protected EaseChatPrimaryMenuBase chatPrimaryMenu;
     protected EaseEmojiconMenuBase emojiconMenu;
     protected EaseChatExtendMenu chatExtendMenu;
-    protected FrameLayout chatExtendMenuContainer;
     protected LayoutInflater layoutInflater;
+    protected FrameLayout chatExtendMenuContainer;
 
     private Handler handler = new Handler();
     private ChatInputMenuListener listener;
