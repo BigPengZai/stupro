@@ -1,7 +1,4 @@
-package com.hyphenate.easeui.widget;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.onlyhiedu.mobile.Widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,8 +12,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.adapter.EaseContactAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.widget.EaseSidebar;
+import com.onlyhiedu.mobile.UI.Emc.adapter.EaseContactAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EaseContactList extends RelativeLayout {
     protected static final String TAG = EaseContactList.class.getSimpleName();
