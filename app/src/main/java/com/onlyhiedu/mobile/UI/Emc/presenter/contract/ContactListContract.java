@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Emc.presenter.contract;
 
+import com.hyphenate.easeui.domain.EaseUser;
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 
@@ -10,9 +11,10 @@ import com.onlyhiedu.mobile.Base.BaseView;
 public interface ContactListContract {
 
     interface View extends BaseView {
+        void deleteFriendSuccess(EaseUser user);
     }
 
     interface Presenter extends BasePresenter<ContactListContract.View> {
-        void deleteFriends(String phone);
+        void deleteFriends(EaseUser user);
     }
 }

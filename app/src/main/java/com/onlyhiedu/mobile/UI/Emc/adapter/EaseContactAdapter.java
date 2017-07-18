@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.adapter;
+package com.onlyhiedu.mobile.UI.Emc.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -15,13 +15,15 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.EMLog;
+import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,9 +101,18 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
                 avatarView.setRadius(avatarOptions.getAvatarRadius());
         }
 
-        EaseUserUtils.setUserNick(username, holder.nameView);
-        EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-        
+//        EaseUserUtils.setUserNick(username, holder.nameView);
+//        EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
+
+
+        IMUserInfo fromCache = UserCacheManager.getFromCache(username);
+        if (TextUtils.isEmpty(fromCache.iconurl)) {
+            Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(holder.avatar);
+        } else {
+            Glide.with(getContext()).load(fromCache.iconurl).into(holder.avatar);
+        }
+        holder.nameView.setText(fromCache.userName);
+
        
         if(primaryColor != 0)
             holder.nameView.setTextColor(primaryColor);

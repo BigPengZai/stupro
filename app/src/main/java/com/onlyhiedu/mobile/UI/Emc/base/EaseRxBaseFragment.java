@@ -2,7 +2,6 @@ package com.onlyhiedu.mobile.UI.Emc.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
@@ -12,6 +11,8 @@ import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BasePresenter;
 
 public abstract class EaseRxBaseFragment <T extends BasePresenter> extends BaseFragment<T> {
+
+
     protected EaseTitleBar titleBar;
     protected InputMethodManager inputMethodManager;
 
@@ -22,22 +23,8 @@ public abstract class EaseRxBaseFragment <T extends BasePresenter> extends BaseF
         //noinspection ConstantConditions
         titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
 
-        EaseinitView();
-        EasesetUpView();
     }
-    
-    public void showTitleBar(){
-        if(titleBar != null){
-            titleBar.setVisibility(View.VISIBLE);
-        }
-    }
-    
-    public void hideTitleBar(){
-        if(titleBar != null){
-            titleBar.setVisibility(View.GONE);
-        }
-    }
-    
+
     protected void hideSoftKeyboard() {
         if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getActivity().getCurrentFocus() != null)
@@ -45,10 +32,5 @@ public abstract class EaseRxBaseFragment <T extends BasePresenter> extends BaseF
                         InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
-    
-    protected abstract void EaseinitView();
-    
-    protected abstract void EasesetUpView();
-
 
 }

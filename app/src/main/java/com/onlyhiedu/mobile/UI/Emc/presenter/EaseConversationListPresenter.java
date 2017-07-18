@@ -5,47 +5,44 @@ import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
-import com.onlyhiedu.mobile.UI.Emc.presenter.contract.NewFriendsMsgContract;
-
-import java.util.List;
+import com.onlyhiedu.mobile.UI.Emc.presenter.contract.EaseConversationListContract;
 
 import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
 /**
- * Created by Administrator on 2017/7/6.
+ * Created by Administrator on 2017/7/18.
  */
 
-public class NewFriendsMsgPresenter extends RxPresenter<NewFriendsMsgContract.View> implements NewFriendsMsgContract.Presenter {
+public class EaseConversationListPresenter extends RxPresenter<EaseConversationListContract.View> implements EaseConversationListContract.Presenter {
 
 
     private RetrofitHelper mRetrofitHelper;
 
     @Inject
-    public NewFriendsMsgPresenter(RetrofitHelper mRetrofitHelper) {
+    public EaseConversationListPresenter(RetrofitHelper mRetrofitHelper) {
         this.mRetrofitHelper = mRetrofitHelper;
     }
 
     @Override
-    public void getNewFriends(List<String> IMNames) {
-        Flowable<onlyHttpResponse<IMAllUserInfo>> flowable = mRetrofitHelper.fetchGetIMUserList(IMNames);
+    public void getIMUserFriendList() {
+        Flowable<onlyHttpResponse<IMAllUserInfo>> flowable = mRetrofitHelper.fetchGetIMUserFriendList();
+
         MyResourceSubscriber<onlyHttpResponse<IMAllUserInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<IMAllUserInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<IMAllUserInfo> data) {
+
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().getNewFriendsSuccess(data.getData());
+                        getView().getIMUserFriendListSuccess(data.getData());
                     } else {
                         getView().showError(data.getMessage());
                     }
                 }
+
             }
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
-
-
-
-
 }

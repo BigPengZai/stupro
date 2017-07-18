@@ -1,5 +1,8 @@
 package com.onlyhiedu.mobile.UI.Emc;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.onlyhiedu.mobile.Base.SimpleActivity;
@@ -17,6 +20,14 @@ public class ContactListActivity extends SimpleActivity {
     @Override
     protected int getLayout() {
         return R.layout.activity_contactlist;
+    }
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Log.d("Xwc","ContactListActivity");
     }
 
     @Override

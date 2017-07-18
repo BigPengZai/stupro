@@ -29,10 +29,10 @@ import android.widget.TextView;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.easeui.adapter.EaseContactAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.adapter.EaseContactAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -97,14 +97,14 @@ public class AddContactActivity extends EaseRxBaseActivity<AddContactPresenter> 
      * @param view
      */
     public void addContact(View view) {
-        if (EMClient.getInstance().getCurrentUser().equals(nameText.getText().toString())) {
+        if (EMClient.getInstance().getCurrentUser().equals(toAddUsername)) {
             new EaseAlertDialog(this, R.string.not_add_myself).show();
             return;
         }
 
-        if (DemoHelper.getInstance().getContactList().containsKey(nameText.getText().toString())) {
+        if (DemoHelper.getInstance().getContactList().containsKey(toAddUsername)) {
             //let the user know the contact already in your contact list
-            if (EMClient.getInstance().contactManager().getBlackListUsernames().contains(nameText.getText().toString())) {
+            if (EMClient.getInstance().contactManager().getBlackListUsernames().contains(toAddUsername)) {
                 new EaseAlertDialog(this, R.string.user_already_in_contactlist).show();
                 return;
             }
@@ -128,6 +128,7 @@ public class AddContactActivity extends EaseRxBaseActivity<AddContactPresenter> 
                     runOnUiThread(new Runnable() {
                         public void run() {
                             progressDialog.dismiss();
+
                             String s1 = getResources().getString(R.string.send_successful);
                             Toast.makeText(getApplicationContext(), s1, Toast.LENGTH_LONG).show();
                         }
@@ -155,6 +156,9 @@ public class AddContactActivity extends EaseRxBaseActivity<AddContactPresenter> 
         searchedUserLayout.setVisibility(View.VISIBLE);
         nameText.setText(info.userName);
         toAddUsername = info.imUserName.replace("-", "");
+
+//        SPUtil.setUserNick(toAddUsername,info.userName);
+
     }
 
     @Override

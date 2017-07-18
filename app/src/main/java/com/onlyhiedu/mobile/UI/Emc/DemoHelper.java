@@ -40,14 +40,14 @@ import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import com.onlyhiedu.mobile.Model.bean.UserIMContacts;
+import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.IMUserInfo2;
 import com.onlyhiedu.mobile.Model.http.onlyApis;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.PreferenceManager;
 import com.onlyhiedu.mobile.Utils.SPUtil;
-import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -70,7 +70,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 
 public class DemoHelper {
     /**
@@ -158,13 +157,16 @@ public class DemoHelper {
     public void init(Context context) {
         demoModel = new DemoModel(context);
         EMOptions options = initChatOptions();
+//        options.setRestServer("103.241.230.122:31111");
+//        options.setIMServer("103.241.230.122");
+//        options.setImPort(31097);
 
         //use default options if options is null
         if (EaseUI.getInstance().init(context, options)) {
             appContext = context;
 
             //debug mode, you'd better set it to false, if you want release your App officially.
-            EMClient.getInstance().setDebugMode(false);
+            EMClient.getInstance().setDebugMode(true);
             //get easeui instance
             easeUI = EaseUI.getInstance();
             //to set user's profile and avatar
@@ -174,7 +176,7 @@ public class DemoHelper {
             //initialize profile manager
             getUserProfileManager().init(context);
             //set Call options
-//            setCallOptions();
+            setCallOptions();
 
             // TODO: set Call options
             // min video kbps
@@ -226,9 +228,8 @@ public class DemoHelper {
 
             // enabled fixed sample rate
             boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
-            //TODO 注释了
 //            EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
-            //TODO 注释了
+
             // Offline call push
 //            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
@@ -249,6 +250,14 @@ public class DemoHelper {
         options.setRequireAck(true);
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
+
+        //you need apply & set your own id if you want to use google cloud messaging.
+        options.setGCMNumber("324169311137");
+        //you need apply & set your own id if you want to use Mi push notification
+        options.setMipushConfig("2882303761517426801", "5381742660801");
+        //you need apply & set your own id if you want to use Huawei push notification
+        options.setHuaweiPushAppId("10492024");
+
         //set custom servers, commonly used in private deployment
         if (demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
             options.setRestServer(demoModel.getRestServer());
@@ -320,10 +329,10 @@ public class DemoHelper {
 
         // enabled fixed sample rate
         boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
-        EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
+//        EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
         // Offline call push
-        EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+//        EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
     }
 
     protected void setEaseUIProviders() {
@@ -334,6 +343,7 @@ public class DemoHelper {
 
         // set profile provider if you want easeUI to handle avatar and nickname
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
+
             @Override
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
@@ -453,26 +463,26 @@ public class DemoHelper {
                 // you can set what activity you want display when user click the notification
                 Intent intent = new Intent(appContext, ChatActivity.class);
                 // open calling activity if there is call
-                if (isVideoCalling) {
+//                if(isVideoCalling){
 //                    intent = new Intent(appContext, VideoCallActivity.class);
-                } else if (isVoiceCalling) {
+//                }else if(isVoiceCalling){
 //                    intent = new Intent(appContext, VoiceCallActivity.class);
-                } else {
-                    ChatType chatType = message.getChatType();
-                    if (chatType == ChatType.Chat) { // single chat message
-                        intent.putExtra("userId", message.getFrom());
-                        intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
-                    } else { // group chat message
-                        // message.getTo() is the group id
-                        intent.putExtra("userId", message.getTo());
-                        if (chatType == ChatType.GroupChat) {
-                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
-                        } else {
-                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
-                        }
-
+//                }else{
+                ChatType chatType = message.getChatType();
+                if (chatType == ChatType.Chat) { // single chat message
+                    intent.putExtra("userId", message.getFrom());
+                    intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
+                } else { // group chat message
+                    // message.getTo() is the group id
+                    intent.putExtra("userId", message.getTo());
+                    if (chatType == ChatType.GroupChat) {
+                        intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+                    } else {
+                        intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                     }
+
                 }
+//                }
                 return intent;
             }
         });
@@ -707,7 +717,7 @@ public class DemoHelper {
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
             msg.addBody(new EMTextMessageBody(inviter + " " + st3));
-            msg.setStatus(EMMessage.Status.SUCCESS);
+            msg.setStatus(Status.SUCCESS);
             // save invitation as messages
             EMClient.getInstance().chatManager().saveMessage(msg);
             // notify invitation message
@@ -796,6 +806,7 @@ public class DemoHelper {
 
     /***
      * 好友变化listener
+     *
      */
     public class MyContactListener implements EMContactListener {
 
@@ -806,13 +817,31 @@ public class DemoHelper {
             Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
             EaseUser user = new EaseUser(username);
 
+
             if (!localUsers.containsKey(username)) {
                 userDao.saveContact(user);
             }
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
 
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+            OkHttpClient client = new OkHttpClient();
+            RequestBody formBody = new FormBody.Builder()
+                    .add("token", SPUtil.getToken())
+                    .add("userName", username)
+                    .build();
+            Request request = new Request.Builder().url(onlyApis.HOST + "client/chat/getIMUserInfo")
+                    .post(formBody).build();
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+
+                IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
+                UserCacheManager.insert(imUserInfo.data);
+                broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override
@@ -901,9 +930,18 @@ public class DemoHelper {
     }
 
     private EaseUser getUserInfo(String username) {
-        // 从本地缓存中获取用户昵称头像
-        EaseUser user = UserCacheManager.getEaseUser(username);
-        if(user == null){
+        // To get instance of EaseUser, here we get it from the user list in memory
+        // You'd better cache it if you get it from your server
+        EaseUser user = null;
+        if (username.equals(EMClient.getInstance().getCurrentUser()))
+            return getUserProfileManager().getCurrentUserInfo();
+        user = getContactList().get(username);
+        if (user == null && getRobotList() != null) {
+            user = getRobotList().get(username);
+        }
+
+        // if user is not in your contacts, set inital letter for him/her
+        if (user == null) {
             user = new EaseUser(username);
             EaseCommonUtils.setUserInitialLetter(user);
         }
@@ -923,8 +961,6 @@ public class DemoHelper {
             public void onMessageReceived(List<EMMessage> messages) {
                 for (EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-                    // 从消息的扩展属性里获取昵称头像
-                    UserCacheManager.save(message.ext());
                     // in background, do not refresh UI, notify it in notification bar
                     if (!easeUI.hasForegroundActivies()) {
                         getNotifier().onNewMsg(message);
@@ -940,6 +976,12 @@ public class DemoHelper {
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
                     //red packet code : 处理红包回执透传消息
+//                    if(!easeUI.hasForegroundActivies()){
+//                        if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+//                            RedPacketUtil.receiveRedPacketAckMessage(message);
+//                            broadcastManager.sendBroadcast(new Intent(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+//                        }
+//                    }
 
                     if (action.equals("__Call_ReqP2P_ConferencePattern")) {
                         String title = message.getStringAttribute("em_apns_ext", "conference call");
@@ -1247,38 +1289,18 @@ public class DemoHelper {
     }
 
     public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback) {
-
         if (isSyncingContactsWithServer) {
             return;
         }
+
         isSyncingContactsWithServer = true;
 
         new Thread() {
             @Override
             public void run() {
-                List<String> usernames = new ArrayList<String>();
+                List<String> usernames = null;
                 try {
-
-//                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
-
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody formBody = new FormBody.Builder()
-                            .add("token", SPUtil.getToken())
-                            .add("userName", SPUtil.getEmcRegName())
-                            .build();
-                    Request request = new Request.Builder().url(onlyApis.HOST + "/client/chat/getIMUserFriendList")
-                            .post(formBody).build();
-                    Response response = client.newCall(request).execute();
-                    if (!response.isSuccessful())
-                        throw new IOException("请求好友接口失败  Unexpected code " + response);
-
-
-                    UserIMContacts userIMContacts = JsonUtil.parseJson(response.body().string(), UserIMContacts.class);
-                    List<UserIMContacts.DataBean.ListBean> MyServeContact = userIMContacts.data.list;
-                    for (int i = 0; i < MyServeContact.size() && MyServeContact != null; i++) {
-                        usernames.add(MyServeContact.get(i).userName);
-                    }
-
+                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                     // in case that logout already before server returns, we should return immediately
                     if (!isLoggedIn()) {
                         isContactsSyncedWithServer = false;
@@ -1288,18 +1310,10 @@ public class DemoHelper {
                     }
 
                     Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
-
-
-                    for (int i = 0; i < usernames.size(); i++) {
-                        EaseUser user = new EaseUser(usernames.get(i));
-                        user.setNick(MyServeContact.get(i).userName);
-                        user.setNickname(MyServeContact.get(i).userName);
-                        user.setAvatar(MyServeContact.get(i).iconurl);
-                        EaseCommonUtils.setUserInitialLetter(user);
-                        userlist.put(usernames.get(i), user);
-                    }
                     for (String username : usernames) {
-
+                        EaseUser user = new EaseUser(username);
+                        EaseCommonUtils.setUserInitialLetter(user);
+                        userlist.put(username, user);
                     }
                     // save the contact list to cache
                     getContactList().clear();
@@ -1331,17 +1345,16 @@ public class DemoHelper {
                         }
                     });
                     if (callback != null) {
-
                         callback.onSuccess(usernames);
                     }
-                } catch (Exception e) {
+                } catch (HyphenateException e) {
                     demoModel.setContactSynced(false);
                     isContactsSyncedWithServer = false;
                     isSyncingContactsWithServer = false;
                     notifyContactsSyncListener(false);
                     e.printStackTrace();
                     if (callback != null) {
-                        callback.onError(500, e.toString());
+                        callback.onError(e.getErrorCode(), e.toString());
                     }
                 }
 

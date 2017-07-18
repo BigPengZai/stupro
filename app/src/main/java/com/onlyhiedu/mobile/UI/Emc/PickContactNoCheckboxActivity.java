@@ -21,10 +21,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.hyphenate.easeui.adapter.EaseContactAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.adapter.EaseContactAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;

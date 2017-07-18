@@ -19,7 +19,6 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -34,7 +33,6 @@ import com.hyphenate.util.PathUtil;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Widget.ChatRowVoiceCall;
-import com.onlyhiedu.mobile.cache.UserCacheManager;
 import com.onlyhiedu.mobile.domain.EmojiconExampleGroupData;
 import com.onlyhiedu.mobile.domain.RobotUser;
 
@@ -211,8 +209,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             //set message extension
             message.setAttribute("em_robot_message", isRobot);
         }
-        // 设置消息的扩展属性，携带昵称头像
-        UserCacheManager.setMsgExt(message);
     }
     
     @Override

@@ -32,9 +32,6 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.NetUtils;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Emc.base.EaseRxContactListFragment;
-import com.onlyhiedu.mobile.UI.Emc.presenter.ContactListPresenter;
-import com.onlyhiedu.mobile.UI.Emc.presenter.contract.NewFriendsMsgContract;
 import com.onlyhiedu.mobile.Widget.ContactItemView;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.db.UserDao;
@@ -46,7 +43,7 @@ import java.util.Map;
  * contact list
  * 通讯录
  */
-public class ContactListFragment extends EaseRxContactListFragment<ContactListPresenter> implements NewFriendsMsgContract.View {
+public class ContactListFragment extends EaseContactListFragment {
 
     private static final String TAG = ContactListFragment.class.getSimpleName();
     private ContactSyncListener contactSyncListener;
@@ -58,14 +55,15 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
 
     @SuppressLint("InflateParams")
     @Override
-    protected void EaseinitView() {
-        super.EaseinitView();
+    protected void initView() {
+        super.initView();
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.em_contacts_header, null);
         HeaderItemClickListener clickListener = new HeaderItemClickListener();
         applicationItem = (ContactItemView) headerView.findViewById(R.id.application_item);
         applicationItem.setOnClickListener(clickListener);
         headerView.findViewById(R.id.group_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
+//        headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
         listView.addHeaderView(headerView);
         //add loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
@@ -74,22 +72,21 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
         registerForContextMenu(listView);
     }
 
-
     @Override
     public void refresh() {
         Map<String, EaseUser> m = DemoHelper.getInstance().getContactList();
         if (m instanceof Hashtable<?, ?>) {
             //noinspection unchecked
-            m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>) m).clone();
+            m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>)m).clone();
         }
         setContactsMap(m);
         super.refresh();
-        if (inviteMessgeDao == null) {
+        if(inviteMessgeDao == null){
             inviteMessgeDao = new InviteMessgeDao(getActivity());
         }
-        if (inviteMessgeDao.getUnreadMessagesCount() > 0) {
+        if(inviteMessgeDao.getUnreadMessagesCount() > 0){
             applicationItem.showUnreadMsgView();
-        } else {
+        }else{
             applicationItem.hideUnreadMsgView();
         }
     }
@@ -97,15 +94,8 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void EasesetUpView() {
+    protected void setUpView() {
         titleBar.setRightImageResource(R.drawable.em_add);
-//        titleBar.setLeftImageResource();
-        titleBar.setLeftLayoutClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
         titleBar.setRightLayoutClickListener(new OnClickListener() {
 
             @Override
@@ -117,15 +107,15 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
         //设置联系人数据
         Map<String, EaseUser> m = DemoHelper.getInstance().getContactList();
         if (m instanceof Hashtable<?, ?>) {
-            m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>) m).clone();
+            m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>)m).clone();
         }
         setContactsMap(m);
-        super.EasesetUpView();
+        super.setUpView();
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EaseUser user = (EaseUser) listView.getItemAtPosition(position);
+                EaseUser user = (EaseUser)listView.getItemAtPosition(position);
                 if (user != null) {
                     String username = user.getUsername();
                     // demo中直接进入聊天页面，实际一般是进入用户详情页
@@ -169,38 +159,17 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
             contactSyncListener = null;
         }
 
-        if (blackListSyncListener != null) {
+        if(blackListSyncListener != null){
             DemoHelper.getInstance().removeSyncBlackListListener(blackListSyncListener);
         }
 
-        if (contactInfoSyncListener != null) {
+        if(contactInfoSyncListener != null){
             DemoHelper.getInstance().getUserProfileManager().removeSyncContactInfoListener(contactInfoSyncListener);
         }
     }
 
-    @Override
-    protected void initInject() {
-        getFragmentComponent().inject(this);
-    }
 
-
-    @Override
-    protected void initView() {
-
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    public void showError(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-    }
-
-
-    protected class HeaderItemClickListener implements OnClickListener {
+    protected class HeaderItemClickListener implements OnClickListener{
 
         @Override
         public void onClick(View v) {
@@ -217,7 +186,10 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
                     //进入聊天室列表页面
                     startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
                     break;
-
+//                case R.id.robot_item:
+//                    //进入Robot列表页面
+//                    startActivity(new Intent(getActivity(), RobotsActivity.class));
+//                    break;
 
                 default:
                     break;
@@ -248,7 +220,7 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
                 e.printStackTrace();
             }
             return true;
-        } else if (item.getItemId() == R.id.add_to_blacklist) {
+        }else if(item.getItemId() == R.id.add_to_blacklist){
             moveToBlacklist(toBeProcessUsername);
             return true;
         }
@@ -278,7 +250,6 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
                     DemoHelper.getInstance().getContactList().remove(tobeDeleteUser.getUsername());
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
-                            mPresenter.deleteFriends(tobeDeleteUser.getUsername());
                             pd.dismiss();
                             contactList.remove(tobeDeleteUser);
                             contactListLayout.refresh();
@@ -305,14 +276,14 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
             EMLog.d(TAG, "on contact list sync success:" + success);
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable(){
 
                         @Override
                         public void run() {
-                            if (success) {
+                            if(success){
                                 loadingView.setVisibility(View.GONE);
                                 refresh();
-                            } else {
+                            }else{
                                 String s1 = getResources().getString(R.string.get_failed_please_check);
                                 Toast.makeText(getActivity(), s1, Toast.LENGTH_LONG).show();
                                 loadingView.setVisibility(View.GONE);
@@ -329,7 +300,7 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
 
         @Override
         public void onSyncComplete(boolean success) {
-            getActivity().runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable(){
 
                 @Override
                 public void run() {
@@ -350,7 +321,7 @@ public class ContactListFragment extends EaseRxContactListFragment<ContactListPr
                 @Override
                 public void run() {
                     loadingView.setVisibility(View.GONE);
-                    if (success) {
+                    if(success){
                         refresh();
                     }
                 }

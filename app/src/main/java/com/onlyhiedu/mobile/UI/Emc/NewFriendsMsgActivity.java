@@ -17,21 +17,33 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.adapter.NewFriendsMsgAdapter;
+import com.onlyhiedu.mobile.UI.Emc.base.EaseRxBaseActivity;
 import com.onlyhiedu.mobile.UI.Emc.presenter.NewFriendsMsgPresenter;
 import com.onlyhiedu.mobile.UI.Emc.presenter.contract.NewFriendsMsgContract;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.domain.InviteMessage;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * Application and notification
  * 申请与通知
  */
-public class NewFriendsMsgActivity extends EaseBaseActivity2<NewFriendsMsgPresenter> implements NewFriendsMsgContract.View {
+public class NewFriendsMsgActivity extends EaseRxBaseActivity<NewFriendsMsgPresenter> implements NewFriendsMsgContract.View {
 
+
+    @BindView(R.id.list)
+    ListView mList;
+
+
+    private InviteMessgeDao mDao;
+    private List<InviteMessage> mMsgs;
 
     @Override
     protected void initInject() {
@@ -45,18 +57,28 @@ public class NewFriendsMsgActivity extends EaseBaseActivity2<NewFriendsMsgPresen
 
     @Override
     protected void initView() {
-        ListView listView = (ListView) findViewById(R.id.list);
-        InviteMessgeDao dao = new InviteMessgeDao(this);
-        List<InviteMessage> msgs = dao.getMessagesList();
+        mDao = new InviteMessgeDao(this);
+        mMsgs = mDao.getMessagesList();
 
-        NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs);
-        listView.setAdapter(adapter);
-        dao.saveUnreadMessageCount(0);
+        List<String> IMNames = new ArrayList<>();
+        for (int i = 0; i < mMsgs.size(); i++) {
+            IMNames.add(mMsgs.get(i).getFrom());
+        }
+        mPresenter.getNewFriends(IMNames);
     }
 
+    @Override
+    public void getNewFriendsSuccess(IMAllUserInfo data) {
+        for (int i = 0; i < data.list.size(); i++) {
+            mMsgs.get(i).iconurl = data.list.get(i).iconurl;
+            mMsgs.get(i).phone = data.list.get(i).phone;
+            mMsgs.get(i).userName = data.list.get(i).userName;
+        }
 
-    public void addFriend(String phone) {
-        mPresenter.addFriends(phone);
+
+        NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, mMsgs);
+        mList.setAdapter(adapter);
+        mDao.saveUnreadMessageCount(0);
     }
 
 
@@ -68,6 +90,5 @@ public class NewFriendsMsgActivity extends EaseBaseActivity2<NewFriendsMsgPresen
     public void showError(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
 
 }

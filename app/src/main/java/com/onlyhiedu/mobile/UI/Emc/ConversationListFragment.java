@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
-import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.util.NetUtils;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
@@ -39,8 +38,8 @@ public class ConversationListFragment extends EaseConversationListFragment {
     }
 
     @Override
-    protected void setUpView() {
-        super.setUpView();
+    protected void initData() {
+        super.initData();
         titleBar.setRightImageResource(R.drawable.em_contact_list_normal);
         titleBar.setRightLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +76,6 @@ public class ConversationListFragment extends EaseConversationListFragment {
                 }
             }
         });
-        super.setUpView();
         //end of red packet code
     }
 
