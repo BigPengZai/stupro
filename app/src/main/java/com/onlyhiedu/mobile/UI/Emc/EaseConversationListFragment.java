@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +39,7 @@ import java.util.Map;
 
 /**
  * conversation list fragment
+ * 会话列表
  */
 public class EaseConversationListFragment extends EaseRxBaseFragment<EaseConversationListPresenter> implements EaseConversationListContract.View {
     private final static int MSG_REFRESH = 2;
@@ -132,6 +134,7 @@ public class EaseConversationListFragment extends EaseRxBaseFragment<EaseConvers
 
         query.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("peyton", "s: "+s);
                 conversationListView.filter(s);
                 if (s.length() > 0) {
                     clearSearch.setVisibility(View.VISIBLE);

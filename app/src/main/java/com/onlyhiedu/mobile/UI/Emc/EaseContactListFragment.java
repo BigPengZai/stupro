@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -118,12 +119,13 @@ public class EaseContactListFragment extends EaseBaseFragment {
         
         query.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "s: " + s);
                 contactListLayout.filter(s);
                 if (s.length() > 0) {
                     clearSearch.setVisibility(View.VISIBLE);
                 } else {
                     clearSearch.setVisibility(View.INVISIBLE);
-                    
+
                 }
             }
 

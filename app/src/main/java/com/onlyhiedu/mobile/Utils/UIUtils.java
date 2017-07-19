@@ -60,6 +60,8 @@ public class UIUtils {
         EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
             @Override
             public void onSuccess() {
+                EMClient.getInstance().chatManager().loadAllConversations();
+                EMClient.getInstance().groupManager().loadAllGroups();
                 boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
                         SPUtil.getName());
                 if (!updatenick) {

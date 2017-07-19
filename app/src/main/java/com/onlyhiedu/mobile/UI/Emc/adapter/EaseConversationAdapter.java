@@ -270,9 +270,10 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
 //                        if(user != null && user.getNick() != null)
 //                            username = user.getNick();
                     }
-
+                    IMUserInfo fromCache = UserCacheManager.getFromCache(username);
+                    String userName = fromCache.userName;
                     // First match against the whole ,non-splitted value
-                    if (username.startsWith(prefixString)) {
+                    if (userName.startsWith(prefixString)) {
                         newValues.add(value);
                     } else {
                         final String[] words = username.split(" ");
