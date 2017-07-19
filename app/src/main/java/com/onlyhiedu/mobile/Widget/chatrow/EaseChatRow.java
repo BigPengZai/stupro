@@ -134,7 +134,7 @@ public abstract class EaseChatRow extends LinearLayout {
             } else {
                 Glide.with(context).load(SPUtil.getAvatarUrl()).into(userAvatarView);
             }
-            EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
+//            EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
         } else {
 
             IMUserInfo fromCache = UserCacheManager.getFromCache(message.getFrom());
