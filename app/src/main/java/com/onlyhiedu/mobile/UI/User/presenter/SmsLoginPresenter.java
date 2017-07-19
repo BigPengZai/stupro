@@ -84,7 +84,7 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
                         if (!data.getData().registerIMFlag) {
                             emcRegister(mRetrofitHelper,getView());
                         } else {
-                            emcLogin(getView());
+                            getView().showUser();
                         }
                     } else {
                         getView().showError(data.getMessage());

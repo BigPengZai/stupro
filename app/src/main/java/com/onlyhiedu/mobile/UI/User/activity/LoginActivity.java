@@ -133,6 +133,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             startActivity(new Intent(this, MainActivity.class));
             EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
         }
+        UIUtils.emcLogin();
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }

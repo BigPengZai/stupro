@@ -33,6 +33,7 @@ public class ChatActivity extends EaseBaseActivity{
         chatFragment.setArguments(getIntent().getExtras());
 
         getSupportFragmentManager().beginTransaction().add(R.id.container, chatFragment).commit();
+
     }
     
     @Override

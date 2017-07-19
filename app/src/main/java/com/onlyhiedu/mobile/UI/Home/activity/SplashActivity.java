@@ -8,8 +8,10 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 
@@ -20,26 +22,36 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
  */
 
 public class SplashActivity extends Activity {
-
-
+    private static final int sleepTime = 1500;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_splash);
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
+        new Thread(new Runnable() {
             public void run() {
-                if (TextUtils.isEmpty(SPUtil.getToken())) {
-                    Log.d(Constants.TAG,SPUtil.getToken());
-                    startActivity(new Intent(SplashActivity.this, OpenIDActivity.class));
-                } else {
+                if (DemoHelper.getInstance().isLoggedIn()&&!TextUtils.isEmpty(SPUtil.getToken())) {
+                    long start = System.currentTimeMillis();
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                    EMClient.getInstance().groupManager().loadAllGroups();
+                    long costTime = System.currentTimeMillis() - start;
+                    if (sleepTime - costTime > 0) {
+                        try {
+                            Thread.sleep(sleepTime - costTime);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
+                }else {
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                    }
+                    startActivity(new Intent(SplashActivity.this, OpenIDActivity.class));
+                    finish();
                 }
-                finish();
             }
-        }, 1000);
+        }).start();
     }
 }

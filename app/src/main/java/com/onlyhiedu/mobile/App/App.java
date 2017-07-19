@@ -76,7 +76,7 @@ public class App extends Application {
         instance = this;
 
 //        LeakCanary.install(this);
-        EaseUI.getInstance().init(this, null);
+//        EaseUI.getInstance().init(this, null);
         initGlide();
         DaoUtil.getInstance(this);
         initWorkerThread();

@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,14 +27,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
+import com.onlyhiedu.mobile.Cache.UserCacheManager;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
+import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.io.File;
@@ -47,7 +53,33 @@ import static com.onlyhiedu.mobile.Utils.AppUtil.isMethodsCompat;
  */
 
 public class UIUtils {
+    public static   void emcLogin() {
+        String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
+        DemoDBManager.getInstance().closeDB();
+        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
+        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        SPUtil.getName());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
 
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+               Log.d("tag","登录失败:" + message);
+            }
+        });
+    }
     public static void startLoginActivity(Context context) {
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();

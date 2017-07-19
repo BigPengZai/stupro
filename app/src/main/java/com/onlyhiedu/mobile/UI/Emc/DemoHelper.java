@@ -38,6 +38,7 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
@@ -176,7 +177,7 @@ public class DemoHelper {
             //initialize profile manager
             getUserProfileManager().init(context);
             //set Call options
-            setCallOptions();
+//            setCallOptions();
 
             // TODO: set Call options
             // min video kbps
@@ -250,14 +251,6 @@ public class DemoHelper {
         options.setRequireAck(true);
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
-
-        //you need apply & set your own id if you want to use google cloud messaging.
-        options.setGCMNumber("324169311137");
-        //you need apply & set your own id if you want to use Mi push notification
-        options.setMipushConfig("2882303761517426801", "5381742660801");
-        //you need apply & set your own id if you want to use Huawei push notification
-        options.setHuaweiPushAppId("10492024");
-
         //set custom servers, commonly used in private deployment
         if (demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
             options.setRestServer(demoModel.getRestServer());

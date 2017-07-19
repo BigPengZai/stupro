@@ -16,6 +16,7 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.util.NetUtils;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 
 
@@ -27,7 +28,7 @@ import com.onlyhiedu.mobile.db.InviteMessgeDao;
 public class ConversationListFragment extends EaseConversationListFragment {
 
     private TextView errorText;
-
+    public static final String TAG = ConversationListFragment.class.getSimpleName();
     @Override
     protected void initView() {
         super.initView();
@@ -35,18 +36,26 @@ public class ConversationListFragment extends EaseConversationListFragment {
         View errorView = (LinearLayout) View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
+        errorView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtils.emcLogin();
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
         titleBar.setRightImageResource(R.drawable.em_contact_list_normal);
-        titleBar.setRightLayoutClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), ContactListActivity.class));
-            }
-        });
+        if (DemoHelper.getInstance().isLoggedIn()) {
+            titleBar.setRightLayoutClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getContext(), ContactListActivity.class));
+                }
+            });
+        }
         // register context menu
         registerForContextMenu(conversationListView);
         conversationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

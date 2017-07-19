@@ -93,7 +93,7 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
             public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        emcLogin(v);
+                        v.showUser();
                     } else {
                         Log.d(Constants.Async, "RxPresenter - emcRegister :" + data.getMessage());
                         v.showError(data.getMessage());
@@ -102,42 +102,6 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
             }
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
-    }
-
-    protected <V extends IMBaseView> void emcLogin(V v) {
-        String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
-        // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
-        // close it before login to make sure DemoDB not overlap
-        DemoDBManager.getInstance().closeDB();
-        // reset current user name before login
-        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
-        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                // ** manually load all local groups and conversation
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                // update current user's display name for APNs
-                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-                        App.currentUserNick.trim());
-                if (!updatenick) {
-                    Log.e("LoginActivity", "update current user nick fail");
-                }
-
-                // get user's info (this should be get from App's server or 3rd party service)
-                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-                v.showUser();
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-                v.IMLoginFailure("登录失败:" + message);
-            }
-        });
     }
 
 }

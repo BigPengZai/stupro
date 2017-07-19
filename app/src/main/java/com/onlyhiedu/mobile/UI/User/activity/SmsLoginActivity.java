@@ -22,6 +22,7 @@ import com.onlyhiedu.mobile.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.SmsLoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -198,6 +199,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     @Override
     public void showUser() {
         addUTag();
+        UIUtils.emcLogin();
         startActivity(new Intent(this, MainActivity.class));
         AppManager.getAppManager().finishActivity(LoginActivity.class);
         finish();

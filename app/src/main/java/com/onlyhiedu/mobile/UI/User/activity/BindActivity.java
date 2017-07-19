@@ -18,6 +18,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.BindPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.BindContract;
 import com.onlyhiedu.mobile.Utils.StringUtils;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -71,6 +72,7 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
     public void showUser() {
         App.bIsGuestLogin = false;
         startActivity(new Intent(this, MainActivity.class));
+        UIUtils.emcLogin();
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }

@@ -51,7 +51,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         if (!data.getData().registerIMFlag) {
                             emcRegister(mRetrofitHelper, getView());
                         } else {
-                            emcLogin(getView());
+                            getView().showUser();
                         }
                     } else {
                         getView().showError(data.getMessage());
