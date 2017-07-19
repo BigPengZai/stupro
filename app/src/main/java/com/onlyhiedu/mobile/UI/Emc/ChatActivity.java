@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.db.DemoDBManager;
 import com.onlyhiedu.mobile.runtimepermissions.PermissionsManager;
 
 /**

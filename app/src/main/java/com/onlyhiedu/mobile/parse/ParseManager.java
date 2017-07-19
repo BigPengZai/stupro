@@ -8,15 +8,6 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,75 +40,69 @@ public class ParseManager {
 
     public void onInit(Context context) {
         Context appContext = context.getApplicationContext();
-        Parse.enableLocalDatastore(appContext);
-//		Parse.initialize(context, ParseAppID, ParseClientKey);
-        Parse.initialize(new Parse.Configuration.Builder(appContext)
-                .applicationId(ParseAppID)
-                .server(parseServer)
-                .build());
     }
 
     public boolean updateParseNickName(final String nickname) {
-        String username = EMClient.getInstance().getCurrentUser();
-        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
-        pQuery.whereEqualTo(CONFIG_USERNAME, username);
-        ParseObject pUser = null;
-        try {
-            pUser = pQuery.getFirst();
-            if (pUser == null) {
-                return false;
-            }
-            pUser.put(CONFIG_NICK, nickname);
-            pUser.save();
-            return true;
-        } catch (ParseException e) {
-            if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                pUser = new ParseObject(CONFIG_TABLE_NAME);
-                pUser.put(CONFIG_USERNAME, username);
-                pUser.put(CONFIG_NICK, nickname);
-                try {
-                    pUser.save();
-                    return true;
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                    EMLog.e(TAG, "parse error " + e1.getMessage());
-                }
-
-            }
-            e.printStackTrace();
-            EMLog.e(TAG, "parse error " + e.getMessage());
-        } catch (Exception e) {
-            EMLog.e(TAG, "updateParseNickName error");
-            e.printStackTrace();
-        }
+//        String username = EMClient.getInstance().getCurrentUser();
+//        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
+//        pQuery.whereEqualTo(CONFIG_USERNAME, username);
+//        ParseObject pUser = null;
+//        try {
+//            pUser = pQuery.getFirst();
+//            if (pUser == null) {
+//                return false;
+//            }
+//            pUser.put(CONFIG_NICK, nickname);
+//            pUser.save();
+//            return true;
+//        } catch (ParseException e) {
+//            if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+//                pUser = new ParseObject(CONFIG_TABLE_NAME);
+//                pUser.put(CONFIG_USERNAME, username);
+//                pUser.put(CONFIG_NICK, nickname);
+//                try {
+//                    pUser.save();
+//                    return true;
+//                } catch (ParseException e1) {
+//                    e1.printStackTrace();
+//                    EMLog.e(TAG, "parse error " + e1.getMessage());
+//                }
+//
+//            }
+//            e.printStackTrace();
+//            EMLog.e(TAG, "parse error " + e.getMessage());
+//        } catch (Exception e) {
+//            EMLog.e(TAG, "updateParseNickName error");
+//            e.printStackTrace();
+//        }
         return false;
     }
 
     public void getContactInfos(List<String> usernames, final EMValueCallBack<List<EaseUser>> callback) {
-        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
-        pQuery.whereContainedIn(CONFIG_USERNAME, usernames);
-        pQuery.findInBackground(new FindCallback<ParseObject>() {
-
-            @Override
-            public void done(List<ParseObject> arg0, ParseException arg1) {
-                if (arg0 != null) {
-                    List<EaseUser> mList = new ArrayList<EaseUser>();
-                    for (ParseObject pObject : arg0) {
-                        EaseUser user = new EaseUser(pObject.getString(CONFIG_USERNAME));
-                        ParseFile parseFile = pObject.getParseFile(CONFIG_AVATAR);
-                        if (parseFile != null) {
-                            user.setAvatar(parseFile.getUrl());
-                        }
-                        user.setNick(pObject.getString(CONFIG_NICK));
-                        EaseCommonUtils.setUserInitialLetter(user);
-                        mList.add(user);
-                    }
-                    callback.onSuccess(mList);
-                } else {
-                    callback.onError(arg1.getCode(), arg1.getMessage());
-                }
-            }
-        });
+//        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
+//        pQuery.whereContainedIn(CONFIG_USERNAME, usernames);
+//        pQuery.findInBackground(new FindCallback<ParseObject>() {
+//
+//            @Override
+//            public void done(List<ParseObject> arg0, ParseException arg1) {
+//                if (arg0 != null) {
+//                    List<EaseUser> mList = new ArrayList<EaseUser>();
+//                    for (ParseObject pObject : arg0) {
+//                        EaseUser user = new EaseUser(pObject.getString(CONFIG_USERNAME));
+//                        ParseFile parseFile = pObject.getParseFile(CONFIG_AVATAR);
+//                        if (parseFile != null) {
+//                            user.setAvatar(parseFile.getUrl());
+//                        }
+//                        user.setNick(pObject.getString(CONFIG_NICK));
+//                        EaseCommonUtils.setUserInitialLetter(user);
+//                        mList.add(user);
+//                    }
+//                    callback.onSuccess(mList);
+//                } else {
+//                    callback.onError(arg1.getCode(), arg1.getMessage());
+//                }
+//            }
+//        });
     }
 
 
@@ -132,59 +117,59 @@ public class ParseManager {
 
             @Override
             public void onError(int error, String errorMsg) {
-                if (error == ParseException.OBJECT_NOT_FOUND) {
-                    ParseObject pUser = new ParseObject(CONFIG_TABLE_NAME);
-                    pUser.put(CONFIG_USERNAME, username);
-                    pUser.saveInBackground(new SaveCallback() {
-
-                        @Override
-                        public void done(ParseException arg0) {
-                            if (arg0 == null) {
-                                callback.onSuccess(new EaseUser(username));
-                            }
-                        }
-                    });
-                } else {
-                    callback.onError(error, errorMsg);
-                }
+//                if (error == ParseException.OBJECT_NOT_FOUND) {
+//                    ParseObject pUser = new ParseObject(CONFIG_TABLE_NAME);
+//                    pUser.put(CONFIG_USERNAME, username);
+//                    pUser.saveInBackground(new SaveCallback() {
+//
+//                        @Override
+//                        public void done(ParseException arg0) {
+//                            if (arg0 == null) {
+//                                callback.onSuccess(new EaseUser(username));
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    callback.onError(error, errorMsg);
+//                }
             }
         });
     }
 
     public void asyncGetUserInfo(final String username, final EMValueCallBack<EaseUser> callback) {
-        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
-        pQuery.whereEqualTo(CONFIG_USERNAME, username);
-        pQuery.getFirstInBackground(new GetCallback<ParseObject>() {
-
-            @Override
-            public void done(ParseObject pUser, ParseException e) {
-                if (pUser != null) {
-                    String nick = pUser.getString(CONFIG_NICK);
-                    ParseFile pFile = pUser.getParseFile(CONFIG_AVATAR);
-                    if (callback != null) {
-                        EaseUser user = DemoHelper.getInstance().getContactList().get(username);
-                        if (user != null) {
-                            user.setNick(nick);
-                            if (pFile != null && pFile.getUrl() != null) {
-                                user.setAvatar(pFile.getUrl());
-                            }
-                        } else {
-                            user = new EaseUser(username);
-                            user.setNick(nick);
-                            if (pFile != null && pFile.getUrl() != null) {
-                                user.setAvatar(pFile.getUrl());
-                            }
-                        }
-                        callback.onSuccess(user);
-                    }
-                } else {
-                    if (callback != null) {
-                        callback.onError(e.getCode(), e.getMessage());
-                    }
-                }
-
-            }
-        });
+//        ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
+//        pQuery.whereEqualTo(CONFIG_USERNAME, username);
+//        pQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+//
+//            @Override
+//            public void done(ParseObject pUser, ParseException e) {
+//                if (pUser != null) {
+//                    String nick = pUser.getString(CONFIG_NICK);
+//                    ParseFile pFile = pUser.getParseFile(CONFIG_AVATAR);
+//                    if (callback != null) {
+//                        EaseUser user = DemoHelper.getInstance().getContactList().get(username);
+//                        if (user != null) {
+//                            user.setNick(nick);
+//                            if (pFile != null && pFile.getUrl() != null) {
+//                                user.setAvatar(pFile.getUrl());
+//                            }
+//                        } else {
+//                            user = new EaseUser(username);
+//                            user.setNick(nick);
+//                            if (pFile != null && pFile.getUrl() != null) {
+//                                user.setAvatar(pFile.getUrl());
+//                            }
+//                        }
+//                        callback.onSuccess(user);
+//                    }
+//                } else {
+//                    if (callback != null) {
+//                        callback.onError(e.getCode(), e.getMessage());
+//                    }
+//                }
+//
+//            }
+//        });
     }
 
 

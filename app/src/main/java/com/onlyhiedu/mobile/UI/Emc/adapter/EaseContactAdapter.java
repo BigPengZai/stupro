@@ -75,9 +75,11 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
         if(user == null)
             Log.d("ContactAdapter", position + "");
         String username = user.getUsername();
-        String header = user.getInitialLetter();
-        
-        if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {
+        IMUserInfo fromCache = UserCacheManager.getFromCache(username);
+//        String header = user.getInitialLetter();
+        String header=fromCache.getInitialLetter();
+
+        if (position == 0 || header != null && !header.equals(UserCacheManager.getFromCache(getItem(position - 1).getUsername()).getInitialLetter())) {
             if (TextUtils.isEmpty(header)) {
                 holder.headerView.setVisibility(View.GONE);
             } else {
@@ -105,7 +107,6 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
 //        EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
 
 
-        IMUserInfo fromCache = UserCacheManager.getFromCache(username);
         if (TextUtils.isEmpty(fromCache.iconurl)) {
             Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(holder.avatar);
         } else {

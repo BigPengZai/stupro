@@ -1,7 +1,9 @@
 package com.onlyhiedu.mobile.Model.bean;
 
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.onlyhiedu.mobile.Utils.IMUserInfoUtil;
 
 /**
  * Created by Administrator on 2017/7/12.
@@ -26,6 +28,21 @@ public class IMUserInfo {
     @DatabaseField
     public String phone;
 
+    public String getInitialLetter() {
+        if(initialLetter == null){
+            IMUserInfoUtil.setUserInitialLetter(this);
+        }
+        return initialLetter;
+    }
+
+    public void setInitialLetter(String initialLetter) {
+        this.initialLetter = initialLetter;
+    }
+
+    /**
+     * initial letter for nickname
+     */
+    protected String initialLetter;
 
     public IMUserInfo( String imUserName, String iconurl, String userName, String phone) {
         this.imUserName = imUserName;

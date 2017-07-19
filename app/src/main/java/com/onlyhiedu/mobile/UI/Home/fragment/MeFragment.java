@@ -339,7 +339,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             Log.d("", data.imagePath);
             SPUtil.setAvatarUrl(data.imagePath);
             DemoHelper.getInstance().getUserProfileManager().uploadUserAvatar(data.imagePath);
-        }
+    }
     }
 
     @Override
