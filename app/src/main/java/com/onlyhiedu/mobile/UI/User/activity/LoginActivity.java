@@ -1,5 +1,7 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +53,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     private boolean mBooleanExtra;
     private int mIntExtra;
+    private ProgressDialog mPd;
 
     @Override
     protected void initInject() {
@@ -74,7 +77,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         mEditNumber.setButton(mButton);
         mEditNumber.getEditTextView().setText(SPUtil.getPhone());
         UIUtils.initCursor(mEditNumber.getEditTextView());
-
+        mPd = new ProgressDialog(LoginActivity.this);
+        mPd.setCanceledOnTouchOutside(false);
+        mPd.setMessage(getString(R.string.Is_landing));
     }
 
 
@@ -105,6 +110,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String number = mEditNumber.getEditText();
         String pwd = mEditPwd.getEditText();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
+            mPd.show();
             mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
             Log.d(TAG, ":" + StringUtils.getDeviceId(this));
         }
@@ -133,7 +139,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             startActivity(new Intent(this, MainActivity.class));
             EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
         }
-        UIUtils.emcLogin();
+        mPd.dismiss();
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }

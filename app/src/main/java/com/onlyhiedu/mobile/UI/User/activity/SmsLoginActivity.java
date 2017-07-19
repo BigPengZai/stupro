@@ -199,7 +199,6 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     @Override
     public void showUser() {
         addUTag();
-        UIUtils.emcLogin();
         startActivity(new Intent(this, MainActivity.class));
         AppManager.getAppManager().finishActivity(LoginActivity.class);
         finish();

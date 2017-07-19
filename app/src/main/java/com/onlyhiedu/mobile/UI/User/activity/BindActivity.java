@@ -72,7 +72,6 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
     public void showUser() {
         App.bIsGuestLogin = false;
         startActivity(new Intent(this, MainActivity.class));
-        UIUtils.emcLogin();
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }

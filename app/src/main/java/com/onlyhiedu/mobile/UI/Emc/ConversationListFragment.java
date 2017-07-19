@@ -39,7 +39,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
         errorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIUtils.emcLogin();
+//                UIUtils.emcLogin();
             }
         });
     }

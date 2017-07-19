@@ -53,35 +53,7 @@ import static com.onlyhiedu.mobile.Utils.AppUtil.isMethodsCompat;
  */
 
 public class UIUtils {
-    public static   void emcLogin() {
-        String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
-        DemoDBManager.getInstance().closeDB();
-        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
-        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                EMClient.getInstance().chatManager().loadAllConversations();
-                EMClient.getInstance().groupManager().loadAllGroups();
-                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-                        SPUtil.getName());
-                if (!updatenick) {
-                    Log.e("LoginActivity", "update current user nick fail");
-                }
 
-                // get user's info (this should be get from App's server or 3rd party service)
-                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-               Log.d("tag","登录失败:" + message);
-            }
-        });
-    }
     public static void startLoginActivity(Context context) {
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();

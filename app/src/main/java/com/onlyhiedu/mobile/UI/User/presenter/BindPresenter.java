@@ -84,7 +84,7 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
                         if (!data.getData().registerIMFlag) {
                             emcRegister(mRetrofitHelper,getView());
                         } else {
-                            getView().showUser();
+                            emcLogin(getView());
                         }
                     } else {
                         getView().showError(data.getMessage());
