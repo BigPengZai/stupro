@@ -14,15 +14,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -33,7 +30,7 @@ import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
-import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.http.onlyApis;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
@@ -46,6 +43,12 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 import static com.onlyhiedu.mobile.Utils.AppUtil.isMethodsCompat;
 
 /**
@@ -53,7 +56,35 @@ import static com.onlyhiedu.mobile.Utils.AppUtil.isMethodsCompat;
  */
 
 public class UIUtils {
+    public static   void emcLogin() {
+        String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
+        DemoDBManager.getInstance().closeDB();
+        DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
+        EMClient.getInstance().login(SPUtil.getEmcRegName(), pwd, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                EMClient.getInstance().chatManager().loadAllConversations();
+                EMClient.getInstance().groupManager().loadAllGroups();
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        SPUtil.getName());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
 
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+               Log.d("tag","登录失败:" + message);
+            }
+        });
+    }
     public static void startLoginActivity(Context context) {
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();
@@ -326,27 +357,15 @@ public class UIUtils {
         activity.startActivity(intent);
     }
 
-
-    public static void setTextChanged(Button btn, EditText edt) {
-        edt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                if (charSequence.toString().length() != 0) {
-                    btn.setEnabled(true);
-                } else {
-                    btn.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+    public static void getIMUserInfo(String name, Callback   call) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+                .add("token", SPUtil.getToken())
+                .add("userName", name)
+                .build();
+        Request request = new Request.Builder().url(onlyApis.IM_USER_INFO_URL)
+                .post(formBody).build();
+        client.newCall(request).enqueue(call);
     }
 
 

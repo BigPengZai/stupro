@@ -39,6 +39,8 @@ public interface onlyApis {
     //公网环境
     String HOST = "http://api.onlyeduhi.com/";
 
+    String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
+
     /**
      * 客户端登录
      *

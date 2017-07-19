@@ -100,8 +100,7 @@ public class NewGroupActivity extends EaseBaseActivity {
 					try {
 						EMGroupOptions option = new EMGroupOptions();
 					    option.maxUsers = 200;
-						option.inviteNeedConfirm = true;
-					    
+                        option.inviteNeedConfirm = false;
 					    String reason = NewGroupActivity.this.getString(R.string.invite_join_group);
 					    reason  = EMClient.getInstance().getCurrentUser() + reason + groupName;
 					    

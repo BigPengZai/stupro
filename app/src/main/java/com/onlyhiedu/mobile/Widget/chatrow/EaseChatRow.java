@@ -20,19 +20,26 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.Direct;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
-import com.onlyhiedu.mobile.UI.Emc.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.onlyhiedu.mobile.Widget.EaseChatMessageList;
-import com.onlyhiedu.mobile.Widget.EaseChatMessageList.MessageListItemClickListener;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.IMUserInfo2;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.UI.Emc.adapter.EaseMessageAdapter;
+import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.SPUtil;
+import com.onlyhiedu.mobile.Utils.UIUtils;
+import com.onlyhiedu.mobile.Widget.EaseChatMessageList;
+import com.onlyhiedu.mobile.Widget.EaseChatMessageList.MessageListItemClickListener;
 
+import java.io.IOException;
 import java.util.Date;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public abstract class EaseChatRow extends LinearLayout {
     protected static final String TAG = EaseChatRow.class.getSimpleName();
@@ -139,15 +146,61 @@ public abstract class EaseChatRow extends LinearLayout {
 
             IMUserInfo fromCache = UserCacheManager.getFromCache(message.getFrom());
 
-            if (TextUtils.isEmpty(fromCache.iconurl)) {
-                Glide.with(context).load(R.drawable.ease_default_avatar).into(userAvatarView);
+            if (fromCache == null) {
+
+                UIUtils.getIMUserInfo(message.getFrom(),new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
+                        UserCacheManager.insert(imUserInfo.data);
+                        Activity activity = (Activity) context;
+                        if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
+
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Glide.with(context).load(R.drawable.ease_default_avatar).into(userAvatarView);
+                                }
+                            });
+
+
+                        } else {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Glide.with(context).load(imUserInfo.data.iconurl).into(userAvatarView);
+                                }
+                            });
+
+                        }
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                usernickView.setText(imUserInfo.data.userName);
+                            }
+                        });
+
+
+                    }
+                });
 
             } else {
-                Glide.with(context).load(fromCache.iconurl).into(userAvatarView);
-            }
+                if (TextUtils.isEmpty(fromCache.iconurl)) {
+                    Glide.with(context).load(R.drawable.ease_default_avatar).into(userAvatarView);
+
+                } else {
+                    Glide.with(context).load(fromCache.iconurl).into(userAvatarView);
+                }
 
 //            EaseUserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
-            EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+//            EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+                usernickView.setText(fromCache.userName);
+            }
+
         }
 
         if (deliveredView != null) {

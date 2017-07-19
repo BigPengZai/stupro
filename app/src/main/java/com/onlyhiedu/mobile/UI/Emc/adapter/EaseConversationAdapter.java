@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Emc.adapter;
 
 import android.content.Context;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -164,8 +165,8 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             if (cvsListHelper != null) {
                 content = cvsListHelper.onSetItemSecondaryText(lastMessage);
             }
-            holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))),
-                    BufferType.SPANNABLE);
+            Spannable smiledText = EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext())));
+            holder.message.setText(smiledText, BufferType.SPANNABLE);
             if (content != null) {
                 holder.message.setText(content);
             }

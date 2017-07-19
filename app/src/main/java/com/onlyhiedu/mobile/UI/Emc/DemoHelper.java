@@ -38,7 +38,6 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
@@ -822,7 +821,7 @@ public class DemoHelper {
                     .add("token", SPUtil.getToken())
                     .add("userName", username)
                     .build();
-            Request request = new Request.Builder().url(onlyApis.HOST + "client/chat/getIMUserInfo")
+            Request request = new Request.Builder().url(onlyApis.IM_USER_INFO_URL)
                     .post(formBody).build();
             Response response = null;
             try {

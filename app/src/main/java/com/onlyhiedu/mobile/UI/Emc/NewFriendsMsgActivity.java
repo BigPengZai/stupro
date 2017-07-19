@@ -64,7 +64,18 @@ public class NewFriendsMsgActivity extends EaseRxBaseActivity<NewFriendsMsgPrese
         for (int i = 0; i < mMsgs.size(); i++) {
             IMNames.add(mMsgs.get(i).getFrom());
         }
-        mPresenter.getNewFriends(IMNames);
+        if (IMNames.size() > 0) {
+            mPresenter.getNewFriends(IMNames);
+        } else {
+            init();
+        }
+
+    }
+
+    private void init() {
+        NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, mMsgs);
+        mList.setAdapter(adapter);
+        mDao.saveUnreadMessageCount(0);
     }
 
     @Override
@@ -74,11 +85,7 @@ public class NewFriendsMsgActivity extends EaseRxBaseActivity<NewFriendsMsgPrese
             mMsgs.get(i).phone = data.list.get(i).phone;
             mMsgs.get(i).userName = data.list.get(i).userName;
         }
-
-
-        NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, mMsgs);
-        mList.setAdapter(adapter);
-        mDao.saveUnreadMessageCount(0);
+        init();
     }
 
 

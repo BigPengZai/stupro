@@ -85,7 +85,6 @@ public class ConversationListFragment extends EaseConversationListFragment {
                 }
             }
         });
-        //end of red packet code
     }
 
     @Override
