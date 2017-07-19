@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.widget;
+package com.onlyhiedu.mobile.Widget;
 
 import android.content.Context;
 import android.text.Editable;
@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.widget.EaseChatPrimaryMenuBase;
 import com.hyphenate.util.EMLog;
 
 /**

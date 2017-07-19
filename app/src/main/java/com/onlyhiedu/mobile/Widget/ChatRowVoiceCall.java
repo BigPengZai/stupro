@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
+import com.onlyhiedu.mobile.Widget.chatrow.EaseChatRow;
 import com.onlyhiedu.mobile.UI.Emc.Constant;
 
 public class ChatRowVoiceCall extends EaseChatRow {

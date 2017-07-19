@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.widget.chatrow;
+package com.onlyhiedu.mobile.Widget.chatrow;
 
 import com.hyphenate.chat.EMFileMessageBody;
 import com.hyphenate.chat.EMMessage;

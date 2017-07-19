@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.ui;
+package com.onlyhiedu.mobile.UI.Emc;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -41,19 +41,25 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
+import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
+import com.hyphenate.easeui.ui.EaseBaseFragment;
+import com.hyphenate.easeui.ui.EaseChatRoomListener;
+import com.hyphenate.easeui.ui.EaseGroupListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
-import com.hyphenate.easeui.widget.EaseChatInputMenu;
-import com.hyphenate.easeui.widget.EaseChatInputMenu.ChatInputMenuListener;
-import com.hyphenate.easeui.widget.EaseChatMessageList;
-import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
-import com.hyphenate.easeui.widget.EaseVoiceRecorderView.EaseVoiceRecorderCallback;
-import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.onlyhiedu.mobile.Widget.EaseChatInputMenu;
+import com.onlyhiedu.mobile.Widget.EaseChatInputMenu.ChatInputMenuListener;
+import com.onlyhiedu.mobile.Widget.EaseChatMessageList;
+import com.onlyhiedu.mobile.Widget.EaseVoiceRecorderView;
+import com.onlyhiedu.mobile.Widget.EaseVoiceRecorderView.EaseVoiceRecorderCallback;
+import com.onlyhiedu.mobile.Widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
+import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 
 import java.io.File;
 import java.util.List;
@@ -182,15 +188,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     protected void setUpView() {
-        titleBar.setTitle(toChatUsername);
+        IMUserInfo fromCache = UserCacheManager.getFromCache(toChatUsername);
+        titleBar.setTitle(fromCache.userName);
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
             // set title
-            if(EaseUserUtils.getUserInfo(toChatUsername) != null){
-                EaseUser user = EaseUserUtils.getUserInfo(toChatUsername);
-                if (user != null) {
-                    titleBar.setTitle(user.getNick());
-                }
-            }
+//            if(EaseUserUtils.getUserInfo(toChatUsername) != null){
+//                EaseUser user = EaseUserUtils.getUserInfo(toChatUsername);
+//                if (user != null) {
+//                    titleBar.setTitle(user.getNick());
+//                }
+//            }
             titleBar.setRightImageResource(R.drawable.ease_mm_title_remove);
         } else {
         	titleBar.setRightImageResource(R.drawable.ease_to_group_details_normal);

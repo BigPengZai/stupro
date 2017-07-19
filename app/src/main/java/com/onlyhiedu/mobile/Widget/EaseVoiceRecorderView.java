@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.widget;
+package com.onlyhiedu.mobile.Widget;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,7 +18,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.model.EaseVoiceRecorder;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRowVoicePlayClickListener;
+import com.onlyhiedu.mobile.Widget.chatrow.EaseChatRowVoicePlayClickListener;
 
 /**
  * Voice recorder view

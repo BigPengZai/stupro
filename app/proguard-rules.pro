@@ -244,3 +244,17 @@ public static final ** CREATOR;
 -keep class android.support.design.internal.BottomNavigationMenuView {
     *;
 }
+
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
+-keep class com.j256.ormlite.** { *; }
+-dontwarn com.j256.ormlite.android.**
+-dontwarn com.j256.ormlite.dao.**
+-dontwarn com.j256.ormlite.db.**
+-dontwarn com.j256.ormlite.field.**
+-dontwarn com.j256.ormlite.logger.**
+-dontwarn com.j256.ormlite.misc.**
+-dontwarn com.j256.ormlite.stmt.**
+-dontwarn com.j256.ormlite.support.**
+-dontwarn com.j256.ormlite.table.**
