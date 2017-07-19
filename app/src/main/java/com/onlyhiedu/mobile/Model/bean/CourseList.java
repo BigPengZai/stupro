@@ -30,7 +30,7 @@ public class CourseList {
          * teacherName : null
          */
 
-        public String uuid;
+        public String courseUuid;
         public String leadsUuid;
         public String teacherUuid;
         public String courseDate;
@@ -51,11 +51,11 @@ public class CourseList {
         }
 
         public String getUuid() {
-            return uuid;
+            return courseUuid;
         }
 
         public void setUuid(String uuid) {
-            this.uuid = uuid;
+            this.courseUuid = uuid;
         }
 
         public String getLeadsUuid() {
