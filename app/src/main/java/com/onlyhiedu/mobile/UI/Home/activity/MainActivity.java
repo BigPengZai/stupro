@@ -424,34 +424,37 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     private void showExceptionDialog(String exceptionType) {
         isExceptionDialogShow = true;
         DemoHelper.getInstance().logout(false, null);
-        String st = getResources().getString(R.string.Logoff_notification);
-        if (!MainActivity.this.isFinishing()) {
-            // clear up global variables
-            try {
-                if (exceptionBuilder == null)
-                    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-                exceptionBuilder.setTitle(st);
-                exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));
-                exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        exceptionBuilder = null;
-                        isExceptionDialogShow = false;
-                        finish();
-//                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startActivity(intent);
-                    }
-                });
-                exceptionBuilder.setCancelable(false);
-                exceptionBuilder.create().show();
-                isConflict = true;
-            } catch (Exception e) {
-                EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
-            }
-        }
+        isConflict = true;
+        isExceptionDialogShow = false;
+        UIUtils.startLoginActivity(this);
+//        String st = getResources().getString(R.string.Logoff_notification);
+//        if (!MainActivity.this.isFinishing()) {
+//            // clear up global variables
+//            try {
+//                if (exceptionBuilder == null)
+//                    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+//                exceptionBuilder.setTitle(st);
+//                exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));
+//                exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                        exceptionBuilder = null;
+//                        isExceptionDialogShow = false;
+//                        finish();
+////                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+////                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+////                        startActivity(intent);
+//                    }
+//                });
+//                exceptionBuilder.setCancelable(false);
+//                exceptionBuilder.create().show();
+//                isConflict = true;
+//            } catch (Exception e) {
+//                EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
+//            }
+//        }
     }
 
     private void showExceptionDialogFromIntent(Intent intent) {
