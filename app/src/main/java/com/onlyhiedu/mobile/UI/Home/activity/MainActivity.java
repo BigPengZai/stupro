@@ -516,6 +516,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             public void onReceive(Context context, Intent intent) {
                 updateUnreadLabel();
                 updateUnreadAddressLable();
+                if (conversationListFragment != null) {
+                    conversationListFragment.refresh();
+                }
+                if(conversationListFragment != null) {
+                    conversationListFragment.refresh();
+                }
                 if (currentTabIndex == 0) {
                     // refresh conversation list
                     if (conversationListFragment != null) {
