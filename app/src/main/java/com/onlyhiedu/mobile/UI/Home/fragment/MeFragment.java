@@ -299,7 +299,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CAMERA_REQUEST_CODE:
-                mFileOut = PhotoUtil.startUCrop(getActivity(),MeFragment.this ,cameraPath, 200, 100);
+                mFileOut = PhotoUtil.startUCrop(getActivity(),MeFragment.this ,cameraPath, 200, 200);
                 break;
             case ALBUM_REQUEST_CODE:
                 try {
@@ -307,7 +307,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     String absolutePath =
                             PhotoUtil.getAbsolutePath(getActivity(), uri);
                     Log.d(TAG, "path=" + absolutePath);
-                    mFileOut = PhotoUtil.startUCrop(getActivity(),MeFragment.this, absolutePath, 200, 100);
+                    mFileOut = PhotoUtil.startUCrop(getActivity(),MeFragment.this, absolutePath, 200, 200);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
