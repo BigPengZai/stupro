@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
-import com.onlyhiedu.mobile.Model.bean.HomeNews;
+import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Utils.ImageLoader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,11 +22,13 @@ import butterknife.ButterKnife;
  * Created by pengpeng on 2017/5/24.
  */
 
-public class HomeNewsAdapter extends BaseRecyclerAdapter<HomeNews> {
+public class HomeNewsAdapter extends BaseRecyclerAdapter<HomeBannerBean.ListBean> {
 
+    private RequestManager mRequestManager;
 
     public HomeNewsAdapter(Context context) {
         super(context, VIEW_TYPE_NORMAL);
+        mRequestManager = Glide.with(context);
     }
 
     @Override
@@ -32,9 +37,9 @@ public class HomeNewsAdapter extends BaseRecyclerAdapter<HomeNews> {
     }
 
     @Override
-    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, HomeNews item, int position) {
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, HomeBannerBean.ListBean item, int position) {
         ViewHolder h = (ViewHolder) holder;
-        h.mImage.setImageResource(item.res);
+        ImageLoader.loadImage(mRequestManager,h.mImage,item.image);
         h.mTv.setText(item.title);
     }
 

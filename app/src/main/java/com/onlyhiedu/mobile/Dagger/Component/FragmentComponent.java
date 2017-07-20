@@ -8,6 +8,7 @@ import com.onlyhiedu.mobile.UI.Emc.ContactListFragment;
 import com.onlyhiedu.mobile.UI.Emc.EaseConversationListFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseRecordFragment;
+import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 
 import dagger.Component;
@@ -29,4 +30,6 @@ public interface FragmentComponent {
     void inject(ContactListFragment fragment);
 
     void inject(EaseConversationListFragment fragment);
+
+    void inject(HomeFragment fragment);
 }

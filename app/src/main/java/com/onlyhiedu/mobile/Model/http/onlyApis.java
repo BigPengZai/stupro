@@ -8,6 +8,8 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
+import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
@@ -23,6 +25,7 @@ import io.reactivex.Flowable;
 import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -368,5 +371,26 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/student/saveAvatar")
     Flowable<onlyHttpResponse> saveAvatar(@Field("imagePath") String imagePath, @Field("imageName") String imageName);
+
+
+    /**
+     * 首页banner
+     */
+    @GET("client/home/listBanner")
+    Flowable<onlyHttpResponse<HomeBannerBean>> getListBanner();
+
+
+    /**
+     * 老师
+     */
+    @GET("client/home/listTeacherRecommend")
+    Flowable<onlyHttpResponse<HomeTeacher>> getListTeacher();
+
+    /**
+     * 教育头条
+     * @return
+     */
+    @GET("client/home/listArticle")
+    Flowable<onlyHttpResponse<HomeBannerBean>> getListArticle();
 
 }

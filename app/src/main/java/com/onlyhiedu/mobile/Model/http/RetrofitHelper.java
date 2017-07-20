@@ -10,6 +10,8 @@ import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
+import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
+import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
@@ -297,5 +299,18 @@ public class RetrofitHelper {
 
     public Flowable<onlyHttpResponse<IMAllUserInfo>> fetchGetIMUserList(List<String> names) {
         return sOnlyApis.getIMUserList(names);
+    }
+
+    public Flowable<onlyHttpResponse<HomeBannerBean>> fetchGetListBanner() {
+        return sOnlyApis.getListBanner();
+    }
+
+
+    public Flowable<onlyHttpResponse<HomeTeacher>> fetchGetListTeacher() {
+        return sOnlyApis.getListTeacher();
+    }
+
+    public Flowable<onlyHttpResponse<HomeBannerBean>> fetchGetListArticle() {
+        return sOnlyApis.getListArticle();
     }
 }

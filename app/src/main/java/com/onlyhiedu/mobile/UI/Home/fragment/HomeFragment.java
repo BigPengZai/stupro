@@ -12,14 +12,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
+import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter.OnItemClickListener;
-import com.onlyhiedu.mobile.Base.SimpleFragment;
-import com.onlyhiedu.mobile.Model.bean.HomeNews;
+import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
+import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
+import com.onlyhiedu.mobile.UI.Home.presenter.HomePresenter;
+import com.onlyhiedu.mobile.UI.Home.presenter.contract.HomeContract;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -40,7 +43,7 @@ import static com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity.PHONE_NUM;
  * Created by pengpeng on 2017/5/24.
  */
 
-public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRefreshLayout.OnRefreshListener, HomeContract.View {
 
 
     private HomeNewsAdapter mNewsAdapter;
@@ -55,7 +58,13 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
     RecyclerView mRecyclerView_Good;
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
+    private HomeBannerBean mData;
 
+
+    @Override
+    protected void initInject() {
+        getFragmentComponent().inject(this);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -63,49 +72,66 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
     }
 
     @Override
-    protected void initEventAndData() {
-        initBanner();
-        initData();
+    protected void initView() {
+
+        mPresenter.getBannerData();
+        mPresenter.getTeacherData();
+        mPresenter.getArticle();
+
+    }
+
+    @Override
+    protected void initData() {
         initListener();
     }
 
-    private void initListener() {
-        mRefreshLayout.setOnRefreshListener(this);
-        mBanner.setOnBannerListener(bannerListener);
-        mNewsAdapter.setOnItemClickListener(itemClickListener);
-    }
-
-    private void initBanner() {
-        ArrayList<Integer> images = new ArrayList<>();
-        images.add(R.mipmap.page1);
-        images.add(R.mipmap.page2);
-        images.add(R.mipmap.page3);
+    @Override
+    public void showBannerData(HomeBannerBean data) {
+        mData = data;
+        ArrayList<String> images = new ArrayList<>();
+        for (int i = 0 ;i < data.list.size(); i++) {
+            images.add(data.list.get(i).image);
+        }
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setImages(images);
         mBanner.setDelayTime(5000);
         mBanner.start();
     }
 
-    private void initData() {
-        mViewPager.setAdapter(new TeacherPageAdapter(mContext));
+    @Override
+    public void showTeacherData(HomeTeacher data) {
+        mViewPager.setAdapter(new TeacherPageAdapter(mContext,data));
         mViewPager.setOffscreenPageLimit(5);
+
+    }
+
+    @Override
+    public void showArticle(HomeBannerBean data) {
         mNewsAdapter = new HomeNewsAdapter(mContext);
         UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Good, mNewsAdapter);
-        new HomeNews();
-        mNewsAdapter.addAll(HomeNews.datas);
+        mNewsAdapter.addAll(data.list);
+        mNewsAdapter.setOnItemClickListener(itemClickListener);
     }
+
+
+    private void initListener() {
+        mRefreshLayout.setOnRefreshListener(this);
+        mBanner.setOnBannerListener(bannerListener);
+
+    }
+
 
     OnItemClickListener itemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(int position, long itemId) {
-            UIUtils.startHomeNewsWebViewAct(mContext, mNewsAdapter.getItem(position).url, " 教育头条");
+            UIUtils.startHomeNewsWebViewAct(mContext, mNewsAdapter.getItem(position).link, " 教育头条");
         }
     };
 
     OnBannerListener bannerListener = new OnBannerListener() {
         @Override
         public void OnBannerClick(int position) {
-            UIUtils.startHomeNewsWebViewAct(mContext, urls[position], titles[position]);
+            UIUtils.startHomeNewsWebViewAct(mContext,mData.list.get(position).link, mData.list.get(position).title);
         }
     };
 
@@ -150,12 +176,11 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
                 }
                 break;
             case R.id.tv_information:
-                if (App. bIsGuestLogin) {
-                    startActivity(new Intent(mContext, OpenIDActivity.class).putExtra(OpenIDActivity.cancelShow, true).putExtra(OpenIDActivity.information,true));
+                if (App.bIsGuestLogin) {
+                    startActivity(new Intent(mContext, OpenIDActivity.class).putExtra(OpenIDActivity.cancelShow, true).putExtra(OpenIDActivity.information, true));
                 } else {
                     startActivity(new Intent(mContext, MyInfoActivity.class));
                 }
-
                 break;
         }
     }
@@ -177,5 +202,10 @@ public class HomeFragment extends SimpleFragment implements SwipeRefreshLayout.O
         }
     }
 
+
+    @Override
+    public void showError(String msg) {
+        Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+    }
 
 }
