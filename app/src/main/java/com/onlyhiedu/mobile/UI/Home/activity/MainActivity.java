@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -16,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -120,8 +118,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Override
     protected void initView() {
-        Log.d("xwc","Main");
-
 
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();

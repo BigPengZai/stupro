@@ -124,7 +124,8 @@
         </activity>
 
         <!-- 环信 -->
-        <activity android:name=".UI.Emc.ContactListActivity"/>
+        <activity android:name=".UI.Emc.ContactListActivity"
+                  android:windowSoftInputMode="adjustPan"/>
         <!-- 聊天页面 -->
         <activity
             android:name=".UI.Emc.ChatActivity"
