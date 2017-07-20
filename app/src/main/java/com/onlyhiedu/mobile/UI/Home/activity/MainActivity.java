@@ -333,10 +333,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
      */
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-        if (count > 0) {
-            mNavigation.getMenu().getItem(2).setIcon(R.mipmap.ic_launcher);
-        } else {
-            mNavigation.getMenu().getItem(2).setIcon(R.drawable.em_conversation_selected);
+        if (mNavigation!=null) {
+            if (count > 0) {
+                mNavigation.getMenu().getItem(2).setIcon(R.mipmap.ic_launcher);
+            } else {
+                mNavigation.getMenu().getItem(2).setIcon(R.drawable.em_conversation_selected);
+            }
         }
     }
 
