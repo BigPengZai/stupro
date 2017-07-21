@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Emc.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -30,7 +31,9 @@ import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -86,38 +89,6 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
         String username = user.getUsername();
         IMUserInfo fromCache = UserCacheManager.getFromCache(username);
         //        String header = user.getInitialLetter();
-        String header=fromCache.getInitialLetter();
-
-        if (position == 0 || header != null && !header.equals(UserCacheManager.getFromCache(getItem(position - 1).getUsername()).getInitialLetter())) {
-            if (TextUtils.isEmpty(header)) {
-                holder.headerView.setVisibility(View.GONE);
-            } else {
-                holder.headerView.setVisibility(View.VISIBLE);
-                holder.headerView.setText(header);
-            }
-        } else {
-            holder.headerView.setVisibility(View.GONE);
-        }
-
-        EaseAvatarOptions avatarOptions = EaseUI.getInstance().getAvatarOptions();
-        if (avatarOptions != null && holder.avatar instanceof EaseImageView) {
-            EaseImageView avatarView = ((EaseImageView) holder.avatar);
-            if (avatarOptions.getAvatarShape() != 0)
-                avatarView.setShapeType(avatarOptions.getAvatarShape());
-            if (avatarOptions.getAvatarBorderWidth() != 0)
-                avatarView.setBorderWidth(avatarOptions.getAvatarBorderWidth());
-            if (avatarOptions.getAvatarBorderColor() != 0)
-                avatarView.setBorderColor(avatarOptions.getAvatarBorderColor());
-            if (avatarOptions.getAvatarRadius() != 0)
-                avatarView.setRadius(avatarOptions.getAvatarRadius());
-        }
-
-//        EaseUserUtils.setUserNick(username, holder.nameView);
-//        EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-
-
-//        IMUserInfo fromCache = UserCacheManager.getFromCache(username);
-
         if (fromCache == null) {
             UIUtils.getIMUserInfo(username, new Callback() {
                 @Override
@@ -128,18 +99,46 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
-                    UserCacheManager.insert(imUserInfo.data);
-                    if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
-                        Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(holder.avatar);
-                    } else {
-                        Glide.with(getContext()).load(imUserInfo.data.iconurl).into(holder.avatar);
+                    Activity context = (Activity) getContext();
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UserCacheManager.insert(imUserInfo.data);
+                            if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
+                                Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(holder.avatar);
+                            } else {
+                                Glide.with(getContext()).load(imUserInfo.data.iconurl).into(holder.avatar);
 
-                    }
-                    holder.nameView.setText(imUserInfo.data.userName);
-
+                            }
+                            holder.nameView.setText(imUserInfo.data.userName);
+                        }
+                    });
                 }
             });
         } else {
+            String header=fromCache.getInitialLetter();
+            if (position == 0 || header != null && !header.equals(UserCacheManager.getFromCache(getItem(position - 1).getUsername()).getInitialLetter())) {
+                if (TextUtils.isEmpty(header)) {
+                    holder.headerView.setVisibility(View.GONE);
+                } else {
+                    holder.headerView.setVisibility(View.VISIBLE);
+                    holder.headerView.setText(header);
+                }
+            } else {
+                holder.headerView.setVisibility(View.GONE);
+            }
+            EaseAvatarOptions avatarOptions = EaseUI.getInstance().getAvatarOptions();
+            if (avatarOptions != null && holder.avatar instanceof EaseImageView) {
+                EaseImageView avatarView = ((EaseImageView) holder.avatar);
+                if (avatarOptions.getAvatarShape() != 0)
+                    avatarView.setShapeType(avatarOptions.getAvatarShape());
+                if (avatarOptions.getAvatarBorderWidth() != 0)
+                    avatarView.setBorderWidth(avatarOptions.getAvatarBorderWidth());
+                if (avatarOptions.getAvatarBorderColor() != 0)
+                    avatarView.setBorderColor(avatarOptions.getAvatarBorderColor());
+                if (avatarOptions.getAvatarRadius() != 0)
+                    avatarView.setRadius(avatarOptions.getAvatarRadius());
+            }
             if (TextUtils.isEmpty(fromCache.iconurl)) {
                 Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(holder.avatar);
             } else {

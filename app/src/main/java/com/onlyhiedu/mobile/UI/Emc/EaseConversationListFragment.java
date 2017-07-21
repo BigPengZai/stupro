@@ -92,6 +92,9 @@ public class EaseConversationListFragment extends EaseRxBaseFragment<EaseConvers
         *
         */
         if (contacts.list != null && contacts.list.size() > 0) {
+            for (IMUserInfo userInfo : contacts.list) {
+                userInfo.imUserName=userInfo.imUserName.toLowerCase();
+            }
             UserCacheManager.insertAll(contacts.list);
         }
 

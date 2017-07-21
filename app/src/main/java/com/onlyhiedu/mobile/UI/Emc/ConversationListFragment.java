@@ -47,7 +47,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
     @Override
     protected void initData() {
         super.initData();
-        titleBar.setRightImageResource(R.drawable.em_contact_list_normal);
+//        titleBar.setRightImageResource(R.drawable.em_contact_list_normal);
         if (DemoHelper.getInstance().isLoggedIn()) {
             titleBar.setRightLayoutClickListener(new View.OnClickListener() {
                 @Override

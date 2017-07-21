@@ -27,7 +27,11 @@ public class IMUserInfo {
     public String userName;
     @DatabaseField
     public String phone;
-
+    /**
+     * initial letter for nickname
+     */
+    @DatabaseField
+    protected String initialLetter;
     public String getInitialLetter() {
         if(initialLetter == null){
             IMUserInfoUtil.setUserInitialLetter(this);
@@ -39,13 +43,10 @@ public class IMUserInfo {
         this.initialLetter = initialLetter;
     }
 
-    /**
-     * initial letter for nickname
-     */
-    protected String initialLetter;
+
 
     public IMUserInfo( String imUserName, String iconurl, String userName, String phone) {
-        this.imUserName = imUserName;
+        this.imUserName = imUserName.toLowerCase();
         this.iconurl = iconurl;
         this.userName = userName;
         this.phone = phone;

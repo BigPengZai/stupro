@@ -83,6 +83,7 @@ public class EaseContactListFragment extends EaseBaseFragment {
         if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
         super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override

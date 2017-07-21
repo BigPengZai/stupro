@@ -284,10 +284,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.onResume();
         MobclickAgent.onPageStart("SplashScreen11"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);          //统计时长
-        if (!isConflict && !isCurrentAccountRemoved) {
-            updateUnreadLabel();
-            updateUnreadAddressLable();
-        }
+//        if (!isConflict && !isCurrentAccountRemoved) {
+//            updateUnreadLabel();
+//            updateUnreadAddressLable();
+//        }
+        updateUnreadLabel();
+        updateUnreadAddressLable();
         DemoHelper sdkHelper = DemoHelper.getInstance();
         sdkHelper.pushActivity(this);
         EMClient.getInstance().chatManager().addMessageListener(messageListener);

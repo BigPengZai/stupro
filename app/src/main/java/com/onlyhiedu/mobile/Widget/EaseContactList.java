@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
@@ -14,9 +15,13 @@ import android.widget.RelativeLayout;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseSidebar;
+import com.onlyhiedu.mobile.Cache.UserCacheManager;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.UI.Emc.adapter.EaseContactAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EaseContactList extends RelativeLayout {
@@ -95,6 +100,17 @@ public class EaseContactList extends RelativeLayout {
      */
     public void init(List<EaseUser> contactList){
     	this.contactList = contactList;
+        for (EaseUser user : contactList) {
+            IMUserInfo fromCache = UserCacheManager.getFromCache(user.getUsername());
+            user.setNick(fromCache.userName);
+        }
+        Collections.sort(contactList, new Comparator<EaseUser>() {
+            @Override
+            public int compare(EaseUser o1, EaseUser o2) {
+                return o2.getNick().compareTo(o1.getNick());
+            }
+        });
+        Log.d(TAG, ""+contactList);
         adapter = new EaseContactAdapter(context, 0, new ArrayList<EaseUser>(contactList));
         adapter.setPrimaryColor(primaryColor).setPrimarySize(primarySize).setInitialLetterBg(initialLetterBg)
             .setInitialLetterColor(initialLetterColor);
