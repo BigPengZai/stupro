@@ -168,6 +168,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showError(String msg) {
+        mPd.dismiss();
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "msg:" + msg);
     }
