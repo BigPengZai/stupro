@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -423,38 +424,32 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
      */
     private void showExceptionDialog(String exceptionType) {
         isExceptionDialogShow = true;
-        DemoHelper.getInstance().logout(false, null);
-        isConflict = true;
-        isExceptionDialogShow = false;
-        UIUtils.startLoginActivity(this);
-//        String st = getResources().getString(R.string.Logoff_notification);
-//        if (!MainActivity.this.isFinishing()) {
-//            // clear up global variables
-//            try {
-//                if (exceptionBuilder == null)
-//                    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+        String st = getResources().getString(R.string.Logoff_notification);
+        if (!MainActivity.this.isFinishing()) {
+            // clear up global variables
+            try {
+                if (exceptionBuilder == null)
+                    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
 //                exceptionBuilder.setTitle(st);
-//                exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));
-//                exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        exceptionBuilder = null;
-//                        isExceptionDialogShow = false;
-//                        finish();
-////                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-////                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-////                        startActivity(intent);
-//                    }
-//                });
-//                exceptionBuilder.setCancelable(false);
-//                exceptionBuilder.create().show();
-//                isConflict = true;
-//            } catch (Exception e) {
-//                EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
-//            }
-//        }
+                exceptionBuilder.setMessage("该账号已在另一台设备登录");
+                exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DemoHelper.getInstance().logout(false, null);
+                        dialog.dismiss();
+                        exceptionBuilder = null;
+                        isExceptionDialogShow = false;
+                        UIUtils.startLoginActivity(MainActivity.this);
+                    }
+                });
+                exceptionBuilder.setCancelable(false);
+                exceptionBuilder.create().show();
+                isConflict = true;
+            } catch (Exception e) {
+                EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
+            }
+        }
     }
 
     private void showExceptionDialogFromIntent(Intent intent) {
