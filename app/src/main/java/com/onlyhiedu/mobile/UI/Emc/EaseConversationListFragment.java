@@ -201,9 +201,11 @@ public class EaseConversationListFragment extends EaseRxBaseFragment<EaseConvers
                     break;
 
                 case MSG_REFRESH: {
-                    conversationList.clear();
-                    conversationList.addAll(loadConversationList());
-                    conversationListView.refresh();
+                    if (conversationList != null && conversationListView != null) {
+                        conversationList.clear();
+                        conversationList.addAll(loadConversationList());
+                        conversationListView.refresh();
+                    }
                     break;
                 }
                 default:

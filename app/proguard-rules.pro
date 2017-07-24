@@ -244,7 +244,7 @@ public static final ** CREATOR;
 -keep class android.support.design.internal.BottomNavigationMenuView {
     *;
 }
-
+# ormlite
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
@@ -258,3 +258,6 @@ public static final ** CREATOR;
 -dontwarn com.j256.ormlite.stmt.**
 -dontwarn com.j256.ormlite.support.**
 -dontwarn com.j256.ormlite.table.**
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

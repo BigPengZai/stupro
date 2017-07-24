@@ -17,6 +17,7 @@ import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -69,14 +70,17 @@ public class App extends Application {
         return mWorkerThread;
     }
     public static String currentUserNick = "";
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     @Override
     public void onCreate() {
-        MultiDex.install(this);
         super.onCreate();
         instance = this;
-
-//        LeakCanary.install(this);
-//        EaseUI.getInstance().init(this, null);
         initGlide();
         DaoUtil.getInstance(this);
         initWorkerThread();
@@ -118,6 +122,8 @@ public class App extends Application {
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
         DemoHelper.getInstance().init(this);
+        //bugly
+        CrashReport.initCrashReport(getApplicationContext(), "6737e83213", false);
 
     }
 

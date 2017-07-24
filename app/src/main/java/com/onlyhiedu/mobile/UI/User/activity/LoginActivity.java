@@ -23,6 +23,7 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -107,6 +108,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
 
     private void toLogin() {
+//        CrashReport.testJavaCrash();
         String number = mEditNumber.getEditText();
         String pwd = mEditPwd.getEditText();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {

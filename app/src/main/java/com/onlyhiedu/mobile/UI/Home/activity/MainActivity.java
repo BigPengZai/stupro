@@ -436,7 +436,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DemoHelper.getInstance().logout(false, null);
                         dialog.dismiss();
                         exceptionBuilder = null;
                         isExceptionDialogShow = false;
