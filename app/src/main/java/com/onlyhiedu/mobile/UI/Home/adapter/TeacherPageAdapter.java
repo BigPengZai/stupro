@@ -63,7 +63,7 @@ public class TeacherPageAdapter extends PagerAdapter {
             age.setText(item.teachingAge);
             age2.setText(item.graduateClass);
             grade.setText(item.improveScore);
-            introduction.setText(item.description);
+            introduction.setText(item.introduction);
             view.setPadding(0, 0, ScreenUtil.dip2px(10), 0);
         }
         container.addView(view, -2, -2);

@@ -31,6 +31,6 @@ public class HomeTeacher {
         public String teachingAge;
         public String graduateClass;
         public String improveScore;
-        public String description;
+        public String introduction;
     }
 }
