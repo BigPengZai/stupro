@@ -1,6 +1,6 @@
 package com.onlyhiedu.mobile.Model.bean;
 
-import com.hyphenate.easeui.utils.EaseCommonUtils;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.onlyhiedu.mobile.Utils.IMUserInfoUtil;

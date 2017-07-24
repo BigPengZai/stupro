@@ -377,20 +377,20 @@ public interface onlyApis {
      * 首页banner
      */
     @GET("client/home/listBanner")
-    Flowable<onlyHttpResponse<HomeBannerBean>> getListBanner();
+    Flowable<onlyHttpResponse<HomeBannerBean>> getListBanner(@Query("deviceType") String deviceType);
 
 
     /**
      * 老师
      */
     @GET("client/home/listTeacherRecommend")
-    Flowable<onlyHttpResponse<HomeTeacher>> getListTeacher();
+    Flowable<onlyHttpResponse<HomeTeacher>> getListTeacher(@Query("deviceType") String deviceType);
 
     /**
      * 教育头条
      * @return
      */
     @GET("client/home/listArticle")
-    Flowable<onlyHttpResponse<HomeBannerBean>> getListArticle();
+    Flowable<onlyHttpResponse<HomeBannerBean>> getListArticle(@Query("deviceType") String deviceType);
 
 }

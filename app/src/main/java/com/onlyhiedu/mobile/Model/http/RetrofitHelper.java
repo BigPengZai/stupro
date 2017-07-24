@@ -302,15 +302,15 @@ public class RetrofitHelper {
     }
 
     public Flowable<onlyHttpResponse<HomeBannerBean>> fetchGetListBanner() {
-        return sOnlyApis.getListBanner();
+        return sOnlyApis.getListBanner("Android");
     }
 
 
     public Flowable<onlyHttpResponse<HomeTeacher>> fetchGetListTeacher() {
-        return sOnlyApis.getListTeacher();
+        return sOnlyApis.getListTeacher("Android");
     }
 
     public Flowable<onlyHttpResponse<HomeBannerBean>> fetchGetListArticle() {
-        return sOnlyApis.getListArticle();
+        return sOnlyApis.getListArticle("Android");
     }
 }

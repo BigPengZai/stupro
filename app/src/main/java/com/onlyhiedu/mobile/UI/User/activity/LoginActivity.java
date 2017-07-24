@@ -1,7 +1,6 @@
 package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -170,7 +169,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showError(String msg) {
-        mPd.dismiss();
+        if(mPd.isShowing()){
+            mPd.dismiss();
+        }
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "msg:" + msg);
     }
