@@ -1124,25 +1124,16 @@ public class GroupDetailsActivity extends EaseBaseActivity implements OnClickLis
                             }
                             Activity activity = (Activity) getContext();
                             UserCacheManager.insert(imUserInfo.data);
-                            if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
                                         Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(finalHolder.imageView);
-                                    }
-                                });
-
-
-                            } else {
-
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                    } else {
                                         Glide.with(getContext()).load(imUserInfo.data.iconurl).into(finalHolder.imageView);
                                     }
-                                });
-
-                            }
+                                }
+                            });
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
