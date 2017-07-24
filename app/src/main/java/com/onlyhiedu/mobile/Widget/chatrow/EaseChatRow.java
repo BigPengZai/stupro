@@ -156,8 +156,12 @@ public abstract class EaseChatRow extends LinearLayout {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
+                        if(imUserInfo == null){
+                                return;
+                        }
                         UserCacheManager.insert(imUserInfo.data);
                         Activity activity = (Activity) context;
+
                         if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
 
                             activity.runOnUiThread(new Runnable() {

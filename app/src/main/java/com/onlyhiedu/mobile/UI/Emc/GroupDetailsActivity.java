@@ -965,6 +965,9 @@ public class GroupDetailsActivity extends EaseBaseActivity implements OnClickLis
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
+                        if (imUserInfo == null) {
+                            return;
+                        }
                         UserCacheManager.insert(imUserInfo.data);
                         Activity activity = (Activity) getContext();
                         if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
@@ -1116,14 +1119,37 @@ public class GroupDetailsActivity extends EaseBaseActivity implements OnClickLis
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
+                            if (imUserInfo == null) {
+                                return;
+                            }
+                            Activity activity = (Activity) getContext();
                             UserCacheManager.insert(imUserInfo.data);
                             if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
-                                Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(finalHolder.imageView);
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Glide.with(getContext()).load(R.drawable.ease_default_avatar).into(finalHolder.imageView);
+                                    }
+                                });
+
 
                             } else {
-                                Glide.with(getContext()).load(imUserInfo.data.iconurl).into(finalHolder.imageView);
+
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Glide.with(getContext()).load(imUserInfo.data.iconurl).into(finalHolder.imageView);
+                                    }
+                                });
+
                             }
-                            finalHolder.textView.setText(imUserInfo.data.userName);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finalHolder.textView.setText(imUserInfo.data.userName);
+                                }
+                            });
+
                         }
                     });
 

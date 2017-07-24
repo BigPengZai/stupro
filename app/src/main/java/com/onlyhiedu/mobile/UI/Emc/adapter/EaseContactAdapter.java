@@ -31,9 +31,7 @@ import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -99,6 +97,9 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     IMUserInfo2 imUserInfo = JsonUtil.parseJson(response.body().string(), IMUserInfo2.class);
+                    if (imUserInfo == null) {
+                        return;
+                    }
                     Activity context = (Activity) getContext();
                     context.runOnUiThread(new Runnable() {
                         @Override
@@ -116,7 +117,7 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
                 }
             });
         } else {
-            String header=fromCache.getInitialLetter();
+            String header = fromCache.getInitialLetter();
             if (position == 0 || header != null && !header.equals(UserCacheManager.getFromCache(getItem(position - 1).getUsername()).getInitialLetter())) {
                 if (TextUtils.isEmpty(header)) {
                     holder.headerView.setVisibility(View.GONE);
