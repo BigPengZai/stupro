@@ -18,12 +18,12 @@
         android:layout_above="@+id/input_menu"
         android:layout_below="@id/title_bar" >
 
-        <com.hyphenate.easeui.widget.EaseChatMessageList
+        <com.onlyhiedu.mobile.Widget.EaseChatMessageList
             android:id="@+id/message_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.hyphenate.easeui.widget.EaseVoiceRecorderView
+        <com.onlyhiedu.mobile.Widget.EaseVoiceRecorderView
             android:id="@+id/voice_recorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
-    <com.hyphenate.easeui.widget.EaseChatInputMenu
+    <com.onlyhiedu.mobile.Widget.EaseChatInputMenu
         android:id="@+id/input_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

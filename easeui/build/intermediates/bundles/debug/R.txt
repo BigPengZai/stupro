@@ -33,8 +33,6 @@ int anim v_fragment_enter 0x7f04001f
 int anim v_fragment_exit 0x7f040020
 int anim v_fragment_pop_enter 0x7f040021
 int anim v_fragment_pop_exit 0x7f040022
-int anim voice_from_icon 0x7f040023
-int anim voice_to_icon 0x7f040024
 int attr actionBarDivider 0x7f010041
 int attr actionBarItemBackground 0x7f010042
 int attr actionBarPopupTheme 0x7f01003b
@@ -801,10 +799,12 @@ int drawable notification_bg_low_pressed 0x7f020102
 int drawable notification_bg_normal 0x7f020103
 int drawable notification_bg_normal_pressed 0x7f020104
 int drawable notification_icon_background 0x7f020105
-int drawable notification_template_icon_bg 0x7f020108
-int drawable notification_template_icon_low_bg 0x7f020109
+int drawable notification_template_icon_bg 0x7f02010a
+int drawable notification_template_icon_low_bg 0x7f02010b
 int drawable notification_tile_bg 0x7f020106
 int drawable notify_panel_notification_icon_bg 0x7f020107
+int drawable voice_from_icon 0x7f020108
+int drawable voice_to_icon 0x7f020109
 int id action0 0x7f0a00c1
 int id action_bar 0x7f0a004d
 int id action_bar_activity_content 0x7f0a0000

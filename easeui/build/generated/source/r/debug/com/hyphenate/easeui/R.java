@@ -44,8 +44,6 @@ public final class R {
         public static int v_fragment_exit=0x7f040020;
         public static int v_fragment_pop_enter=0x7f040021;
         public static int v_fragment_pop_exit=0x7f040022;
-        public static int voice_from_icon=0x7f040023;
-        public static int voice_to_icon=0x7f040024;
     }
     public static final class attr {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -2332,10 +2330,12 @@ containing a value of this type.
         public static int notification_bg_normal=0x7f020103;
         public static int notification_bg_normal_pressed=0x7f020104;
         public static int notification_icon_background=0x7f020105;
-        public static int notification_template_icon_bg=0x7f020108;
-        public static int notification_template_icon_low_bg=0x7f020109;
+        public static int notification_template_icon_bg=0x7f02010a;
+        public static int notification_template_icon_low_bg=0x7f02010b;
         public static int notification_tile_bg=0x7f020106;
         public static int notify_panel_notification_icon_bg=0x7f020107;
+        public static int voice_from_icon=0x7f020108;
+        public static int voice_to_icon=0x7f020109;
     }
     public static final class id {
         public static int action0=0x7f0a00c1;

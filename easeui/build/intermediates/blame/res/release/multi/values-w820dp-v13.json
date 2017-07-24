@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "D:\\Vcs\\android-client\\easeui\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
+        "outputFile": "D:\\Mobile_Stu\\android-client\\easeui\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 108
                 },
                 "from": {
-                    "file": "D:\\Vcs\\android-client\\easeui\\src\\main\\res\\values-w820dp\\ease_dimens.xml",
+                    "file": "D:\\Mobile_Stu\\android-client\\easeui\\src\\main\\res\\values-w820dp\\ease_dimens.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
