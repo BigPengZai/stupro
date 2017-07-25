@@ -15,11 +15,15 @@ public interface UploadAvatarContract {
         void uploadAvatarSucess(Avatar data);
 
         void saveAvatarSucess();
+
+        void getInfoSucess();
     }
 
     interface Presenter extends BasePresenter<UploadAvatarContract.View> {
         void uploadAvatar(File file);
 
         void saveAvatar(String imagePath,String imgName);
+
+        void getStuInfo();
     }
 }
