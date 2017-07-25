@@ -103,7 +103,7 @@ public interface onlyApis {
     /**
      * 修改学生年级
      *
-     * @param sex
+     * @param
      * @return
      */
     @FormUrlEncoded
@@ -348,7 +348,7 @@ public interface onlyApis {
     /**
      * 根据多个username获取用户信息
      *
-     * @param phone
+     * @param
      * @return
      */
     @FormUrlEncoded

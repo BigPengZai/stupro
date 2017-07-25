@@ -48,11 +48,12 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName, data.getData().avatarUrl);
                         getStuInfo(mRetrofitHelper, getView());
-                        if (!data.getData().registerIMFlag) {
-                            emcRegister(mRetrofitHelper, getView());
-                        } else {
-                            emcLogin(getView());
-                        }
+                        getView().showUser();
+//                        if (!data.getData().registerIMFlag) {
+//                            emcRegister(mRetrofitHelper, getView());
+//                        } else {
+//                            emcLogin(getView());
+//                        }
                     } else {
                         getView().showError(data.getMessage());
                     }

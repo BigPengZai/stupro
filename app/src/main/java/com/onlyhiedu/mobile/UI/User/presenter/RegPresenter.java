@@ -143,7 +143,8 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
                         String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setUserInfo(emcRegName,data.getData().token,data.getData().phone,data.getData().userName,data.getData().avatarUrl);
-                        emcRegister(mRetrofitHelper,getView());
+//                        emcRegister(mRetrofitHelper,getView());
+                        getView().showUser();
                     } else {
                         getView().showError(data.getMessage());
                     }

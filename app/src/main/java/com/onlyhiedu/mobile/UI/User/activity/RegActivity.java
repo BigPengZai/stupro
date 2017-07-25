@@ -293,7 +293,7 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mProgressDialog.isShowing()) {
+        if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }

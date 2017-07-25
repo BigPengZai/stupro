@@ -122,7 +122,7 @@ public class App extends Application {
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
         DemoHelper.getInstance().init(this);
         //bugly
-        CrashReport.initCrashReport(getApplicationContext(), "6737e83213", false);
+        CrashReport.initCrashReport(getApplicationContext(), "5c1349523c", false);
 
     }
 

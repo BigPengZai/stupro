@@ -119,28 +119,20 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Override
     protected void initView() {
-
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
         mHomeFragment = new HomeFragment();
         conversationListFragment = new ConversationListFragment();
-
-
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
         showExceptionDialogFromIntent(getIntent());
         inviteMessgeDao = new InviteMessgeDao(this);
-        UserDao userDao = new UserDao(this);
-
-//        contactListFragment = new ContactListFragment();
-
-
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment, conversationListFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -150,11 +142,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     protected void initData() {
         super.initData();
         mPresenter.updateVersion(true);
-        //register broadcast receiver to receive the change of group from DemoHelper
-        registerBroadcastReceiver();
+//        registerBroadcastReceiver();
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
-        //debug purpose only
-//        registerInternalDebugReceiver();
     }
 
     @Override
@@ -170,15 +159,15 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             } else showHideFragment(mClassFragment);
 
         }
-        if (item.getItemId() == R.id.thr) {
+       /* if (item.getItemId() == R.id.thr) {
             if (App.bIsGuestLogin) {
                 UIUtils.startGuestLoginActivity(this, 2);
                 return false;
             } else showHideFragment(conversationListFragment);
 
 
-        }
-        if (item.getItemId() == R.id.fou) {
+        }*/
+        if (item.getItemId() == R.id.thr) {
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
@@ -285,12 +274,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.onResume();
         MobclickAgent.onPageStart("SplashScreen11"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);          //统计时长
-//        if (!isConflict && !isCurrentAccountRemoved) {
-//            updateUnreadLabel();
-//            updateUnreadAddressLable();
-//        }
-        updateUnreadLabel();
-        updateUnreadAddressLable();
+//        updateUnreadLabel();
+//        updateUnreadAddressLable();
         DemoHelper sdkHelper = DemoHelper.getInstance();
         sdkHelper.pushActivity(this);
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
@@ -324,7 +309,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     }
 
     private void unregisterBroadcastReceiver() {
-        broadcastManager.unregisterReceiver(broadcastReceiver);
+        if (broadcastManager != null) {
+            broadcastManager.unregisterReceiver(broadcastReceiver);
+        }
     }
 
     /**
@@ -332,7 +319,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
      */
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-        if (mNavigation!=null) {
+        if (mNavigation != null) {
             if (count > 0) {
                 mNavigation.getMenu().getItem(2).setIcon(R.mipmap.ic_launcher);
             } else {
@@ -353,11 +340,13 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                 break;
             case 2:
                 mNavigation.setSelectedItemId(R.id.thr);
-                showHideFragment(conversationListFragment);
+                showHideFragment(mMeFragment);
+//                mNavigation.setSelectedItemId(R.id.thr);
+//                showHideFragment(conversationListFragment);
                 break;
             case 3:
-                mNavigation.setSelectedItemId(R.id.fou);
-                showHideFragment(mMeFragment);
+//                mNavigation.setSelectedItemId(R.id.fou);
+//                showHideFragment(mMeFragment);
                 break;
         }
     }
@@ -473,7 +462,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         runOnUiThread(new Runnable() {
             public void run() {
                 // refresh unread count
-                updateUnreadLabel();
+//                updateUnreadLabel();
                 if (currentTabIndex == 0) {
                     // refresh conversation list
                     if (conversationListFragment != null) {
@@ -506,31 +495,14 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateUnreadLabel();
-                updateUnreadAddressLable();
+//                updateUnreadLabel();
+//                updateUnreadAddressLable();
                 if (conversationListFragment != null) {
                     conversationListFragment.refresh();
                 }
-                if(conversationListFragment != null) {
+                if (conversationListFragment != null) {
                     conversationListFragment.refresh();
                 }
-                if (currentTabIndex == 0) {
-                    // refresh conversation list
-                    if (conversationListFragment != null) {
-                        conversationListFragment.refresh();
-                    }
-                } else if (currentTabIndex == 1) {
-                    if(conversationListFragment != null) {
-                        conversationListFragment.refresh();
-                    }
-                }
-                String action = intent.getAction();
-                if (action.equals(Constant.ACTION_GROUP_CHANAGED)) {
-//                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
-//                        GroupsActivity.instance.onResume();
-//                    }
-                }
-                //end of red packet code
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
@@ -554,7 +526,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                     }
                 }
             });
-            updateUnreadAddressLable();
+//            updateUnreadAddressLable();
         }
 
         @Override

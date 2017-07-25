@@ -148,7 +148,7 @@ public abstract class EaseChatRow extends LinearLayout {
 
             if (fromCache == null) {
 
-                UIUtils.getIMUserInfo(message.getFrom(),new Callback() {
+                UIUtils.getIMUserInfo(message.getFrom(), new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                     }
@@ -162,7 +162,7 @@ public abstract class EaseChatRow extends LinearLayout {
                         UserCacheManager.insert(imUserInfo.data);
                         Activity activity = (Activity) context;
 
-                        if (TextUtils.isEmpty(imUserInfo.data.iconurl)) {
+                        if (imUserInfo.data != null && TextUtils.isEmpty(imUserInfo.data.iconurl)) {
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
@@ -176,7 +176,9 @@ public abstract class EaseChatRow extends LinearLayout {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Glide.with(context).load(imUserInfo.data.iconurl).into(userAvatarView);
+                                    if (imUserInfo.data != null) {
+                                        Glide.with(context).load(imUserInfo.data.iconurl).into(userAvatarView);
+                                    }
                                 }
                             });
 
@@ -184,7 +186,9 @@ public abstract class EaseChatRow extends LinearLayout {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                usernickView.setText(imUserInfo.data.userName);
+                                if (imUserInfo.data != null) {
+                                    usernickView.setText(imUserInfo.data.userName);
+                                }
                             }
                         });
 
