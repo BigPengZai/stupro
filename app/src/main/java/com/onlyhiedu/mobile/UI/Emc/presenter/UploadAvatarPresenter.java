@@ -7,12 +7,15 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.onlyhiedu.mobile.Base.IMBaseView;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.Emc.presenter.contract.UploadAvatarContract;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 
 import java.io.File;
 
@@ -99,5 +102,28 @@ public class UploadAvatarPresenter extends RxPresenter<UploadAvatarContract.View
             }
         }
         return data;
+    }
+
+
+
+    //获得学生信息
+    @Override
+    public void getStuInfo() {
+        Flowable<onlyHttpResponse<StudentInfo>> flowable = mRetrofitHelper.fetchStudentInfo();
+
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<StudentInfo>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<StudentInfo> data) {
+                if (getView() != null ) {
+                    if (!data.isHasError()) {
+                        SPUtil.setAvatarUrl(data.getData().iconurl);
+                        getView().getInfoSucess();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 }

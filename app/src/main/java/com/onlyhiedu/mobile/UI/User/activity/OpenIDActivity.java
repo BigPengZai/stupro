@@ -17,6 +17,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.OpenIDPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.OpenIDContract;
 import com.onlyhiedu.mobile.Utils.MyUMAuthListener;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -103,6 +104,49 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
             //回调成功，即登陆成功后这里返回Map<String, String> map，map里面就是用户的信息，可以拿出来使用了
 //            Toast.makeText(getApplicationContext(), "授权成功", Toast.LENGTH_SHORT).show();
             if (map != null) {
+                String uid = null;
+                String openid = null;
+                String name = null;
+                String gender = null;
+                String iconurl = null;
+                String city = null;
+                String province = null;
+                String country = null;
+                switch (share_media) {
+                    case WEIXIN:
+                        uid = map.get("unionid");
+                        openid = map.get("openid");
+                        name = map.get("screen_name");
+                        gender = map.get("gender");
+                        iconurl = map.get("iconurl");
+                        SPUtil.setAvatarUrl(iconurl);
+                        city = map.get("city");
+                        province = map.get("province");
+                        country = map.get("country");
+                        break;
+                    case QQ:
+                        uid = map.get("uid");
+                        openid = map.get("openid");
+                        name = map.get("screen_name");
+                        gender = map.get("gender");
+                        iconurl = map.get("iconurl");
+                        SPUtil.setAvatarUrl(iconurl);
+                        city = map.get("city");
+                        province = map.get("province");
+                        break;
+                    case SINA:
+                        uid = map.get("uid");
+                        name = map.get("screen_name");
+                        gender = map.get("gender");
+                        iconurl = map.get("iconurl");
+                        SPUtil.setAvatarUrl(iconurl);
+                        city = map.get("location");
+                        break;
+                }
+                Log.d(TAG, "uid : " + uid + "openid : " + openid + " name : " + name + "_______name : " + name + "_______gender : " + gender
+                        + "_______iconurl : " + iconurl + "_______city : " + city + "_______province : " + province + "_______country : " + country);
+            }
+            if (map != null) {
                 mShareAPI.getPlatformInfo(OpenIDActivity.this, share_media, umAuthListener2);
             }
         }
@@ -129,6 +173,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
                         name = map.get("screen_name");
                         gender = map.get("gender");
                         iconurl = map.get("iconurl");
+                        SPUtil.setAvatarUrl(iconurl);
                         city = map.get("city");
                         province = map.get("province");
                         country = map.get("country");
@@ -139,6 +184,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
                         name = map.get("screen_name");
                         gender = map.get("gender");
                         iconurl = map.get("iconurl");
+                        SPUtil.setAvatarUrl(iconurl);
                         city = map.get("city");
                         province = map.get("province");
                         break;
@@ -147,6 +193,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
                         name = map.get("screen_name");
                         gender = map.get("gender");
                         iconurl = map.get("iconurl");
+                        SPUtil.setAvatarUrl(iconurl);
                         city = map.get("location");
                         break;
                 }

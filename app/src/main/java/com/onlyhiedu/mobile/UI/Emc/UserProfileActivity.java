@@ -308,6 +308,11 @@ public class UserProfileActivity extends EaseRxBaseActivity<UploadAvatarPresente
     }
 
     @Override
+    public void getInfoSucess() {
+
+    }
+
+    @Override
     public void showError(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }

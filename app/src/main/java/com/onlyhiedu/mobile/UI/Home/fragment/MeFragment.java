@@ -100,7 +100,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
     @Override
     protected void initView() {
-
+        mPresenter.getStuInfo();
     }
 
     @Override
@@ -353,5 +353,10 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_fail),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void getInfoSucess() {
+        ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
     }
 }
