@@ -27,6 +27,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.base.EaseRxBaseActivity;
 import com.onlyhiedu.mobile.UI.Emc.presenter.UploadAvatarPresenter;
@@ -308,7 +309,7 @@ public class UserProfileActivity extends EaseRxBaseActivity<UploadAvatarPresente
     }
 
     @Override
-    public void getInfoSucess() {
+    public void getInfoSucess(StudentInfo info) {
 
     }
 

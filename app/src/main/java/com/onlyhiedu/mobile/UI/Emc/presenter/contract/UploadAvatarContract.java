@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Emc.presenter.contract;
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 
 import java.io.File;
 
@@ -16,7 +17,7 @@ public interface UploadAvatarContract {
 
         void saveAvatarSucess();
 
-        void getInfoSucess();
+        void getInfoSucess(StudentInfo info);
     }
 
     interface Presenter extends BasePresenter<UploadAvatarContract.View> {

@@ -117,7 +117,7 @@ public class UploadAvatarPresenter extends RxPresenter<UploadAvatarContract.View
                 if (getView() != null ) {
                     if (!data.isHasError()) {
                         SPUtil.setAvatarUrl(data.getData().iconurl);
-                        getView().getInfoSucess();
+                        getView().getInfoSucess(data.getData());
                     } else {
                         getView().showError(data.getMessage());
                     }

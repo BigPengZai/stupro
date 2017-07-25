@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
@@ -100,12 +101,15 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
     @Override
     protected void initView() {
-        mPresenter.getStuInfo();
+        if (!App.bIsGuestLogin) {
+            mPresenter.getStuInfo();
+        }
     }
 
     @Override
     protected void initData() {
         if (App.bIsGuestLogin) {
+            SPUtil.setAvatarUrl("");
             mTvName.setText("登录/注册");
             mTvName.setTextColor(getResources().getColor(R.color.c_F42440));
             mTvName.setBackgroundResource(R.drawable.radius5);
@@ -136,7 +140,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     public void onClick(View view) {
         if (App.bIsGuestLogin) {
             if (view.getId() != R.id.setting_know) {
-                UIUtils.startGuestLoginActivity(mContext, 3);
+                UIUtils.startGuestLoginActivity(mContext, 2);
             } else {
                 startActivity(new Intent(getContext(), KnowActivity.class));
             }
@@ -245,13 +249,12 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     }
 
 
-
-
     public void uploadHeadPhoto() {
         mTakePhotoPopWin = new TakePhotoPopWin(getActivity(), onClickListener);
         //showAtLocation(View parent, int gravity, int x, int y)
         mTakePhotoPopWin.showAtLocation(mLl, Gravity.CENTER, 0, 0);
     }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -292,14 +295,13 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     };
 
 
-
     //上传头像
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CAMERA_REQUEST_CODE:
-                mFileOut = PhotoUtil.startUCrop(getActivity(),MeFragment.this ,cameraPath, 200, 200);
+                mFileOut = PhotoUtil.startUCrop(getActivity(), MeFragment.this, cameraPath, 200, 200);
                 break;
             case ALBUM_REQUEST_CODE:
                 try {
@@ -307,7 +309,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     String absolutePath =
                             PhotoUtil.getAbsolutePath(getActivity(), uri);
                     Log.d(TAG, "path=" + absolutePath);
-                    mFileOut = PhotoUtil.startUCrop(getActivity(),MeFragment.this, absolutePath, 200, 200);
+                    mFileOut = PhotoUtil.startUCrop(getActivity(), MeFragment.this, absolutePath, 200, 200);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -339,7 +341,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             Log.d("", data.imagePath);
             SPUtil.setAvatarUrl(data.imagePath);
             DemoHelper.getInstance().getUserProfileManager().uploadUserAvatar(data.imagePath);
-    }
+        }
     }
 
     @Override
@@ -356,7 +358,9 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     }
 
     @Override
-    public void getInfoSucess() {
-        ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+    public void getInfoSucess(StudentInfo info) {
+        if (info != null && info.iconurl != null && !"".equals(info.iconurl)) {
+            ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+        }
     }
 }
