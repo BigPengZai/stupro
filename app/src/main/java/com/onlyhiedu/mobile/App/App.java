@@ -16,6 +16,7 @@ import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
+import com.pingplusplus.android.Pingpp;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
@@ -123,6 +124,8 @@ public class App extends Application {
         DemoHelper.getInstance().init(this);
         //bugly
         CrashReport.initCrashReport(getApplicationContext(), "5c1349523c", false);
+        //ping++
+        Pingpp.enableDebugLog(true);
 
     }
 
