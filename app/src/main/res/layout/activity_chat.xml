@@ -1,18 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:keepScreenOn="true">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true">
+        <!--上课-->
+        <LinearLayout
+            android:id="@+id/ll_video"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <io.agore.openvcall.ui.TeacherVideoView
+                android:id="@+id/grid_video_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <ViewStub
+                android:id="@id/small_video_view_dock"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:inflatedId="@id/small_video_view_dock"
+                android:layout="@layout/small_video_view_dock"/>
+        </LinearLayout>
+
+
+        <!--白版-->
+        <com.onlyhiedu.mobile.Widget.MyScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ll_video"
+            android:background="@color/white">
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/image_course_ware"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"/>
+
+                <com.onlyhiedu.mobile.Widget.draw.DrawView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/draw_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:dv_draw_alpha="255"
+                    app:dv_draw_anti_alias="true"
+                    app:dv_draw_color="@color/colorAccent"
+                    app:dv_draw_corners="round"
+                    app:dv_draw_dither="true"
+                    app:dv_draw_font_family="default_font"
+                    app:dv_draw_font_size="12"
+                    app:dv_draw_mode="draw"
+                    app:dv_draw_style="stroke"
+                    app:dv_draw_tool="pen"
+                    app:dv_draw_width="4"/>
+            </FrameLayout>
+
+        </com.onlyhiedu.mobile.Widget.MyScrollView>
+
+        <!-- IM -->
+        <LinearLayout
+            android:id="@+id/ll_msg"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:background="#80000000"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/msg_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:transcriptMode="normal"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:maxLines="2"
+                    android:scrollbars="vertical"/>
+
+                <TextView
+                    android:id="@+id/tv_send"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:background="@color/c_D8D8D8"
+                    android:gravity="center"
+                    android:text="发送"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/image_full_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/size_12"
+            android:src="@mipmap/ic_full_screen"
+            android:visibility="gone"/>
+    </RelativeLayout>
+    <!--Toolbar-->
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/elevation"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_marginTop="-50dp"
         app:layout_scrollFlags="scroll|enterAlways|snap"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -62,27 +188,27 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:visibility="invisible"
                     android:id="@+id/but_im"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15"
                     android:background="@drawable/im_text_bg"
                     android:paddingBottom="@dimen/size_7"
-                    android:layout_marginLeft="@dimen/size_15"
                     android:paddingLeft="@dimen/size_18"
                     android:paddingRight="@dimen/size_18"
                     android:paddingTop="@dimen/size_7"
                     android:text="聊天"
                     android:textColor="@color/im_text_color"
-                    android:textSize="@dimen/size_16"/>
+                    android:textSize="@dimen/size_16"
+                    android:visibility="invisible"/>
 
                 <View
                     android:id="@+id/im_point"
-                    android:visibility="gone"
-                    android:background="@drawable/im_oval"
                     android:layout_width="10dp"
+                    android:layout_height="10dp"
                     android:layout_marginLeft="75dp"
-                    android:layout_height="10dp"/>
+                    android:background="@drawable/im_oval"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -91,131 +217,8 @@
 
 
     </android.support.v7.widget.Toolbar>
-
-
-    <!--上课-->
-    <LinearLayout
-        android:id="@+id/ll_video"
-        android:layout_width="160dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical">
-
-        <io.agore.openvcall.ui.TeacherVideoView
-            android:id="@+id/grid_video_view_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <ViewStub
-            android:id="@id/small_video_view_dock"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:inflatedId="@id/small_video_view_dock"
-            android:layout="@layout/small_video_view_dock"/>
-    </LinearLayout>
-
-
-    <!--白版-->
-    <com.onlyhiedu.mobile.Widget.MyScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_toRightOf="@+id/ll_video"
-        android:background="@color/white">
-
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/image_course_ware"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"/>
-
-            <com.onlyhiedu.mobile.Widget.draw.DrawView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/draw_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                app:dv_draw_alpha="255"
-                app:dv_draw_anti_alias="true"
-                app:dv_draw_color="@color/colorAccent"
-                app:dv_draw_corners="round"
-                app:dv_draw_dither="true"
-                app:dv_draw_font_family="default_font"
-                app:dv_draw_font_size="12"
-                app:dv_draw_mode="draw"
-                app:dv_draw_style="stroke"
-                app:dv_draw_tool="pen"
-                app:dv_draw_width="4"/>
-        </FrameLayout>
-
-    </com.onlyhiedu.mobile.Widget.MyScrollView>
-
-    <!-- IM -->
-    <LinearLayout
-        android:id="@+id/ll_msg"
-        android:layout_width="160dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="#80000000"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/msg_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:transcriptMode="normal"/>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/edit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:maxLines="2"
-                android:scrollbars="vertical"/>
-
-            <TextView
-                android:id="@+id/tv_send"
-                android:layout_width="45dp"
-                android:layout_height="40dp"
-                android:background="@color/c_D8D8D8"
-                android:gravity="center"
-                android:text="发送"/>
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/image_full_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:padding="@dimen/size_12"
-        android:src="@mipmap/ic_full_screen"
-        android:visibility="gone"/>
-
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -230,4 +233,4 @@
             android:layout_height="50dp"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
-</RelativeLayout>
+</FrameLayout>

@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="colorPrimary2">#11FFFFFF</color>
     <color name="black">#000000</color>
     <color name="window_bg">#FFFFFF</color>
     <color name="flux_sub_text_02">#A9A9A9</color>

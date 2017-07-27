@@ -19,7 +19,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Chronometer;
 import android.widget.EditText;
@@ -58,6 +60,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -194,6 +197,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
         initMessageList();
+        startCountTimeThread();
     }
 
     @Override
@@ -455,6 +459,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         if (mUidsList != null) {
             mUidsList.clear();
+        }
+        if (mViewHandler != null) {
+            mViewHandler.removeCallbacksAndMessages(null);
         }
         quitCall();
     }
@@ -815,7 +822,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
     private float rate;      //缩放比例
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen,R.id.but_im})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -831,7 +838,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (mScrollViewFullP == null) {
 
                     mScrollViewFullP = new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
-                    mScrollViewFullP.topMargin = com.onlyhiedu.mobile.Utils.ScreenUtil.getToolbarHeight(this);
+//                    mScrollViewFullP.topMargin = com.onlyhiedu.mobile.Utils.ScreenUtil.getToolbarHeight(this);
 
                     mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
                     mImageCourseWareFullP = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
@@ -1446,6 +1453,129 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         return super.dispatchTouchEvent(ev);
     }
 
+        int ss = 0;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            mCountTimeThread.reset();
+            if (ss == 0) {
+                //可见
+                mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+                ss = 1;
+                return true;
+            }
+           /* //屏幕被触摸
+            if (ss == 1) {
+                //invisable
+                mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                ss = 0;
+            } else {
+                //visable
+                mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                ss = 1;
+            }*/
+        }
+        return super.onTouchEvent(event);
+    }
+
+    private CountTimeThread mCountTimeThread;
+    /**
+     * 开始启动线程控制按钮组件的显示.
+     */
+    private void startCountTimeThread() {
+        mCountTimeThread = new CountTimeThread(3);
+        mCountTimeThread.start();
+    }
+
+    /**
+     * 隐藏控制按钮的控件
+     */
+    private void hide() {
+        if (ss== 1&&mToolbar!=null) {
+            ss = 0;
+            mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        }
+    }
+
+    private MainHandler mViewHandler = new MainHandler(ChatActivity.this);
+    private static class MainHandler extends Handler {
+        /** 隐藏按钮消息id */
+        private final int MSG_HIDE = 0x0001;
+
+        private WeakReference<ChatActivity> weakRef;
+        public MainHandler(ChatActivity activity) {
+            weakRef = new WeakReference<ChatActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final ChatActivity mainActivity = weakRef.get();
+            if (mainActivity != null) {
+                switch (msg.what) {
+                    case MSG_HIDE:
+                        mainActivity.hide();
+                        break;
+                }
+            }
+
+            super.handleMessage(msg);
+        }
+
+        public void sendHideControllMessage() {
+            obtainMessage(MSG_HIDE).sendToTarget();
+        }
+    };
+    /**
+     * 如果mControllButtonLayout可见, 则无操作second秒之后隐藏mControllButtonLayout.
+     *
+     *
+     *
+     */
+    private class CountTimeThread extends Thread {
+        private final long maxVisibleTime;
+        private long startVisibleTime;
+        /**
+         * @param second 设置按钮控件最大可见时间,单位是秒
+         */
+        public CountTimeThread(int second) {
+            // 将时间换算成毫秒
+            maxVisibleTime = second * 1000;
+
+            // 设置为后台线程.
+            setDaemon(true);
+        }
+
+        /**
+         * 每当界面有操作时就需要重置mControllButtonLayout开始显示的时间,
+         */
+        public synchronized void reset() {
+            startVisibleTime = System.currentTimeMillis();
+        }
+
+        public void run() {
+            startVisibleTime = System.currentTimeMillis();
+
+            while (true) {
+                // 如果已经到达了最大显示时间, 则隐藏功能控件.
+                if ((startVisibleTime + maxVisibleTime) < System.currentTimeMillis()) {
+                    // 发送隐藏按钮控件消息.
+                    mViewHandler.sendHideControllMessage();
+
+                    startVisibleTime = System.currentTimeMillis();
+                }
+
+                try {
+                    // 线程休眠1s.
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+
 
     @Override
     public void showError(String msg) {
@@ -1468,4 +1598,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             chronometer.setText(substring);
         }
     }
+
+
 }
