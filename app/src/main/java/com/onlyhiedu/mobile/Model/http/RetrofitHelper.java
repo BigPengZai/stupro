@@ -8,14 +8,19 @@ import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.CoursePriceList;
+import com.onlyhiedu.mobile.Model.bean.CoursePriceTypeInfo;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
 import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Model.bean.PayInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
+import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
@@ -313,4 +318,25 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<HomeBannerBean>> fetchGetListArticle() {
         return sOnlyApis.getListArticle("Android");
     }
+
+    public Flowable<onlyHttpResponse<List<TypeListInfo>>> fetchGetTypeList() {
+        return sOnlyApis.getTypeList();
+    }
+
+    public Flowable<onlyHttpResponse<List<CoursePriceTypeInfo>>> fetchGetCorsePriceList(String type) {
+        return sOnlyApis.getCorsePriceList(type);
+    }
+     public Flowable<onlyHttpResponse<List<CoursePriceList>>> fetchGetPriceList(String activityType,String type) {
+        return sOnlyApis.getPriceList(activityType,type);
+    }
+
+    public Flowable<onlyHttpResponse> fetchGetPayMoney(String coursePriceUuid, String code) {
+        return sOnlyApis.getPayMoney(coursePriceUuid,code);
+    }
+
+    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel) {
+        return sOnlyApis.getPingPay(coursePriceUuid,channel);
+    }
+
+
 }

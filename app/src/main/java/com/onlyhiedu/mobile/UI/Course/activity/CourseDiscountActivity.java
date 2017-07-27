@@ -1,15 +1,21 @@
 package com.onlyhiedu.mobile.UI.Course.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
+import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Base.ViewPagerAdapterFragment;
+import com.onlyhiedu.mobile.Model.bean.CoursePriceTypeInfo;
+import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.fragment.CourseDiscountFragment;
 import com.onlyhiedu.mobile.UI.Course.persenter.CourseDiscountPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CourseDiscountContract;
 import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -20,27 +26,14 @@ import static com.onlyhiedu.mobile.Utils.UIUtils.setIndicator;
  * 课程优惠
  */
 
-public class CourseDiscountActivity extends BaseActivity<CourseDiscountPresenter> implements CourseDiscountContract.View, TabLayout.OnTabSelectedListener {
+public class CourseDiscountActivity extends SimpleActivity implements  TabLayout.OnTabSelectedListener {
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
     private ViewPagerAdapterFragment mAdapter;
-    @Override
-    protected void initInject() {
-        getActivityComponent().inject(this);
-    }
-
-    @Override
-    protected void initView() {
-        mAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(), this);
-        mAdapter.addTab("课程优惠", "CourseDiscountFragment", CourseDiscountFragment.class, null);
-        mAdapter.addTab("暑期优惠", "SummerDiscountFragment", CourseDiscountFragment.class, null);
-        mViewpager.setAdapter(mAdapter);
-        mTabLayout.setupWithViewPager(mViewpager);
-        setIndicator(mTabLayout, 40, 40);
-        mTabLayout.addOnTabSelectedListener(this);
-    }
+    private List<TypeListInfo> mTypeList;
+    private Bundle mArgs;
 
     @Override
     protected int getLayout() {
@@ -48,24 +41,29 @@ public class CourseDiscountActivity extends BaseActivity<CourseDiscountPresenter
     }
 
     @Override
-    public void showInfoSuccess() {
-
+    protected void initEventAndData() {
+        mAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(), this);
+        mTypeList = (List<TypeListInfo>) getIntent().getSerializableExtra("typeList");
+        for (TypeListInfo typeListInfo : mTypeList) {
+            mArgs = new Bundle();
+            mArgs.putString("tag",typeListInfo.getValue());
+            mAdapter.addTab(typeListInfo.getKey(), typeListInfo.getValue(), CourseDiscountFragment.class, mArgs);
+        }
+        mViewpager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewpager);
+        setIndicator(mTabLayout, 40, 40);
+        mTabLayout.addOnTabSelectedListener(this);
     }
-
-    @Override
-    public void showError(String msg) {
-
-    }
-
-
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
             case 0:
-                MobclickAgent.onEvent(mContext,"tab_nostart");
+                tab.setTag(mTypeList.get(0).getValue());
+                MobclickAgent.onEvent(mContext, "tab_nostart");
                 break;
             case 1:
-                MobclickAgent.onEvent(mContext,"tab_finish");
+                tab.setTag(mTypeList.get(1).getValue());
+                MobclickAgent.onEvent(mContext, "tab_finish");
                 break;
         }
     }
@@ -79,4 +77,6 @@ public class CourseDiscountActivity extends BaseActivity<CourseDiscountPresenter
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+
 }

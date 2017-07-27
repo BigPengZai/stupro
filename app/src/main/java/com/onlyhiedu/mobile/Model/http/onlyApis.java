@@ -6,14 +6,19 @@ import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.Model.bean.ConsumptionData;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.CoursePriceList;
+import com.onlyhiedu.mobile.Model.bean.CoursePriceTypeInfo;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.FeedBackInfo;
 import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Model.bean.PayInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
+import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
@@ -393,4 +398,44 @@ public interface onlyApis {
     @GET("client/home/listArticle")
     Flowable<onlyHttpResponse<HomeBannerBean>> getListArticle(@Query("deviceType") String deviceType);
 
+
+    /**
+     * 活动列表
+     * @return
+     */
+    @GET("client/coursepay/getActivityTypeList")
+    Flowable<onlyHttpResponse<List<TypeListInfo>>> getTypeList();
+
+    /**
+     * 课时包类型列表
+     *
+     * @return
+     */
+    @GET("client/coursepay/getCoursePriceTypeList")
+    Flowable<onlyHttpResponse<List<CoursePriceTypeInfo>>> getCorsePriceList(@Query("activityType") String type);
+
+    /**
+     * 课时包列表
+     *
+     * @return
+     */
+    @GET("client/coursepay/getCoursePriceList")
+    Flowable<onlyHttpResponse<List<CoursePriceList>>> getPriceList(@Query("activityType") String activityType,@Query("type") String type);
+
+    /**
+     * 根据课时包和优惠码
+     *
+     * @return
+     */
+    @GET("client/coursepay/getPayMoney")
+    Flowable<onlyHttpResponse> getPayMoney(@Query("coursePriceUuid")String coursePriceUuid,@Query("code") String code);
+
+    /**
+     * Ping++直接支付
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/coursepay/directPingppPaymentByJson")
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("channel") String channel);
 }

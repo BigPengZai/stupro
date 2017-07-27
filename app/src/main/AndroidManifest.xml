@@ -125,7 +125,7 @@
         <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
         </activity>
         <activity android:name=".UI.Course.activity.CourseDiscountActivity"/>
-
+        <activity android:name=".UI.Course.activity.CoursePayActivity"/>
         <!-- 环信 -->
         <activity android:name=".UI.Emc.ContactListActivity"
                   android:windowSoftInputMode="adjustPan"/>

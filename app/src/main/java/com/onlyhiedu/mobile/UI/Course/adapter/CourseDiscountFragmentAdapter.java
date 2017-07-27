@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
+import com.onlyhiedu.mobile.Model.bean.CoursePriceList;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 
@@ -23,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by pengpeng on 2017/7/26.
  */
 
-public class CourseDiscountFragmentAdapter extends BaseRecyclerAdapter<String> {
+public class CourseDiscountFragmentAdapter extends BaseRecyclerAdapter<CoursePriceList> {
 
     public CourseDiscountFragmentAdapter(Context context) {
         super(context, ONLY_FOOTER);
@@ -35,7 +36,7 @@ public class CourseDiscountFragmentAdapter extends BaseRecyclerAdapter<String> {
     }
 
     @Override
-    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, String item, int position) {
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, CoursePriceList item, int position) {
 
     }
 

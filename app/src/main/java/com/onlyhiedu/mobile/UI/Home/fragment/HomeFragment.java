@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +17,7 @@ import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter.OnItemClickListener;
 import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
+import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
 import com.onlyhiedu.mobile.UI.Course.activity.CourseDiscountActivity;
@@ -31,7 +33,9 @@ import com.onlyhiedu.mobile.Widget.GlideImageLoader;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,6 +64,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
     private HomeBannerBean mData;
+    private Intent mTypeIntent;
 
 
     @Override
@@ -90,7 +95,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
     public void showBannerData(HomeBannerBean data) {
         mData = data;
         ArrayList<String> images = new ArrayList<>();
-        for (int i = 0 ;i < data.list.size(); i++) {
+        for (int i = 0; i < data.list.size(); i++) {
             images.add(data.list.get(i).image);
         }
         mBanner.setImageLoader(new GlideImageLoader());
@@ -101,7 +106,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
 
     @Override
     public void showTeacherData(HomeTeacher data) {
-        mViewPager.setAdapter(new TeacherPageAdapter(mContext,data));
+        mViewPager.setAdapter(new TeacherPageAdapter(mContext, data));
         mViewPager.setOffscreenPageLimit(5);
 
     }
@@ -112,6 +117,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
         UIUtils.setHorizontalLayoutManager(mContext, mRecyclerView_Good, mNewsAdapter);
         mNewsAdapter.addAll(data.list);
         mNewsAdapter.setOnItemClickListener(itemClickListener);
+    }
+
+    @Override
+    public void showTypeListSucess(List<TypeListInfo> data) {
+        mTypeIntent = new Intent(mContext, CourseDiscountActivity.class);
+        Bundle extras = new Bundle();
+        if (data != null && data.size() != 0) {
+            extras.putSerializable("typeList", (Serializable) data);
+            mTypeIntent.putExtras(extras);
+            startActivity(mTypeIntent);
+        }
     }
 
 
@@ -132,7 +148,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
     OnBannerListener bannerListener = new OnBannerListener() {
         @Override
         public void OnBannerClick(int position) {
-            UIUtils.startHomeNewsWebViewAct(mContext,mData.list.get(position).link, mData.list.get(position).title);
+            UIUtils.startHomeNewsWebViewAct(mContext, mData.list.get(position).link, mData.list.get(position).title);
         }
     };
 
@@ -183,8 +199,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
 //                } else {
 //                    startActivity(new Intent(mContext, MyInfoActivity.class));
 //                }
-                startActivity(new Intent(mContext, CourseDiscountActivity.class));
-
+                mPresenter.getActivityTypeList();
                 break;
         }
     }
