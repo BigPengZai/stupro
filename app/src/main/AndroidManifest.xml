@@ -124,6 +124,7 @@
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
         <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
         </activity>
+        <activity android:name=".UI.Course.activity.CourseDiscountActivity"/>
 
         <!-- 环信 -->
         <activity android:name=".UI.Emc.ContactListActivity"

@@ -148,4 +148,6 @@ dependencies {
     //bugly
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    //ping++
+    compile project(':lib:pingpp')
 }

@@ -18,6 +18,7 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
+import com.onlyhiedu.mobile.UI.Course.activity.CourseDiscountActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
@@ -176,11 +177,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
                 }
                 break;
             case R.id.tv_information:
-                if (App.bIsGuestLogin) {
-                    startActivity(new Intent(mContext, OpenIDActivity.class).putExtra(OpenIDActivity.cancelShow, true).putExtra(OpenIDActivity.information, true));
-                } else {
-                    startActivity(new Intent(mContext, MyInfoActivity.class));
-                }
+                //课程优惠
+//                if (App.bIsGuestLogin) {
+//                    startActivity(new Intent(mContext, OpenIDActivity.class).putExtra(OpenIDActivity.cancelShow, true).putExtra(OpenIDActivity.information, true));
+//                } else {
+//                    startActivity(new Intent(mContext, MyInfoActivity.class));
+//                }
+                startActivity(new Intent(mContext, CourseDiscountActivity.class));
+
                 break;
         }
     }

@@ -29,10 +29,10 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         new Thread(new Runnable() {
             public void run() {
-                if (DemoHelper.getInstance().isLoggedIn()&&!TextUtils.isEmpty(SPUtil.getToken())) {
+                if (/*DemoHelper.getInstance().isLoggedIn()&&*/!TextUtils.isEmpty(SPUtil.getToken())) {
                     long start = System.currentTimeMillis();
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                    EMClient.getInstance().groupManager().loadAllGroups();
+//                    EMClient.getInstance().chatManager().loadAllConversations();
+//                    EMClient.getInstance().groupManager().loadAllGroups();
                     long costTime = System.currentTimeMillis() - start;
                     if (sleepTime - costTime > 0) {
                         try {
