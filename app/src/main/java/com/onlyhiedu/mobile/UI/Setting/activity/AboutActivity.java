@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +12,8 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
+import com.onlyhiedu.mobile.UI.User.activity.TermServiceActivity;
 import com.onlyhiedu.mobile.Utils.AppUtil;
-import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import butterknife.BindView;
@@ -51,11 +52,11 @@ public class AboutActivity extends VersionUpdateActivity {
     @Override
     protected void initView() {
         setToolBar("关于我们");
-        mTv_vc_def.setText("嗨课堂V"+AppUtil.getVerName(AboutActivity.this));
+        mTv_vc_def.setText("嗨课堂V" + AppUtil.getVerName(AboutActivity.this));
         mTv_Vc.setText(AppUtil.getVerName(AboutActivity.this));
     }
 
-    @OnClick({R.id.rl_update, R.id.rl_line})
+    @OnClick({R.id.rl_update, R.id.rl_line, R.id.tv_official, R.id.tv_information})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_update:
@@ -66,6 +67,12 @@ public class AboutActivity extends VersionUpdateActivity {
                     UIUtils.callLine(this, PHONE_NUM);
                 }
                 break;
+            case R.id.tv_official:
+                UIUtils.startHomeNewsWebViewAct(mContext, "http://www.onlyhi.cn/", "官网");
+                break;
+            case R.id.tv_information:
+                startActivity(new Intent(mContext, TermServiceActivity.class));
+                break;
         }
     }
 
@@ -73,7 +80,7 @@ public class AboutActivity extends VersionUpdateActivity {
     public void onBackPressedSupport() {
         super.onBackPressedSupport();
         if (mCall != null) {
-            if(!mCall.isCanceled()){
+            if (!mCall.isCanceled()) {
                 mCall.cancel();
             }
             Log.d(TAG, "取消下载。。。。。。。");

@@ -1,39 +1,33 @@
 package com.onlyhiedu.mobile.UI.Course.activity;
 
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.persenter.CoursePayPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
-import com.pingplusplus.android.Pingpp;
+import com.onlyhiedu.mobile.Utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.onlyhiedu.mobile.R.id.alipayButton;
+import static com.onlyhiedu.mobile.R.id.bfbButton;
+import static com.onlyhiedu.mobile.R.id.confirm_pay;
 
 /**
  * Created by pengpeng on 2017/7/27.
  */
 
 public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implements CoursePayContract.View {
-    @BindView(R.id.coupon)
-    EditText mCoupon;
-    //小计
-    @BindView(R.id.subtotal)
-    TextView mSubtotal;
-    private String mCoursePriceUuid;
-    //确认支付
-    @BindView(R.id.confirm_pay)
-    Button mConfirm_pay;
-    //支付宝
-    @BindView(R.id.alipayButton)
-    Button mAlipayButton;
+
     /**
      * 银联支付渠道
      */
@@ -46,6 +40,24 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
      * 支付宝支付渠道
      */
     private static final String CHANNEL_ALIPAY = "alipay";
+
+
+    @BindView(R.id.coupon)
+    EditText mCoupon;
+    //小计
+    @BindView(R.id.subtotal)
+    TextView mSubtotal;
+    private String mCoursePriceUuid;
+    //确认支付
+    @BindView(confirm_pay)
+    Button mConfirm_pay;
+    //支付宝
+    @BindView(alipayButton)
+    Button mAlipayButton;
+
+    private ProgressDialog dialog;
+
+
     @Override
     protected void initInject() {
 
@@ -82,12 +94,15 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showError(String msg) {
-
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showGetPaySucess(double data) {
-        mSubtotal.setText(data+"");
+        mSubtotal.setText(data + "");
     }
 
     @Override
@@ -95,14 +110,38 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 //        Pingpp.createPayment(CoursePayActivity.this, info);
     }
 
-    @OnClick({R.id.confirm_pay,R.id.alipayButton})
+    @Override
+    public void getBaiduPaySuccess(String url) {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        UIUtils.startHomeNewsWebViewAct(this, url, "百度分期");
+    }
+
+    @Override
+    public void getBaiduPayFailure() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        Toast.makeText(this, Constants.NET_ERROR, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick({confirm_pay, alipayButton, bfbButton})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.confirm_pay:
+            case confirm_pay:
                 mCoupon.clearFocus();
                 break;
-            case R.id.alipayButton:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid,CHANNEL_ALIPAY);
+            case alipayButton:
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_ALIPAY);
+                break;
+            case bfbButton: //百度分期
+                if (dialog == null) {
+                    dialog = ProgressDialog.show(this, null, "请稍后..");
+                } else {
+                    dialog.show();
+                }
+                mPresenter.getBaiduPay(mCoursePriceUuid);
                 break;
         }
     }

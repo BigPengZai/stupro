@@ -129,6 +129,8 @@
 
 
         <TextView
+            android:id="@+id/tv_official"
+            android:padding="@dimen/size_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="官方"
@@ -136,11 +138,13 @@
 
         <View
             android:layout_width="1px"
-            android:layout_height="20dp"
-            android:layout_margin="@dimen/size_10"
+            android:layout_height="18dp"
+            android:layout_margin="@dimen/size_5"
             android:background="@color/c_F42440"/>
 
         <TextView
+            android:id="@+id/tv_information"
+            android:padding="@dimen/size_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="版权信息"

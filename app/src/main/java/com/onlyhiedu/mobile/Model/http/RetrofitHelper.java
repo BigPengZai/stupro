@@ -16,7 +16,6 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
-import com.onlyhiedu.mobile.Model.bean.PayInfo;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -326,17 +325,20 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse<List<CoursePriceTypeInfo>>> fetchGetCorsePriceList(String type) {
         return sOnlyApis.getCorsePriceList(type);
     }
-     public Flowable<onlyHttpResponse<List<CoursePriceList>>> fetchGetPriceList(String activityType,String type) {
-        return sOnlyApis.getPriceList(activityType,type);
+
+    public Flowable<onlyHttpResponse<List<CoursePriceList>>> fetchGetPriceList(String activityType, String type) {
+        return sOnlyApis.getPriceList(activityType, type);
     }
 
     public Flowable<onlyHttpResponse> fetchGetPayMoney(String coursePriceUuid, String code) {
-        return sOnlyApis.getPayMoney(coursePriceUuid,code);
+        return sOnlyApis.getPayMoney(coursePriceUuid, code);
     }
 
     public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel) {
-        return sOnlyApis.getPingPay(coursePriceUuid,channel);
+        return sOnlyApis.getPingPay(coursePriceUuid, channel);
     }
 
-
+    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid) {
+        return sOnlyApis.getBaiduPay(coursePriceUuid);
+    }
 }

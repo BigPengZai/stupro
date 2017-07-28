@@ -14,7 +14,6 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
-import com.onlyhiedu.mobile.Model.bean.PayInfo;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -43,9 +42,9 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://192.168.1.219/";
+    String HOST = "http://192.168.1.219/";
     //公网环境
-    String HOST = "http://api.onlyeduhi.com/";
+//    String HOST = "http://api.onlyeduhi.com/";
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
 
@@ -436,6 +435,16 @@ public interface onlyApis {
      * @return
      */
     @FormUrlEncoded
-    @POST("client/coursepay/directPingppPaymentByJson")
+    @POST("client/coursepay/directPingppPayment")
     Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("channel") String channel);
+
+
+    /**
+     * 百度分期直接支付
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/coursepay/directBaiduStagingPayment")
+    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid);
 }
