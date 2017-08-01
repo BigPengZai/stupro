@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Course.persenter;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
@@ -145,15 +146,18 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+
     @Override
-    public void isEmptyGradeSubject() {
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchIsEmptyGradeSubject();
-        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+    public void getStudentInfo() {
+
+        Flowable<onlyHttpResponse<StudentInfo>> flowable = mRetrofitHelper.fetchStudentInfo();
+
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<StudentInfo>>() {
             @Override
-            public void onNextData(onlyHttpResponse data) {
-                if (null != getView() && null != data) {
+            public void onNextData(onlyHttpResponse<StudentInfo> data) {
+                if (getView() != null ) {
                     if (!data.isHasError()) {
-                        getView().getGradeSubject(data.getCode());
+                        getView().showStudentInfo(data.getData());
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -162,6 +166,4 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
-
-
 }

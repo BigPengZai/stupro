@@ -92,6 +92,7 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
             }
             mSettingGrade.setDetailText(data.grade);
             mSettingAddress.setDetailText(data.examArea);
+            mSettingSubject.setDetailText(data.subject);
         }
     }
     Thread thread = new Thread(new Runnable() {

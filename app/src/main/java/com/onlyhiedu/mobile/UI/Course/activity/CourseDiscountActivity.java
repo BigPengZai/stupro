@@ -3,6 +3,8 @@ package com.onlyhiedu.mobile.UI.Course.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
@@ -13,11 +15,13 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.fragment.CourseDiscountFragment;
 import com.onlyhiedu.mobile.UI.Course.persenter.CourseDiscountPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CourseDiscountContract;
+import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.onlyhiedu.mobile.Utils.UIUtils.setIndicator;
 
@@ -35,6 +39,8 @@ public class CourseDiscountActivity extends SimpleActivity implements  TabLayout
     private List<TypeListInfo> mTypeList;
     private Bundle mArgs;
 
+    @BindView(R.id.iv_back)
+    ImageView mIv_Back;
     @Override
     protected int getLayout() {
         return R.layout.activity_course;
@@ -76,6 +82,15 @@ public class CourseDiscountActivity extends SimpleActivity implements  TabLayout
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @OnClick({R.id.iv_back})
+    public void onClick(View view)  {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+        }
     }
 
 

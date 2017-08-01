@@ -8,10 +8,13 @@ public class StudentInfo {
 
 
     public String stuNo;
+    public String iconurl;
     public String name;
-    public String grade;
-    public String examArea;
     public Integer sex;
-    public   String iconurl;
+    public String grade;
+    //高考地区
+    public String examArea;
+    //科目
+    public String subject;
 
 }

@@ -4,6 +4,7 @@ import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 
 /**
  * Created by pengpeng on 2017/7/27.
@@ -20,7 +21,8 @@ public interface CoursePayContract {
 
         void getPingPayStatus(PingPayStatus data);
 
-        void getGradeSubject(int code);
+
+        void showStudentInfo(StudentInfo info);
     }
 
     interface Presenter extends BasePresenter<CoursePayContract.View> {
@@ -35,6 +37,8 @@ public interface CoursePayContract {
 
         void getPingPayStatus(String id);
 
-        void isEmptyGradeSubject();
+
+
+        void getStudentInfo();
     }
 }

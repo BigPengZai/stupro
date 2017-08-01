@@ -27,4 +27,6 @@ public class CoursePriceList {
     public double specialDiscount;
     public long specialPrice;
 
+    public String coursePricePackageName;
+
 }

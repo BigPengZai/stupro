@@ -11,12 +11,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +30,12 @@ import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.ProvinceBean;
+import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.persenter.CoursePayPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
+import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
@@ -41,7 +47,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.onlyhiedu.mobile.R.id.alipayButton;
-import static com.onlyhiedu.mobile.R.id.bfbButton;
 import static com.onlyhiedu.mobile.R.id.confirm_pay;
 
 
@@ -63,7 +68,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
      * 支付宝支付渠道
      */
     private static final String CHANNEL_ALIPAY = "alipay";
-
+    /**
+     * 百度分期
+     */
+    public static final String CHANNEL_BDF = "bdf";
     public static final String TAG = CoursePayActivity.class.getSimpleName();
     @BindView(R.id.gradeSubject)
     LinearLayout mGradeSubject;
@@ -79,7 +87,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     Button mConfirm_pay;
     //支付宝
     @BindView(alipayButton)
-    Button mAlipayButton;
+    RadioButton mAlipayButton;
     private ProgressDialog dialog;
     //年级
     @BindView(R.id.setting_grade)
@@ -91,13 +99,21 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     SettingItemView mSettingSubject;
     private OptionsPickerView mSubject;
     private ArrayList<ProvinceBean> mSubjectData = WheelUtils.getSubject();
-    private String mId;
+    private String mChargeId;
 
     @BindView(R.id.rel)
     RelativeLayout mRelativeLayout;
+    @BindView(R.id.pay_method)
+    RadioGroup mPayMethod;
+    String payMethod;
+    @BindView(R.id.scroll_view)
+    ScrollView mScrollView;
+    @BindView(R.id.tv_offline)
+    TextView mTextView;
 
     @Override
     protected void initInject() {
+
         getActivityComponent().inject(this);
     }
 
@@ -124,13 +140,37 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
             }
         });
-
+        mPayMethod.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId != R.id.offline) {
+                    checkOfflineInVisable();
+                }
+                switch (checkedId) {
+                    case R.id.alipayButton:
+                        payMethod = CHANNEL_ALIPAY;
+                        break;
+                    case R.id.wechatButton:
+                        payMethod = CHANNEL_WECHAT;
+                        break;
+                    case R.id.upmpButton:
+                        payMethod = CHANNEL_UPACP;
+                        break;
+                    case R.id.bfbButton:
+                        payMethod = CHANNEL_BDF;
+                        break;
+                    default:
+                        payMethod = "";
+                        break;
+                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
-        mPresenter.isEmptyGradeSubject();
+        mPresenter.getStudentInfo();
     }
 
     //年级
@@ -177,7 +217,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     @Override
     public void showPingPaySucess(PingPaySucessInfo info) {
         Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
-        mId = info.getId();
+        mChargeId = info.getId();
         Pingpp.createPayment(CoursePayActivity.this, JsonUtil.toJson(info));
     }
 
@@ -197,24 +237,13 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         Toast.makeText(this, Constants.NET_ERROR, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({confirm_pay, alipayButton, bfbButton, R.id.setting_grade, R.id.setting_subject})
+    @OnClick({R.id.confirm_pay, R.id.setting_grade, R.id.setting_subject, R.id.offline})
     public void onClick(View view) {
         switch (view.getId()) {
             case confirm_pay:
-
+                //确认支付
+                confirmPayment();
                 break;
-            case alipayButton:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_ALIPAY);
-                break;
-            case bfbButton: //百度分期
-                if (dialog == null) {
-                    dialog = ProgressDialog.show(this, null, "请稍后..");
-                } else {
-                    dialog.show();
-                }
-                mPresenter.getBaiduPay(mCoursePriceUuid);
-                break;
-
             case R.id.setting_grade:
                 //年级
                 if (mGradeWheel == null) {
@@ -228,6 +257,63 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     mSubject = WheelUtils.getWhellView(mContext, subject, mSubjectData);
                 }
                 mSubject.show();
+                break;
+            case R.id.offline:
+                //线下转账
+                checkOfflineVisable();
+                break;
+        }
+    }
+
+    private void checkOfflineVisable() {
+        mTextView.setVisibility(View.VISIBLE);
+        mConfirm_pay.setVisibility(View.GONE);
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        parms.setMargins(0, ScreenUtil.getToolbarHeight(this), 0, 0);
+        mScrollView.setLayoutParams(parms);
+
+    }
+
+    private void checkOfflineInVisable() {
+        mTextView.setVisibility(View.GONE);
+        mConfirm_pay.setVisibility(View.VISIBLE);
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        parms.setMargins(0, ScreenUtil.getToolbarHeight(this), 0, ScreenUtil.dip2px(50));
+        mScrollView.setLayoutParams(parms);
+    }
+
+
+    private void confirmPayment() {
+        if (mSettingGrade.getDetailText() == null || TextUtils.isEmpty(mSettingGrade.getDetailText())) {
+            Toast.makeText(this, "请填写 年级 信息", Toast.LENGTH_SHORT).show();
+        }
+        if (mSettingSubject.getDetailText() == null || TextUtils.isEmpty(mSettingSubject.getDetailText())) {
+            Toast.makeText(this, "请填写 科目 信息", Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.isEmpty(payMethod)) {
+            Toast.makeText(this, "请选择支付方式", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        switch (payMethod) {
+            case CHANNEL_ALIPAY:
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_ALIPAY);
+                break;
+            case CHANNEL_WECHAT:
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_WECHAT);
+                break;
+            case CHANNEL_UPACP:
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_UPACP);
+                break;
+            case CHANNEL_BDF:
+                if (dialog == null) {
+                    dialog = ProgressDialog.show(this, null, "请稍后..");
+                } else {
+                    dialog.show();
+                }
+                mPresenter.getBaiduPay(mCoursePriceUuid);
+                break;
+            default:
+//                Toast.makeText(this, "请选择支付方式",Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -268,11 +354,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         builder.setTitle("提示");
         builder.setPositiveButton("OK", null);
         builder.create().show();
-        if ("success".equals(str) && mId != null && !mId.equals("")) {
+        if ("success".equals(str) && mChargeId != null && !mChargeId.equals("")) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mPresenter.getPingPayStatus(mId);
+                    mPresenter.getPingPayStatus(mChargeId);
                 }
             }, 1000);
         }
@@ -284,8 +370,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     }
 
     @Override
-    public void getGradeSubject(int code) {
-        mGradeSubject.setVisibility(code == 0 ? View.INVISIBLE : View.VISIBLE);
+    public void showStudentInfo(StudentInfo info) {
+        if (info != null) {
+            mSettingGrade.setDetailText(info.grade);
+            mSettingSubject.setDetailText(info.subject);
+        }
     }
 
 

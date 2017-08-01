@@ -9,6 +9,7 @@
 
     <include layout="@layout/layout_toolbar"/>
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
@@ -18,6 +19,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -82,86 +84,100 @@
                     ecdemo:item_showDivider="true"
                     ecdemo:item_titleText="科目"/>
             </LinearLayout>
-
-
-            <Button
-                android:id="@+id/alipayButton"
+            <!--支付方式-->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/amountEditText"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:text="支付宝支付"/>
-
-            <Button
-                android:id="@+id/wechatButton"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:text="支付方式"
+                android:textSize="23sp"/>
+            <RadioGroup
+                android:id="@+id/pay_method"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingRight="15dp">
+                <RadioButton
+                    android:id="@+id/alipayButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingLeft="30dp"
+                    android:text="支付宝支付"
+                    android:textSize="19sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="?android:attr/listDivider"/>
+                <RadioButton
+                    android:id="@+id/wechatButton"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingLeft="30dp"
+                    android:text="微信支付"
+                    android:textSize="19sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="?android:attr/listDivider"/>
+                <RadioButton
+                    android:id="@+id/upmpButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingLeft="30dp"
+                    android:text="银联支付"
+                    android:textSize="19sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="?android:attr/listDivider"/>
+                <RadioButton
+                    android:id="@+id/bfbButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingLeft="30dp"
+                    android:text="百度分期"
+                    android:textSize="19sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="?android:attr/listDivider"/>
+                <RadioButton
+                    android:id="@+id/offline"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingLeft="30dp"
+                    android:text="线下转账"
+                    android:textSize="19sp"/>
+            </RadioGroup>
+            <!--线下转账-->
+            <TextView
+                android:textSize="21sp"
+                android:id="@+id/tv_offline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/alipayButton"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:text="微信支付"/>
-
-
-            <Button
-                android:id="@+id/upmpButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/qpayButton"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:text="银联支付"/>
-
-            <Button
-                android:id="@+id/bfbButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/upmpButton"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:text="百度分期"/>
-
-            <Button
-                android:id="@+id/bfbButton2222"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/upmpButton"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:text="公司转账"/>
+                android:text="线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
-
     <Button
+        android:textColor="@color/white"
+        android:background="@color/c9"
         android:id="@+id/confirm_pay"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:text="确认支付"
         android:textSize="21sp"/>
+
 </RelativeLayout>

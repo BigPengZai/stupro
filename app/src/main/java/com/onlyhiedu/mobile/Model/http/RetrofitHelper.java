@@ -353,12 +353,9 @@ public class RetrofitHelper {
         return sOnlyApis.getPingPayStatus(id);
     }
 
-    //判断学生是否有科目和年级信息
-    public Flowable<onlyHttpResponse> fetchIsEmptyGradeSubject() {
-        return sOnlyApis.getEmptyGradeSubject();
-    }
 
     public Flowable<onlyHttpResponse<OrderList>> fetchGetOrderList(String state,int page) {
         return sOnlyApis.getOrderList(state,page);
     }
+
 }

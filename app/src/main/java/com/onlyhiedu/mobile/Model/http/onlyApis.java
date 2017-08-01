@@ -467,13 +467,6 @@ public interface onlyApis {
     Flowable<onlyHttpResponse<PingPayStatus>> getPingPayStatus(@Query("chargeId") String id);
 
     /**
-     * 判断学生是否有科目年级
-     */
-    @POST("client/student/validateStudentInfo")
-    Flowable<onlyHttpResponse> getEmptyGradeSubject();
-
-
-    /**
      * 课程订单列表
      */
     @GET(" client/coursepay/getOrderList")
