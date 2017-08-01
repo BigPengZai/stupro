@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
+import com.onlyhiedu.mobile.Model.OrderList;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
@@ -355,5 +356,9 @@ public class RetrofitHelper {
     //判断学生是否有科目和年级信息
     public Flowable<onlyHttpResponse> fetchIsEmptyGradeSubject() {
         return sOnlyApis.getEmptyGradeSubject();
+    }
+
+    public Flowable<onlyHttpResponse<OrderList>> fetchGetOrderList(String state,int page) {
+        return sOnlyApis.getOrderList(state,page);
     }
 }

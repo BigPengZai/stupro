@@ -5,13 +5,11 @@ import android.app.Activity;
 import com.onlyhiedu.mobile.Dagger.ActivityScope;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
-import com.onlyhiedu.mobile.UI.Course.activity.CourseDiscountActivity;
 import com.onlyhiedu.mobile.UI.Course.activity.CoursePayActivity;
 import com.onlyhiedu.mobile.UI.Emc.AddContactActivity;
 import com.onlyhiedu.mobile.UI.Emc.NewFriendsMsgActivity;
 import com.onlyhiedu.mobile.UI.Emc.UserProfileActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
-import com.onlyhiedu.mobile.UI.Home.activity.MineOrdersActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.FeedBackActivity;
@@ -67,10 +65,6 @@ public interface ActivityComponent {
 
     void inject(AddContactActivity activity);
 
-    void inject(CourseDiscountActivity courseDiscountActivity);
-
     void inject(CoursePayActivity coursePayActivity);
 
-
-    void inject(MineOrdersActivity ordersActivity);
 }

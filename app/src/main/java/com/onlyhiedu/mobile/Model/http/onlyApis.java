@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
+import com.onlyhiedu.mobile.Model.OrderList;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
@@ -394,6 +395,7 @@ public interface onlyApis {
 
     /**
      * 教育头条
+     *
      * @return
      */
     @GET("client/home/listArticle")
@@ -402,6 +404,7 @@ public interface onlyApis {
 
     /**
      * 活动列表
+     *
      * @return
      */
     @GET("client/coursepay/getActivityTypeList")
@@ -421,7 +424,7 @@ public interface onlyApis {
      * @return
      */
     @GET("client/coursepay/getCoursePriceList")
-    Flowable<onlyHttpResponse<List<CoursePriceList>>> getPriceList(@Query("activityType") String activityType,@Query("type") String type);
+    Flowable<onlyHttpResponse<List<CoursePriceList>>> getPriceList(@Query("activityType") String activityType, @Query("type") String type);
 
     /**
      * 根据课时包和优惠码
@@ -429,7 +432,7 @@ public interface onlyApis {
      * @return
      */
     @GET("client/coursepay/getPayMoney")
-    Flowable<onlyHttpResponse> getPayMoney(@Query("coursePriceUuid")String coursePriceUuid,@Query("code") String code);
+    Flowable<onlyHttpResponse> getPayMoney(@Query("coursePriceUuid") String coursePriceUuid, @Query("code") String code);
 
     /**
      * Ping++直接支付
@@ -438,7 +441,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/coursepay/directPingppPayment")
-    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("channel") String channel);
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel);
 
 
     /**
@@ -449,23 +452,30 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/coursepay/directBaiduStagingPayment")
     Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid);
+
     /**
-     *
      * 科目
-     * */
+     */
     @FormUrlEncoded
     @POST("client/student/updateSubject")
-    Flowable<onlyHttpResponse> updateSubject(@Field("subject") String  subject);
+    Flowable<onlyHttpResponse> updateSubject(@Field("subject") String subject);
+
     /**
      * Ping++ 订单状态查询
-     *
-     * */
+     */
     @GET("client/coursepay/getPingppOrderPayStatus")
     Flowable<onlyHttpResponse<PingPayStatus>> getPingPayStatus(@Query("chargeId") String id);
+
     /**
-     *判断学生是否有科目年级
-     *
-     * */
+     * 判断学生是否有科目年级
+     */
     @POST("client/student/validateStudentInfo")
     Flowable<onlyHttpResponse> getEmptyGradeSubject();
+
+
+    /**
+     * 课程订单列表
+     */
+    @GET(" client/coursepay/getOrderList")
+    Flowable<onlyHttpResponse<OrderList>> getOrderList(@Query("payStatus") String  payStatus, @Query("pageNo") int pageNo);
 }

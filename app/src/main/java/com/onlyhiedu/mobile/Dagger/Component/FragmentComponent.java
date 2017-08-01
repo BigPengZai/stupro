@@ -11,6 +11,7 @@ import com.onlyhiedu.mobile.UI.Home.fragment.CourseFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseRecordFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
+import com.onlyhiedu.mobile.UI.Home.fragment.OrderFragment;
 
 import dagger.Component;
 
@@ -36,4 +37,5 @@ public interface FragmentComponent {
 
     void inject(CourseDiscountFragment courseDiscountFragment);
 
+    void inject(OrderFragment fragment);
 }

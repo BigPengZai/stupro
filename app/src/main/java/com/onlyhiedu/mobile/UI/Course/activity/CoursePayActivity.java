@@ -37,13 +37,13 @@ import com.pingplusplus.android.Pingpp;
 
 import java.util.ArrayList;
 
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.onlyhiedu.mobile.R.id.alipayButton;
 import static com.onlyhiedu.mobile.R.id.bfbButton;
 import static com.onlyhiedu.mobile.R.id.confirm_pay;
+
 
 /**
  * Created by pengpeng on 2017/7/27.
@@ -191,7 +191,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void getBaiduPayFailure() {
-        if (dialog.isShowing()) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         Toast.makeText(this, Constants.NET_ERROR, Toast.LENGTH_SHORT).show();
