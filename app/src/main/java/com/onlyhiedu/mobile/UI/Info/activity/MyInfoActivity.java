@@ -49,6 +49,12 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
     SettingItemView mSettingGrade;
     @BindView(R.id.setting_address)
     SettingItemView mSettingAddress;
+
+    //科目
+    @BindView(R.id.setting_subject)
+    SettingItemView mSettingSubject;
+    private OptionsPickerView mSubject;
+    private ArrayList<ProvinceBean> mSubjectData = WheelUtils.getSubject();
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -148,7 +154,18 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
             }
         }
     };
-    @OnClick({R.id.setting_sex, R.id.setting_grade, R.id.setting_address})
+    //科目
+    OptionsPickerView.OnOptionsSelectListener subject = new OptionsPickerView.OnOptionsSelectListener() {
+        @Override
+        public void onOptionsSelect(int options1, int option2, int options3, View v) {
+            String grade = mSubjectData.get(options1).getPickerViewText();
+            if (TextUtils.isEmpty(mSettingSubject.getDetailText()) || !grade.equals(mSettingSubject.getDetailText())) {
+                mPresenter.updateSubject(grade);
+                mSettingSubject.setDetailText(grade);
+            }
+        }
+    };
+    @OnClick({R.id.setting_sex, R.id.setting_grade, R.id.setting_address,R.id.setting_subject})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_sex:
@@ -158,6 +175,7 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
                 mSexWheel.show();
                 break;
             case R.id.setting_grade:
+                //年级
                 if (mGradeWheel == null) {
                     mGradeWheel = WheelUtils.getWhellView(mContext, gradeL, mGradeData);
                 }
@@ -170,6 +188,13 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
                 if (showAddress) {
                     mAddressWheel.show();
                 }
+                break;
+            case R.id.setting_subject:
+                //科目
+                if (mSubject == null) {
+                    mSubject = WheelUtils.getWhellView(mContext, subject, mSubjectData);
+                }
+                mSubject.show();
                 break;
         }
     }

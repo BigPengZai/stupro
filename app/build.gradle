@@ -116,6 +116,7 @@ dependencies {
     //插件
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
     apt 'com.google.dagger:dagger-compiler:2.11-rc2'
+
     apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     //UI
     compile 'com.android.support:design:25.3.1'

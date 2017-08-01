@@ -26,9 +26,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"/>
     <!-- 银联需要的权限 -->
-    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.NFC"/>
     <application
         android:name=".App.App"
         android:allowBackup="true"
@@ -101,8 +101,8 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".UI.Home.activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
         <activity android:name=".UI.Setting.activity.AboutActivity"/>
@@ -125,7 +125,10 @@
         <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
         </activity>
         <activity android:name=".UI.Course.activity.CourseDiscountActivity"/>
-        <activity android:name=".UI.Course.activity.CoursePayActivity"/>
+        <activity android:name=".UI.Home.activity.MineOrdersActivity"/>
+        <activity
+            android:name=".UI.Course.activity.CoursePayActivity"
+            android:windowSoftInputMode="stateUnspecified|adjustPan"/>
         <!-- 环信 -->
         <activity android:name=".UI.Emc.ContactListActivity"
                   android:windowSoftInputMode="adjustPan"/>
@@ -169,7 +172,7 @@
         <activity
             android:name=".UI.Emc.ExitGroupDialog"
             android:screenOrientation="portrait"/>
-      <!--  android:theme="@style/MyDialogStyleBottom"-->
+        <!--  android:theme="@style/MyDialogStyleBottom"-->
 
         <!-- 群组选人 -->
         <activity
@@ -198,7 +201,7 @@
         <activity
             android:name=".UI.Emc.ContextMenuActivity"
             android:screenOrientation="portrait"/>
-   <!--     android:theme="@style/MyDialogStyle"-->
+        <!--     android:theme="@style/MyDialogStyle"-->
         <!-- 显示下载大图页面 -->
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
@@ -300,7 +303,7 @@
             android:name="com.pingplusplus.android.PaymentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
         <!-- 微信支付 -->
         <!-- 1.需要将以下"替换成自己 APK 的包名"换成在微信平台上注册填写的包名 -->
@@ -308,20 +311,20 @@
         <activity-alias
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:targetActivity="com.pingplusplus.android.PaymentActivity" />
+            android:targetActivity="com.pingplusplus.android.PaymentActivity"/>
 
         <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind" >
+            android:screenOrientation="behind">
         </activity>
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind" >
+            android:screenOrientation="behind">
         </activity>
 
         <!-- 银联支付 -->

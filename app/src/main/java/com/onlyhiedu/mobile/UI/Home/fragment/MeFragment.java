@@ -27,6 +27,7 @@ import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Emc.presenter.UploadAvatarPresenter;
 import com.onlyhiedu.mobile.UI.Emc.presenter.contract.UploadAvatarContract;
 import com.onlyhiedu.mobile.UI.Home.activity.KnowActivity;
+import com.onlyhiedu.mobile.UI.Home.activity.MineOrdersActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.SettingActivity;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
@@ -70,7 +71,9 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     ImageView mAvatar;
     @BindView(R.id.ll_me)
     LinearLayout mLl;
-
+    //我的订单
+    @BindView(R.id.setting_orders)
+    SettingItemView mSettingOrders;
     private String name = "";
 
     private final int SHARE_REQUEST_CODE = 1;
@@ -136,7 +139,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     }
 
 
-    @OnClick({R.id.iv_portrait, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name})
+    @OnClick({R.id.iv_portrait, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name,R.id.setting_orders})
     public void onClick(View view) {
         if (App.bIsGuestLogin) {
             if (view.getId() != R.id.setting_know) {
@@ -167,6 +170,9 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     break;
                 case R.id.setting_know:
                     startActivity(new Intent(getContext(), KnowActivity.class));
+                    break;
+                case R.id.setting_orders:
+                    startActivity(new Intent(getContext(),MineOrdersActivity.class));
                     break;
             }
         }

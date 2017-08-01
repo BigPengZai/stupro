@@ -64,7 +64,22 @@ public class WheelUtils {
         data.add(new ProvinceBean(0, "高三", "描述部分", "其他数据"));
         return data;
     }
-
+    //学科
+    public static ArrayList<ProvinceBean> getSubject(){
+        //语文 数学 英语  物理 化学 历史 生物  政治 地理 科学
+        ArrayList<ProvinceBean> data = new ArrayList<>();
+        data.add(new ProvinceBean(0, "语文", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "数学", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "英语", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "物理", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "化学", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "历史", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "生物", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "政治", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "地理", "描述部分", "其他数据"));
+        data.add(new ProvinceBean(0, "科学", "描述部分", "其他数据"));
+        return data;
+    }
     public static ArrayList<ProvinceBean> getAddress() {
         ArrayList<ProvinceBean> datas = new ArrayList<>();
         ArrayList<ArrayList<String>> options2Items = new ArrayList<>();

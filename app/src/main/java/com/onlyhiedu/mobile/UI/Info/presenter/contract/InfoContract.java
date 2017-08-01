@@ -21,5 +21,7 @@ public interface InfoContract {
         void updateSex(int sex);
         void updateGrade(String grade);
         void updateExamArea(String examArea);
+
+        void updateSubject(String subject);
     }
 }

@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.UI.Course.persenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
+import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 
 /**
@@ -16,6 +17,10 @@ public interface CoursePayContract {
 
         void getBaiduPaySuccess(String url);
         void getBaiduPayFailure();
+
+        void getPingPayStatus(PingPayStatus data);
+
+        void getGradeSubject(int code);
     }
 
     interface Presenter extends BasePresenter<CoursePayContract.View> {
@@ -24,5 +29,12 @@ public interface CoursePayContract {
         void getPingppPaymentByJson(String coursePriceUuid, String channel);
 
         void getBaiduPay(String uuid);
+        void updateGrade(String grade);
+
+        void updateSubject(String subject);
+
+        void getPingPayStatus(String id);
+
+        void isEmptyGradeSubject();
     }
 }

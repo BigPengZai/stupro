@@ -14,6 +14,7 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -42,9 +43,10 @@ public interface onlyApis {
 
 
     //测试环境
-    String HOST = "http://192.168.1.219/";
+//    String HOST = "http://192.168.1.219/";
     //公网环境
-//    String HOST = "http://api.onlyeduhi.com/";
+    String HOST = "http://api.onlyeduhi.cn/";
+
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
 
@@ -447,4 +449,23 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/coursepay/directBaiduStagingPayment")
     Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid);
+    /**
+     *
+     * 科目
+     * */
+    @FormUrlEncoded
+    @POST("client/student/updateSubject")
+    Flowable<onlyHttpResponse> updateSubject(@Field("subject") String  subject);
+    /**
+     * Ping++ 订单状态查询
+     *
+     * */
+    @GET("client/coursepay/getPingppOrderPayStatus")
+    Flowable<onlyHttpResponse<PingPayStatus>> getPingPayStatus(@Query("chargeId") String id);
+    /**
+     *判断学生是否有科目年级
+     *
+     * */
+    @POST("client/student/validateStudentInfo")
+    Flowable<onlyHttpResponse> getEmptyGradeSubject();
 }

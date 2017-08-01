@@ -27,6 +27,12 @@
         ecdemo:item_titleText="年级"/>
 
     <com.onlyhiedu.mobile.Widget.SettingItemView
+        android:id="@+id/setting_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ecdemo:item_showDivider="true"
+        ecdemo:item_titleText="科目"/>
+    <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

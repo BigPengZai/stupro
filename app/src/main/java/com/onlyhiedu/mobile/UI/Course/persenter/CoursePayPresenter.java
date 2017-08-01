@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Course.persenter;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
+import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
@@ -93,6 +94,72 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
 
         };
 
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void updateGrade(String grade) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateGrade(grade);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+
+                    getView().showError(data.getMessage());
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void updateSubject(String subject) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateSubject(subject);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+                    getView().showError(data.getMessage());
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    //PIng++ 订单支付状态查询
+    @Override
+    public void getPingPayStatus(String id) {
+        Flowable<onlyHttpResponse<PingPayStatus>> flowable = mRetrofitHelper.fetchPingPayStatus(id);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<PingPayStatus>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<PingPayStatus> data) {
+                if (null != getView() && null != data) {
+                    if (!data.isHasError()) {
+                        getView().getPingPayStatus(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void isEmptyGradeSubject() {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchIsEmptyGradeSubject();
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (null != getView() && null != data) {
+                    if (!data.isHasError()) {
+                        getView().getGradeSubject(data.getCode());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 

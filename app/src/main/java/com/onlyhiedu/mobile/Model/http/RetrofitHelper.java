@@ -16,6 +16,7 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -340,5 +341,19 @@ public class RetrofitHelper {
 
     public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid) {
         return sOnlyApis.getBaiduPay(coursePriceUuid);
+    }
+
+    //科目
+    public Flowable<onlyHttpResponse> fetchUpdateSubject(String subject) {
+        return sOnlyApis.updateSubject(subject);
+    }
+    //PIng++ 订单支付状态查询
+    public Flowable<onlyHttpResponse<PingPayStatus>> fetchPingPayStatus(String id) {
+        return sOnlyApis.getPingPayStatus(id);
+    }
+
+    //判断学生是否有科目和年级信息
+    public Flowable<onlyHttpResponse> fetchIsEmptyGradeSubject() {
+        return sOnlyApis.getEmptyGradeSubject();
     }
 }

@@ -98,4 +98,18 @@ public class InfoPresenter extends RxPresenter<InfoContract.View> implements Pre
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+    @Override
+    public void updateSubject(String subject) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateSubject(subject);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+                    getView().showError(data.getMessage());
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
 }

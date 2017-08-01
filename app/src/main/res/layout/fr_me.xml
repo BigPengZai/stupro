@@ -62,6 +62,16 @@
         ecdemo:item_icon_left="@mipmap/me_consumption"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="课时消耗"/>
+
+    <!--我的订单-->
+    <com.onlyhiedu.mobile.Widget.SettingItemView
+        android:id="@+id/setting_orders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        ecdemo:item_icon_left="@mipmap/help"
+        ecdemo:item_showDivider="true"
+        ecdemo:item_titleText="我的订单"/>
     <!--使用帮助  -->
     <com.onlyhiedu.mobile.Widget.SettingItemView
         android:id="@+id/setting_know"
