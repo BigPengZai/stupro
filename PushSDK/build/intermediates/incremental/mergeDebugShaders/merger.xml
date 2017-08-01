@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\Vcs\android-client\PushSDK\src\main\shaders"/></dataSet><dataSet config="debug"><source path="D:\Vcs\android-client\PushSDK\build-types\debug\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Mobile_Stu\android-client\PushSDK\src\main\shaders"/></dataSet><dataSet config="debug"><source path="D:\Mobile_Stu\android-client\PushSDK\build-types\debug\shaders"/></dataSet></merger>

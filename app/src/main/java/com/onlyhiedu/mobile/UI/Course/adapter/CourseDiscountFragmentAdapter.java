@@ -38,6 +38,7 @@ public class CourseDiscountFragmentAdapter extends BaseRecyclerAdapter<CoursePri
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, CoursePriceList item, int position) {
         ViewHolder h = (ViewHolder) holder;
+
         h.mTv_Discount.setText(item.specialDiscount+"");
         h.mTv_Course_Name.setText(item.coursePricePackageName);
         h.mTv_Now_Price.setText(item.nowPrice+"");
