@@ -1599,5 +1599,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    @Override
+    public boolean swipeBackPriority() {
+        return false;
+    }
 
 }

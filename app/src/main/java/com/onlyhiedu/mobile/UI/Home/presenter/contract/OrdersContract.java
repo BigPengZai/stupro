@@ -2,7 +2,7 @@ package com.onlyhiedu.mobile.UI.Home.presenter.contract;
 
 import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
-import com.onlyhiedu.mobile.Model.OrderList;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 
 import java.util.List;
 

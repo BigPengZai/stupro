@@ -22,13 +22,15 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 /**
  * MVP activity基类
  * Created by xuwc on 2016/11/24.
  */
-public abstract class BaseActivity<T extends BasePresenter> extends SupportActivity implements BaseView {
+public abstract class BaseActivity<T extends BasePresenter> extends SwipeBackActivity implements BaseView {
 
     @Inject
     protected T mPresenter;
@@ -141,5 +143,12 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     @Override
     public void onBackPressedSupport() {
         super.onBackPressedSupport();
+    }
+
+
+    @Override
+    public FragmentAnimator onCreateFragmentAnimator() {
+        // 设置横向(和安卓4.x动画相同)
+        return new DefaultHorizontalAnimator();
     }
 }

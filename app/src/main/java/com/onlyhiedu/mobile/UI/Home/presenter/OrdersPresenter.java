@@ -1,7 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.presenter;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
-import com.onlyhiedu.mobile.Model.OrderList;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.OrdersContract;

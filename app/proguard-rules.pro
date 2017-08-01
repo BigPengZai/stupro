@@ -101,6 +101,7 @@ public static ** valueOf(java.lang.String);
 -keep public class com.onlyhiedu.mobile.Model.http.onlyHttpResponse{
    *;
 }
+-keep class * extends android.support.v4.app.FragmentManager{ *; }
 #-keep public class com.onlyhiedu.mobile.App.App{
 #   *;
 #}

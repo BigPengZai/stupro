@@ -12,13 +12,13 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
 /**
  * 无MVP
  * Created by xuwc on 2016/12/1.
  */
-public abstract class SimpleFragment extends SupportFragment {
+public abstract class SimpleFragment extends SwipeBackFragment {
     protected View mView;
     protected Activity mActivity;
     protected Context mContext;

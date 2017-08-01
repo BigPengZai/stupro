@@ -14,13 +14,15 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 /**
  * 无MVP的activity
  * Created by xuwc on 2016/11/30.
  */
-public abstract class SimpleActivity extends SupportActivity {
+public abstract class SimpleActivity extends SwipeBackActivity {
 
 
     protected Activity mContext;
@@ -30,7 +32,6 @@ public abstract class SimpleActivity extends SupportActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-
         //竖屏锁定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -96,4 +97,9 @@ public abstract class SimpleActivity extends SupportActivity {
 
     protected abstract void initEventAndData();
 
+    @Override
+    public FragmentAnimator onCreateFragmentAnimator() {
+        // 设置横向(和安卓4.x动画相同)
+        return new DefaultHorizontalAnimator();
+    }
 }

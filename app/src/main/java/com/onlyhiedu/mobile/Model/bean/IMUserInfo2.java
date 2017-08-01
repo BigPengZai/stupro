@@ -1,7 +1,6 @@
-package com.onlyhiedu.mobile.Model;
+package com.onlyhiedu.mobile.Model.bean;
 
 import com.onlyhiedu.mobile.App.App;
-import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 
 /**

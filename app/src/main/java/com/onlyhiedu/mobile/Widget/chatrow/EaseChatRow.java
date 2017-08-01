@@ -25,7 +25,7 @@ import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
-import com.onlyhiedu.mobile.Model.IMUserInfo2;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo2;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.UI.Emc.adapter.EaseMessageAdapter;
 import com.onlyhiedu.mobile.Utils.JsonUtil;

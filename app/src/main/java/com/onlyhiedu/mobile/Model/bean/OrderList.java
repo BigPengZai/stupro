@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.Model;
+package com.onlyhiedu.mobile.Model.bean;
 
 import java.util.List;
 
@@ -30,10 +30,9 @@ public class OrderList {
 
         public String orderUuid;
         public String orderNo;
-        public String type;
-        public String length;
+        public String coursePricePackageName;
         public String money;
-        public long createDate;
+        public String createDate;
         public Object payTime;
     }
 }

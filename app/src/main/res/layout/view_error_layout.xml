@@ -4,7 +4,7 @@
                 android:layout_height="fill_parent">
 
     <RelativeLayout
-        android:background="@color/c_F2F2F2"
+        android:background="@color/c_F9F9F9"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
-import com.onlyhiedu.mobile.Model.OrderList;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.R;
 
 import butterknife.BindView;
@@ -33,15 +33,26 @@ public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, OrderList.ListBean item, int position) {
         ViewHolder h = (ViewHolder) holder;
-        h.mMoney.setText("111111111111");
+        h.mMoney.setText(item.money);
+        h.mTvType.setText(item.coursePricePackageName);
+        h.mTvOrderNo.setText("订单编号：" + item.orderNo);
+        h.mTvTime.setText("创建时间：" + item.createDate);
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+
+        @BindView(R.id.tv_type)
+        TextView mTvType;
         @BindView(R.id.money)
         TextView mMoney;
-
+        @BindView(R.id.tv_orderNo)
+        TextView mTvOrderNo;
+        @BindView(R.id.tv_time)
+        TextView mTvTime;
+        @BindView(R.id.go_pay)
+        TextView mGoPay;
 
         public ViewHolder(View view) {
             super(view);

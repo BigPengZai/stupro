@@ -24,7 +24,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
-import com.onlyhiedu.mobile.Model.IMUserInfo2;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo2;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;

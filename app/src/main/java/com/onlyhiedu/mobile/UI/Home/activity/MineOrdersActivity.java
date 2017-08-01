@@ -26,6 +26,7 @@ public class MineOrdersActivity extends SimpleActivity {
 
     private ViewPagerAdapterFragment mAdapter;
 
+
     @Override
     protected int getLayout() {
         return R.layout.activity_orders;
@@ -37,11 +38,11 @@ public class MineOrdersActivity extends SimpleActivity {
 
         mAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(), mContext);
         Bundle bundle = new Bundle();
-        bundle.putString("payState", "0");
-        Bundle bundle2 = new Bundle();
         bundle.putString("payState", "1");
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("payState", "2");
         Bundle bundle3 = new Bundle();
-        bundle.putString("payState", "2");
+        bundle3.putString("payState", "0");
 
         mAdapter.addTab("全部", "全部", OrderFragment.class, null);
         mAdapter.addTab("待支付", "待支付", OrderFragment.class, bundle);

@@ -41,7 +41,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
-import com.onlyhiedu.mobile.Model.IMUserInfo2;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo2;
 import com.onlyhiedu.mobile.Model.http.onlyApis;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;

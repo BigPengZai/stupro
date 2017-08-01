@@ -53,7 +53,7 @@ import com.hyphenate.easeui.widget.EaseSwitchButton;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.Cache.UserCacheManager;
-import com.onlyhiedu.mobile.Model.IMUserInfo2;
+import com.onlyhiedu.mobile.Model.bean.IMUserInfo2;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.JsonUtil;

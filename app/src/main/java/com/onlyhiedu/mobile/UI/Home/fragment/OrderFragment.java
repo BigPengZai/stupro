@@ -1,13 +1,15 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
-import com.onlyhiedu.mobile.Model.OrderList;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Course.activity.CoursePayActivity;
 import com.onlyhiedu.mobile.UI.Course.adapter.OrderAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.OrdersPresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.OrdersContract;
@@ -23,7 +25,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/8/1.
  */
 
-public class OrderFragment extends BaseFragment<OrdersPresenter> implements OrdersContract.View, View.OnClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener {
+public class OrderFragment extends BaseFragment<OrdersPresenter> implements OrdersContract.View, View.OnClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -60,7 +62,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
         mAdapter = new OrderAdapter(mContext);
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
-//        mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnItemClickListener(this);
     }
 
 
@@ -100,8 +102,6 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
     @Override
     public void getOrderListSuccess(List<OrderList.ListBean> data, boolean isRefresh) {
 
-
-        Toast.makeText(mContext, data.size() + "", Toast.LENGTH_SHORT).show();
         if (mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         }
@@ -135,5 +135,14 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
     public void showNetWorkError() {
         mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
         mSwipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        if (mPayState != null && mPayState.equals("1")) {
+            Intent mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
+            mPayIntent.putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid);
+            startActivity(mPayIntent);
+        }
     }
 }

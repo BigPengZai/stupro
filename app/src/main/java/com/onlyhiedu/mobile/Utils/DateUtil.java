@@ -13,7 +13,7 @@ import java.util.Locale;
  * Created by pengpeng on 2017/2/22.
  */
 
-public  class DateUtil {
+public class DateUtil {
     /**
      * 日期类型 *
      */
@@ -45,8 +45,8 @@ public  class DateUtil {
             d = sdf.parse(user_time);
             long l = d.getTime();
             String str = String.valueOf(l);
-            re_time = str.substring(0,10);
-        }catch (ParseException e) {
+            re_time = str.substring(0, 10);
+        } catch (ParseException e) {
         }
         return re_time;
     }
@@ -72,6 +72,13 @@ public  class DateUtil {
         tv.setText(String.format(Locale.CHINA, "%02d:%02d:%02d", hour, minute, second));
     }
 
+
+    public static String formatTime(String type, Long time) {
+        String re_StrTime = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(type);
+        re_StrTime = sdf.format(new Date(time));
+        return re_StrTime;
+    }
 
 
     /**

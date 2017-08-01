@@ -2,15 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/size_10"
+              android:background="@color/white"
               android:orientation="vertical">
 
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:layout_marginLeft="@dimen/size_10"
+                  android:layout_marginTop="@dimen/size_8"
+                  android:orientation="horizontal">
 
-    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-               android:src="@mipmap/ic_launcher"/>
+        <TextView android:id="@+id/tv_type" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="小学" android:textColor="@color/c_333333"/>
 
-    <TextView
-        android:id="@+id/money"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/money" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_20"
+            android:text="100"
+            android:textColor="@color/c_00121C" android:textSize="14sp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/size_8" android:text="元"
+                  android:textColor="@color/c_2A2A2A"/>
+
+    </LinearLayout>
+
+
+    <TextView android:id="@+id/tv_orderNo"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/size_10" android:layout_marginTop="@dimen/size_16"
+              android:orientation="horizontal"
+              android:text="111"
+              android:textColor="@color/c_666666"/>
+
+    <TextView android:id="@+id/tv_time"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/size_10" android:layout_marginTop="@dimen/size_8"
+              android:orientation="horizontal"
+              android:text="111"
+              android:textColor="@color/c_666666"/>
+
+    <View style="@style/horizontal_line" android:layout_marginTop="@dimen/size_16"/>
+
+    <TextView android:id="@+id/go_pay" android:layout_width="70dp"
+              android:layout_height="25dp"
+              android:layout_gravity="right"
+              android:layout_marginBottom="@dimen/size_10"
+              android:layout_marginRight="@dimen/size_30"
+              android:layout_marginTop="@dimen/size_10"
+              android:background="@drawable/select_log_out"
+              android:gravity="center"
+              android:text="支付"
+              android:textColor="@color/select_log_out"/>
 
 </LinearLayout>

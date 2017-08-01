@@ -98,7 +98,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
         if (isRefresh) {  //刷新
             mSwipeRefresh.setRefreshing(false);
-            if (data.size() == 0) { //没有数据
+            if (data == null || data.size() == 0) { //没有数据
                 mErrorLayout.isLlPhoneVisibility(View.VISIBLE);
                 mErrorLayout.setState(ErrorLayout.NODATA);
             } else {

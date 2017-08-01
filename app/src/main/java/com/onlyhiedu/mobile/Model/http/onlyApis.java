@@ -1,7 +1,7 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
-import com.onlyhiedu.mobile.Model.OrderList;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;

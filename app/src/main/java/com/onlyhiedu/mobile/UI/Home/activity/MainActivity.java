@@ -40,7 +40,6 @@ import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
-import com.onlyhiedu.mobile.db.UserDao;
 import com.onlyhiedu.mobile.runtimepermissions.PermissionsManager;
 import com.onlyhiedu.mobile.runtimepermissions.PermissionsResultAction;
 import com.umeng.analytics.MobclickAgent;
@@ -540,6 +539,16 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         @Override
         public void onFriendRequestDeclined(String username) {
         }
+    }
+
+    /**
+     * 限制SwipeBack的条件,默认栈内Fragment数 <= 1时 , 优先滑动退出Activity , 而不是Fragment
+     *
+     * @return true: Activity可以滑动退出, 并且总是优先;  false: Activity不允许滑动退出
+     */
+    @Override
+    public boolean swipeBackPriority() {
+        return false;
     }
 
 }
