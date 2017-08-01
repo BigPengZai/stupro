@@ -5,34 +5,140 @@
               android:orientation="vertical">
     <!--折扣-->
     <LinearLayout
+        android:id="@+id/ll_discount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
         android:background="@mipmap/bg_discount"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="3dp">
         <TextView
+            android:id="@+id/tv_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="8.6"
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="13sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="折"
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="13sp"/>
     </LinearLayout>
+    <!--文案-->
     <LinearLayout
-
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TextView
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <!--课时-->
+        <TextView
+            android:id="@+id/tv_course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40课时"
+            android:textSize="19sp"/>
+        <!--现价-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="现价："
+                android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/tv_now_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7200"
+                android:textColor="@color/colorAccent"
+                android:textSize="17sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 元"
+                android:textSize="17sp"/>
+        </LinearLayout>
+        <!--原价-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <View
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="3px"
+                android:layout_centerVertical="true"
+                android:background="@color/c_999999"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+                <TextView
+                    android:textColor="@color/text_color_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="原价： "
+                    android:textSize="15sp"/>
+                <TextView
+                    android:textColor="@color/text_color_hint"
+                    android:id="@+id/tv_original_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8360"
+                    android:textSize="15sp"/>
+                <TextView
+                    android:textColor="@color/text_color_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 元"
+                    android:textSize="15sp"/>
+            </LinearLayout>
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        </RelativeLayout>
+        <!--文案-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/c_F42440"
+                android:padding="1dp"
+                android:text="赠"
+                android:textColor="@color/white"
+                android:textSize="13sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="金牌班主任服务"
+                android:textSize="13sp"/>
+        </LinearLayout>
+        <!--购买-->
+        <Button
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textSize="16sp"
+            android:id="@+id/btn_pay"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/select_log_out"
+            android:text="购买"
+            android:textColor="@color/white"
+        />
     </LinearLayout>
 
 </LinearLayout>

@@ -37,10 +37,25 @@ public class CourseDiscountFragmentAdapter extends BaseRecyclerAdapter<CoursePri
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, CoursePriceList item, int position) {
+        ViewHolder h = (ViewHolder) holder;
+        h.mTv_Discount.setText(item.specialDiscount+"");
+        h.mTv_Course_Name.setText(item.coursePricePackageName);
+        h.mTv_Now_Price.setText(item.nowPrice+"");
+        h.mTv_Original_Paice.setText(item.originalPrice+"");
 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_discount)
+        TextView mTv_Discount;
+        @BindView(R.id.tv_course_name)
+        TextView mTv_Course_Name;
+        @BindView(R.id.tv_now_price)
+        TextView mTv_Now_Price;
+        @BindView(R.id.tv_original_price)
+        TextView mTv_Original_Paice;
+
+
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

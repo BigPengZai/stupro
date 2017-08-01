@@ -135,6 +135,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 if (rootInvisibleHeight <= 100) {
                     //软键盘隐藏啦
                     Log.d(TAG, "隐藏啦");
+                    if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
+                        mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
+                    }
                 } else {
                     Log.d(TAG, "软键盘弹出啦");
                 }
@@ -385,9 +388,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             if (inputMethodManager.isActive()) {
                 inputMethodManager.hideSoftInputFromWindow(CoursePayActivity.this.getCurrentFocus().getWindowToken(), 0);
             }
-            if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
+           /* if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
                 mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
-            }
+            }*/
             return true;
         }
         return super.dispatchKeyEvent(event);

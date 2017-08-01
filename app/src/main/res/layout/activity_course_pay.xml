@@ -102,9 +102,11 @@
                     android:id="@+id/alipayButton"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
                     android:button="@null"
+                    android:drawableLeft="@mipmap/icon_alipay"
+                    android:drawablePadding="15dp"
                     android:drawableRight="@android:drawable/btn_radio"
-                    android:paddingLeft="30dp"
                     android:text="支付宝支付"
                     android:textSize="19sp"/>
                 <View
@@ -162,22 +164,22 @@
             </RadioGroup>
             <!--线下转账-->
             <TextView
-                android:textSize="21sp"
                 android:id="@+id/tv_offline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账线下转账"
+                android:textSize="21sp"
                 android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
     <Button
-        android:textColor="@color/white"
-        android:background="@color/c9"
         android:id="@+id/confirm_pay"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/c9"
         android:text="确认支付"
+        android:textColor="@color/white"
         android:textSize="21sp"/>
 
 </RelativeLayout>

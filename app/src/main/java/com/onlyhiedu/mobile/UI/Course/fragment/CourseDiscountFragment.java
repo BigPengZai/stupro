@@ -48,7 +48,8 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_course;
+//        return R.layout.fragment_course;
+        return R.layout.fragment_course_normal;
     }
 
     @Override
