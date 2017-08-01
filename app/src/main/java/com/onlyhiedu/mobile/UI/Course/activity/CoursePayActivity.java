@@ -129,6 +129,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             @Override
             public void onGlobalLayout() {
                 Rect rect = new Rect();
+
                 mRelativeLayout.getWindowVisibleDisplayFrame(rect);
                 int rootInvisibleHeight = mRelativeLayout.getRootView().getHeight() - rect.bottom;
                 Log.d(TAG, "lin.getRootView().getHeight()=" + mRelativeLayout.getRootView().getHeight() + ",rect.bottom=" + rect.bottom + ",rootInvisibleHeight=" + rootInvisibleHeight);
