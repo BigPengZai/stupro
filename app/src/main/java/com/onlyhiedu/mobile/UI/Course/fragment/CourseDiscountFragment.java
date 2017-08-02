@@ -105,7 +105,8 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
     @Override
     public void onItemClick(int position, long itemId) {
         mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
-        mPayIntent.putExtra("coursePriceUuid", adapter.getItem(position).uuid);
+        mPayIntent.putExtra("coursePriceUuid", adapter.getItem(position).uuid)
+                .putExtra("coursePricePackageName",adapter.getItem(position).coursePricePackageName);
         startActivity(mPayIntent);
     }
 }

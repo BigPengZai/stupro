@@ -1,24 +1,17 @@
 package com.onlyhiedu.mobile.UI.Course.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -35,9 +28,9 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.persenter.CoursePayPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
-import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
+import com.onlyhiedu.mobile.Widget.PayItemView;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
 import com.pingplusplus.android.Pingpp;
 
@@ -46,8 +39,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.onlyhiedu.mobile.R.id.alipayButton;
 import static com.onlyhiedu.mobile.R.id.confirm_pay;
+import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_ALIPAY;
+import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_BDF;
+import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_UPACP;
+import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_WECHAT;
 
 
 /**
@@ -56,38 +52,31 @@ import static com.onlyhiedu.mobile.R.id.confirm_pay;
 
 public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implements CoursePayContract.View {
 
-    /**
-     * 银联支付渠道
-     */
-    private static final String CHANNEL_UPACP = "upacp";
-    /**
-     * 微信支付渠道
-     */
-    private static final String CHANNEL_WECHAT = "wx";
-    /**
-     * 支付宝支付渠道
-     */
-    private static final String CHANNEL_ALIPAY = "alipay";
-    /**
-     * 百度分期
-     */
-    public static final String CHANNEL_BDF = "bdf";
+
     public static final String TAG = CoursePayActivity.class.getSimpleName();
+
+    @BindView(R.id.rl_edit)
+    RelativeLayout mRelativeLayout;
     @BindView(R.id.gradeSubject)
     LinearLayout mGradeSubject;
+
+
+    //支付View
+    @BindView(R.id.pay_item_view)
+    PayItemView mPayItemView;
+
+    @BindView(R.id.money)
+    TextView tvMoney;
+
+
     //优惠码
     @BindView(R.id.coupon)
     EditText mCoupon;
-    //小计
-    @BindView(R.id.subtotal)
-    TextView mSubtotal;
-    private String mCoursePriceUuid;
+
     //确认支付
     @BindView(confirm_pay)
     Button mConfirm_pay;
-    //支付宝
-    @BindView(alipayButton)
-    RadioButton mAlipayButton;
+
     private ProgressDialog dialog;
     //年级
     @BindView(R.id.setting_grade)
@@ -99,32 +88,31 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     SettingItemView mSettingSubject;
     private OptionsPickerView mSubject;
     private ArrayList<ProvinceBean> mSubjectData = WheelUtils.getSubject();
-    private String mChargeId;
 
-    @BindView(R.id.rel)
-    RelativeLayout mRelativeLayout;
-    @BindView(R.id.pay_method)
-    RadioGroup mPayMethod;
+
     String payMethod;
     @BindView(R.id.scroll_view)
     ScrollView mScrollView;
     @BindView(R.id.tv_offline)
     TextView mTextView;
+    @BindView(R.id.tv_course_name)
+    TextView mTvCourseName;
+
+    private String mCoursePriceUuid;
+    private String mChargeId;
 
     @Override
     protected void initInject() {
-
         getActivityComponent().inject(this);
     }
 
     @Override
     protected void initView() {
-        super.initView();
         setToolBar("课程支付");
+
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
-        dialog = new ProgressDialog(this);
-        dialog.setTitle("请稍后..");
-        dialog.setCanceledOnTouchOutside(false);
+        mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
+
         mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -144,31 +132,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
             }
         });
-        mPayMethod.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != R.id.offline) {
-                    checkOfflineInVisable();
-                }
-                switch (checkedId) {
-                    case R.id.alipayButton:
-                        payMethod = CHANNEL_ALIPAY;
-                        break;
-                    case R.id.wechatButton:
-                        payMethod = CHANNEL_WECHAT;
-                        break;
-                    case R.id.upmpButton:
-                        payMethod = CHANNEL_UPACP;
-                        break;
-                    case R.id.bfbButton:
-                        payMethod = CHANNEL_BDF;
-                        break;
-                    default:
-                        payMethod = "";
-                        break;
-                }
-            }
-        });
+
     }
 
     @Override
@@ -176,6 +140,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         super.initData();
         mPresenter.getStudentInfo();
     }
+
 
     //年级
     OptionsPickerView.OnOptionsSelectListener gradeL = new OptionsPickerView.OnOptionsSelectListener() {
@@ -207,7 +172,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showError(String msg) {
-        if (dialog.isShowing()) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -215,7 +180,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showGetPaySucess(double data) {
-        mSubtotal.setText(data + "");
+        tvMoney.setText(data + "");
     }
 
     @Override
@@ -241,7 +206,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         Toast.makeText(this, Constants.NET_ERROR, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({R.id.confirm_pay, R.id.setting_grade, R.id.setting_subject, R.id.offline})
+    @OnClick({R.id.confirm_pay, R.id.setting_grade, R.id.setting_subject})
     public void onClick(View view) {
         switch (view.getId()) {
             case confirm_pay:
@@ -262,28 +227,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
                 mSubject.show();
                 break;
-            case R.id.offline:
-                //线下转账
-                checkOfflineVisable();
-                break;
+//            case R.id.offline:
+//                //线下转账
+//                checkOfflineVisable();
+//                break;
         }
-    }
-
-    private void checkOfflineVisable() {
-        mTextView.setVisibility(View.VISIBLE);
-        mConfirm_pay.setVisibility(View.GONE);
-        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        parms.setMargins(0, ScreenUtil.getToolbarHeight(this), 0, 0);
-        mScrollView.setLayoutParams(parms);
-
-    }
-
-    private void checkOfflineInVisable() {
-        mTextView.setVisibility(View.GONE);
-        mConfirm_pay.setVisibility(View.VISIBLE);
-        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        parms.setMargins(0, ScreenUtil.getToolbarHeight(this), 0, ScreenUtil.dip2px(50));
-        mScrollView.setLayoutParams(parms);
     }
 
 
@@ -296,19 +244,20 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             Toast.makeText(this, "请填写 科目 信息", Toast.LENGTH_SHORT).show();
             return;
         }
+        payMethod = mPayItemView.getPayMethod();
         if (TextUtils.isEmpty(payMethod)) {
             Toast.makeText(this, "请选择支付方式", Toast.LENGTH_SHORT).show();
             return;
         }
         switch (payMethod) {
             case CHANNEL_ALIPAY:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_ALIPAY);
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
                 break;
             case CHANNEL_WECHAT:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_WECHAT);
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
                 break;
             case CHANNEL_UPACP:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, CHANNEL_UPACP);
+                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
                 break;
             case CHANNEL_BDF:
                 if (dialog == null) {
@@ -361,7 +310,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
             }, 1000);
         } else {
-            Toast.makeText(this,"支付失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -370,7 +319,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
-        Toast.makeText(this, "支付成功",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "" + data.getPayStatus());
     }
 
@@ -383,19 +332,4 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     }
 
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        //TODO 或者点击 键盘完成按钮 显示
-        if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (inputMethodManager.isActive()) {
-                inputMethodManager.hideSoftInputFromWindow(CoursePayActivity.this.getCurrentFocus().getWindowToken(), 0);
-            }
-           /* if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
-                mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
-            }*/
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
 }

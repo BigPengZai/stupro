@@ -2,76 +2,167 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ecdemo="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/c_F9F9F9"
     android:orientation="vertical">
 
     <include layout="@layout/layout_toolbar"/>
+
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="@dimen/size_50">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
 
+            <TextView android:id="@+id/tv_course_name" android:layout_width="match_parent"
+                      android:layout_height="@dimen/edit_height"
+                      android:background="@color/white"
+                      android:gravity="center_vertical" android:paddingLeft="@dimen/size_10"
+                      android:text="初三"
+                      android:textColor="@color/c_333333"
+                      android:textSize="@dimen/sp_16"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/edit_height"
+                android:layout_marginTop="@dimen/size_10"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:text="请输入优惠码： "/>
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="请输入优惠码： "
+                    android:textColor="@color/c_333333" android:textSize="@dimen/sp_14"/>
 
                 <!--优惠码-->
                 <EditText
                     android:id="@+id/coupon"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/size_10"
                     android:background="@null"
-                    android:hint="优惠码"
+                    android:hint="没有则不填"
                     android:imeOptions="flagNoExtractUi"
-                    android:inputType="number"/>
-            </LinearLayout>
+                    android:inputType="number"
+                    android:textSize="@dimen/sp_12"/>
+
+                <View style="@style/horizontal_line" android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
 
 
-            <TextView
-                android:id="@+id/subtotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="小计："
-                android:textSize="21sp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="优惠："
-                android:textSize="21sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="赠送： 金牌班主任服务"
-                android:textSize="21sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="小计"
+                    android:textColor="@color/c_333333"
+                    android:textSize="@dimen/sp_12"/>
+
+                <!--优惠码-->
+                <TextView
+                    android:id="@+id/money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:text="111"
+                    android:textColor="@color/c_151515"
+                    android:textSize="@dimen/sp_14"/>
+
+                <View style="@style/horizontal_line" android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="优惠"
+                    android:textColor="@color/c_333333"
+                    android:textSize="@dimen/sp_12"/>
+
+                <!--优惠码-->
+                <TextView
+                    android:id="@+id/tv_discounts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:text="111"
+                    android:textColor="@color/c_151515"
+                    android:textSize="@dimen/sp_14"/>
+
+                <View style="@style/horizontal_line" android:layout_alignParentBottom="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="赠送"
+                    android:textColor="@color/c_333333"
+                    android:textSize="@dimen/sp_12"/>
+
+                <!--优惠码-->
+                <TextView
+                    android:id="@+id/tv_give"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:text="111"
+                    android:textColor="@color/c_151515"
+                    android:textSize="@dimen/sp_14"/>
+
+            </RelativeLayout>
+
             <!--年级和科目-->
             <LinearLayout
                 android:id="@+id/gradeSubject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
                 <com.onlyhiedu.mobile.Widget.SettingItemView
                     android:id="@+id/setting_grade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     ecdemo:item_showDivider="true"
                     ecdemo:item_titleText="年级"/>
 
@@ -80,88 +171,15 @@
                     android:id="@+id/setting_subject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    ecdemo:item_showDivider="true"
                     ecdemo:item_titleText="科目"/>
             </LinearLayout>
-            <!--支付方式-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:text="支付方式"
-                android:textSize="23sp"/>
-            <RadioGroup
-                android:id="@+id/pay_method"
+
+
+            <com.onlyhiedu.mobile.Widget.PayItemView
+                android:id="@+id/pay_item_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingRight="15dp">
-                <RadioButton
-                    android:id="@+id/alipayButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:button="@null"
-                    android:drawableLeft="@mipmap/icon_alipay"
-                    android:drawablePadding="15dp"
-                    android:drawableRight="@android:drawable/btn_radio"
-                    android:text="支付宝支付"
-                    android:textSize="19sp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="?android:attr/listDivider"/>
-                <RadioButton
-                    android:id="@+id/wechatButton"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:button="@null"
-                    android:drawableRight="@android:drawable/btn_radio"
-                    android:paddingLeft="30dp"
-                    android:text="微信支付"
-                    android:textSize="19sp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="?android:attr/listDivider"/>
-                <RadioButton
-                    android:id="@+id/upmpButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:button="@null"
-                    android:drawableRight="@android:drawable/btn_radio"
-                    android:paddingLeft="30dp"
-                    android:text="银联支付"
-                    android:textSize="19sp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="?android:attr/listDivider"/>
-                <RadioButton
-                    android:id="@+id/bfbButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:button="@null"
-                    android:drawableRight="@android:drawable/btn_radio"
-                    android:paddingLeft="30dp"
-                    android:text="百度分期"
-                    android:textSize="19sp"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="?android:attr/listDivider"/>
-                <RadioButton
-                    android:id="@+id/offline"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:button="@null"
-                    android:drawableRight="@android:drawable/btn_radio"
-                    android:paddingLeft="30dp"
-                    android:text="线下转账"
-                    android:textSize="19sp"/>
-            </RadioGroup>
+                android:layout_height="wrap_content"/>
+
             <!--线下转账-->
             <TextView
                 android:id="@+id/tv_offline"
@@ -172,6 +190,7 @@
                 android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
+
     <Button
         android:id="@+id/confirm_pay"
         android:layout_width="match_parent"
@@ -181,5 +200,4 @@
         android:text="确认支付"
         android:textColor="@color/white"
         android:textSize="21sp"/>
-
 </RelativeLayout>
