@@ -34,5 +34,6 @@ public class OrderList {
         public String money;
         public String createDate;
         public Object payTime;
+        public int orderStatus;
     }
 }

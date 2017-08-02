@@ -37,6 +37,19 @@ public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean> {
         h.mTvType.setText(item.coursePricePackageName);
         h.mTvOrderNo.setText("订单编号：" + item.orderNo);
         h.mTvTime.setText("创建时间：" + item.createDate);
+        h.mGoPay.setBackgroundResource(item.orderStatus == 1 ? R.drawable.select_log_out : R.drawable.shape_login_ben_radius_gray);
+        h.mGoPay.setClickable(item.orderStatus == 1 ? true : false);
+        switch (item.orderStatus) {
+            case 0:
+                h.mGoPay.setText("已关闭");
+                break;
+            case 1:
+                h.mGoPay.setText("去支付");
+                break;
+            case 2:
+                h.mGoPay.setText("已支付");
+                break;
+        }
     }
 
 
