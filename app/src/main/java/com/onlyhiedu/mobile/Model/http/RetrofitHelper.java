@@ -358,4 +358,16 @@ public class RetrofitHelper {
         return sOnlyApis.getOrderList(state,page);
     }
 
+
+
+    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchOrderGetPingPay(String coursePriceUuid, String channel) {
+        return sOnlyApis.getOrderPingPay(coursePriceUuid, channel);
+    }
+
+    public Flowable<onlyHttpResponse<String>> fetchOrderGetBaiduPay(String coursePriceUuid) {
+        return sOnlyApis.getOrderBaiduPay(coursePriceUuid);
+    }
+
+
+
 }

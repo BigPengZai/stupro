@@ -44,7 +44,61 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
+    //订单 Ping++ 支付
+    @Override
+    public void getOrderPingppPayment(String coursePriceUuid, String channel) {
+        Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchOrderGetPingPay(coursePriceUuid, channel);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<PingPaySucessInfo>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<PingPaySucessInfo> data) {
+                if (null != getView() && null != data) {
+                    if (!data.isHasError()) {
+                        getView().showPingPaySucess(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
 
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+
+    }
+    //订单 百度支付
+    @Override
+    public void getOrderBaiduPay(String uuid) {
+        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchOrderGetBaiduPay(uuid);
+        ResourceSubscriber observer = new ResourceSubscriber<onlyHttpResponse<String>>() {
+            @Override
+            public void onNext(onlyHttpResponse<String> data) {
+                if (null != getView() && null != data) {
+                    if (!data.isHasError()) {
+                        getView().getBaiduPaySuccess(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+                if (getView() != null) {
+                    getView().getBaiduPayFailure();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    //课时包 Ping++ 支付
     @Override
     public void getPingppPaymentByJson(String coursePriceUuid, String channel) {
         Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchGetPingPay(coursePriceUuid, channel);
@@ -64,7 +118,7 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
 
     }
-
+    //课时包百度支付
     @Override
     public void getBaiduPay(String uuid) {
         Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchGetBaiduPay(uuid);
@@ -98,6 +152,13 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+
+
+
+
+
+
+
     @Override
     public void updateGrade(String grade) {
         Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateGrade(grade);
@@ -127,7 +188,7 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
-    //PIng++ 订单支付状态查询
+    //课时包 PIng++ 订单支付状态查询
     @Override
     public void getPingPayStatus(String id) {
         Flowable<onlyHttpResponse<PingPayStatus>> flowable = mRetrofitHelper.fetchPingPayStatus(id);

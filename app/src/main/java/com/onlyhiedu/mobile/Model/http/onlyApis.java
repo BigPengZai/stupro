@@ -470,5 +470,25 @@ public interface onlyApis {
      * 课程订单列表
      */
     @GET(" client/coursepay/getOrderList")
-    Flowable<onlyHttpResponse<OrderList>> getOrderList(@Query("payStatus") String  payStatus, @Query("pageNo") int pageNo);
+    Flowable<onlyHttpResponse<OrderList>> getOrderList(@Query("payStatus") String payStatus, @Query("pageNo") int pageNo);
+    /**
+     *
+     * 订单 Ping++支付
+     * */
+    @FormUrlEncoded
+    @POST("client/coursepay/orderPingppPay")
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel);
+
+    /**
+     * 订单 百度分期直接支付
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/coursepay/orderBaiduStagingPay")
+    Flowable<onlyHttpResponse<String>> getOrderBaiduPay(@Field("orderUuid") String coursePriceUuid);
+
+
+
+
 }

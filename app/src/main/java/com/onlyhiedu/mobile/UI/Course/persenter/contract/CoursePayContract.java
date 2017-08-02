@@ -36,9 +36,10 @@ public interface CoursePayContract {
         void updateSubject(String subject);
 
         void getPingPayStatus(String id);
-
-
-
         void getStudentInfo();
+
+        void getOrderPingppPayment(String coursePriceUuid, String channel);
+
+        void getOrderBaiduPay(String uuid);
     }
 }

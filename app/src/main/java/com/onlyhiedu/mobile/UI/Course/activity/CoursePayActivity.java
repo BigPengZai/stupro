@@ -100,6 +100,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     private String mCoursePriceUuid;
     private String mChargeId;
+    private String mPayFrom;
 
     @Override
     protected void initInject() {
@@ -112,7 +113,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
-
+        mPayFrom = getIntent().getStringExtra("mPayFrom");
         mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -251,13 +252,25 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         }
         switch (payMethod) {
             case CHANNEL_ALIPAY:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                if ("order".equals(mPayFrom)) {
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod);
+                } else {
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                }
                 break;
             case CHANNEL_WECHAT:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                if ("order".equals(mPayFrom)) {
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod);
+                } else {
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                }
                 break;
             case CHANNEL_UPACP:
-                mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                if ("order".equals(mPayFrom)) {
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod);
+                } else {
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                }
                 break;
             case CHANNEL_BDF:
                 if (dialog == null) {
@@ -265,7 +278,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 } else {
                     dialog.show();
                 }
-                mPresenter.getBaiduPay(mCoursePriceUuid);
+                if ("order".equals(mPayFrom)) {
+                    mPresenter.getOrderBaiduPay(mCoursePriceUuid);
+                } else {
+                    mPresenter.getBaiduPay(mCoursePriceUuid);
+                }
                 break;
         }
     }
@@ -305,7 +322,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    dialog.show();
+                    if (dialog == null) {
+                        dialog = ProgressDialog.show(CoursePayActivity.this, null,"请稍等...");
+                    } else {
+                        dialog.show();
+                    }
                     mPresenter.getPingPayStatus(mChargeId);
                 }
             }, 1000);
