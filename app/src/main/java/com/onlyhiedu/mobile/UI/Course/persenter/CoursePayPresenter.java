@@ -136,7 +136,7 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
             public void onNextData(onlyHttpResponse<PingPayStatus> data) {
                 if (null != getView() && null != data) {
                     if (!data.isHasError()) {
-                        getView().getPingPayStatus(data.getData());
+                        getView().getPingPayStatusSucess(data.getData());
                     } else {
                         getView().showError(data.getMessage());
                     }

@@ -220,7 +220,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showPingPaySucess(PingPaySucessInfo info) {
-        Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
         mChargeId = info.getId();
         Pingpp.createPayment(CoursePayActivity.this, JsonUtil.toJson(info));
     }
@@ -290,9 +290,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     private void confirmPayment() {
         if (mSettingGrade.getDetailText() == null || TextUtils.isEmpty(mSettingGrade.getDetailText())) {
             Toast.makeText(this, "请填写 年级 信息", Toast.LENGTH_SHORT).show();
+            return;
         }
         if (mSettingSubject.getDetailText() == null || TextUtils.isEmpty(mSettingSubject.getDetailText())) {
             Toast.makeText(this, "请填写 科目 信息", Toast.LENGTH_SHORT).show();
+            return;
         }
         if (TextUtils.isEmpty(payMethod)) {
             Toast.makeText(this, "请选择支付方式", Toast.LENGTH_SHORT).show();
@@ -315,9 +317,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     dialog.show();
                 }
                 mPresenter.getBaiduPay(mCoursePriceUuid);
-                break;
-            default:
-//                Toast.makeText(this, "请选择支付方式",Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -353,23 +352,25 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         if (null != msg2 && msg2.length() != 0) {
             str += "\n" + msg2;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(str);
-        builder.setTitle("提示");
-        builder.setPositiveButton("OK", null);
-        builder.create().show();
-        if ("success".equals(str) && mChargeId != null && !mChargeId.equals("")) {
+        if ("success".equals(str) && mChargeId != null && !TextUtils.isEmpty(mChargeId)) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    dialog.show();
                     mPresenter.getPingPayStatus(mChargeId);
                 }
             }, 1000);
+        } else {
+            Toast.makeText(this,"支付失败",Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void getPingPayStatus(PingPayStatus data) {
+    public void getPingPayStatusSucess(PingPayStatus data) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        Toast.makeText(this, "支付成功",Toast.LENGTH_SHORT).show();
         Log.d(TAG, "" + data.getPayStatus());
     }
 
@@ -384,6 +385,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        //TODO 或者点击 键盘完成按钮 显示
         if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if (inputMethodManager.isActive()) {

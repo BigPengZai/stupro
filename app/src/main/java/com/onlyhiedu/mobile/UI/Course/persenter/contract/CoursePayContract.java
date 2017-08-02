@@ -19,7 +19,7 @@ public interface CoursePayContract {
         void getBaiduPaySuccess(String url);
         void getBaiduPayFailure();
 
-        void getPingPayStatus(PingPayStatus data);
+        void getPingPayStatusSucess(PingPayStatus data);
 
 
         void showStudentInfo(StudentInfo info);
