@@ -10,12 +10,12 @@
     <include layout="@layout/layout_toolbar"/>
 
     <ScrollView
-        android:scrollbars="none"
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_marginBottom="@dimen/size_50">
+        android:layout_marginBottom="@dimen/size_50"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +24,8 @@
             <TextView android:id="@+id/tv_course_name" android:layout_width="match_parent"
                       android:layout_height="@dimen/edit_height"
                       android:background="@color/white"
-                      android:gravity="center_vertical" android:paddingLeft="@dimen/activity_horizontal_margin"
+                      android:gravity="center_vertical"
+                      android:paddingLeft="@dimen/activity_horizontal_margin"
                       android:text="初三"
                       android:textColor="@color/c_333333"
                       android:textSize="@dimen/sp_16"/>
@@ -120,7 +121,7 @@
                     android:textColor="@color/c_151515"
                     android:textSize="@dimen/sp_14"/>
 
-                <View style="@style/horizontal_line" android:layout_alignParentBottom="true" />
+                <View style="@style/horizontal_line" android:layout_alignParentBottom="true"/>
 
             </RelativeLayout>
 
@@ -180,40 +181,6 @@
                 android:id="@+id/pay_item_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
-            <!--线下转账-->
-            <RelativeLayout
-                android:id="@+id/rl_wx"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_height"
-                android:layout_marginTop="@dimen/size_10"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_horizontal_margin">
-
-                <ImageView android:id="@+id/iv_wx" android:layout_width="wrap_content"
-                           android:layout_height="wrap_content" android:layout_centerVertical="true"
-                           android:src="@mipmap/icon_offline"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@+id/iv_wx" android:layout_toRightOf="@+id/iv_wx"
-                    android:text="线下转账" android:textColor="@color/c_666666"
-                    android:textSize="@dimen/sp_14"/>
-
-
-                <CheckBox android:id="@+id/check_wx" android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:layout_alignParentRight="true"
-                          android:layout_centerVertical="true"
-                          android:layout_marginRight="@dimen/size_10"/>
-
-                <View style="@style/horizontal_line" android:layout_alignParentBottom="true"/>
-
-            </RelativeLayout>
             <TextView
                 android:id="@+id/tv_offline"
                 android:layout_width="wrap_content"
@@ -224,13 +191,39 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/confirm_pay"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/c9"
-        android:text="确认支付"
-        android:textColor="@color/white"
-        android:textSize="21sp"/>
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+           android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计: "
+                android:textSize="21sp"/>
+            <TextView
+                android:id="@+id/tv_total"
+                android:textColor="@color/c_F42440"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1111元 "
+                android:textSize="21sp"/>
+        </LinearLayout>
+        <Button
+            android:padding="11dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/confirm_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/c_F42440"
+            android:text="确认支付"
+            android:textColor="@color/white"
+            android:textSize="21sp"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -109,6 +109,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     private String mChargeId;
     private String mPayFrom;
     private Long mNowPrice;
+    //合计
+    @BindView(R.id.tv_total)
+    TextView mTv_Total;
 
     @Override
     protected void initInject() {
@@ -142,7 +145,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 return false;
             }
         });
-
     }
 
     @Override
@@ -150,6 +152,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         super.initData();
         mPresenter.getStudentInfo();
         tvMoney.setText(mNowPrice + "元");
+        mTv_Total.setText(mNowPrice + "元");
     }
 
 
@@ -191,6 +194,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showGetPaySucess(double data) {
+        mTv_Total.setText(data + "元");
         tvMoney.setText(data + "元");
         mTv_Discounts.setText(((double)mNowPrice-data)+"元");
     }

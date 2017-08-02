@@ -132,8 +132,67 @@
         <CheckBox android:id="@+id/check_bdf" android:layout_width="wrap_content"
                   android:layout_height="wrap_content" android:layout_alignParentRight="true"
                   android:layout_centerVertical="true" android:layout_marginRight="@dimen/size_10"/>
+        <View style="@style/horizontal_line" android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+    <!--线下转账-->
+    <RelativeLayout
+        android:id="@+id/rl_offline"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_height"
+        android:layout_marginTop="@dimen/size_10"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/iv_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_offline"/>
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/iv_offline"
+            android:layout_toRightOf="@+id/iv_offline"
+            android:text="线下转账" android:textColor="@color/c_666666"
+            android:textSize="@dimen/sp_14"/>
+        <CheckBox android:id="@+id/check_offline"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentRight="true"
+                  android:layout_centerVertical="true"
+                  android:layout_marginRight="@dimen/size_10"/>
 
 
     </RelativeLayout>
-
+    <!--文案-->
+    <LinearLayout
+        android:id="@+id/ll_offline"
+        android:visibility="gone"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="户名：上海昂立智立方教育培训有限公司在线一对一事业部"/>
+        <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开户行：工商银行上海番禺路支行"/>
+        <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="账号：1001 2867 2901 6985 434"/>
+    </LinearLayout>
 </LinearLayout>

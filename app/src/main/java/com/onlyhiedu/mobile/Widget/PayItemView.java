@@ -1,12 +1,17 @@
 package com.onlyhiedu.mobile.Widget;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.onlyhiedu.mobile.R;
 
@@ -42,16 +47,23 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
      * 百度分期
      */
     public static final String CHANNEL_BDF = "bdf";
+    /**
+     * 线下转账
+     */
+    public static final String CHANNEL_OFFLINE = "offline";
+
     CheckBox mCheckYl;
     CheckBox mCheckWx;
     CheckBox mCheckAlipay;
     CheckBox mCheckBdf;
+    CheckBox mCheckOffline;
 
     RelativeLayout mRlBdf;
     RelativeLayout mRlWx;
     RelativeLayout mRlYl;
+    RelativeLayout mRl_Offline;
     RelativeLayout mRlAlipay;
-
+    LinearLayout mLl_Offline;
     private String payMethod;
 
     public String getPayMethod() {
@@ -67,6 +79,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
         mRlYl = (RelativeLayout) findViewById(R.id.rl_yl);
         mRlAlipay = (RelativeLayout) findViewById(R.id.rl_alipay);
 
+
         mRlYl.setOnClickListener(this);
         mRlWx.setOnClickListener(this);
         mRlAlipay.setOnClickListener(this);
@@ -76,6 +89,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
         mCheckWx = (CheckBox) findViewById(R.id.check_wx);
         mCheckAlipay = (CheckBox) findViewById(R.id.check_alipay);
         mCheckBdf = (CheckBox) findViewById(R.id.check_bdf);
+        mCheckOffline = (CheckBox) findViewById(R.id.check_offline);
 
 
         mCheckYl.setOnClickListener(this);
@@ -83,11 +97,17 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
         mCheckAlipay.setOnClickListener(this);
         mCheckBdf.setOnClickListener(this);
 
+        //线下转账
+        mRl_Offline = (RelativeLayout) findViewById(R.id.rl_offline);
+        mLl_Offline = (LinearLayout) findViewById(R.id.ll_offline);
+        mCheckOffline.setOnClickListener(this);
+
     }
 
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.rl_yl:
                 payMethod = CHANNEL_UPACP;
@@ -95,6 +115,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(false);
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.rl_wx:
                 payMethod = CHANNEL_WECHAT;
@@ -102,6 +123,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(true);
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.rl_alipay:
                 payMethod = CHANNEL_ALIPAY;
@@ -109,6 +131,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(false);
                 mCheckAlipay.setChecked(true);
                 mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.rl_bdf:
                 payMethod = CHANNEL_BDF;
@@ -116,6 +139,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(false);
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(true);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.check_yl:
                 payMethod = CHANNEL_UPACP;
@@ -123,6 +147,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(false);
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.check_wx:
                 payMethod = CHANNEL_WECHAT;
@@ -130,6 +155,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(true);
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.check_alipay:
                 payMethod = CHANNEL_ALIPAY;
@@ -137,6 +163,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(false);
                 mCheckAlipay.setChecked(true);
                 mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(false);
                 break;
             case R.id.check_bdf:
                 payMethod = CHANNEL_BDF;
@@ -144,12 +171,51 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
                 mCheckWx.setChecked(false);
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(true);
+                mCheckOffline.setChecked(false);
+                break;
+            case R.id.check_offline:
+                payMethod = CHANNEL_OFFLINE;
+                mCheckYl.setChecked(false);
+                mCheckWx.setChecked(false);
+                mCheckAlipay.setChecked(false);
+                mCheckBdf.setChecked(false);
+                mCheckOffline.setChecked(true);
                 break;
         }
+        initOffline(mCheckOffline.isChecked());
+    }
+
+    private void initOffline(boolean ischecked) {
+        if (ischecked) {
+            mLl_Offline.setVisibility(VISIBLE);
+        } else {
+            mLl_Offline.setVisibility(GONE);
+        }
+            /*mLl_Offline.animate().translationY(mLl_Offline.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+            mLl_Offline.animate().setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    mLl_Offline.setVisibility(VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });*/
     }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
     }
 }
