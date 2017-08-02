@@ -10,6 +10,7 @@
     <include layout="@layout/layout_toolbar"/>
 
     <ScrollView
+        android:scrollbars="none"
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +24,7 @@
             <TextView android:id="@+id/tv_course_name" android:layout_width="match_parent"
                       android:layout_height="@dimen/edit_height"
                       android:background="@color/white"
-                      android:gravity="center_vertical" android:paddingLeft="@dimen/size_10"
+                      android:gravity="center_vertical" android:paddingLeft="@dimen/activity_horizontal_margin"
                       android:text="初三"
                       android:textColor="@color/c_333333"
                       android:textSize="@dimen/sp_16"/>

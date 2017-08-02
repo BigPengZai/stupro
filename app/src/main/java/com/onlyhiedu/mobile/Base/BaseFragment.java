@@ -18,13 +18,13 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * MVP
  * Created by xuwc on 2016/11/24.
  */
-public abstract class BaseFragment<T extends BasePresenter> extends SwipeBackFragment implements BaseView {
+public abstract class BaseFragment<T extends BasePresenter> extends SupportFragment implements BaseView {
 
 
     @Inject

@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 
 import com.onlyhiedu.mobile.R;
@@ -13,7 +14,7 @@ import com.onlyhiedu.mobile.R;
  * Created by Administrator on 2017/8/2.
  */
 
-public class PayItemView extends RelativeLayout implements View.OnClickListener {
+public class PayItemView extends RelativeLayout implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
 
 //    private TextView mTitle, mTvDetail;
@@ -76,6 +77,12 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener 
         mCheckAlipay = (CheckBox) findViewById(R.id.check_alipay);
         mCheckBdf = (CheckBox) findViewById(R.id.check_bdf);
 
+
+        mCheckYl.setOnClickListener(this);
+        mCheckWx.setOnClickListener(this);
+        mCheckAlipay.setOnClickListener(this);
+        mCheckBdf.setOnClickListener(this);
+
     }
 
 
@@ -110,6 +117,39 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener 
                 mCheckAlipay.setChecked(false);
                 mCheckBdf.setChecked(true);
                 break;
+            case R.id.check_yl:
+                payMethod = CHANNEL_UPACP;
+                mCheckYl.setChecked(true);
+                mCheckWx.setChecked(false);
+                mCheckAlipay.setChecked(false);
+                mCheckBdf.setChecked(false);
+                break;
+            case R.id.check_wx:
+                payMethod = CHANNEL_WECHAT;
+                mCheckYl.setChecked(false);
+                mCheckWx.setChecked(true);
+                mCheckAlipay.setChecked(false);
+                mCheckBdf.setChecked(false);
+                break;
+            case R.id.check_alipay:
+                payMethod = CHANNEL_ALIPAY;
+                mCheckYl.setChecked(false);
+                mCheckWx.setChecked(false);
+                mCheckAlipay.setChecked(true);
+                mCheckBdf.setChecked(false);
+                break;
+            case R.id.check_bdf:
+                payMethod = CHANNEL_BDF;
+                mCheckYl.setChecked(false);
+                mCheckWx.setChecked(false);
+                mCheckAlipay.setChecked(false);
+                mCheckBdf.setChecked(true);
+                break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
     }
 }

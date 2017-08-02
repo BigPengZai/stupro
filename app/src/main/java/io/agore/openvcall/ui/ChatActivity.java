@@ -207,6 +207,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         startService(intent);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSwipeBackLayout().setEnableGesture(false);
+    }
 
     @Override
     protected void onStop() {
@@ -1599,9 +1604,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
-    @Override
-    public boolean swipeBackPriority() {
-        return false;
-    }
+
 
 }

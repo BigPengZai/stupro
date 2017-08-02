@@ -15,6 +15,7 @@ import com.onlyhiedu.mobile.Dagger.Component.ActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerActivityComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Widget.Swipeback.app.SwipeBackActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 
@@ -22,9 +23,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
-import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 /**
  * MVP activity基类
@@ -146,9 +144,4 @@ public abstract class BaseActivity<T extends BasePresenter> extends SwipeBackAct
     }
 
 
-    @Override
-    public FragmentAnimator onCreateFragmentAnimator() {
-        // 设置横向(和安卓4.x动画相同)
-        return new DefaultHorizontalAnimator();
-    }
 }

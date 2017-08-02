@@ -100,7 +100,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     private String mCoursePriceUuid;
     private String mChargeId;
-    private String mPayFrom;
 
     @Override
     protected void initInject() {
@@ -113,24 +112,25 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
-        mPayFrom = getIntent().getStringExtra("mPayFrom");
-        mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect rect = new Rect();
 
-                mRelativeLayout.getWindowVisibleDisplayFrame(rect);
-                int rootInvisibleHeight = mRelativeLayout.getRootView().getHeight() - rect.bottom;
-                Log.d(TAG, "lin.getRootView().getHeight()=" + mRelativeLayout.getRootView().getHeight() + ",rect.bottom=" + rect.bottom + ",rootInvisibleHeight=" + rootInvisibleHeight);
-                if (rootInvisibleHeight <= 100) {
-                    //软键盘隐藏啦
-                    Log.d(TAG, "隐藏啦");
+
+        mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager imm = (InputMethodManager) v
+                            .getContext().getSystemService(
+                                    Context.INPUT_METHOD_SERVICE);
+                    if (imm.isActive()) {
+                        imm.hideSoftInputFromWindow(
+                                v.getApplicationWindowToken(), 0);
+                    }
                     if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
                         mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
                     }
-                } else {
-                    Log.d(TAG, "软键盘弹出啦");
+                    return true;
                 }
+                return false;
             }
         });
 

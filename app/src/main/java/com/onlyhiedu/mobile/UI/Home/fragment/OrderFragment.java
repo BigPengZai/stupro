@@ -141,8 +141,9 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
     public void onItemClick(int position, long itemId) {
         if (mPayState != null && mPayState.equals("1")) {
             Intent mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
-            mPayIntent.putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid);
             mPayIntent.putExtra("mPayFrom", "order");
+            mPayIntent.putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
+                    .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
             startActivity(mPayIntent);
         }
     }
