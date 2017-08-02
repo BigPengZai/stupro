@@ -77,7 +77,7 @@
                     android:textColor="@color/c_333333"
                     android:textSize="@dimen/sp_12"/>
 
-                <!--优惠码-->
+                <!--小计-->
                 <TextView
                     android:id="@+id/money"
                     android:layout_width="wrap_content"
@@ -85,7 +85,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/size_10"
-                    android:text="111"
+                    android:text="元"
                     android:textColor="@color/c_151515"
                     android:textSize="@dimen/sp_14"/>
 
@@ -108,7 +108,7 @@
                     android:textColor="@color/c_333333"
                     android:textSize="@dimen/sp_12"/>
 
-                <!--优惠码-->
+                <!--优惠-->
                 <TextView
                     android:id="@+id/tv_discounts"
                     android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/size_10"
-                    android:text="111"
+                    android:text="0.0元"
                     android:textColor="@color/c_151515"
                     android:textSize="@dimen/sp_14"/>
 
@@ -139,7 +139,7 @@
                     android:textColor="@color/c_333333"
                     android:textSize="@dimen/sp_12"/>
 
-                <!--优惠码-->
+                <!---->
                 <TextView
                     android:id="@+id/tv_give"
                     android:layout_width="wrap_content"
@@ -147,7 +147,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/size_10"
-                    android:text="111"
+                    android:text="金牌班主任服务"
                     android:textColor="@color/c_151515"
                     android:textSize="@dimen/sp_14"/>
 
@@ -182,6 +182,38 @@
                 android:layout_height="wrap_content"/>
 
             <!--线下转账-->
+            <RelativeLayout
+                android:id="@+id/rl_wx"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_height"
+                android:layout_marginTop="@dimen/size_10"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
+
+                <ImageView android:id="@+id/iv_wx" android:layout_width="wrap_content"
+                           android:layout_height="wrap_content" android:layout_centerVertical="true"
+                           android:src="@mipmap/icon_offline"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/iv_wx" android:layout_toRightOf="@+id/iv_wx"
+                    android:text="线下转账" android:textColor="@color/c_666666"
+                    android:textSize="@dimen/sp_14"/>
+
+
+                <CheckBox android:id="@+id/check_wx" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:layout_alignParentRight="true"
+                          android:layout_centerVertical="true"
+                          android:layout_marginRight="@dimen/size_10"/>
+
+                <View style="@style/horizontal_line" android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
             <TextView
                 android:id="@+id/tv_offline"
                 android:layout_width="wrap_content"

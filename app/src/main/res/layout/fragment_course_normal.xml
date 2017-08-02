@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <com.onlyhiedu.mobile.Widget.LabelsView
-        android:id="@+id/labels"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:minHeight="25dp"
-        android:padding="5dp"
-        app:labelBackground="@drawable/label_bg"
-        app:labelTextColor="@drawable/label_text_color"
-        app:labelTextPaddingBottom="5dp"
-        app:labelTextPaddingLeft="10dp"
-        app:labelTextPaddingRight="10dp"
-        app:labelTextPaddingTop="5dp"
-        app:labelTextSize="14sp"
-        app:lineMargin="10dp"
-        app:maxSelect="0"
-        app:selectType="SINGLE"
-        app:wordMargin="10dp"
-    >
-    </com.onlyhiedu.mobile.Widget.LabelsView>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.onlyhiedu.mobile.Widget.LabelsView
+            android:id="@+id/labels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:minHeight="25dp"
+            android:padding="5dp"
+            app:labelBackground="@drawable/label_bg"
+            app:labelTextColor="@drawable/label_text_color"
+            app:labelTextPaddingBottom="5dp"
+            app:labelTextPaddingLeft="10dp"
+            app:labelTextPaddingRight="10dp"
+            app:labelTextPaddingTop="5dp"
+            app:labelTextSize="14sp"
+            app:lineMargin="10dp"
+            app:maxSelect="0"
+            app:selectType="SINGLE"
+            app:wordMargin="10dp"
+        >
+        </com.onlyhiedu.mobile.Widget.LabelsView>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
-        android:id="@+id/recycler_view"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+        />
+    </LinearLayout>
+
+    <com.onlyhiedu.mobile.Widget.ErrorLayout
+        android:visibility="gone"
+        android:id="@+id/error_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
-
-</LinearLayout>
+        android:layout_height="match_parent"
+       />
+</RelativeLayout>

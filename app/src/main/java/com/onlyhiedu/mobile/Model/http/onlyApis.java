@@ -435,23 +435,23 @@ public interface onlyApis {
     Flowable<onlyHttpResponse> getPayMoney(@Query("coursePriceUuid") String coursePriceUuid, @Query("code") String code);
 
     /**
-     * Ping++直接支付
+     * 课时包 Ping++直接支付
      *
      * @return
      */
     @FormUrlEncoded
     @POST("client/coursepay/directPingppPayment")
-    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel);
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel,@Field("code") String code);
 
 
     /**
-     * 百度分期直接支付
+     * 课时包 百度分期直接支付
      *
      * @return
      */
     @FormUrlEncoded
     @POST("client/coursepay/directBaiduStagingPayment")
-    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid);
+    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("code")String code);
 
     /**
      * 科目
@@ -477,7 +477,7 @@ public interface onlyApis {
      * */
     @FormUrlEncoded
     @POST("client/coursepay/orderPingppPay")
-    Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel);
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel,@Field("code") String code);
 
     /**
      * 订单 百度分期直接支付
@@ -486,7 +486,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/coursepay/orderBaiduStagingPay")
-    Flowable<onlyHttpResponse<String>> getOrderBaiduPay(@Field("orderUuid") String coursePriceUuid);
+    Flowable<onlyHttpResponse<String>> getOrderBaiduPay(@Field("orderUuid") String coursePriceUuid,@Field("code") String code);
 
 
 

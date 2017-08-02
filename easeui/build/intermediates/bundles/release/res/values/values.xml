@@ -401,7 +401,6 @@
     <style name="Anim_style2" parent="android:Theme.NoTitleBar">
         <item name="android:windowAnimationStyle">@style/AnimFade</item>
     </style>
-    <style name="AppTheme" parent="android:Theme.Light"/>
     <style name="HeadScale" parent="android:Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/AnimHead</item>
         <item name="android:windowFrame">@null</item>

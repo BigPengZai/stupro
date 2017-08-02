@@ -28,9 +28,9 @@ public interface CoursePayContract {
     interface Presenter extends BasePresenter<CoursePayContract.View> {
         void getPayMoney(String coursePriceUuid, String code);
 
-        void getPingppPaymentByJson(String coursePriceUuid, String channel);
+        void getPingppPaymentByJson(String coursePriceUuid, String channel,String code);
 
-        void getBaiduPay(String uuid);
+        void getBaiduPay(String uuid,String code);
         void updateGrade(String grade);
 
         void updateSubject(String subject);
@@ -38,8 +38,8 @@ public interface CoursePayContract {
         void getPingPayStatus(String id);
         void getStudentInfo();
 
-        void getOrderPingppPayment(String coursePriceUuid, String channel);
+        void getOrderPingppPayment(String coursePriceUuid, String channel,String code);
 
-        void getOrderBaiduPay(String uuid);
+        void getOrderBaiduPay(String uuid,String code);
     }
 }

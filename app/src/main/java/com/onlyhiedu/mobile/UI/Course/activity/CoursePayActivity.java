@@ -2,13 +2,17 @@ package com.onlyhiedu.mobile.UI.Course.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -98,8 +102,13 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     @BindView(R.id.tv_course_name)
     TextView mTvCourseName;
 
+    //优惠
+    @BindView(R.id.tv_discounts)
+    TextView mTv_Discounts;
     private String mCoursePriceUuid;
     private String mChargeId;
+    private String mPayFrom;
+    private Long mNowPrice;
 
     @Override
     protected void initInject() {
@@ -112,8 +121,8 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
-
-
+        mPayFrom = getIntent().getStringExtra("mPayFrom");
+        mNowPrice = getIntent().getLongExtra("nowPrice",0);
         mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -140,6 +149,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     protected void initData() {
         super.initData();
         mPresenter.getStudentInfo();
+        tvMoney.setText(mNowPrice + "元");
     }
 
 
@@ -181,7 +191,8 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showGetPaySucess(double data) {
-        tvMoney.setText(data + "");
+        tvMoney.setText(data + "元");
+        mTv_Discounts.setText(((double)mNowPrice-data)+"元");
     }
 
     @Override
@@ -253,23 +264,23 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         switch (payMethod) {
             case CHANNEL_ALIPAY:
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod);
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_WECHAT:
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod);
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_UPACP:
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod);
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod);
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_BDF:
@@ -279,9 +290,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     dialog.show();
                 }
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderBaiduPay(mCoursePriceUuid);
+                    mPresenter.getOrderBaiduPay(mCoursePriceUuid,mCoupon.getText().toString());
                 } else {
-                    mPresenter.getBaiduPay(mCoursePriceUuid);
+                    mPresenter.getBaiduPay(mCoursePriceUuid,mCoupon.getText().toString());
                 }
                 break;
         }

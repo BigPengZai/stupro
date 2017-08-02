@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
@@ -17,6 +18,7 @@ import com.onlyhiedu.mobile.UI.Course.activity.CoursePayActivity;
 import com.onlyhiedu.mobile.UI.Course.adapter.CourseDiscountFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Course.persenter.CourseDiscountPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CourseDiscountContract;
+import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.LabelsView;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import butterknife.BindView;
  * 课程优惠
  */
 
-public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter> implements CourseDiscountContract.View, BaseRecyclerAdapter.OnItemClickListener {
+public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter> implements CourseDiscountContract.View, BaseRecyclerAdapter.OnItemClickListener, View.OnClickListener {
 
 
     @BindView(R.id.labels)
@@ -40,7 +42,8 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
     public static final String TAG = CourseDiscountFragment.class.getSimpleName();
     private String activityType;
     private Intent mPayIntent;
-
+    @BindView(R.id.error_layout)
+    ErrorLayout mErrorLayout;
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -105,8 +108,17 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
     @Override
     public void onItemClick(int position, long itemId) {
         mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
-        mPayIntent.putExtra("coursePriceUuid", adapter.getItem(position).uuid)
+        mPayIntent
+                .putExtra("nowPrice",adapter.getItem(position).nowPrice)
+                .putExtra("coursePriceUuid", adapter.getItem(position).uuid)
                 .putExtra("coursePricePackageName",adapter.getItem(position).coursePricePackageName);
         startActivity(mPayIntent);
+    }
+
+    @Override
+    public void onClick(View view) {
+        mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
+        mPresenter.getCoursePriceTypeListInfo(activityType);
+//        mPresenter.getOrderList(true, mPayState);
     }
 }

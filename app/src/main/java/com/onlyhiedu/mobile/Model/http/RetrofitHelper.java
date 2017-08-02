@@ -336,12 +336,12 @@ public class RetrofitHelper {
         return sOnlyApis.getPayMoney(coursePriceUuid, code);
     }
 
-    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel) {
-        return sOnlyApis.getPingPay(coursePriceUuid, channel);
+    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel,String code) {
+        return sOnlyApis.getPingPay(coursePriceUuid, channel,code);
     }
 
-    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid) {
-        return sOnlyApis.getBaiduPay(coursePriceUuid);
+    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid,String code) {
+        return sOnlyApis.getBaiduPay(coursePriceUuid,code);
     }
 
     //科目
@@ -360,12 +360,12 @@ public class RetrofitHelper {
 
 
 
-    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchOrderGetPingPay(String coursePriceUuid, String channel) {
-        return sOnlyApis.getOrderPingPay(coursePriceUuid, channel);
+    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchOrderGetPingPay(String coursePriceUuid, String channel,String code) {
+        return sOnlyApis.getOrderPingPay(coursePriceUuid, channel,code);
     }
 
-    public Flowable<onlyHttpResponse<String>> fetchOrderGetBaiduPay(String coursePriceUuid) {
-        return sOnlyApis.getOrderBaiduPay(coursePriceUuid);
+    public Flowable<onlyHttpResponse<String>> fetchOrderGetBaiduPay(String coursePriceUuid,String code) {
+        return sOnlyApis.getOrderBaiduPay(coursePriceUuid,code);
     }
 
 

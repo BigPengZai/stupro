@@ -46,8 +46,8 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
     }
     //订单 Ping++ 支付
     @Override
-    public void getOrderPingppPayment(String coursePriceUuid, String channel) {
-        Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchOrderGetPingPay(coursePriceUuid, channel);
+    public void getOrderPingppPayment(String coursePriceUuid, String channel,String code) {
+        Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchOrderGetPingPay(coursePriceUuid, channel,code);
         MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<PingPaySucessInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<PingPaySucessInfo> data) {
@@ -66,8 +66,8 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
     }
     //订单 百度支付
     @Override
-    public void getOrderBaiduPay(String uuid) {
-        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchOrderGetBaiduPay(uuid);
+    public void getOrderBaiduPay(String uuid,String code) {
+        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchOrderGetBaiduPay(uuid,code);
         ResourceSubscriber observer = new ResourceSubscriber<onlyHttpResponse<String>>() {
             @Override
             public void onNext(onlyHttpResponse<String> data) {
@@ -100,8 +100,8 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
 
     //课时包 Ping++ 支付
     @Override
-    public void getPingppPaymentByJson(String coursePriceUuid, String channel) {
-        Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchGetPingPay(coursePriceUuid, channel);
+    public void getPingppPaymentByJson(String coursePriceUuid, String channel,String code) {
+        Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchGetPingPay(coursePriceUuid, channel,code);
         MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<PingPaySucessInfo>>() {
             @Override
             public void onNextData(onlyHttpResponse<PingPaySucessInfo> data) {
@@ -120,8 +120,8 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
     }
     //课时包百度支付
     @Override
-    public void getBaiduPay(String uuid) {
-        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchGetBaiduPay(uuid);
+    public void getBaiduPay(String uuid,String code) {
+        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchGetBaiduPay(uuid,code);
         ResourceSubscriber observer = new ResourceSubscriber<onlyHttpResponse<String>>() {
             @Override
             public void onNext(onlyHttpResponse<String> data) {
