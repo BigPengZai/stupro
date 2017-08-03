@@ -83,6 +83,9 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
 
     @Override
     public void showPriceTypeListSuccess(List<CoursePriceTypeInfo> data) {
+        if (data == null || data.size() == 0) {
+            return;
+        }
         ArrayList<String> label = new ArrayList<>();
         for (CoursePriceTypeInfo coursePriceTypeInfo : data) {
             label.add(coursePriceTypeInfo.getType());
