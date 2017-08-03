@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.Model.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class OrderList {
     public int total;
     public List<ListBean> list;
 
-    public static class ListBean {
+    public static class ListBean implements Serializable{
         /**
          * orderUuid : 1bc004b87b2e460692a86586d75689ac
          * orderNo : 20170725194442100001
@@ -31,9 +32,11 @@ public class OrderList {
         public String orderUuid;
         public String orderNo;
         public String coursePricePackageName;
-        public String money;
+        public Long money;
         public String createDate;
         public Object payTime;
         public int orderStatus;
+        public Long originalPrice;
+        public Long discountPrice;
     }
 }

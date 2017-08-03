@@ -33,7 +33,7 @@ public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, OrderList.ListBean item, int position) {
         ViewHolder h = (ViewHolder) holder;
-        h.mMoney.setText(item.money);
+        h.mMoney.setText(item.money+"");
         h.mTvType.setText(item.coursePricePackageName);
         h.mTvOrderNo.setText("订单编号：" + item.orderNo);
         h.mTvTime.setText("创建时间：" + item.createDate);

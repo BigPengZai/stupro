@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.ProvinceBean;
@@ -38,6 +39,7 @@ import com.onlyhiedu.mobile.Widget.PayItemView;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
 import com.pingplusplus.android.Pingpp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -68,7 +70,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     //支付View
     @BindView(R.id.pay_item_view)
     PayItemView mPayItemView;
-    //小计
+    //原价
     @BindView(R.id.money)
     TextView tvMoney;
 
@@ -107,7 +109,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     private String mChargeId;
     private String mPayFrom;
     private Long mNowPrice;
-    //合计
+    //小计
     @BindView(R.id.tv_total)
     TextView mTv_Total;
     private long mSpecialPrice;
@@ -121,21 +123,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     @Override
     protected void initView() {
         setToolBar("课程支付");
-
-        mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
-        mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
-        mPayFrom = getIntent().getStringExtra("mPayFrom");
-        //原价
-        mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
-        //现价
-        mNowPrice = getIntent().getLongExtra("nowPrice",0);
-        //优惠
-        mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
-        if ("order".equals(mPayFrom)) {
-            mRelativeLayout.setVisibility(View.GONE);
-            mSettingGrade.setClickable(false);
-            mSettingSubject.setClickable(false);
-        }
+        initIntentDate();
         mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -170,12 +158,37 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         });
     }
 
+    private void initIntentDate() {
+        mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
+        mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
+        mPayFrom = getIntent().getStringExtra("mPayFrom");
+        if ("order".equals(mPayFrom)) {
+            OrderList.ListBean orderDate = (OrderList.ListBean) getIntent().getSerializableExtra("orderDate");
+            mOriginalPrice = Long.parseLong(orderDate.originalPrice+"");
+            mNowPrice = Long.parseLong(orderDate.money+"");
+            mSpecialPrice = Long.parseLong(orderDate.discountPrice+"");
+            mRelativeLayout.setVisibility(View.GONE);
+            mSettingGrade.setClickable(false);
+            mSettingSubject.setClickable(false);
+        } else {
+            //原价 originalPrice
+            mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
+            //现价
+            mNowPrice = getIntent().getLongExtra("nowPrice",0);
+            //优惠
+            mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
+        }
+    }
+
     @Override
     protected void initData() {
         super.initData();
         mPresenter.getStudentInfo();
+        //原价
         tvMoney.setText(mOriginalPrice + "元");
+        //小计
         mTv_Total.setText(mNowPrice + "元");
+        //优惠
         mTv_Discounts.setText(mSpecialPrice+"元");
     }
 
@@ -218,8 +231,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showGetPaySucess(double data) {
+        //小计
         mTv_Total.setText(data + "元");
-        mTv_Discounts.setText(((double)mNowPrice-data)+mSpecialPrice+"元");
+        //优惠
+        mTv_Discounts.setText(((double)mOriginalPrice-data)+"元");
     }
 
     @Override

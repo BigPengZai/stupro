@@ -77,7 +77,7 @@
                     android:textColor="@color/c_333333"
                     android:textSize="@dimen/sp_12"/>
 
-                <!--小计-->
+                <!--原价-->
                 <TextView
                     android:id="@+id/money"
                     android:layout_width="wrap_content"

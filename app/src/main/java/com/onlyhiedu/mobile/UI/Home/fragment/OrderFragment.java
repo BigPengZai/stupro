@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -139,10 +140,14 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
 
     @Override
     public void onItemClick(int position, long itemId) {
-        if (mPayState != null && mPayState.equals("1")) {
+        if (mPayState != null /*&& mPayState.equals("1")*/) {
             Intent mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
-            mPayIntent.putExtra("mPayFrom", "order");
-            mPayIntent.putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("orderDate",mAdapter.getItem(position));
+            mPayIntent
+                    .putExtras(bundle)
+                    .putExtra("mPayFrom", "order")
+                    .putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
                     .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
             startActivity(mPayIntent);
         }
