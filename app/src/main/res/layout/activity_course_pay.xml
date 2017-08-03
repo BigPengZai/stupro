@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="小计"
+                    android:text="原价"
                     android:textColor="@color/c_333333"
                     android:textSize="@dimen/sp_12"/>
 
@@ -192,7 +192,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="合计: "
+                android:text="小计: "
                 android:textSize="21sp"/>
             <TextView
                 android:id="@+id/tv_total"

@@ -68,7 +68,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     //支付View
     @BindView(R.id.pay_item_view)
     PayItemView mPayItemView;
-
+    //小计
     @BindView(R.id.money)
     TextView tvMoney;
 
@@ -110,6 +110,8 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     //合计
     @BindView(R.id.tv_total)
     TextView mTv_Total;
+    private long mSpecialPrice;
+    private long mOriginalPrice;
 
     @Override
     protected void initInject() {
@@ -123,7 +125,12 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
         mPayFrom = getIntent().getStringExtra("mPayFrom");
+        //原价
+        mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
+        //现价
         mNowPrice = getIntent().getLongExtra("nowPrice",0);
+        //优惠
+        mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
         if ("order".equals(mPayFrom)) {
             mRelativeLayout.setVisibility(View.GONE);
             mSettingGrade.setClickable(false);
@@ -167,8 +174,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     protected void initData() {
         super.initData();
         mPresenter.getStudentInfo();
-        tvMoney.setText(mNowPrice + "元");
+        tvMoney.setText(mOriginalPrice + "元");
         mTv_Total.setText(mNowPrice + "元");
+        mTv_Discounts.setText(mSpecialPrice+"元");
     }
 
 
@@ -211,8 +219,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     @Override
     public void showGetPaySucess(double data) {
         mTv_Total.setText(data + "元");
-        tvMoney.setText(data + "元");
-        mTv_Discounts.setText(((double)mNowPrice-data)+"元");
+        mTv_Discounts.setText(((double)mNowPrice-data)+mSpecialPrice+"元");
     }
 
     @Override
