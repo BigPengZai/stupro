@@ -185,34 +185,23 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
         initOffline(mCheckOffline.isChecked());
     }
 
+    public static interface  OnItemClickListener{
+        void onItemClick();
+    }
+    private OnItemClickListener mOnItemClickListener = null;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
     private void initOffline(boolean ischecked) {
+        if (mOnItemClickListener != null) {
+            mOnItemClickListener.onItemClick();
+        }
         if (ischecked) {
             mLl_Offline.setVisibility(VISIBLE);
         } else {
             mLl_Offline.setVisibility(GONE);
         }
-            /*mLl_Offline.animate().translationY(mLl_Offline.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-            mLl_Offline.animate().setListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    mLl_Offline.setVisibility(VISIBLE);
-                }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });*/
     }
 
     @Override

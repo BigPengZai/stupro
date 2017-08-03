@@ -97,8 +97,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     String payMethod;
     @BindView(R.id.scroll_view)
     ScrollView mScrollView;
-    @BindView(R.id.tv_offline)
-    TextView mTextView;
     @BindView(R.id.tv_course_name)
     TextView mTvCourseName;
 
@@ -148,6 +146,19 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mPayItemView.setOnItemClickListener(new PayItemView.OnItemClickListener() {
+            @Override
+            public void onItemClick() {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                });
+
             }
         });
     }
