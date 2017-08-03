@@ -1,10 +1,12 @@
 package com.onlyhiedu.mobile.UI.Course.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
@@ -50,6 +52,11 @@ public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean> {
                 h.mGoPay.setText("已支付");
                 break;
         }
+        View view = h.itemView;
+        view.setScaleY(0.7f);
+        view.setScaleX(0.7f);
+        ViewCompat.animate(view).scaleX(1.0f).scaleY(1.0f).setDuration(500).setInterpolator(new OvershootInterpolator()).start();
+
     }
 
 
