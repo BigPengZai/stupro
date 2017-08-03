@@ -142,10 +142,10 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
     public void onItemClick(int position, long itemId) {
         if (mPayState != null /*&& mPayState.equals("1")*/) {
             Intent mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("orderDate",mAdapter.getItem(position));
             mPayIntent
-                    .putExtras(bundle)
+                    .putExtra("originalPrice",(long)Double.parseDouble(mAdapter.getItem(position).originalPrice))
+                    .putExtra("nowPrice",(long)Double.parseDouble(mAdapter.getItem(position).money))
+                    .putExtra("specialPrice",(long)Double.parseDouble(mAdapter.getItem(position).discountPrice))
                     .putExtra("mPayFrom", "order")
                     .putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
                     .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);

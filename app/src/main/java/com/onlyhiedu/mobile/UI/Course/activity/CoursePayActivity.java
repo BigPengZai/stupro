@@ -162,21 +162,16 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
         mPayFrom = getIntent().getStringExtra("mPayFrom");
+        //原价 originalPrice
+        mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
+        //现价
+        mNowPrice = getIntent().getLongExtra("nowPrice",0);
+        //优惠
+        mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
         if ("order".equals(mPayFrom)) {
-            OrderList.ListBean orderDate = (OrderList.ListBean) getIntent().getSerializableExtra("orderDate");
-            mOriginalPrice = Long.parseLong(orderDate.originalPrice+"");
-            mNowPrice = Long.parseLong(orderDate.money+"");
-            mSpecialPrice = Long.parseLong(orderDate.discountPrice+"");
             mRelativeLayout.setVisibility(View.GONE);
             mSettingGrade.setClickable(false);
             mSettingSubject.setClickable(false);
-        } else {
-            //原价 originalPrice
-            mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
-            //现价
-            mNowPrice = getIntent().getLongExtra("nowPrice",0);
-            //优惠
-            mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
         }
     }
 

@@ -32,11 +32,11 @@ public class OrderList {
         public String orderUuid;
         public String orderNo;
         public String coursePricePackageName;
-        public Long money;
+        public String money;
         public String createDate;
         public Object payTime;
         public int orderStatus;
-        public Long originalPrice;
-        public Long discountPrice;
+        public String originalPrice;
+        public String discountPrice;
     }
 }
