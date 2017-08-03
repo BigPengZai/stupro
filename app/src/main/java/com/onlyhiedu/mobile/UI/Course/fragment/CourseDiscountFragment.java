@@ -91,6 +91,7 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
             label.add(coursePriceTypeInfo.getType());
         }
         labelsView.setLabels(label);
+        labelsView.setSelects(0);
         mPresenter.getCoursePriceList(activityType, data.get(0).getType());
         //标签的点击监听
         labelsView.setOnLabelClickListener(new LabelsView.OnLabelClickListener() {

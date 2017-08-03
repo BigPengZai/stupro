@@ -57,32 +57,23 @@ import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_WECHAT;
  */
 
 public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implements CoursePayContract.View {
-
-
     public static final String TAG = CoursePayActivity.class.getSimpleName();
-
     @BindView(R.id.rl_edit)
     RelativeLayout mRelativeLayout;
     @BindView(R.id.gradeSubject)
     LinearLayout mGradeSubject;
-
-
     //支付View
     @BindView(R.id.pay_item_view)
     PayItemView mPayItemView;
     //原价
     @BindView(R.id.money)
     TextView tvMoney;
-
-
     //优惠码
     @BindView(R.id.coupon)
     EditText mCoupon;
-
     //确认支付
     @BindView(confirm_pay)
     Button mConfirm_pay;
-
     private ProgressDialog dialog;
     //年级
     @BindView(R.id.setting_grade)
@@ -94,14 +85,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     SettingItemView mSettingSubject;
     private OptionsPickerView mSubject;
     private ArrayList<ProvinceBean> mSubjectData = WheelUtils.getSubject();
-
-
     String payMethod;
     @BindView(R.id.scroll_view)
     ScrollView mScrollView;
     @BindView(R.id.tv_course_name)
     TextView mTvCourseName;
-
     //优惠
     @BindView(R.id.tv_discounts)
     TextView mTv_Discounts;
@@ -119,7 +107,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     protected void initInject() {
         getActivityComponent().inject(this);
     }
-
     @Override
     protected void initView() {
         setToolBar("课程支付");

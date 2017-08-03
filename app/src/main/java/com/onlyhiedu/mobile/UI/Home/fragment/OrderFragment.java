@@ -140,7 +140,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
 
     @Override
     public void onItemClick(int position, long itemId) {
-        if (mPayState != null /*&& mPayState.equals("1")*/) {
+        if (mPayState != null && mPayState.equals("1")) {
             Intent mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
             mPayIntent
                     .putExtra("originalPrice",(long)Double.parseDouble(mAdapter.getItem(position).originalPrice))
