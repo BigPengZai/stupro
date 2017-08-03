@@ -126,6 +126,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
         mPayFrom = getIntent().getStringExtra("mPayFrom");
         mNowPrice = getIntent().getLongExtra("nowPrice",0);
+        if ("order".equals(mPayFrom)) {
+            mRelativeLayout.setVisibility(View.GONE);
+            mSettingGrade.setClickable(false);
+            mSettingSubject.setClickable(false);
+        }
         mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
