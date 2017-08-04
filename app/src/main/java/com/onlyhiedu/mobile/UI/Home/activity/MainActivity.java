@@ -123,7 +123,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mHomeFragment = new HomeFragment();
         conversationListFragment = new ConversationListFragment();
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
-        showExceptionDialogFromIntent(getIntent());
+//   IM     showExceptionDialogFromIntent(getIntent());
         inviteMessgeDao = new InviteMessgeDao(this);
         //不隐藏首页
         if (App.getInstance().isTag) {
@@ -142,7 +142,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.initData();
         mPresenter.updateVersion(true);
 //        registerBroadcastReceiver();
-        EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+//   IM      EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
     }
 
     @Override
@@ -273,11 +273,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         super.onResume();
         MobclickAgent.onPageStart("SplashScreen11"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);          //统计时长
-//        updateUnreadLabel();
-//        updateUnreadAddressLable();
-        DemoHelper sdkHelper = DemoHelper.getInstance();
-        sdkHelper.pushActivity(this);
-        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+//   IM      updateUnreadLabel();
+//    IM     updateUnreadAddressLable();
+//   IM      DemoHelper sdkHelper = DemoHelper.getInstance();
+//   IM      sdkHelper.pushActivity(this);
+//    IM     EMClient.getInstance().chatManager().addMessageListener(messageListener);
         getSwipeBackLayout().setEnableGesture(false);
     }
 
@@ -297,12 +297,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (exceptionBuilder != null) {
-            exceptionBuilder.create().dismiss();
-            exceptionBuilder = null;
-            isExceptionDialogShow = false;
-        }
-        unregisterBroadcastReceiver();
+//   IM      if (exceptionBuilder != null) {
+//   IM          exceptionBuilder.create().dismiss();
+//    IM         exceptionBuilder = null;
+//    IM         isExceptionDialogShow = false;
+//    IM     }
+//    IM     unregisterBroadcastReceiver();
 
         UMShareAPI.get(this).release();
         EventBus.getDefault().unregister(this);
@@ -541,8 +541,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         public void onFriendRequestDeclined(String username) {
         }
     }
-
-
 
 
 }

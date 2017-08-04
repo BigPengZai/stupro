@@ -4,18 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
-import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -71,7 +68,8 @@ public class SettingActivity extends SimpleActivity {
                 startActivity(new Intent(this, FeedBackActivity.class));
                 break;
             case R.id.btn_out:
-                logoutApp();
+                UIUtils.startLoginActivity(SettingActivity.this);
+//                logoutApp();
                 break;
             case R.id.ll_clean_cache:
                 cleanAppCache();
