@@ -29,7 +29,14 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.onlyhiedu.mobile.R.id.btn_openid_qq;
+import static com.onlyhiedu.mobile.R.id.btn_openid_sina;
+import static com.onlyhiedu.mobile.R.id.btn_openid_wx;
 import static com.onlyhiedu.mobile.R.id.guest;
+import static com.onlyhiedu.mobile.R.id.mobile_login;
+import static com.onlyhiedu.mobile.R.id.tv_cancel;
+import static com.onlyhiedu.mobile.R.id.register;
+
 
 public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements OpenIDContract.View {
 
@@ -42,9 +49,9 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     private int mIntExtra;
 
 
-    @BindView(R.id.tv_cancel)
+    @BindView(tv_cancel)
     ImageView mTvCancel;
-    @BindView(R.id.guest)
+    @BindView(guest)
     TextView mTvGuest;
 
     @Override
@@ -207,13 +214,13 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     };
 
 
-    @OnClick({R.id.mobile_login, R.id.register, guest, R.id.btn_openid_wx, R.id.btn_openid_qq, R.id.btn_openid_sina, R.id.tv_cancel})
+    @OnClick({mobile_login, register, guest, btn_openid_wx, btn_openid_qq, btn_openid_sina, tv_cancel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.mobile_login:
+            case mobile_login:
                 startActivity(new Intent(this, LoginActivity.class).putExtra(information, mBooleanExtra).putExtra(MainActivity.showPagePosition, mIntExtra));
                 break;
-            case R.id.register:
+            case register:
                 startActivity(new Intent(this, RegActivity.class));
                 break;
             case guest:
@@ -221,16 +228,16 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 break;
-            case R.id.btn_openid_wx:
+            case btn_openid_wx:
                 mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, wxAuthLister);
                 break;
-            case R.id.btn_openid_qq:
+            case btn_openid_qq:
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, umAuthListener);
                 break;
-            case R.id.btn_openid_sina:
+            case btn_openid_sina:
                 mShareAPI.doOauthVerify(this, SHARE_MEDIA.SINA, umAuthListener);
                 break;
-            case R.id.tv_cancel:
+            case tv_cancel:
                 finish();
                 break;
         }

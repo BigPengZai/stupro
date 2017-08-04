@@ -13,7 +13,6 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.pingplusplus.android.Pingpp;
@@ -121,7 +120,7 @@ public class App extends Application {
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
-        DemoHelper.getInstance().init(this);
+//        DemoHelper.getInstance().init(this);
         //bugly
         CrashReport.initCrashReport(getApplicationContext(), "5c1349523c", false);
         //ping++

@@ -542,11 +542,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
     }
 
-    //    /**
-//     * 限制SwipeBack的条件,默认栈内Fragment数 <= 1时 , 优先滑动退出Activity , 而不是Fragment
-//     *
-//     * @return true: Activity可以滑动退出, 并且总是优先;  false: Activity不允许滑动退出
-//     */
 
 
 

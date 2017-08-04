@@ -338,7 +338,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
     @Override
     public void showError(String msg) {
-
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
