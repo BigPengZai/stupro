@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        ecdemo:item_icon_left="@mipmap/help"
+        ecdemo:item_icon_left="@mipmap/icon_order"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="我的订单"/>
     <!--使用帮助  -->

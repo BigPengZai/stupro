@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Course.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -41,6 +42,9 @@ public class CourseDiscountActivity extends SimpleActivity implements  TabLayout
 
     @BindView(R.id.iv_back)
     ImageView mIv_Back;
+    //竖线
+    @BindView(R.id.view_vertical)
+    View mView;
     @Override
     protected int getLayout() {
         return R.layout.activity_course;
@@ -50,10 +54,15 @@ public class CourseDiscountActivity extends SimpleActivity implements  TabLayout
     protected void initEventAndData() {
         mAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(), this);
         mTypeList = (List<TypeListInfo>) getIntent().getSerializableExtra("typeList");
+
         for (TypeListInfo typeListInfo : mTypeList) {
             mArgs = new Bundle();
             mArgs.putString("tag",typeListInfo.getValue());
             mAdapter.addTab(typeListInfo.getKey(), typeListInfo.getValue(), CourseDiscountFragment.class, mArgs);
+        }
+        if (mTypeList.size() == 1) {
+            mView.setVisibility(View.GONE);
+            mTabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FFFFFF"));
         }
         mViewpager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewpager);

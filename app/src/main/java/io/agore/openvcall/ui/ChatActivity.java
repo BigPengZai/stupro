@@ -455,6 +455,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
             }
         });
+        /*mToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
+
     }
 
     private void finishClassRoom() {

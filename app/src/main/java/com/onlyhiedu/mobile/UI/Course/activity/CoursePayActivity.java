@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -100,16 +102,20 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     TextView mTv_Total;
     private long mSpecialPrice;
     private long mOriginalPrice;
+    @BindView(R.id.ll_rootView)
+    LinearLayout mLl_RootView;
 
+    public boolean isTag;
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
     }
+
     @Override
     protected void initView() {
         setToolBar("课程支付");
         initIntentDate();
-        mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+       /* mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -120,14 +126,15 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                         imm.hideSoftInputFromWindow(
                                 v.getApplicationWindowToken(), 0);
                     }
-                    if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
+                    *//*if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
                         mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
-                    }
+                    }*//*
                     return true;
                 }
                 return false;
             }
-        });
+        });*/
+
 
         mPayItemView.setOnItemClickListener(new PayItemView.OnItemClickListener() {
             @Override
@@ -143,6 +150,31 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+            mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Rect r = new Rect();
+                        mRelativeLayout.getWindowVisibleDisplayFrame(r);
+                        int screenHeight = mRelativeLayout.getRootView()
+                                .getHeight();
+                        int heightDifference = screenHeight - (r.bottom);
+                        if (heightDifference > 200) {
+                            isTag = false;
+                        } else {
+                            //软键盘隐藏
+                            if (!TextUtils.isEmpty(mCoupon.getText().toString())&&isTag==false) {
+                                mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
+                            }
+                        }
+                    }
+                });
+    }
+
+
     private void initIntentDate() {
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
@@ -150,7 +182,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         //原价 originalPrice
         mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
         //现价
-        mNowPrice = getIntent().getLongExtra("nowPrice",0);
+        mNowPrice = getIntent().getLongExtra("nowPrice", 0);
         //优惠
         mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
         if ("order".equals(mPayFrom)) {
@@ -169,7 +201,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         //小计
         mTv_Total.setText(mNowPrice + "元");
         //优惠
-        mTv_Discounts.setText(mSpecialPrice+"元");
+        mTv_Discounts.setText(mSpecialPrice + "元");
     }
 
 
@@ -211,10 +243,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     @Override
     public void showGetPaySucess(double data) {
+        isTag = true;
         //小计
         mTv_Total.setText(data + "元");
         //优惠
-        mTv_Discounts.setText(((double)mOriginalPrice-data)+"元");
+        mTv_Discounts.setText(((double) mOriginalPrice - data) + "元");
     }
 
     @Override
@@ -261,10 +294,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
                 mSubject.show();
                 break;
-//            case R.id.offline:
-//                //线下转账
-//                checkOfflineVisable();
-//                break;
         }
     }
 
@@ -286,23 +315,23 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         switch (payMethod) {
             case CHANNEL_ALIPAY:
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_WECHAT:
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_UPACP:
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
+                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod,mCoupon.getText().toString());
+                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_BDF:
@@ -312,9 +341,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     dialog.show();
                 }
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderBaiduPay(mCoursePriceUuid,mCoupon.getText().toString());
+                    mPresenter.getOrderBaiduPay(mCoursePriceUuid, mCoupon.getText().toString());
                 } else {
-                    mPresenter.getBaiduPay(mCoursePriceUuid,mCoupon.getText().toString());
+                    mPresenter.getBaiduPay(mCoursePriceUuid, mCoupon.getText().toString());
                 }
                 break;
         }
@@ -352,14 +381,14 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             str += "\n" + msg2;
         }
         if ("success".equals(str) && mChargeId != null && !TextUtils.isEmpty(mChargeId)) {
+            if (dialog == null) {
+                dialog = ProgressDialog.show(CoursePayActivity.this, null, "请稍等...");
+            } else {
+                dialog.show();
+            }
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (dialog == null) {
-                        dialog = ProgressDialog.show(CoursePayActivity.this, null,"请稍等...");
-                    } else {
-                        dialog.show();
-                    }
                     mPresenter.getPingPayStatus(mChargeId);
                 }
             }, 1000);
@@ -384,6 +413,5 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             mSettingSubject.setDetailText(info.subject);
         }
     }
-
 
 }

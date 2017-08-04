@@ -59,6 +59,8 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
     protected void initView() {
         Bundle arguments = getArguments();
         activityType = arguments.getString("tag");
+        mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
+        mErrorLayout.setOnLayoutClickListener(this);
         Log.d(TAG, "tag:" + activityType);
         mPresenter.getCoursePriceTypeListInfo(activityType);
         adapter = new CourseDiscountFragmentAdapter(mContext);
@@ -83,7 +85,11 @@ public class CourseDiscountFragment extends BaseFragment<CourseDiscountPresenter
 
     @Override
     public void showPriceTypeListSuccess(List<CoursePriceTypeInfo> data) {
+        if (mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
+            mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
+        }
         if (data == null || data.size() == 0) {
+            mErrorLayout.setState(ErrorLayout.NODATA);
             return;
         }
         ArrayList<String> label = new ArrayList<>();

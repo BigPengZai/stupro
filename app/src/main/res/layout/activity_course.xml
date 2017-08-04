@@ -21,6 +21,7 @@
             app:tabTextColor="@color/c_070707"/>
 
         <View
+            android:id="@+id/view_vertical"
             android:layout_width="1px"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
