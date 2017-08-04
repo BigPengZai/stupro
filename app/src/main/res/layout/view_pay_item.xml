@@ -171,28 +171,31 @@
     <!--文案-->
     <LinearLayout
         android:id="@+id/ll_offline"
-        android:visibility="gone"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:visibility="gone"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin">
         <TextView
-            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/size_5"
+            android:layout_height="wrap_content"
+            android:text="户名   ：上海昂立智立方教育培训有限公司在线一对一事业部"
+            android:textSize="15sp"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="户名：上海昂立智立方教育培训有限公司在线一对一事业部"/>
-        <TextView
             android:layout_marginTop="15dp"
-            android:textSize="19sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开户行：工商银行上海番禺路支行"/>
+            android:text="开户行：工商银行上海番禺路支行"
+            android:textSize="15sp"/>
         <TextView
-            android:layout_marginTop="15dp"
-            android:textSize="19sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="账号：1001 2867 2901 6985 434"/>
+            android:layout_marginTop="15dp"
+            android:text="账号   ：1001 2867 2901 6985 434"
+            android:layout_marginBottom="@dimen/size_5"
+            android:textSize="15sp"/>
     </LinearLayout>
+
 </LinearLayout>

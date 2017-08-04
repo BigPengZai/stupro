@@ -137,14 +137,14 @@
                     android:textSize="13sp"/>
             </LinearLayout>
             <!--购买-->
-            <Button
-                android:id="@+id/btn_pay"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/select_log_out"
+                android:gravity="center"
+                android:background="@drawable/shape_reg_btn_radius_nor"
                 android:text="购买"
                 android:textColor="@color/white"
                 android:textSize="16sp"

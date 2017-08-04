@@ -1,17 +1,13 @@
 package com.onlyhiedu.mobile.Widget;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.onlyhiedu.mobile.R;
 
@@ -20,15 +16,6 @@ import com.onlyhiedu.mobile.R;
  */
 
 public class PayItemView extends RelativeLayout implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-
-
-//    private TextView mTitle, mTvDetail;
-//    private ImageView mImage;
-//    private View mDividerView;
-//
-//    //内容
-//    private String mDetailText;
-//    private final ImageView mLeft_icon;
 
 
     /**
@@ -185,7 +172,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
         initOffline(mCheckOffline.isChecked());
     }
 
-    public static interface  OnItemClickListener{
+    public   interface  OnItemClickListener{
         void onItemClick();
     }
     private OnItemClickListener mOnItemClickListener = null;
