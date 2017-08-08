@@ -80,7 +80,6 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
                         String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName, data.getData().avatarUrl);
-                        getStuInfo(mRetrofitHelper, getView());
                             getView().showUser();
 //                        if (!data.getData().registerIMFlag) {
 //                            emcRegister(mRetrofitHelper,getView());

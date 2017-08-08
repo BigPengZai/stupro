@@ -329,6 +329,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
                 break;
             case CHANNEL_BDF:
+
                 if (dialog == null) {
                     dialog = ProgressDialog.show(this, null, "请稍后..");
                 } else {

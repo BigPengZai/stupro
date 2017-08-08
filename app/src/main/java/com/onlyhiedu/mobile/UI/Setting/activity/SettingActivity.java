@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.hyphenate.EMCallBack;
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
@@ -34,7 +36,11 @@ public class SettingActivity extends SimpleActivity {
     TextView mTvCacheSize;
     @BindView(R.id.toggle_btn)
     ToggleButton mToggle_btn;
+    @BindView(R.id.rl_toggleButton)
+    RelativeLayout mRelativeLayout;
+
     public static final String TAG = SettingActivity.class.getSimpleName();
+
     @Override
     protected int getLayout() {
         return R.layout.activity_setting;
@@ -43,6 +49,8 @@ public class SettingActivity extends SimpleActivity {
     @Override
     protected void initEventAndData() {
         setToolBar("设置");
+        mRelativeLayout.setVisibility(App.bIsGuestLogin ? View.GONE : View.VISIBLE);
+
         mTvCacheSize.setText(UIUtils.calculateCacheSize(this));
         mToggle_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -59,29 +67,37 @@ public class SettingActivity extends SimpleActivity {
 
     @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out, R.id.ll_clean_cache, R.id.setting_about})
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.setting_pwd:
-                startActivity(new Intent(this, ModifyPwActivity.class));
-                MobclickAgent.onEvent(this, "setting_modify_pw");
-                break;
-            case R.id.setting_feedback:
-                startActivity(new Intent(this, FeedBackActivity.class));
-                break;
-            case R.id.btn_out:
-                UIUtils.startLoginActivity(SettingActivity.this);
+            switch (view.getId()) {
+                case R.id.setting_pwd:
+                    if(App.bIsGuestLogin){
+                        UIUtils.startGuestLoginActivity(this,2);
+                    }else{
+                        startActivity(new Intent(this, ModifyPwActivity.class));
+                        MobclickAgent.onEvent(this, "setting_modify_pw");
+                    }
+                    break;
+                case R.id.setting_feedback:
+                    if(App.bIsGuestLogin){
+                        UIUtils.startGuestLoginActivity(this,2);
+                    }else{
+                        startActivity(new Intent(this, FeedBackActivity.class));
+                    }
+                    break;
+                case R.id.btn_out:
+                    UIUtils.startLoginActivity(SettingActivity.this);
 //                logoutApp();
-                break;
-            case R.id.ll_clean_cache:
-                cleanAppCache();
-                break;
-            case R.id.setting_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-        }
+                    break;
+                case R.id.ll_clean_cache:
+                    cleanAppCache();
+                    break;
+                case R.id.setting_about:
+                    startActivity(new Intent(this, AboutActivity.class));
+                    break;
+            }
     }
 
     private void logoutApp() {
-        DemoHelper.getInstance().logout(false,new EMCallBack() {
+        DemoHelper.getInstance().logout(false, new EMCallBack() {
             @Override
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
@@ -99,7 +115,7 @@ public class SettingActivity extends SimpleActivity {
 
             @Override
             public void onError(int code, String message) {
-               runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(SettingActivity.this, "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
@@ -130,6 +146,7 @@ public class SettingActivity extends SimpleActivity {
                 }
         );
     }
+
     //关闭 推送
     public void disablePush() {
         PushAgent.getInstance(this).disable(new IUmengCallback() {
@@ -168,7 +185,7 @@ public class SettingActivity extends SimpleActivity {
                     public void run() {
                         Toast.makeText(SettingActivity.this, "上课提醒已经打开。", Toast.LENGTH_SHORT).show();
                         mToggle_btn.setChecked(true);
-                        Log.d(TAG, "打开推送：success" );
+                        Log.d(TAG, "打开推送：success");
                     }
                 });
 
@@ -180,7 +197,7 @@ public class SettingActivity extends SimpleActivity {
                     @Override
                     public void run() {
                         mToggle_btn.setChecked(false);
-                        Log.d(TAG, "打开推送：failure" );
+                        Log.d(TAG, "打开推送：failure");
                     }
                 });
 

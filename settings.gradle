@@ -1,1 +1,1 @@
-include ':app', ':PushSDK', ':easeui', ':lib:bdwallet_pay_sdk', ':lib:pingpp'
+include ':app', ':PushSDK', ':easeui', ':lib:pingpp'

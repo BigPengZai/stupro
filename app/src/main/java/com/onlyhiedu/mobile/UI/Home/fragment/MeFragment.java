@@ -128,6 +128,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
     }
 
+
     public void setTextStyle() {
         mTvName.setText(SPUtil.getName());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
@@ -136,17 +137,21 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
         mTvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         mTvName.setTextColor(getResources().getColor(R.color.white));
         mTvName.setBackgroundResource(R.drawable.transparent);
+        mPresenter.getStuInfo();
     }
 
 
-    @OnClick({R.id.iv_portrait, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name,R.id.setting_orders})
+    @OnClick({R.id.iv_portrait, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name, R.id.setting_orders})
     public void onClick(View view) {
         if (App.bIsGuestLogin) {
-            if (view.getId() != R.id.setting_know) {
-                UIUtils.startGuestLoginActivity(mContext, 2);
-            } else {
+            if (view.getId() == R.id.setting_know) {
                 startActivity(new Intent(getContext(), KnowActivity.class));
+            } else if (view.getId() == R.id.iv_setting) {
+                startActivity(new Intent(getContext(), SettingActivity.class));
+            } else {
+                UIUtils.startGuestLoginActivity(mContext, 2);
             }
+
         } else {
             switch (view.getId()) {
                 case R.id.iv_portrait:
@@ -172,7 +177,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     startActivity(new Intent(getContext(), KnowActivity.class));
                     break;
                 case R.id.setting_orders:
-                    startActivity(new Intent(getContext(),MineOrdersActivity.class));
+                    startActivity(new Intent(getContext(), MineOrdersActivity.class));
                     break;
             }
         }
