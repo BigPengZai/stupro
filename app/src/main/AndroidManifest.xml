@@ -334,7 +334,7 @@
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
 
-        <activity android:name=".Base.X5WebViewActivity"/>
+       <activity android:name=".UI.Course.activity.BaiduWalletWebViewActivity"/>
     </application>
 
 </manifest>

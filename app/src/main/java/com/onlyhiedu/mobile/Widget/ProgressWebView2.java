@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 
 
@@ -21,13 +22,13 @@ import com.onlyhiedu.mobile.Utils.ScreenUtil;
  * @Description:带进度条的WebView
  */
 @SuppressWarnings("deprecation")
-public class ProgressWebView extends WebView {
+public class ProgressWebView2 extends WebView {
 
     private ProgressBar progressbar;
     private ProgressDialog dialog;
 
 
-    public ProgressWebView(Context context, AttributeSet attrs) {
+    public ProgressWebView2(Context context, AttributeSet attrs) {
         super(context, attrs);
         progressbar = new ProgressBar(context, null,
                 android.R.attr.progressBarStyleHorizontal);
@@ -39,14 +40,14 @@ public class ProgressWebView extends WebView {
 
         setWebChromeClient(new WebChromeClient());
         setWebViewClient(new MyWebViewClient());
-        setDownloadListener(new DownloadListener() {
-            @Override
-            public void onDownloadStart(String s, String s1, String s2, String s3, long l) {
-                Uri uri = Uri.parse(s);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                getContext().startActivity(intent);
-            }
-        });
+//        setDownloadListener(new DownloadListener() {
+//            @Override
+//            public void onDownloadStart(String s, String s1, String s2, String s3, long l) {
+//                Uri uri = Uri.parse(s);
+//                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                getContext().startActivity(intent);
+//            }
+//        });
         dialog = ProgressDialog.show(context, null, "页面加载中，请稍后..");
 
 
@@ -83,9 +84,30 @@ public class ProgressWebView extends WebView {
 
 
     public class MyWebViewClient extends WebViewClient {
+
+        private Uri mStartWalletUri;
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
+            Uri parse = Uri.parse(url);
+            if (parse.getScheme().equals("baiduwallet")) {  //唤醒百度钱包
+                mStartWalletUri = parse;
+                //已安装百度钱包
+                if (AppUtil.isPkgInstalled("com.baidu.wallet")) {
+                    getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                } else {
+                    Toast.makeText(getContext(), "请先安装百度钱包", Toast.LENGTH_SHORT).show();
+                }
+            } else if (url.endsWith(".apk")) {
+                if (AppUtil.isPkgInstalled("com.baidu.wallet")) {
+                    getContext().startActivity(new Intent(Intent.ACTION_VIEW, mStartWalletUri));
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, parse);
+                    getContext().startActivity(intent);
+                }
+            } else {
+                view.loadUrl(url);
+            }
             return false;
         }
 

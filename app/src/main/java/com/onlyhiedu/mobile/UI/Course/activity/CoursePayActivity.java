@@ -28,7 +28,6 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.persenter.CoursePayPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
-import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
 import com.onlyhiedu.mobile.Widget.PayItemView;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
@@ -100,6 +99,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     LinearLayout mLl_RootView;
 
     public boolean isTag;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -147,7 +147,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     @Override
     public void onResume() {
         super.onResume();
-            mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+        mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
@@ -160,7 +160,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                             isTag = false;
                         } else {
                             //软键盘隐藏
-                            if (!TextUtils.isEmpty(mCoupon.getText().toString())&&isTag==false) {
+                            if (!TextUtils.isEmpty(mCoupon.getText().toString()) && isTag == false) {
                                 mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
                             }
                         }
@@ -256,7 +256,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
-        UIUtils.startHomeNewsWebViewAct(this, url, "百度分期");
+        startActivity(new Intent(this, BaiduWalletWebViewActivity.class).putExtra(BaiduWalletWebViewActivity.URL, url).putExtra(BaiduWalletWebViewActivity.TITLE, "百度分期"));
     }
 
     @Override

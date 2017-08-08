@@ -162,6 +162,8 @@
         <LinearLayout
             android:id="@+id/ll_reg_step1"
             android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/size_20"
+            android:layout_marginRight="@dimen/size_20"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/ll_reg_step2"

@@ -185,9 +185,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
-            EMClient.getInstance().chatManager().removeMessageListener(messageListener);
-            DemoHelper sdkHelper = DemoHelper.getInstance();
-            sdkHelper.popActivity(this);
+//       IM     EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+//        IM    DemoHelper sdkHelper = DemoHelper.getInstance();
+//        IM    sdkHelper.popActivity(this);
             AppManager.getAppManager().AppExit();
         }
     }
