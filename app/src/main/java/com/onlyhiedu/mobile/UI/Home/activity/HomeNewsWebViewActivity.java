@@ -24,8 +24,6 @@ public class HomeNewsWebViewActivity extends SimpleActivity {
     @Override
     protected void initEventAndData() {
 
-
-
         String title = getIntent().getStringExtra(TITLE);
         if(!TextUtils.isEmpty(title)){
             setToolBar(title);
@@ -36,6 +34,5 @@ public class HomeNewsWebViewActivity extends SimpleActivity {
             mWebView.loadUrl(url);
         }
     }
-
 
 }

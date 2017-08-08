@@ -2,17 +2,13 @@ package com.onlyhiedu.mobile.UI.Course.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,7 +20,6 @@ import android.widget.Toast;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
-import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.ProvinceBean;
@@ -39,7 +34,6 @@ import com.onlyhiedu.mobile.Widget.PayItemView;
 import com.onlyhiedu.mobile.Widget.SettingItemView;
 import com.pingplusplus.android.Pingpp;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;

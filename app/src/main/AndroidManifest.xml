@@ -123,6 +123,7 @@
         <activity android:name=".UI.Consumption.activity.ConsumeActivity"/>
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
         <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
+
         </activity>
         <activity android:name=".UI.Course.activity.CourseDiscountActivity"/>
         <activity android:name=".UI.Home.activity.MineOrdersActivity"/>
@@ -333,6 +334,7 @@
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
 
+        <activity android:name=".Base.X5WebViewActivity"/>
     </application>
 
 </manifest>

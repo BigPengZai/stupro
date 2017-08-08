@@ -128,6 +128,7 @@ public class App extends Application {
 
     }
 
+
     private void initGlide() {
         Glide.get(this).register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(new OkHttpClient()));
     }

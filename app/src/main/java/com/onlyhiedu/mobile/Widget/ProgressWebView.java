@@ -30,7 +30,6 @@ public class ProgressWebView extends WebView {
                 android.R.attr.progressBarStyleHorizontal);
         progressbar.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
                 ScreenUtil.dip2px(3), 0, 0));
-
         Drawable drawable = context.getResources().getDrawable(R.drawable.progress_bar_states);
         progressbar.setProgressDrawable(drawable);
         addView(progressbar);
@@ -56,6 +55,9 @@ public class ProgressWebView extends WebView {
     }
 
     public class WebChromeClient extends android.webkit.WebChromeClient {
+
+
+
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             if (newProgress == 100) {
@@ -69,12 +71,23 @@ public class ProgressWebView extends WebView {
         }
     }
 
+
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
+
+//            if(url.contains("baiduwallet://")){
+//            }else{
+                view.loadUrl(url);
+//            }
+            return false;
         }
+
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+////            view.loadUrl(url);
+//            return false;
+//        }
 
         @Override
         public void onPageFinished(WebView view, String url) {
@@ -83,6 +96,7 @@ public class ProgressWebView extends WebView {
                 dialog.dismiss();
             }
         }
+
     }
 
 
