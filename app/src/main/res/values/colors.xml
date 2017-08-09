@@ -39,6 +39,10 @@
     <color name="c_333333">#333333</color>
     <color name="c_F9F9F9">#F9F9F9</color>
     <color name="c_151515">#151515</color>
+    <color name="c_3d3d3d">#3d3d3d</color>
+    <color name="c_f6f6f6">#f6f6f6</color>
+    <color name="c_b1b1b1">#b1b1b1</color>
+    <color name="c_f2f4f5">#f2f4f5</color>
 
     <!--wheelview-->
     <color name="c3">#dedede</color>

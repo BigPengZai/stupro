@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -11,12 +12,14 @@ import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Base.ViewPagerAdapterFragment;
 import com.onlyhiedu.mobile.Model.bean.CoursePriceTypeInfo;
+import com.onlyhiedu.mobile.Model.bean.LoginProtoDemo;
 import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.fragment.CourseDiscountFragment;
 import com.onlyhiedu.mobile.UI.Course.persenter.CourseDiscountPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CourseDiscountContract;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
+import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
@@ -62,12 +65,14 @@ public class CourseDiscountActivity extends SimpleActivity implements  TabLayout
         }
         if (mTypeList.size() == 1) {
             mView.setVisibility(View.GONE);
+            mTabLayout.setTabTextColors(Color.parseColor("#3d3d3d"),Color.parseColor("#3d3d3d"));
             mTabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FFFFFF"));
         }
         mViewpager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewpager);
         setIndicator(mTabLayout, 40, 40);
         mTabLayout.addOnTabSelectedListener(this);
+        Log.d("TAG", "Json:"+JsonUtil.toJson(new LoginProtoDemo()).length());
     }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {

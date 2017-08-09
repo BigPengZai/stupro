@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'android-apt'
+apply plugin: 'com.google.protobuf'
 def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
@@ -46,7 +47,14 @@ android {
     }
     sourceSets{
         main{
-            jniLibs.srcDirs=['libs']
+
+            proto {
+                srcDir 'src/main/proto'
+                include '**/*.proto'
+            }
+            java {
+                jniLibs.srcDirs=['libs']
+            }
         }
     }
 
@@ -151,4 +159,27 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //ping++
     compile project(':lib:pingpp')
+    //protobuf
+    compile 'com.google.protobuf:protobuf-java:3.1.0'
+    compile 'com.google.protobuf:protoc:3.1.0'
+}
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.1.0'
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.builtins {
+                java {}
+                // Add cpp output without any option.
+                // DO NOT omit the braces if you want this builtin to be added.
+            }
+        }
+    }
+
+    generatedFilesBaseDir = "$projectDir/src/generated"
 }

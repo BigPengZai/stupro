@@ -1,0 +1,9 @@
+package test;
+option java_package = "com.onlyhiedu.mobile.protobuf";
+option java_outer_classname = "LoginProto";
+message Login{
+  required int32 id = 1;
+  required string name = 2;
+  required string pws = 3;
+  optional string email = 4;
+}

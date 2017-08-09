@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
     app:cardElevation="1dp"
+    android:background="@color/c_f2f4f5"
 >
     <LinearLayout
         android:layout_margin="3dp"
@@ -18,8 +19,8 @@
             android:id="@+id/ll_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
             android:background="@mipmap/bg_discount"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -46,6 +47,7 @@
             android:orientation="vertical">
             <!--课时-->
             <TextView
+                android:textColor="@color/c_3d3d3d"
                 android:id="@+id/tv_course_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,6 +61,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
                 <TextView
+                    android:textColor="@color/c_666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="现价："
@@ -71,6 +74,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"/>
                 <TextView
+                    android:textColor="@color/c_666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" 元"
@@ -87,7 +91,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
-                    android:background="@color/c_535353"/>
+                    android:background="@color/c_f6f6f6"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,20 +101,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="原价： "
-                        android:textColor="@color/c_535353"
+                        android:textColor="@color/c_b1b1b1"
                         android:textSize="15sp"/>
                     <TextView
                         android:id="@+id/tv_original_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="8360"
-                        android:textColor="@color/c_535353"
+                        android:textColor="@color/c_b1b1b1"
                         android:textSize="15sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" 元"
-                        android:textColor="@color/c_535353"
+                        android:textColor="@color/c_b1b1b1"
                         android:textSize="15sp"/>
                 </LinearLayout>
 
@@ -119,7 +123,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="17dp"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
@@ -130,6 +134,7 @@
                     android:textColor="@color/white"
                     android:textSize="13sp"/>
                 <TextView
+                    android:textColor="@color/c_b1b1b1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
@@ -142,7 +147,8 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
                 android:gravity="center"
                 android:background="@drawable/shape_reg_btn_radius_nor"
                 android:text="购买"
