@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ public class SettingActivity extends SimpleActivity {
     ToggleButton mToggle_btn;
     @BindView(R.id.rl_toggleButton)
     RelativeLayout mRelativeLayout;
+    @BindView(R.id.btn_out)
+    Button mButton;
 
     public static final String TAG = SettingActivity.class.getSimpleName();
 
@@ -62,6 +65,8 @@ public class SettingActivity extends SimpleActivity {
                 }
             }
         });
+
+        mButton.setText(App.bIsGuestLogin? "登录":"退出登录");
     }
 
 
