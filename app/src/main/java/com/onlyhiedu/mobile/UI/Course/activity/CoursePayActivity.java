@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.onlyhiedu.mobile.R.id.confirm_pay;
+import static com.onlyhiedu.mobile.R.id.toolbar;
 import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_ALIPAY;
 import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_BDF;
 import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_UPACP;
@@ -99,6 +100,8 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     LinearLayout mLl_RootView;
 
     public boolean isTag;
+    private Intent mToOrderSuceIntent;
+
 
     @Override
     protected void initInject() {
@@ -109,27 +112,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     protected void initView() {
         setToolBar("课程支付");
         initIntentDate();
-       /* mCoupon.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) v
-                            .getContext().getSystemService(
-                                    Context.INPUT_METHOD_SERVICE);
-                    if (imm.isActive()) {
-                        imm.hideSoftInputFromWindow(
-                                v.getApplicationWindowToken(), 0);
-                    }
-                    *//*if (!TextUtils.isEmpty(mCoupon.getText().toString())) {
-                        mPresenter.getPayMoney(mCoursePriceUuid, mCoupon.getText().toString());
-                    }*//*
-                    return true;
-                }
-                return false;
-            }
-        });*/
-
-
         mPayItemView.setOnItemClickListener(new PayItemView.OnItemClickListener() {
             @Override
             public void onItemClick() {
@@ -142,6 +124,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
             }
         });
+
     }
 
     @Override
@@ -271,8 +254,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     public void onClick(View view) {
         switch (view.getId()) {
             case confirm_pay:
+//               startActivity(new Intent(this, OrderSucessActivity.class));
                 //确认支付
-                confirmPayment();
+               confirmPayment();
                 break;
             case R.id.setting_grade:
                 //年级
@@ -397,8 +381,18 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
-        Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "" + data.getPayStatus());
+        if (data.getPayStatus() == 1) {
+            mToOrderSuceIntent = new Intent(this, OrderSucessActivity.class);
+            mToOrderSuceIntent.putExtra("packageName",mTvCourseName.getText() );
+            mToOrderSuceIntent.putExtra("originalPrice",mTv_Total.getText() );
+            mToOrderSuceIntent.putExtra("specialPrice",mTv_Discounts.getText() );
+            mToOrderSuceIntent.putExtra("payMethod",payMethod);
+            mToOrderSuceIntent.putExtra("mPayFrom",mPayFrom);
+            startActivity(mToOrderSuceIntent);
+        } else {
+            Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

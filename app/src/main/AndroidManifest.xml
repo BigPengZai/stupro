@@ -29,6 +29,11 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <!-- 银联需要的权限 -->
     <uses-permission android:name="android.permission.NFC" />
+
+    <!-- 百度支付需要的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <application
         android:name=".App.App"
         android:icon="@mipmap/logoicon"
@@ -124,7 +129,9 @@
 
         </activity>
         <activity android:name=".UI.Course.activity.CourseDiscountActivity"/>
-        <activity android:name=".UI.Home.activity.MineOrdersActivity"/>
+        <activity
+            android:name=".UI.Home.activity.MineOrdersActivity"/>
+        <activity android:name=".UI.Course.activity.OrderSucessActivity"/>
         <activity
             android:name=".UI.Course.activity.CoursePayActivity"
             android:windowSoftInputMode="stateUnspecified|adjustPan"/>

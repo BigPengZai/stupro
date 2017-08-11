@@ -81,6 +81,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
         initGlide();
         DaoUtil.getInstance(this);
         initWorkerThread();

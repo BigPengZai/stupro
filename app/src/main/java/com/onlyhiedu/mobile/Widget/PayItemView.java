@@ -194,4 +194,6 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
     }
+
+
 }
