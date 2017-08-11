@@ -340,8 +340,8 @@ public class RetrofitHelper {
         return sOnlyApis.getPingPay(coursePriceUuid, channel,code);
     }
 
-    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid,String code) {
-        return sOnlyApis.getBaiduPay(coursePriceUuid,code);
+    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid,String code,String name ,String phone) {
+        return sOnlyApis.getBaiduPay(coursePriceUuid,code,name,phone);
     }
 
     //科目

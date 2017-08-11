@@ -30,7 +30,7 @@ public interface CoursePayContract {
 
         void getPingppPaymentByJson(String coursePriceUuid, String channel,String code);
 
-        void getBaiduPay(String uuid,String code);
+        void getBaiduPay(String uuid,String code,String name,String phone);
         void updateGrade(String grade);
 
         void updateSubject(String subject);

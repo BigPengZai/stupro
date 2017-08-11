@@ -120,8 +120,8 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
     }
     //课时包百度支付
     @Override
-    public void getBaiduPay(String uuid,String code) {
-        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchGetBaiduPay(uuid,code);
+    public void getBaiduPay(String uuid,String code,String name,String phone ) {
+        Flowable<onlyHttpResponse<String>> flowable = mRetrofitHelper.fetchGetBaiduPay(uuid,code,name,phone);
         ResourceSubscriber observer = new ResourceSubscriber<onlyHttpResponse<String>>() {
             @Override
             public void onNext(onlyHttpResponse<String> data) {

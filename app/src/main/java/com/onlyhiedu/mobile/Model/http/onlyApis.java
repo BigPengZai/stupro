@@ -451,7 +451,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/coursepay/directBaiduStagingPayment")
-    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("code")String code);
+    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("code")String code,@Field("patriarchName")String patriarchName,@Field("patriarchPhone")String patriarchPhone);
 
     /**
      * 科目

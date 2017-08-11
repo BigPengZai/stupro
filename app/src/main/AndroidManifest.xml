@@ -341,6 +341,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
 
        <activity android:name=".UI.Course.activity.BaiduWalletWebViewActivity"/>
+        <activity android:name=".UI.Course.activity.LenderActivity"/>
     </application>
 
 </manifest>

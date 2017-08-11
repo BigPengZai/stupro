@@ -87,7 +87,6 @@ public class ErrorLayout extends LinearLayout implements
         ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.parseColor("#F42440"));
         builder.setSpan(redSpan, 9, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvPhone.setText(builder);
-
         mLlPhone.setOnClickListener(new OnClickListener() {
 
             @Override

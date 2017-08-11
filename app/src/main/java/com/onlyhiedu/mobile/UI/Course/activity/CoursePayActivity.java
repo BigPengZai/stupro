@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.wallet.api.BaiduWallet;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
@@ -39,7 +40,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.onlyhiedu.mobile.R.id.confirm_pay;
-import static com.onlyhiedu.mobile.R.id.toolbar;
 import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_ALIPAY;
 import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_BDF;
 import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_UPACP;
@@ -51,7 +51,11 @@ import static com.onlyhiedu.mobile.Widget.PayItemView.CHANNEL_WECHAT;
  */
 
 public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implements CoursePayContract.View {
+
+
     public static final String TAG = CoursePayActivity.class.getSimpleName();
+    private static final int REQURSE_CODE = 10000;
+
     @BindView(R.id.rl_edit)
     RelativeLayout mRelativeLayout;
     @BindView(R.id.gradeSubject)
@@ -239,7 +243,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
-        startActivity(new Intent(this, BaiduWalletWebViewActivity.class).putExtra(BaiduWalletWebViewActivity.URL, url).putExtra(BaiduWalletWebViewActivity.TITLE, "百度分期"));
+
+        BaiduWallet.getInstance().openH5Module(this, url);
+//        startActivity(new Intent(this, BaiduWalletWebViewActivity.class).putExtra(BaiduWalletWebViewActivity.URL, url).putExtra(BaiduWalletWebViewActivity.TITLE, "百度分期"));
     }
 
     @Override
@@ -256,7 +262,13 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             case confirm_pay:
 //               startActivity(new Intent(this, OrderSucessActivity.class));
                 //确认支付
-               confirmPayment();
+                if (checkInfo()) {
+                    if (payMethod.equals(CHANNEL_BDF)) {
+                        startActivityForResult(new Intent(this, LenderActivity.class), REQURSE_CODE);
+                    } else {
+                        confirmPayment();
+                    }
+                }
                 break;
             case R.id.setting_grade:
                 //年级
@@ -275,21 +287,25 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         }
     }
 
-
-    private void confirmPayment() {
+    private boolean checkInfo() {
         if (mSettingGrade.getDetailText() == null || TextUtils.isEmpty(mSettingGrade.getDetailText())) {
             Toast.makeText(this, "请填写 年级 信息", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         if (mSettingSubject.getDetailText() == null || TextUtils.isEmpty(mSettingSubject.getDetailText())) {
             Toast.makeText(this, "请填写 科目 信息", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         payMethod = mPayItemView.getPayMethod();
         if (TextUtils.isEmpty(payMethod)) {
             Toast.makeText(this, "请选择支付方式", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
+        return true;
+    }
+
+
+    private void confirmPayment() {
         switch (payMethod) {
             case CHANNEL_ALIPAY:
                 if ("order".equals(mPayFrom)) {
@@ -310,19 +326,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
                     mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
-                }
-                break;
-            case CHANNEL_BDF:
-
-                if (dialog == null) {
-                    dialog = ProgressDialog.show(this, null, "请稍后..");
-                } else {
-                    dialog.show();
-                }
-                if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderBaiduPay(mCoursePriceUuid, mCoupon.getText().toString());
-                } else {
-                    mPresenter.getBaiduPay(mCoursePriceUuid, mCoupon.getText().toString());
                 }
                 break;
         }
@@ -347,6 +350,21 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
                 showMsg(result, errorMsg, extraMsg);
+            }
+        }
+
+        if (requestCode == REQURSE_CODE && resultCode == Activity.RESULT_OK) {
+            String name = data.getStringExtra("name");
+            String phone = data.getStringExtra("phone");
+            if (dialog == null) {
+                dialog = ProgressDialog.show(this, null, "请稍后..");
+            } else {
+                dialog.show();
+            }
+            if ("order".equals(mPayFrom)) {
+                mPresenter.getOrderBaiduPay(mCoursePriceUuid, mCoupon.getText().toString());
+            } else {
+                mPresenter.getBaiduPay(mCoursePriceUuid, mCoupon.getText().toString(),name,phone);
             }
         }
     }
@@ -384,11 +402,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         Log.d(TAG, "" + data.getPayStatus());
         if (data.getPayStatus() == 1) {
             mToOrderSuceIntent = new Intent(this, OrderSucessActivity.class);
-            mToOrderSuceIntent.putExtra("packageName",mTvCourseName.getText() );
-            mToOrderSuceIntent.putExtra("originalPrice",mTv_Total.getText() );
-            mToOrderSuceIntent.putExtra("specialPrice",mTv_Discounts.getText() );
-            mToOrderSuceIntent.putExtra("payMethod",payMethod);
-            mToOrderSuceIntent.putExtra("mPayFrom",mPayFrom);
+            mToOrderSuceIntent.putExtra("packageName", mTvCourseName.getText());
+            mToOrderSuceIntent.putExtra("originalPrice", mTv_Total.getText());
+            mToOrderSuceIntent.putExtra("specialPrice", mTv_Discounts.getText());
+            mToOrderSuceIntent.putExtra("payMethod", payMethod);
+            mToOrderSuceIntent.putExtra("mPayFrom", mPayFrom);
             startActivity(mToOrderSuceIntent);
         } else {
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
