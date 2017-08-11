@@ -31,10 +31,8 @@
     <uses-permission android:name="android.permission.NFC" />
     <application
         android:name=".App.App"
-        android:allowBackup="true"
         android:icon="@mipmap/logoicon"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <!-- 网络状态 -->
@@ -328,6 +326,7 @@
             android:exported="false"
             android:screenOrientation="behind" >
         </activity>
+
 
         <!-- 银联支付 -->
         <activity

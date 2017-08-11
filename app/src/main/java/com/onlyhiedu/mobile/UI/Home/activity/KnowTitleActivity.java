@@ -19,6 +19,7 @@ public class KnowTitleActivity extends SimpleActivity {
     @BindView(R.id.web_view)
     WebView mWb_Service;
     ProgressDialog dialog;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_know_tile;
@@ -32,10 +33,10 @@ public class KnowTitleActivity extends SimpleActivity {
         }
 
         mWb_Service.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        mWb_Service.setWebViewClient(new WebViewClient(){
+        mWb_Service.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                if(dialog.isShowing()){
+                if (dialog.isShowing()) {
                     dialog.dismiss();
                 }
             }
@@ -48,9 +49,9 @@ public class KnowTitleActivity extends SimpleActivity {
         wSet.setUseWideViewPort(true);
         wSet.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         wSet.setLoadWithOverviewMode(true);
-        dialog = ProgressDialog.show(this,null,"页面加载中，请稍后..");
+        dialog = ProgressDialog.show(this, null, "页面加载中，请稍后..");
         //http://www.onlyeduhi.com/app/problem5.html
-        mWb_Service.loadUrl("http://www.onlyeduhi.com/app/problem"+position+".html");
+        mWb_Service.loadUrl("http://www.onlyeduhi.cn/app/problem" + position + ".html");
     }
 
     @Override

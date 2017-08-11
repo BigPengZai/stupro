@@ -159,6 +159,7 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //ping++
     compile project(':lib:pingpp')
+    compile 'com.baidu.wallet:wallet-sdk-business:6.4.14-SNAPSHOT'
     //protobuf
     compile 'com.google.protobuf:protobuf-java:3.1.0'
     compile 'com.google.protobuf:protoc:3.1.0'
