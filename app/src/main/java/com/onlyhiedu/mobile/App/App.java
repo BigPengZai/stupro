@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.baidu.wallet.api.BaiduWallet;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -125,7 +126,8 @@ public class App extends Application {
         CrashReport.initCrashReport(getApplicationContext(), "5c1349523c", false);
         //ping++
         Pingpp.enableDebugLog(true);
-
+        //百度钱包
+        BaiduWallet.getInstance().initWallet(this,"outyahei");
     }
 
 

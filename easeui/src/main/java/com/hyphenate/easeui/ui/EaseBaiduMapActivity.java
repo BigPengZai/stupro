@@ -13,41 +13,6 @@
  */
 package com.hyphenate.easeui.ui;
 
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
-//import com.baidu.location.BDLocation;
-//import com.baidu.location.BDLocationListener;
-//import com.baidu.location.LocationClient;
-//import com.baidu.location.LocationClientOption;
-//import com.baidu.mapapi.SDKInitializer;
-//import com.baidu.mapapi.map.BaiduMap;
-//import com.baidu.mapapi.map.BaiduMapOptions;
-//import com.baidu.mapapi.map.BitmapDescriptorFactory;
-//import com.baidu.mapapi.map.MapStatus;
-//import com.baidu.mapapi.map.MapStatusUpdate;
-//import com.baidu.mapapi.map.MapStatusUpdateFactory;
-//import com.baidu.mapapi.map.MapView;
-//import com.baidu.mapapi.map.MarkerOptions;
-//import com.baidu.mapapi.map.MyLocationConfiguration;
-//import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
-//import com.baidu.mapapi.map.OverlayOptions;
-//import com.baidu.mapapi.model.LatLng;
-//import com.baidu.mapapi.utils.CoordinateConverter;
-import com.hyphenate.easeui.R;
-
 public class EaseBaiduMapActivity extends EaseBaseActivity {
 
 //	private final static String TAG = "map";
