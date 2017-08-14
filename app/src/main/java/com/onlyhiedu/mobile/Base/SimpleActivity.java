@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.Widget.Swipeback.app.SwipeBackActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -19,7 +20,7 @@ import butterknife.Unbinder;
  * 无MVP的activity
  * Created by xuwc on 2016/11/30.
  */
-public abstract class SimpleActivity extends com.onlyhiedu.mobile.Widget.Swipeback.app.SwipeBackActivity {
+public abstract class SimpleActivity extends SwipeBackActivity {
 
 
     protected Activity mContext;
