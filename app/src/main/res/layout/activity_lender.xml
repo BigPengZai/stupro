@@ -6,12 +6,67 @@
 
     <include layout="@layout/layout_toolbar"/>
 
+    <View android:layout_width="match_parent"
+          android:layout_height="@dimen/activity_horizontal_margin"
+          android:background="@color/c_f2f4f5"/>
 
-    <EditText android:id="@+id/edit_name" android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:layout_marginTop="@dimen/activity_horizontal_margin"
+                  android:orientation="horizontal">
 
-    <EditText android:id="@+id/edit_phone" android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-    <Button android:id="@+id/btn_confirm" android:layout_width="match_parent" android:text="GO"
-            android:layout_height="wrap_content"/>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                      android:orientation="vertical">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:gravity="center_vertical"
+                      android:text="姓名"
+                      android:textColor="@color/c_3d3d3d" android:textSize="@dimen/sp_16"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="0dp"
+                      android:layout_marginTop="@dimen/size_20" android:layout_weight="1"
+                      android:gravity="center_vertical" android:text="手机号"
+                      android:textColor="@color/c_3d3d3d" android:textSize="@dimen/sp_16"/>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                      android:layout_marginRight="@dimen/size_30"
+                      android:orientation="vertical">
+
+
+            <EditText android:id="@+id/edit_name" android:layout_width="match_parent"
+                      android:layout_height="35dp"
+                      android:background="@drawable/shape_lender_btn_bg"
+                      android:hint="请输入贷款人姓名"
+                      android:paddingLeft="@dimen/size_10"
+                      android:textSize="@dimen/sp_12"/>
+
+            <EditText android:id="@+id/edit_phone" android:layout_width="match_parent"
+                      android:layout_height="35dp"
+                      android:layout_marginTop="@dimen/size_20"
+                      android:background="@drawable/shape_lender_btn_bg"
+                      android:hint="请输入贷款人手机号"
+                      android:paddingLeft="@dimen/size_10"
+                      android:textSize="@dimen/sp_12"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <Button android:id="@+id/btn_confirm" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/login_padding"
+            android:layout_marginRight="@dimen/login_padding"
+            android:layout_marginTop="@dimen/size_50"
+            android:background="@drawable/shape_reg_btn_radius_nor"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
 </LinearLayout>

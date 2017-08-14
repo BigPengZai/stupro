@@ -245,6 +245,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         }
 
         BaiduWallet.getInstance().openH5Module(this, url);
+
 //        startActivity(new Intent(this, BaiduWalletWebViewActivity.class).putExtra(BaiduWalletWebViewActivity.URL, url).putExtra(BaiduWalletWebViewActivity.TITLE, "百度分期"));
     }
 
