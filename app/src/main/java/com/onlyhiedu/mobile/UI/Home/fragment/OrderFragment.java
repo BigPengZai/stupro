@@ -1,6 +1,8 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -8,6 +10,7 @@ import android.widget.Toast;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.OrderList;
+import com.onlyhiedu.mobile.Model.event.MineOrdersActivityTabSelecPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.activity.CoursePayActivity;
 import com.onlyhiedu.mobile.UI.Course.adapter.OrderAdapter;
@@ -16,6 +19,10 @@ import com.onlyhiedu.mobile.UI.Home.presenter.contract.OrdersContract;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -150,5 +157,26 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
                     .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
             startActivity(mPayIntent);
         }
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMain(MineOrdersActivityTabSelecPos event) {
+        if (mAdapter==null) {
+            return;
+        }
+        mAdapter.clear();
+        mPresenter.getOrderList(true, mPayState);
     }
 }

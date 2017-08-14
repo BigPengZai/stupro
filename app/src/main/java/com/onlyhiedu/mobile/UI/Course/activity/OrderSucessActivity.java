@@ -12,10 +12,14 @@ import android.widget.TextView;
 
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
+import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
+import com.onlyhiedu.mobile.Model.event.MineOrdersActivityTabSelecPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MineOrdersActivity;
 import com.onlyhiedu.mobile.UI.Home.fragment.OrderFragment;
 import com.onlyhiedu.mobile.Utils.AppUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -118,7 +122,8 @@ public class OrderSucessActivity extends SimpleActivity {
                 break;
             case R.id.tv_order_finsh:
                 if ("order".equals(mMPayFrom)) {
-                    AppManager.getAppManager().finishActivity(MineOrdersActivity.class);
+                    EventBus.getDefault().post(new MineOrdersActivityTabSelecPos("notify"));
+//                    AppManager.getAppManager().finishActivity(MineOrdersActivity.class);
                 }
                 AppManager.getAppManager().finishActivity(this);
                 AppManager.getAppManager().finishActivity(CoursePayActivity.class);

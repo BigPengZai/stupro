@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.UI.Home.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -11,10 +12,13 @@ import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Base.ViewPagerAdapterFragment;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
+import com.onlyhiedu.mobile.Model.event.MineOrdersActivityTabSelecPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.OrderFragment;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -91,4 +95,5 @@ public class MineOrdersActivity extends SimpleActivity {
         }
         finish();
     }
+
 }
