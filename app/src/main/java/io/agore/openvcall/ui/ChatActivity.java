@@ -132,6 +132,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     TextView mButDismiss;
     private AgoraAPIOnlySignal m_agoraAPI;
 
+
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private RequestManager mRequestManager;
@@ -161,6 +162,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean isTeacherJoined;
     private ResponseWhiteboardList mResponseWhiteboardList;  //学生后进来白板数据
     private NotifyWhiteboardOperator mNotifyWhiteboardOperator; //学生先进来白板数据
+    int mLastDownY;
+    private int mCurryY;
+
+    private int mDelY;
+    //向上滑动基数
+    private int mUpValue = 3;
 
     @Override
     protected void initInject() {
@@ -442,6 +449,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void setToolBar() {
+        mToolbar.setBackgroundResource(R.color.c33);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.drawable.back);
@@ -461,6 +469,38 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             }
         });*/
+
+        mToolbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        mLastDownY = (int) event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mCurryY = (int) event.getY();
+                        mDelY = mCurryY - mLastDownY;
+                        if (mDelY < 0) {
+                            // 向上滑动超过 基数 开启向上消失动画
+                            if (Math.abs(mDelY) > mUpValue) {
+                                if (visableTag == 1 && mToolbar != null) {
+                                    visableTag = 0;
+                                    mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                                    if (mViewHandler != null) {
+                                        mViewHandler.removeCallbacksAndMessages(null);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+
+                return false;
+            }
+        });
 
     }
 
@@ -1455,42 +1495,33 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (SystemUtil.isShouldHideKeyboard(v, ev)) {
-                SystemUtil.hideKeyboard(v.getWindowToken(), this);
-            }
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                mLastDownY = (int) event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                mCurryY = (int) event.getY();
+                mDelY = mCurryY - mLastDownY;
+                // 滑动超过 基数
+                if (Math.abs(mDelY) < 2) {
+                    mCountTimeThread.reset();
+                    if (visableTag == 0) {
+                        //可见
+                        mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+                        visableTag = 1;
+                        return false;
+                    }
+                }
         }
-        return super.dispatchTouchEvent(ev);
+        return super.dispatchTouchEvent(event);
     }
-
-        int ss = 0;
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            mCountTimeThread.reset();
-            if (ss == 0) {
-                //可见
-                mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
-                ss = 1;
-                return true;
-            }
-           /* //屏幕被触摸
-            if (ss == 1) {
-                //invisable
-                mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-                ss = 0;
-            } else {
-                //visable
-                mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                ss = 1;
-            }*/
-        }
-        return super.onTouchEvent(event);
-    }
-
+    int visableTag = 0;
     private CountTimeThread mCountTimeThread;
+
     /**
      * 开始启动线程控制按钮组件的显示.
      */
@@ -1503,18 +1534,22 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
      * 隐藏控制按钮的控件
      */
     private void hide() {
-        if (ss== 1&&mToolbar!=null) {
-            ss = 0;
+        if (visableTag == 1 && mToolbar != null) {
+            visableTag = 0;
             mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
         }
     }
 
     private MainHandler mViewHandler = new MainHandler(ChatActivity.this);
+
     private static class MainHandler extends Handler {
-        /** 隐藏按钮消息id */
+        /**
+         * 隐藏按钮消息id
+         */
         private final int MSG_HIDE = 0x0001;
 
         private WeakReference<ChatActivity> weakRef;
+
         public MainHandler(ChatActivity activity) {
             weakRef = new WeakReference<ChatActivity>(activity);
         }
@@ -1536,16 +1571,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         public void sendHideControllMessage() {
             obtainMessage(MSG_HIDE).sendToTarget();
         }
-    };
+    }
+
+    ;
+
     /**
      * 如果mControllButtonLayout可见, 则无操作second秒之后隐藏mControllButtonLayout.
-     *
-     *
-     *
      */
     private class CountTimeThread extends Thread {
         private final long maxVisibleTime;
         private long startVisibleTime;
+
         /**
          * @param second 设置按钮控件最大可见时间,单位是秒
          */
@@ -1588,7 +1624,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-
     @Override
     public void showError(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -1610,7 +1645,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             chronometer.setText(substring);
         }
     }
-
 
 
 }

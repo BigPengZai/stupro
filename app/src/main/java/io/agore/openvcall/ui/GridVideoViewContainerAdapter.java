@@ -51,8 +51,9 @@ public class GridVideoViewContainerAdapter extends VideoViewAdapter {
 //            Log.d(TAG, "mItemWidth:" + mItemWidth);
 //            Log.d(TAG, "mItemHeight" + mItemHeight);
 
-            int screenHeight = ScreenUtil.getScreenHeight(mContext)-ScreenUtil.getToolbarHeight(mContext);
-            mItemWidth = ScreenUtil.dip2px(160);
+            int screenHeight = ScreenUtil.getScreenHeight(mContext);
+            int screenWidth = ScreenUtil.getScreenWidth(mContext);
+            mItemWidth = screenWidth/10*3;
             mItemHeight = screenHeight/2;
         }
     }

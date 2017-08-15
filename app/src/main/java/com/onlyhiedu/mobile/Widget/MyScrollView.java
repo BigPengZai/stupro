@@ -28,5 +28,4 @@ public class MyScrollView extends ScrollView {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return true;
     }
-
 }
