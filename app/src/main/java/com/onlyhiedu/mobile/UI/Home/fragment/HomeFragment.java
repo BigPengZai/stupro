@@ -26,8 +26,6 @@ import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.HomePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.HomeContract;
-import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
-import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.GlideImageLoader;
 import com.youth.banner.Banner;
@@ -194,12 +192,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
                 break;
             case R.id.tv_information:
                 //课程优惠
-//                if (App.bIsGuestLogin) {
-//                    startActivity(new Intent(mContext, OpenIDActivity.class).putExtra(OpenIDActivity.cancelShow, true).putExtra(OpenIDActivity.information, true));
-//                } else {
-//                    startActivity(new Intent(mContext, MyInfoActivity.class));
-//                }
-                mPresenter.getActivityTypeList();
+                if(App.bIsGuestLogin){
+                    UIUtils.startGuestLoginActivity(mContext,0);
+                }else{
+                    mPresenter.getActivityTypeList();
+                }
                 break;
         }
     }

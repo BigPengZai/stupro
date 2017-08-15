@@ -43,13 +43,14 @@ public class DialogUtil {
         }
     }
 
-    //竖屏
+
     public static Dialog showOnlyAlert(Context activity, String title, String msg,
                                        String firstTxt, String secondTxt,
                                        boolean outsideCancleable, boolean cancleable,
                                        final DialogListener listener) {
         return showAlert(activity, false, title, msg, firstTxt, secondTxt, outsideCancleable, cancleable, listener);
     }
+
     private static Dialog showAlert(Context context, boolean isButtonVerticle, String title, String msg,
                                     String firstTxt, String secondTxt,
                                     boolean outsideCancleable, boolean cancleable,
@@ -60,10 +61,6 @@ public class DialogUtil {
         dialog.show();
         return dialog;
     }
-
-
-
-
 
     private static Dialog buildDialog(Context context, boolean cancleable, boolean outsideTouchable) {
         Dialog dialog = new Dialog(context);
@@ -130,19 +127,32 @@ public class DialogUtil {
 
     private static void setDialogStyle(Context activity, Dialog dialog, int measuredHeight) {
         Window window = dialog.getWindow();
+        //window.setWindowAnimations(R.style.dialog_center);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams wl = window.getAttributes();
+       /* wl.x = 0;
+        wl.y = getWindowManager().getDefaultDisplay().getHeight();*/
+// 以下这两句是为了保证按钮可以水平满屏
         int width = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
         int height = (int) (((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() * 0.9);
-        if (ScreenUtil.isScreenChange(activity)) {
-            wl.width = (int) (width * 0.54);
-        } else {
-            wl.width = (int) (width * 0.94);
+        // wl.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        if(ScreenUtil.isScreenChange(activity)){
+            wl.width = (int) (width * 0.4);
+        }else{
+            wl.width = (int) (width * 0.8);
         }
-        wl.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        wl.height = ViewGroup.LayoutParams.WRAP_CONTENT;  // 一般情况下为wrapcontent,最大值为height*0.9
+       /* ViewUtils.measureView(contentView);
+        int meHeight = contentView.getMeasuredHeight();//height 为0,weight为1时,控件计算所得height就是0
+        View textview = contentView.findViewById(R.id.tv_msg);
+        ViewUtils.measureView(textview);
+        int textHeight = textview.getMeasuredHeight();*/
         if (measuredHeight > height) {
             wl.height = height;
         }
+        //wl.horizontalMargin= 0.2f;
+// 设置显示位置
+        // wl.gravity = Gravity.CENTER_HORIZONTAL;
         if (!(activity instanceof Activity)) {
             wl.type = WindowManager.LayoutParams.TYPE_TOAST;
         }
