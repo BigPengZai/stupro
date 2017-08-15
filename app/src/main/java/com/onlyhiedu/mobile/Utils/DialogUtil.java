@@ -136,7 +136,11 @@ public class DialogUtil {
         int width = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
         int height = (int) (((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() * 0.9);
         // wl.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        wl.width = (int) (width * 0.94);
+        if(ScreenUtil.isScreenChange(activity)){
+            wl.width = (int) (width * 0.4);
+        }else{
+            wl.width = (int) (width * 0.8);
+        }
         wl.height = ViewGroup.LayoutParams.WRAP_CONTENT;  // 一般情况下为wrapcontent,最大值为height*0.9
        /* ViewUtils.measureView(contentView);
         int meHeight = contentView.getMeasuredHeight();//height 为0,weight为1时,控件计算所得height就是0

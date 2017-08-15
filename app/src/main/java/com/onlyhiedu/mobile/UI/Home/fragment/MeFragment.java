@@ -181,8 +181,6 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     break;
             }
         }
-
-
     }
 
 
