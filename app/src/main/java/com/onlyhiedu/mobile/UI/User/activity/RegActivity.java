@@ -252,7 +252,7 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
             App.bIsGuestLogin = false;
             EventBus.getDefault().post(new MainActivityTabSelectPos(0));
         }
-        if (mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
         startActivity(new Intent(this, MainActivity.class));
@@ -284,7 +284,7 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
 
     @Override
     public void showError(String msg) {
-        if (mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -293,7 +293,7 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }

@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
 import com.onlyhiedu.mobile.R;
@@ -39,11 +39,11 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
      */
     public static final String CHANNEL_OFFLINE = "offline";
 
-    CheckBox mCheckYl;
-    CheckBox mCheckWx;
-    CheckBox mCheckAlipay;
-    CheckBox mCheckBdf;
-    CheckBox mCheckOffline;
+    RadioButton mCheckYl;
+    RadioButton mCheckWx;
+    RadioButton mCheckAlipay;
+    RadioButton mCheckBdf;
+    RadioButton mCheckOffline;
 
     RelativeLayout mRlBdf;
     RelativeLayout mRlWx;
@@ -51,7 +51,7 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
     RelativeLayout mRl_Offline;
     RelativeLayout mRlAlipay;
     LinearLayout mLl_Offline;
-    private String payMethod;
+    private String payMethod = CHANNEL_ALIPAY ;
 
     public String getPayMethod() {
         return payMethod;
@@ -72,12 +72,13 @@ public class PayItemView extends RelativeLayout implements View.OnClickListener,
         mRlAlipay.setOnClickListener(this);
         mRlBdf.setOnClickListener(this);
 
-        mCheckYl = (CheckBox) findViewById(R.id.check_yl);
-        mCheckWx = (CheckBox) findViewById(R.id.check_wx);
-        mCheckAlipay = (CheckBox) findViewById(R.id.check_alipay);
-        mCheckBdf = (CheckBox) findViewById(R.id.check_bdf);
-        mCheckOffline = (CheckBox) findViewById(R.id.check_offline);
+        mCheckYl = (RadioButton) findViewById(R.id.check_yl);
+        mCheckWx = (RadioButton) findViewById(R.id.check_wx);
+        mCheckAlipay = (RadioButton) findViewById(R.id.check_alipay);
+        mCheckBdf = (RadioButton) findViewById(R.id.check_bdf);
+        mCheckOffline = (RadioButton) findViewById(R.id.check_offline);
 
+        mCheckAlipay.setChecked(true);  //默认选中银联
 
         mCheckYl.setOnClickListener(this);
         mCheckWx.setOnClickListener(this);

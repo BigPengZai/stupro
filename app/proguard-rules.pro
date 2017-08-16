@@ -278,3 +278,11 @@ public static final ** CREATOR;
  -keepclassmembers class * {
      @android.webkit.JavascriptInterface <methods>;
  }
+ #==================protobuf======================
+ -dontwarn com.google.**
+ -keep class com.google.protobuf.* {*;}
+ -keepattributes Annotation
+ -keepattributes Signature
+  #==================百度SDK======================
+ -dontwarn com.baidu.wallet.**
+ -dontwarn com.gieseckedevrient.android.**
