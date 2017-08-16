@@ -1,13 +1,21 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,6 +38,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.KnowActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MineOrdersActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.SettingActivity;
+import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.PhotoUtil;
 import com.onlyhiedu.mobile.Utils.SPUtil;
@@ -45,6 +54,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.util.FileUtils;
 
 import java.io.File;
 
@@ -77,6 +87,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     private String name = "";
 
     private final int SHARE_REQUEST_CODE = 1;
+    private final int MY_PERMISSIONS_REQUEST_CALL_PHONE2=2;
     private UMImage mUmImage;
 
     private File mFileOut;
@@ -84,8 +95,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     public final static int ALBUM_REQUEST_CODE = 1;
     public final static int CAMERA_REQUEST_CODE = 3;
     // 拍照路径
-    public static String SAVED_IMAGE_DIR_PATH =
-            Environment.getExternalStorageDirectory().getPath()
+    public static String SAVED_IMAGE_DIR_PATH = Environment.getExternalStorageDirectory()
                     + "/Onlyhi/camera/";
     private String // 指定相机拍摄照片保存地址
             cameraPath = SAVED_IMAGE_DIR_PATH +
@@ -156,7 +166,17 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             switch (view.getId()) {
                 case R.id.iv_portrait:
 //                    mPresenter.uploadHeadPhoto((MainActivity) getActivity());
-                    uploadHeadPhoto();
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_REQUEST_CALL_PHONE2);
+
+                    }else {
+                        uploadHeadPhoto();
+                    }
                     break;
                 case R.id.iv_setting:
                     startActivity(new Intent(getContext(), SettingActivity.class));
@@ -191,6 +211,16 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             case SHARE_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) shareUrl();
                 else Toast.makeText(mContext, "权限未授权", Toast.LENGTH_SHORT).show();
+                break;
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE2:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    uploadHeadPhoto();
+                } else
+                {
+                    // Permission Denied
+                    DialogUtil.showPresimissFialDialog(getContext(),"SD卡存储");
+                }
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -270,6 +300,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
             switch (v.getId()) {
                 case R.id.btn_take_photo:
+                    //从拍照
                     String state = Environment.getExternalStorageState();
                     if (state.equals(Environment.MEDIA_MOUNTED)) {
                         Intent intent = new Intent();
@@ -281,7 +312,17 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                             dir.mkdirs();
                         }
                         // 把文件地址转换成Uri格式
-                        Uri uri = Uri.fromFile(new File(cameraPath));
+//                        Uri uri = Uri.fromFile(new File(cameraPath));
+                        Uri uri;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                            uri = FileProvider.getUriForFile(getActivity(),
+                                     "com.onlyhiedu.mobile.fileprovider",
+                                    new File(cameraPath));
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } else {
+                            uri = Uri.fromFile(new File(cameraPath));
+                        }
                         // 设置系统相机拍摄照片完成后图片文件的存放地址
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         startActivityForResult(intent, CAMERA_REQUEST_CODE);
@@ -292,6 +333,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     mTakePhotoPopWin.dismiss();
                     break;
                 case R.id.btn_pick_photo:
+                    //从系统相册
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setDataAndType(
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -347,9 +389,10 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     @Override
     public void uploadAvatarSucess(Avatar data) {
         if (data != null && data.imagePath != null) {
-            Log.d("", data.imagePath);
+            Log.d(TAG, data.imagePath);
             SPUtil.setAvatarUrl(data.imagePath);
-            DemoHelper.getInstance().getUserProfileManager().uploadUserAvatar(data.imagePath);
+            //更新IM 个人头像
+//            DemoHelper.getInstance().getUserProfileManager().uploadUserAvatar(data.imagePath);
         }
     }
 
@@ -372,4 +415,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
         }
     }
+
+
+
 }

@@ -147,6 +147,7 @@ public class MyEngineEventHandler {
 
         @Override
         public void onConnectionLost() {
+            //onConnectionLost在失去连接且尝试自动重连失败后才触发。
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
@@ -156,6 +157,7 @@ public class MyEngineEventHandler {
 
         @Override
         public void onConnectionInterrupted() {
+            //onConnectionInterrupted回调在SDK刚失去和服务器连接时触发
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();

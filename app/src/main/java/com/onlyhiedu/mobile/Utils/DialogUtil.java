@@ -3,8 +3,12 @@ package com.onlyhiedu.mobile.Utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,43 @@ import com.onlyhiedu.mobile.R;
 
 public class DialogUtil {
 
+
+    public static void showPresimissFialDialog(Context context,String msg) {
+        //创建对话框创建器
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        //设置对话框显示小图标
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        //设置标题
+        builder.setTitle("权限申请");
+        //设置正文
+
+        builder.setMessage("在设置-应用-"+AppUtil.getPackageInfo(context)+"-权限 中开"+msg+"权限，才能正常使用拍照或图片选择功能");
+
+        //添加确定按钮点击事件
+        builder.setPositiveButton("去设置", new DialogInterface.OnClickListener() {//点击完确定后，触发这个事件
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //这里用来跳到手机设置页，方便用户开启权限
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
+
+        //添加取消按钮点击事件
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        //使用构建器创建出对话框对象
+        AlertDialog dialog = builder.create();
+        dialog.show();//显示对话框
+    }
     public static Dialog showProgressDialog(Context context, String msg, boolean cancleable, boolean outsideTouchable) {
         Dialog dialog = new Dialog(context, R.style.DialogStyle);
         dialog.setCancelable(cancleable);

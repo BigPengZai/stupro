@@ -1351,6 +1351,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 break;
             case AGEventHandler.EVENT_TYPE_ON_APP_ERROR:
+                //网络发生波动，请检查网络哦！
                 int subType = (int) data[0];
                 if (subType == ConstantApp.AppError.NO_NETWORK_CONNECTION) {
                     showLongToast(getString(R.string.msg_no_network_connection));

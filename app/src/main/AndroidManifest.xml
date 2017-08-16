@@ -60,6 +60,23 @@
             android:value="25e92a031cccf6e3d941b9c9d857eb2c">
         </meta-data>
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.onlyhiedu.mobile.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!--指定Uri的共享路径-->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+
+        </provider>
+
+
+
+
+
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
