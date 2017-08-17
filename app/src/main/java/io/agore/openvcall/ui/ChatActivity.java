@@ -535,7 +535,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         m_agoraAPI.callbackSet(new AgoraAPI.CallBack() {
             @Override
             public void onLoginSuccess(int uid, int fd) {
-                Log.d(TAG, "Login successfully");
+                Log.d(TAG, "Login successfully"+uid);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -743,7 +743,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onChannelUserList(String[] accounts, int[] uids) {
                 super.onChannelUserList(accounts, uids);
+                Log.d(TAG, "频道accounts：" + accounts.length);
+                for (String s : accounts) {
 
+                    Log.d(TAG, "accounts：" + s);
+                }
                 for (String str : accounts) {
                     if (Integer.parseInt(str) == mRoomInfo.getChannelTeacherId()) {
                         requestWhiteBoardData();

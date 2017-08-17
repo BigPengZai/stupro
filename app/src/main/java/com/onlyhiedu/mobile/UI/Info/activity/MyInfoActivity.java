@@ -183,10 +183,11 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
                 mGradeWheel.show();
                 break;
             case R.id.setting_address:
-                if (mAddressWheel == null) {
+                //高考所在地
+                if (mAddressWheel == null&&mAddressData2.size()!=0&&mAddressData.size()!=0) {
                     mAddressWheel = WheelUtils.getWhellView2(mContext, addressL, mAddressData, mAddressData2);
                 }
-                if (showAddress) {
+                if (showAddress&&mAddressWheel!=null) {
                     mAddressWheel.show();
                 }
                 break;

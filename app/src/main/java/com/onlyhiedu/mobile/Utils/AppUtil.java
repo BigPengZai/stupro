@@ -4,12 +4,15 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.onlyhiedu.mobile.App.App;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created by pengpeng on 2017/2/22.
@@ -87,9 +90,11 @@ public class AppUtil {
             //=context.getClass().getClassLoader().getResourceAsStream("assets/"+names[i]);
 //            InputStream inputStream=context.getResources().getAssets().open(fileName);
             inputStream = context.getClass().getClassLoader().getResourceAsStream("assets/" + fileName);
-            byte[] buffer = new byte[inputStream.available()];
-            inputStream.read(buffer);
-            resultString = new String(buffer, "utf-8");
+//            byte[] buffer = new byte[inputStream.available()];
+//            inputStream.read(buffer);
+//            resultString = new String(buffer, "utf-8");
+            resultString = new String(InputStreamToByte(inputStream));
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -103,6 +108,20 @@ public class AppUtil {
         }
         return resultString;
     }
+
+    public static  byte[] InputStreamToByte(InputStream is) throws Exception {
+        ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024*8];
+        int ch;
+        while ((ch = is.read(buffer)) != -1) {
+            bytestream.write(buffer,0,ch);
+        }
+        byte imgdata[] = bytestream.toByteArray();
+        bytestream.close();
+        return imgdata;
+    }
+
+
 
     /**
      * 判断当前版本是否兼容目标版本的方法

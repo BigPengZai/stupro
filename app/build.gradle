@@ -2,9 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'android-apt'
 apply plugin: 'com.google.protobuf'
+
 def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -18,7 +20,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters  "armeabi-v7a", 'armeabi'
+            abiFilters "armeabi-v7a", 'armeabi'
         }
     }
 
@@ -37,7 +39,7 @@ android {
             maven {
                 url "https://jitpack.io"
             }
-            maven {url "file:///D:/wallet-sdk/m2repository"}
+            maven { url "file:///D:/wallet-sdk/m2repository" }
         }
     }
     buildTypes {
@@ -49,16 +51,17 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    sourceSets{
-        main{
+    sourceSets {
+        main {
 
             proto {
                 srcDir 'src/main/proto'
                 include '**/*.proto'
             }
             java {
-                jniLibs.srcDirs=['libs']
+                jniLibs.srcDirs = ['libs']
             }
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/2']
         }
     }
 
@@ -94,10 +97,10 @@ android {
             def fileName
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 if (variant.buildType.name.equals('release')) {
-                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime() }.apk"
+                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
                 } else if (variant.buildType.name.equals('debug')) {
                     // apk_渠道名-版本号-版本名称-编译时间.apk
-                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime() }_debug.apk"
+                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}_debug.apk"
                 }
 
                 output.outputFile = new File(outputFile.parent, fileName)
