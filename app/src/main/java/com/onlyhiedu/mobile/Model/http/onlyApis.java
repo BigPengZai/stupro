@@ -171,7 +171,7 @@ public interface onlyApis {
 
     @FormUrlEncoded
     @POST("client/courseware/getCoursewareImageList")
-    Flowable<onlyHttpResponse<List<CourseWareImageList>>> getCoursewareImageList(@Field("coursewareId") String courseWareId);
+    Flowable<onlyHttpResponse<List<CourseWareImageList>>> getCoursewareImageList(@Field("coursewareUuid") String courseWareId);
 
     /**
      * 意见反馈

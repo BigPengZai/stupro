@@ -45,24 +45,20 @@
             <com.onlyhiedu.mobile.Widget.MyScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ll_video"
-               >
+                android:layout_height="match_parent">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@mipmap/ic_launcher"
                         android:id="@+id/image_course_ware"
-                        android:layout_width="match_parent"
-                        android:layout_height="500dp"
-                        android:scaleType="fitXY"/>
+                        android:layout_width="936px"
+                        android:layout_height="697px"/>
 
                     <com.onlyhiedu.mobile.Widget.draw.DrawView
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/draw_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="936px"
+                        android:layout_height="697px"
                         android:background="@android:color/transparent"
                         app:dv_draw_alpha="255"
                         app:dv_draw_anti_alias="true"
@@ -74,7 +70,7 @@
                         app:dv_draw_mode="draw"
                         app:dv_draw_style="stroke"
                         app:dv_draw_tool="pen"
-                        app:dv_draw_width="4"/>
+                        app:dv_draw_width="1"/>
                 </FrameLayout>
 
             </com.onlyhiedu.mobile.Widget.MyScrollView>

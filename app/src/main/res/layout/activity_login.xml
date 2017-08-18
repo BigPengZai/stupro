@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/size_10"
-            android:text="验证码登录"
+            android:text="短信验证码登录"
             android:textColor="@color/c_242424"/>
 
         <TextView

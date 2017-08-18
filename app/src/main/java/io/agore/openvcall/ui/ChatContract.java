@@ -26,13 +26,16 @@ public interface ChatContract {
 
         //流统计 Flow statistics
         void showFlowStatistics();
+
+        void showCourseWareImageList(List<CourseWareImageList> data);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
         //上传流统计
         void uploadStatistics(String classTime,String courseUuid);
         void getCourseWareImageList(String wareId ,int page);
-
+        //课件图片列表
+        void getCourseWareImageList(String wareId );
         void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage);
         void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data);
         void setBoardCreate(ImageView courseWareImage,DrawView drawView, NotifyWhiteboardOperator data);

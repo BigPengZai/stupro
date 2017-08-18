@@ -38,6 +38,7 @@ import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
 import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
@@ -51,12 +52,8 @@ import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
-import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
@@ -88,6 +85,7 @@ import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
 import io.agore.propeller.preprocessing.VideoPreProcessing;
 
+import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
 public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, ChatContract.View, Chronometer.OnChronometerTickListener {
@@ -100,6 +98,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //    private GoogleApiClient client;
     private String mUid;
     private int mScreenWidth;
+    @BindView(ll_video)
+    LinearLayout mLlVideo;
     @BindView(R.id.grid_video_view_container)
     TeacherVideoView mGridVideoViewContainer;
     @BindView(R.id.scrollView)
@@ -136,7 +136,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private String mChannelName;
     private RoomInfo mRoomInfo;
     private RequestManager mRequestManager;
-
+    private List<CourseWareImageList> mCourseWareImageLists;//课件列表数据
 
     //课程id
     private String mUuid;
@@ -187,8 +187,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mRequestManager = Glide.with(this);
 
 
-        int imageWidth = mScreenWidth - mGridVideoViewContainer.getWidth();
-        mPresenter.setImageWidth(imageWidth);
+//        int imageWidth = mScreenWidth - mLlVideo.getWidth();
+//        mPresenter.setImageWidth(imageWidth);
         setToolBar();
         event().addEventHandler(this);
         initRoomData();
@@ -205,6 +205,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
         initMessageList();
         startCountTimeThread();
+
+
     }
 
     @Override
@@ -535,7 +537,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         m_agoraAPI.callbackSet(new AgoraAPI.CallBack() {
             @Override
             public void onLoginSuccess(int uid, int fd) {
-                Log.d(TAG, "Login successfully"+uid);
+                Log.d(TAG, "Login successfully" + uid);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -564,86 +566,88 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
                 Log.d(TAG, "点对点消息：" + account + " : " + (long) (uid & 0xffffffffl) + " : " + msg);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        try {
-                            JSONObject obj = new JSONObject(msg);
-                            String type = obj.getString("ActionType");
-                            switch (type) {
-                                case "Request_FinishClass":
-                                    initDismissDialog();
-                                    break;
-                                case "Response_FinishClass":
 
-                                    JSONObject responParamBean = obj.getJSONObject("ResponseParam");
-                                    if (responParamBean != null) {
-                                        String confirm = responParamBean.getString("Confirm");
-                                        if ("YES".equals(confirm)) {
-
-                                            //老师同意下课
-                                            if (m_agoraAPI != null) {
-                                                m_agoraAPI.logout();
-                                                Log.d(TAG, "信令退出");
-                                            }
-                                            if (mUidsList != null) {
-                                                mUidsList.clear();
-                                            }
-
-                                            DialogUtil.showOnlyAlert(ChatActivity.this,
-                                                    "提示"
-                                                    , "老师同意了您的下课请求"
-                                                    , "离开教室"
-                                                    , ""
-                                                    , false, false, new DialogListener() {
-                                                        @Override
-                                                        public void onPositive(DialogInterface dialog) {
-                                                            quitCall();
-                                                        }
-
-                                                        @Override
-                                                        public void onNegative(DialogInterface dialog) {
-                                                        }
-                                                    }
-                                            );
-                                        } else if ("NO".equals(confirm)) {
-                                            DialogUtil.showOnlyAlert(ChatActivity.this,
-                                                    "提示"
-                                                    , "老师拒绝了您的下课请求"
-                                                    , "知道了"
-                                                    , ""
-                                                    , false, false, new DialogListener() {
-                                                        @Override
-                                                        public void onPositive(DialogInterface dialog) {
-                                                        }
-
-                                                        @Override
-                                                        public void onNegative(DialogInterface dialog) {
-                                                        }
-                                                    }
-                                            );
-                                        }
-                                    }
-
-                                    break;
-                                case "Response_WhiteboardList":
-                                    ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
-                                    if (whiteboardData != null && whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
-
-                                        mResponseWhiteboardList = whiteboardData;
-                                        mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
-                                        //TODO
-//                                        mImageFullScreen.setVisibility(View.VISIBLE);
-                                    }
-                                    break;
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        try {
+//                            JSONObject obj = new JSONObject(msg);
+//                            String type = obj.getString("ActionType");
+//                            switch (type) {
+//                                case "Request_FinishClass":
+//                                    initDismissDialog();
+//                                    break;
+//                                case "Response_FinishClass":
+//
+//                                    JSONObject responParamBean = obj.getJSONObject("ResponseParam");
+//                                    if (responParamBean != null) {
+//                                        String confirm = responParamBean.getString("Confirm");
+//                                        if ("YES".equals(confirm)) {
+//
+//                                            //老师同意下课
+//                                            if (m_agoraAPI != null) {
+//                                                m_agoraAPI.logout();
+//                                                Log.d(TAG, "信令退出");
+//                                            }
+//                                            if (mUidsList != null) {
+//                                                mUidsList.clear();
+//                                            }
+//
+//                                            DialogUtil.showOnlyAlert(ChatActivity.this,
+//                                                    "提示"
+//                                                    , "老师同意了您的下课请求"
+//                                                    , "离开教室"
+//                                                    , ""
+//                                                    , false, false, new DialogListener() {
+//                                                        @Override
+//                                                        public void onPositive(DialogInterface dialog) {
+//                                                            quitCall();
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onNegative(DialogInterface dialog) {
+//                                                        }
+//                                                    }
+//                                            );
+//                                        } else if ("NO".equals(confirm)) {
+//                                            DialogUtil.showOnlyAlert(ChatActivity.this,
+//                                                    "提示"
+//                                                    , "老师拒绝了您的下课请求"
+//                                                    , "知道了"
+//                                                    , ""
+//                                                    , false, false, new DialogListener() {
+//                                                        @Override
+//                                                        public void onPositive(DialogInterface dialog) {
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onNegative(DialogInterface dialog) {
+//                                                        }
+//                                                    }
+//                                            );
+//                                        }
+//                                    }
+//
+//                                    break;
+//                                case "Response_WhiteboardList":
+//                                    ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
+//                                    if (whiteboardData != null && whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
+//
+//                                        mResponseWhiteboardList = whiteboardData;
+//                                        mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
+//                                        //TODO
+////                                        mImageFullScreen.setVisibility(View.VISIBLE);
+//                                    }
+//                                    break;
+//                            }
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
 
             }
 
@@ -652,44 +656,82 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void onMessageChannelReceive(String channelID, String account, int uid, String msg) {
                 Log.d(TAG, "频道消息：" + channelID + " " + account + " : " + msg);
 
-                NotifyWhiteboardOperator notifyWhiteboard = mPresenter.getNotifyWhiteboard(msg);
-                if (notifyWhiteboard != null) {
-
-                    int type = mPresenter.getActionType(notifyWhiteboard);
-                    if (type == 0) {
-                        return;
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (type == ChatPresenter.Create) {
-                                mNotifyWhiteboardOperator = notifyWhiteboard;
-                                mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
-                                //TODO
-//                                mImageFullScreen.setVisibility(View.VISIBLE);
-                            }
-                            if (type == ChatPresenter.Destory) {
-                                SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
-                            }
-                            if (type == ChatPresenter.ChangeDoc) {
-                                mDrawView.restartDrawing();
-                                String[] split = notifyWhiteboard.NotifyParam.MethodParam.split("[|]");
-                                String docID = split[0].substring(6, split[0].length());
-                                String docPage = split[1].substring(10, split[1].length());
-                                mPresenter.getCourseWareImageList(docID, Integer.parseInt(docPage));
-                            }
-                            if (type == ChatPresenter.SCROLL) {
-                                mPresenter.ScrollDrawView(ChatActivity.this, mScrollView, notifyWhiteboard);
-                            }
-                            if (type == ChatPresenter.ClearScreen) {
-                                mDrawView.restartDrawing();
-                            }
-                            mPresenter.startDraw(type, mDrawView, notifyWhiteboard);
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BoardBean boardBean = JsonUtil.parseJson(msg, BoardBean.class);
+                        if (boardBean == null) {
+                            return;
                         }
-                    });
+                        if ("03".equals(boardBean.methodtype)) {
+                            mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                        }
+                        if ("01".equals(boardBean.methodtype)) {
+                            mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
+                        }
+                        if ("08".equals(boardBean.methodtype)) {  //清屏
+                            mDrawView.restartDrawing();
+                        }
+                        if ("07".equals(boardBean.methodtype)) {  //上一步
+                            mDrawView.undo();
+                        }
+                        if ("09".equals(boardBean.methodtype)) {   //选择课件
+                            mDrawView.restartDrawing();
+                            mPresenter.getCourseWareImageList(boardBean.methodparam);
+                        }
+                        if ("11".equals(boardBean.methodtype)) {  //下一页
+                            mDrawView.restartDrawing();
+                            ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
+                        }
+                        if ("10".equals(boardBean.methodtype)) {  //上一页
+                            mDrawView.restartDrawing();
+                            ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
+                        }
+                        if ("12".equals(boardBean.methodtype)) {  //关闭文档
+                            mDrawView.restartDrawing();
+                            mImageCourseWare.setImageResource(R.drawable.transparent);
+                        }
 
-                }
+                    }
+                });
+//                NotifyWhiteboardOperator notifyWhiteboard = mPresenter.getNotifyWhiteboard(msg);
+//                if (notifyWhiteboard != null) {
+//
+//                    int type = mPresenter.getActionType(notifyWhiteboard);
+//                    if (type == 0) {
+//                        return;
+//                    }
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (type == ChatPresenter.Create) {
+//                                mNotifyWhiteboardOperator = notifyWhiteboard;
+//                                mPresenter.setBoardCreate(mImageCourseWare, mDrawView, notifyWhiteboard);
+//                                //TODO
+////                                mImageFullScreen.setVisibility(View.VISIBLE);
+//                            }
+//                            if (type == ChatPresenter.Destory) {
+//                                SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
+//                            }
+//                            if (type == ChatPresenter.ChangeDoc) {
+//                                mDrawView.restartDrawing();
+//                                String[] split = notifyWhiteboard.NotifyParam.MethodParam.split("[|]");
+//                                String docID = split[0].substring(6, split[0].length());
+//                                String docPage = split[1].substring(10, split[1].length());
+//                                mPresenter.getCourseWareImageList(docID, Integer.parseInt(docPage));
+//                            }
+//                            if (type == ChatPresenter.SCROLL) {
+//                                mPresenter.ScrollDrawView(ChatActivity.this, mScrollView, notifyWhiteboard);
+//                            }
+//                            if (type == ChatPresenter.ClearScreen) {
+//                                mDrawView.restartDrawing();
+//                            }
+//                            mPresenter.startDraw(type, mDrawView, notifyWhiteboard);
+//
+//                        }
+//                    });
+//
+//                }
             }
 
             @Override
@@ -846,7 +888,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //        if (data.get(0).width > imageWidth) {  //图片宽度大于半屏宽度，按比例缩放（转档过来的图片width目前始终为2960，肯定比半屏大）
         float rate = (float) imageWidth / (float) data.get(page).width;
         if (!mSwitch) {
-            mPresenter.setRate(rate);
+//            mPresenter.setHalfScreenRate(rate);
         }
         int imageHeight = (int) ((float) data.get(page).height * rate);
         mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
@@ -865,13 +907,30 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         finish();
     }
 
+    @Override
+    public void showCourseWareImageList(List<CourseWareImageList> data) {
+        mCourseWareImageLists = data;
 
-    private RelativeLayout.LayoutParams mScrollViewP;
+        mDrawView.restartDrawing();
+        //半屏
+        int imageWidth = (int) (mScreenWidth * 0.7);
+        float rate = (float) imageWidth / (float) 936;
+        mPresenter.setRate(rate);
+
+        int imageHeight = (int) ((float) data.get(0).height * (float) imageWidth / (float) data.get(0).width);
+        mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+        mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+
+        ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl);
+    }
+
+
+    private LinearLayout.LayoutParams mScrollViewP;
     private FrameLayout.LayoutParams mDrawViewP;
     private FrameLayout.LayoutParams mImageCourseWareP;
 
 
-    private RelativeLayout.LayoutParams mScrollViewFullP;
+    private LinearLayout.LayoutParams mScrollViewFullP;
     private FrameLayout.LayoutParams mDrawViewFullP;
     private FrameLayout.LayoutParams mImageCourseWareFullP;
 
@@ -886,21 +945,39 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 break;
             case R.id.image_full_screen:
                 if (mScrollViewP == null) {
-                    mScrollViewP = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
+                    mScrollViewP = (LinearLayout.LayoutParams) mScrollView.getLayoutParams();
                     mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
                     mImageCourseWareP = (FrameLayout.LayoutParams) mImageCourseWare.getLayoutParams();
-                    rate = (float) mScreenWidth / (float) mScrollView.getWidth();
+                    float v = (float) mScreenWidth * (float) 0.7;
+                    rate = (float) mScreenWidth / v;
                 }
+
                 if (mScrollViewFullP == null) {
-
-                    mScrollViewFullP = new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
+                    mScrollViewFullP = new LinearLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
 //                    mScrollViewFullP.topMargin = com.onlyhiedu.mobile.Utils.ScreenUtil.getToolbarHeight(this);
-
                     mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
                     mImageCourseWareFullP = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
+//
                 }
 
                 setBoardViewLayoutParams(mSwitch);
+
+//                if (mScrollViewP == null) {
+//                    mScrollViewP = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
+//                    mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
+//                    mImageCourseWareP = (FrameLayout.LayoutParams) mImageCourseWare.getLayoutParams();
+//                    rate = (float) mScreenWidth / (float) mScrollView.getWidth();
+//                }
+//                if (mScrollViewFullP == null) {
+//
+//                    mScrollViewFullP = new RelativeLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
+////                    mScrollViewFullP.topMargin = com.onlyhiedu.mobile.Utils.ScreenUtil.getToolbarHeight(this);
+//
+//                    mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, (int) ((float) mImageCourseWare.getHeight() * rate));
+//                    mImageCourseWareFullP = new FrameLayout.LayoutParams((int) ((float) mImageCourseWare.getWidth() * rate), (int) ((float) mImageCourseWare.getHeight() * rate));
+//                }
+//
+//                setBoardViewLayoutParams(mSwitch);
                 break;
             case R.id.but_im:
                 if (mLlMsg.getVisibility() == View.GONE) {
@@ -1014,7 +1091,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mMsgAdapter.notifyDataSetChanged();
 
         if (mLlMsg.getVisibility() == View.GONE) {
-            mIMPoint.setVisibility(View.VISIBLE);
         }
 
     }
@@ -1026,7 +1102,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
      */
     public void setBoardViewLayoutParams(boolean flag) {
         if (flag) {
+            mLlVideo.setVisibility(View.VISIBLE);
+
             mSwitch = false;
+            mPresenter.setFullScreen(mSwitch);
             mScrollView.setLayoutParams(mScrollViewP);
             mDrawView.setLayoutParams(mDrawViewP);
             mImageCourseWare.setLayoutParams(mImageCourseWareP);
@@ -1037,11 +1116,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
         } else {
+            mLlVideo.setVisibility(View.GONE);
+
+            mPresenter.setFullScreen(mSwitch);
             mScrollView.setLayoutParams(mScrollViewFullP);
             mDrawView.setLayoutParams(mDrawViewFullP);
             mImageCourseWare.setLayoutParams(mImageCourseWareFullP);
             mSwitch = true;
-
             mPresenter.startDrawViewFullAnimation(mDrawView, rate);
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
@@ -1512,7 +1593,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 mCurryY = (int) event.getY();
                 mDelY = mCurryY - mLastDownY;
                 // 滑动超过 基数
-                if (Math.abs(mDelY) < 2) {
+                if (Math.abs(mDelY) < 2&&mDelY>0) {
                     mCountTimeThread.reset();
                     if (visableTag == 0) {
                         //可见
@@ -1524,6 +1605,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         return super.dispatchTouchEvent(event);
     }
+
     int visableTag = 0;
     private CountTimeThread mCountTimeThread;
 

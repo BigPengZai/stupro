@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.App.App;
@@ -32,16 +31,15 @@ import butterknife.OnClick;
 import static com.onlyhiedu.mobile.R.id.btn_openid_qq;
 import static com.onlyhiedu.mobile.R.id.btn_openid_sina;
 import static com.onlyhiedu.mobile.R.id.btn_openid_wx;
-import static com.onlyhiedu.mobile.R.id.guest;
 import static com.onlyhiedu.mobile.R.id.mobile_login;
-import static com.onlyhiedu.mobile.R.id.tv_cancel;
 import static com.onlyhiedu.mobile.R.id.register;
+import static com.onlyhiedu.mobile.R.id.tv_cancel;
 
 
 public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements OpenIDContract.View {
 
     private static final String TAG = OpenIDActivity.class.getSimpleName();
-    public static final String cancelShow = "cancelShow";  //取消按钮是否可见
+//    public static final String cancelShow = "cancelShow";  //取消按钮是否可见
     public static final String information = "information"; //游客模式下，是否点击各人信息进入的首页
 
     private UMShareAPI mShareAPI;
@@ -51,8 +49,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
     @BindView(tv_cancel)
     ImageView mTvCancel;
-    @BindView(guest)
-    TextView mTvGuest;
+
 
     @Override
     protected void initInject() {
@@ -72,14 +69,14 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-        boolean extra = getIntent().getBooleanExtra(cancelShow, false);
+//        boolean extra = getIntent().getBooleanExtra(cancelShow, false);
         mBooleanExtra = getIntent().getBooleanExtra(information, false);
         mIntExtra = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
 
-        if (extra) mTvCancel.setVisibility(View.VISIBLE);
-        else mTvCancel.setVisibility(View.GONE);
-        if (extra) mTvGuest.setVisibility(View.GONE);
-        else mTvGuest.setVisibility(View.VISIBLE);
+//        if (extra) mTvCancel.setVisibility(View.VISIBLE);
+//        else mTvCancel.setVisibility(View.GONE);
+//        if (extra) mTvGuest.setVisibility(View.GONE);
+//        else mTvGuest.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -214,7 +211,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     };
 
 
-    @OnClick({mobile_login, register, guest, btn_openid_wx, btn_openid_qq, btn_openid_sina, tv_cancel})
+    @OnClick({mobile_login, register,  btn_openid_wx, btn_openid_qq, btn_openid_sina, tv_cancel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case mobile_login:
@@ -223,11 +220,11 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
             case register:
                 startActivity(new Intent(this, RegActivity.class));
                 break;
-            case guest:
-                App.bIsGuestLogin = true;
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                break;
+//            case guest:
+//                App.bIsGuestLogin = true;
+//                startActivity(new Intent(this, MainActivity.class));
+//                finish();
+//                break;
             case btn_openid_wx:
                 mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, wxAuthLister);
                 break;

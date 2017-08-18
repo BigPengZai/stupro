@@ -64,11 +64,37 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     private RetrofitHelper mRetrofitHelper;
 
-    private float mRate;   //缩放比例
+    private float mHalfScreenRate = 1;   //缩放比例
+    private float mFullScreenRate;
+    private float mRate;
+
+    public float getRate() {
+        if (mFullScreen) {
+            return mFullScreenRate;
+        } else {
+            return mHalfScreenRate;
+        }
+    }
+
     private int mImageWidth;//半屏的时候白板宽度
 
+    private boolean mFullScreen;  //全屏？
+
+    public void setFullScreen(boolean fullScreen) {
+        mFullScreen = fullScreen;
+    }
+
+    public boolean getFullScreen() {
+        return mFullScreen;
+    }
+
     public void setRate(float rate) {
-        mRate = rate;
+        if (mFullScreen) {
+            mFullScreenRate = rate;
+        } else {
+            mHalfScreenRate = rate;
+        }
+
     }
 
     public void setImageWidth(int imageWidth) {
@@ -79,8 +105,8 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         return mImageWidth;
     }
 
-    public float getRate() {
-        return mRate;
+    public float getHalfScreenRate() {
+        return mHalfScreenRate;
     }
 
     @Inject
@@ -91,7 +117,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     //流统计
     @Override
     public void uploadStatistics(String classTime, String courseUuid) {
-        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchStatics(classTime,courseUuid);
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchStatics(classTime, courseUuid);
         MyResourceSubscriber<onlyHttpResponse> subscriber = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
             public void onNextData(onlyHttpResponse data) {
@@ -124,13 +150,30 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
     @Override
+    public void getCourseWareImageList(String wareId) {
+        Flowable<onlyHttpResponse<List<CourseWareImageList>>> flowable = mRetrofitHelper.fetchGetCourseWareImageList(wareId);
+
+        MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>> subscriber = new MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
+                if (getView() != null) {
+                    if (!data.isHasError()) getView().showCourseWareImageList(data.getData());
+                    else getView().showError(data.getMessage());
+                }
+            }
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
+    }
+
+    @Override
     public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage) {
 
         ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
 
         float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
 
-        setRate(rate);
+//        setHalfScreenRate(rate);
 
         if (!TextUtils.isEmpty(bean.WhiteboardDocID) && !TextUtils.isEmpty(bean.WhiteboardDocID)) {
             getCourseWareImageList(bean.WhiteboardDocID, Integer.parseInt(bean.WhiteboardDocPageID));
@@ -177,7 +220,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         float pcBoardHeight = parseFloat(split[3].split("=")[1]);
 
         float rate = (float) mImageWidth / pcBoardWidth;
-        setRate(rate);
+//        setHalfScreenRate(rate);
         int imageHeight = (int) (pcBoardHeight * rate);
 
 
@@ -236,6 +279,34 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         return null;
     }
 
+
+    public void drawLine(DrawView view, String param) {
+        List<String[]> datas = new ArrayList<>();
+        String[] spit = param.split("[|]");
+        for (String str : spit) {
+            String[] data = new String[2];
+            String[] xyAxle = str.split(",");
+            data[0] = xyAxle[0];
+            data[1] = xyAxle[1];
+            datas.add(data);
+        }
+        if (datas.size() > 0) {
+            String[] xyAxle = datas.get(0);
+            view.eventActionDown(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
+            if (datas.size() == 2) {
+                String[] xyAxle2 = datas.get(1);
+                view.eventActionMove(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
+                view.eventActionUp(parseFloat(xyAxle2[0]) * getRate(), parseFloat(xyAxle2[1]) * getRate());
+            } else {
+                for (int i = 1; i < datas.size() - 1; i++) {
+                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getRate(), parseFloat(datas.get(i)[1]) * getRate());
+                }
+                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getRate());
+            }
+        }
+    }
+
+
     @Override
     public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
         List<String[]> datas = new ArrayList<>();
@@ -252,16 +323,16 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if (datas.size() > 0) {
             String[] xyAxle = datas.get(0);
-            view.eventActionDown(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+            view.eventActionDown(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
             if (datas.size() == 2) {
                 String[] xyAxle2 = datas.get(1);
-                view.eventActionMove(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
-                view.eventActionUp(parseFloat(xyAxle2[0]) * mRate, parseFloat(xyAxle2[1]) * mRate);
+                view.eventActionMove(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
+                view.eventActionUp(parseFloat(xyAxle2[0]) * getRate(), parseFloat(xyAxle2[1]) * getRate());
             } else {
                 for (int i = 1; i < datas.size() - 1; i++) {
-                    view.eventActionMove(parseFloat(datas.get(i)[0]) * mRate, parseFloat(datas.get(i)[1]) * mRate);
+                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getRate(), parseFloat(datas.get(i)[1]) * getRate());
                 }
-                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * mRate, parseFloat(datas.get(datas.size() - 1)[1]) * mRate);
+                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getRate());
             }
         }
     }
@@ -276,14 +347,14 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 //
 //        int viewHeight = view.getScrollY();
 //
-//        int y = (int) (Float.parseFloat(spit[1]) * mRate);
+//        int y = (int) (Float.parseFloat(spit[1]) * mHalfScreenRate);
 //        if (y > height) {
 //            view.scrollTo(0, y);
 //        }
 
 //        int height = getScreenHeight(activity) - getToolbarHeight(activity);
 //
-//        float visibilityRegion = (float) (height) / mRate;
+//        float visibilityRegion = (float) (height) / mHalfScreenRate;
     }
 
     @Override
@@ -300,11 +371,11 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
         String s = json.NotifyParam.MethodParam;
         String[] xyAxle = s.split(",");
-        view.eventActionDown(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
-        view.eventActionMove(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
+        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
 
-        float x = parseFloat(xyAxle[0]) * mRate + parseFloat(xyAxle[2]) * mRate;
-        float y = parseFloat(xyAxle[1]) * mRate + parseFloat(xyAxle[3]) * mRate;
+        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
+        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
         view.eventActionUp(x, y);
     }
 
@@ -318,10 +389,10 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         String s = json.NotifyParam.MethodParam;
         String spit[] = s.split("[|]");
         String[] xyAxle = spit[0].split(",");
-        view.eventActionDown(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
-        view.eventActionMove(parseFloat(xyAxle[0]) * mRate, parseFloat(xyAxle[1]) * mRate);
-        float x = parseFloat(xyAxle[0]) * mRate + parseFloat(xyAxle[2]) * mRate;
-        float y = parseFloat(xyAxle[1]) * mRate + parseFloat(xyAxle[3]) * mRate;
+        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
+        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
         view.eventActionUp(x, y);
         view.refreshLastText(spit[1]);
     }
@@ -370,8 +441,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         return 0;
     }
-
-
 
 
     public void startDraw(int type, DrawView view, NotifyWhiteboardOperator data) {

@@ -2,8 +2,6 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,10 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -31,7 +29,6 @@ import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Emc.presenter.UploadAvatarPresenter;
 import com.onlyhiedu.mobile.UI.Emc.presenter.contract.UploadAvatarContract;
 import com.onlyhiedu.mobile.UI.Home.activity.KnowActivity;
@@ -54,7 +51,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.util.FileUtils;
 
 import java.io.File;
 
@@ -84,10 +80,9 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     //我的订单
     @BindView(R.id.setting_orders)
     SettingItemView mSettingOrders;
-    private String name = "";
 
     private final int SHARE_REQUEST_CODE = 1;
-    private final int MY_PERMISSIONS_REQUEST_CALL_PHONE2=2;
+    private final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 2;
     private UMImage mUmImage;
 
     private File mFileOut;
@@ -96,7 +91,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     public final static int CAMERA_REQUEST_CODE = 3;
     // 拍照路径
     public static String SAVED_IMAGE_DIR_PATH = Environment.getExternalStorageDirectory()
-                    + "/Onlyhi/camera/";
+            + "/Onlyhi/camera/";
     private String // 指定相机拍摄照片保存地址
             cameraPath = SAVED_IMAGE_DIR_PATH +
             System.currentTimeMillis() + ".png";
@@ -151,6 +146,20 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     }
 
 
+    public void showGuestUI() {
+        SPUtil.setAvatarUrl("");
+        mTvName.setText("登录/注册");
+        mTvName.setTextColor(getResources().getColor(R.color.c_F42440));
+        mTvName.setBackgroundResource(R.drawable.radius5);
+        mTvName.setGravity(Gravity.CENTER);
+        mTvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtil.dip2px(95), ScreenUtil.dip2px(28));
+        params.topMargin = ScreenUtil.dip2px(10);
+        mTvName.setLayoutParams(params);
+        ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+    }
+
+
     @OnClick({R.id.iv_portrait, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name, R.id.setting_orders})
     public void onClick(View view) {
         if (App.bIsGuestLogin) {
@@ -158,8 +167,10 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                 startActivity(new Intent(getContext(), KnowActivity.class));
             } else if (view.getId() == R.id.iv_setting) {
                 startActivity(new Intent(getContext(), SettingActivity.class));
+            }else if(view.getId() == R.id.setting_share){
+                shareUrl();
             } else {
-                UIUtils.startGuestLoginActivity(mContext, 2);
+                UIUtils.startGuestLoginActivity(mContext, 0);
             }
 
         } else {
@@ -168,13 +179,12 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 //                    mPresenter.uploadHeadPhoto((MainActivity) getActivity());
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED)
-                    {
+                            != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
                                 MY_PERMISSIONS_REQUEST_CALL_PHONE2);
 
-                    }else {
+                    } else {
                         uploadHeadPhoto();
                     }
                     break;
@@ -205,7 +215,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case SHARE_REQUEST_CODE:
@@ -213,13 +223,11 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                 else Toast.makeText(mContext, "权限未授权", Toast.LENGTH_SHORT).show();
                 break;
             case MY_PERMISSIONS_REQUEST_CALL_PHONE2:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     uploadHeadPhoto();
-                } else
-                {
+                } else {
                     // Permission Denied
-                    DialogUtil.showPresimissFialDialog(getContext(),"SD卡存储");
+                    DialogUtil.showPresimissFialDialog(getContext(), "SD卡存储");
                 }
                 break;
             default:
@@ -233,7 +241,13 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
         umImageMark.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
         umImageMark.setMarkBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.logoicon));
         UMWeb web = new UMWeb("http://www.onlyhi.cn/");
-        web.setTitle(name + "邀您体验[嗨课堂]");
+
+        if (App.bIsGuestLogin) {
+            web.setTitle("您的好友邀您体验[嗨课堂]");
+        } else {
+
+            web.setTitle(SPUtil.getName() + "邀您体验[嗨课堂]");
+        }
         mUmImage = new UMImage(mContext, R.mipmap.logoicon);
         mUmImage.compressFormat = Bitmap.CompressFormat.PNG;
         web.setThumb(mUmImage);
@@ -317,7 +331,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
                             uri = FileProvider.getUriForFile(getActivity(),
-                                     "com.onlyhiedu.mobile.fileprovider",
+                                    "com.onlyhiedu.mobile.fileprovider",
                                     new File(cameraPath));
                             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         } else {
@@ -415,7 +429,6 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
         }
     }
-
 
 
 }

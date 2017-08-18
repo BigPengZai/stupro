@@ -99,7 +99,6 @@ public class UIUtils {
 
     public static void startGuestLoginActivity(Context cxt, int tabPisition) {
         cxt.startActivity(new Intent(cxt, OpenIDActivity.class)
-                .putExtra(OpenIDActivity.cancelShow, true)
                 .putExtra(MainActivity.showPagePosition, tabPisition));
     }
 

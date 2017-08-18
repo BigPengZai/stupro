@@ -104,7 +104,7 @@ public class MyInfoActivity extends BaseActivity<InfoPresenter> implements InfoC
     });
     private void initAddressData() {
         ArrayList<String> cityList;
-        String address = AppUtil.readAssert(App.getInstance().getApplicationContext(), "address.txt");
+        String address = AppUtil.readAssert(App.getInstance().getApplicationContext(), "address.json");
         AddressModel model = JsonUtil.parseJson(address, AddressModel.class);
         if (model != null) {
             AddressBean data = model.Result;

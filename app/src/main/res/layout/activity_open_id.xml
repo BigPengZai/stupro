@@ -21,8 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_24"
             android:padding="10dp"
-            android:src="@mipmap/close_white"
-            android:visibility="gone"/>
+            android:src="@mipmap/close_white"/>
 
 
         <ImageView
@@ -55,13 +54,13 @@
         android:text="注册"
         android:textColor="@color/white"/>
 
-    <TextView android:id="@+id/guest" android:layout_width="wrap_content"
+<!--    <TextView android:id="@+id/guest" android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal" android:layout_marginTop="70dp"
               android:background="@drawable/selector_bottom_line"
               android:paddingBottom="@dimen/size_2"
               android:text="游客使用"
-              android:textColor="@color/white"/>
+              android:textColor="@color/white"/>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
