@@ -17,6 +17,8 @@ import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.pingplusplus.android.Pingpp;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
@@ -33,7 +35,6 @@ import java.io.InputStream;
 import io.agore.openvcall.model.CurrentUserSettings;
 import io.agore.openvcall.model.WorkerThread;
 import okhttp3.OkHttpClient;
-
 /**
  * 全局应用程序类
  * Created by xuwc on 2016/11/21.
@@ -75,6 +76,7 @@ public class App extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+//        Beta.installTinker(base);
     }
 
     @Override
@@ -129,6 +131,8 @@ public class App extends Application {
         Pingpp.enableDebugLog(true);
         //百度钱包
         BaiduWallet.getInstance().initWallet(this,"outyahei");
+        //bugly 热跟新
+//        Bugly.init(this,"5c1349523c",true);
     }
 
 
