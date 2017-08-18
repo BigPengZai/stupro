@@ -14,6 +14,8 @@ import android.widget.ToggleButton;
 import com.hyphenate.EMCallBack;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
+import com.onlyhiedu.mobile.Listener.MyDialogListener;
+import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.Utils.DialogListener;
@@ -22,6 +24,8 @@ import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengCallback;
 import com.umeng.message.PushAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,39 +70,54 @@ public class SettingActivity extends SimpleActivity {
             }
         });
 
-        mButton.setText(App.bIsGuestLogin? "登录":"退出登录");
+        mButton.setText(App.bIsGuestLogin ? "登录" : "退出登录");
     }
 
 
     @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out, R.id.ll_clean_cache, R.id.setting_about})
     public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.setting_pwd:
-                    if(App.bIsGuestLogin){
-                        UIUtils.startGuestLoginActivity(this,2);
-                    }else{
-                        startActivity(new Intent(this, ModifyPwActivity.class));
-                        MobclickAgent.onEvent(this, "setting_modify_pw");
-                    }
-                    break;
-                case R.id.setting_feedback:
-                    if(App.bIsGuestLogin){
-                        UIUtils.startGuestLoginActivity(this,2);
-                    }else{
-                        startActivity(new Intent(this, FeedBackActivity.class));
-                    }
-                    break;
-                case R.id.btn_out:
-                    UIUtils.startLoginActivity(SettingActivity.this);
-//                logoutApp();
-                    break;
-                case R.id.ll_clean_cache:
-                    cleanAppCache();
-                    break;
-                case R.id.setting_about:
-                    startActivity(new Intent(this, AboutActivity.class));
-                    break;
+        switch (view.getId()) {
+            case R.id.setting_pwd:
+                if (App.bIsGuestLogin) {
+                    UIUtils.startGuestLoginActivity(this, 0);
+                } else {
+                    startActivity(new Intent(this, ModifyPwActivity.class));
+                    MobclickAgent.onEvent(this, "setting_modify_pw");
+                }
+                break;
+            case R.id.setting_feedback:
+                if (App.bIsGuestLogin) {
+                    UIUtils.startGuestLoginActivity(this, 0);
+                } else {
+                    startActivity(new Intent(this, FeedBackActivity.class));
+                }
+                break;
+            case R.id.btn_out:
+                if(App.bIsGuestLogin){
+                    UIUtils.startGuestLoginActivity(this, 0);
+                }else{
+                    outApp();
+                }
+                break;
+            case R.id.ll_clean_cache:
+                cleanAppCache();
+                break;
+            case R.id.setting_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+        }
+    }
+
+
+    private void outApp() {
+        DialogUtil.showOnlyAlert(this, "", "确定要退出登录", "确定", "取消", true, true, new MyDialogListener() {
+            @Override
+            public void onPositive(DialogInterface dialog) {
+                App.bIsGuestLogin = true;
+                EventBus.getDefault().post(new MainActivityShowGuest(true));
+                finish();
             }
+        });
     }
 
     private void logoutApp() {

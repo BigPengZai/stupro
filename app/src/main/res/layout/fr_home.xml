@@ -73,18 +73,18 @@
                         android:drawableTop="@mipmap/ic_assignment"
                         android:text="课程优惠"
                         android:textSize="@dimen/sp_12"/>
-                    <TextView
-                        android:id="@+id/tv_consume"
-                        style="@style/home_text"
-                        android:drawableTop="@mipmap/ic_hourglass_full"
-                        android:text="课时消耗"
-                        android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv_service"
                         style="@style/home_text"
                         android:drawableTop="@mipmap/ic_perm_phone_msg"
                         android:text="客服咨询"
+                        android:textSize="@dimen/sp_12"/>
+                    <TextView
+                        android:id="@+id/tv_consume"
+                        style="@style/home_text"
+                        android:drawableTop="@mipmap/ic_hourglass_full"
+                        android:text="课时消耗"
                         android:textSize="@dimen/sp_12"/>
                 </LinearLayout>
 

@@ -133,6 +133,10 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
      */
     @Override
     protected void onDraw(Canvas canvas) {
+        Bitmap init = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        mContentBitmap = init.copy(Bitmap.Config.ARGB_8888, true);
+        init.recycle();
+        mContentCanvas = new Canvas(mContentBitmap);
         mContentBitmap.eraseColor(Color.TRANSPARENT);
 
         if (mDrawMoveBackgroundIndex != -1)
