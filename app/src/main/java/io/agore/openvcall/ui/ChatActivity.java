@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -206,7 +207,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         initMessageList();
         startCountTimeThread();
 
-
+        mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+        visableTag = 1;
     }
 
     @Override
@@ -944,6 +946,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 canFinshClass();
                 break;
             case R.id.image_full_screen:
+                if (visableTag == 1 && mToolbar != null) {
+                    visableTag = 0;
+                    mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                }
                 if (mScrollViewP == null) {
                     mScrollViewP = (LinearLayout.LayoutParams) mScrollView.getLayoutParams();
                     mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
@@ -1119,7 +1125,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mLlVideo.setVisibility(View.GONE);
 
             mPresenter.setFullScreen(mSwitch);
-            mScrollView.setLayoutParams(mScrollViewFullP);
+//            mScrollView.setLayoutParams(mScrollViewFullP);
+            mScrollView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mDrawView.setLayoutParams(mDrawViewFullP);
             mImageCourseWare.setLayoutParams(mImageCourseWareFullP);
             mSwitch = true;
@@ -1593,13 +1600,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 mCurryY = (int) event.getY();
                 mDelY = mCurryY - mLastDownY;
                 // 滑动超过 基数
-                if (Math.abs(mDelY) < 2&&mDelY>0) {
+                if (Math.abs(mDelY) < 2) {
                     mCountTimeThread.reset();
                     if (visableTag == 0) {
                         //可见
                         mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
                         visableTag = 1;
-                        return false;
+//                        return false;
                     }
                 }
         }

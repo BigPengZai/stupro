@@ -50,8 +50,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
+                        android:src="@mipmap/ic_launcher"
                         android:id="@+id/image_course_ware"
-                        android:layout_width="936px"
+                        android:layout_width="match_parent"
                         android:layout_height="697px"/>
 
                     <com.onlyhiedu.mobile.Widget.draw.DrawView
