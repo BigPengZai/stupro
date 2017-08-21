@@ -37,6 +37,7 @@
         </LinearLayout>
         <!--白版  比例 横 5-->
         <LinearLayout
+            android:id="@+id/ll_board"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="7"
@@ -50,7 +51,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@mipmap/ic_launcher"
                         android:id="@+id/image_course_ware"
                         android:layout_width="match_parent"
                         android:layout_height="697px"/>
@@ -63,7 +63,7 @@
                         android:background="@android:color/transparent"
                         app:dv_draw_alpha="255"
                         app:dv_draw_anti_alias="true"
-                        app:dv_draw_color="@color/colorAccent"
+                        app:dv_draw_color="@color/black"
                         app:dv_draw_corners="round"
                         app:dv_draw_dither="true"
                         app:dv_draw_font_family="default_font"

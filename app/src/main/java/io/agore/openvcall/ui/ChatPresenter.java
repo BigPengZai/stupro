@@ -1,33 +1,18 @@
 package io.agore.openvcall.ui;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
-import com.onlyhiedu.mobile.Model.bean.board.MethodType;
-import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
-import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
-import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
-import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
-import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
-import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,38 +30,12 @@ import static java.lang.Float.parseFloat;
 
 public class ChatPresenter extends RxPresenter<ChatContract.View> implements ChatContract.Presenter {
 
-
-    public static final String Notify_WhiteboardOperator = "Notify_WhiteboardOperator";
-    public static final int DRAW = 1;
-    public static final int SET = 2;
-    public static final int SCROLL = 3;
-    public static final int Eraser = 4;
-    public static final int Oval = 5;
-    public static final int Rect = 6;
-    public static final int Line = 7;
-    public static final int Destory = 8;//老师离开教室
-    public static final int Create = 9;
-    public static final int PaintText = 10;
-    public static final int EraserRect = 11;
-    public static final int ChangeDoc = 12; //改变白板关联的课件
-    public static final int ClearScreen = 13;
-
-
     private RetrofitHelper mRetrofitHelper;
 
-    private float mHalfScreenRate = 1;   //缩放比例
-    private float mFullScreenRate;
-    private float mRate;
 
-    public float getRate() {
-        if (mFullScreen) {
-            return mFullScreenRate;
-        } else {
-            return mHalfScreenRate;
-        }
-    }
+    private float mFullScreenRate;  //全屏缩放比例
+    private float mHalfScreenRate;  //半屏缩放比例
 
-    private int mImageWidth;//半屏的时候白板宽度
 
     private boolean mFullScreen;  //全屏？
 
@@ -84,29 +43,18 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         mFullScreen = fullScreen;
     }
 
-    public boolean getFullScreen() {
-        return mFullScreen;
+
+    public float getScreenRate() {
+        return mFullScreen ? mHalfScreenRate : mHalfScreenRate;
     }
 
-    public void setRate(float rate) {
-        if (mFullScreen) {
-            mFullScreenRate = rate;
-        } else {
-            mHalfScreenRate = rate;
-        }
 
+    public void setHalfScreenRate(float halfScreenRate) {
+        mHalfScreenRate = halfScreenRate;
     }
 
-    public void setImageWidth(int imageWidth) {
-        mImageWidth = imageWidth;
-    }
-
-    public int getImageWidth() {
-        return mImageWidth;
-    }
-
-    public float getHalfScreenRate() {
-        return mHalfScreenRate;
+    public void setFullScreenRate(float fullScreenRate) {
+        mFullScreenRate = fullScreenRate;
     }
 
     @Inject
@@ -131,23 +79,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
     }
 
-    @Override
-    public void getCourseWareImageList(String wareId, int page) {
-
-        Flowable<onlyHttpResponse<List<CourseWareImageList>>> flowable = mRetrofitHelper.fetchGetCourseWareImageList(wareId);
-
-        MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>> subscriber = new MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>>() {
-            @Override
-            public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
-                if (getView() != null) {
-                    if (!data.isHasError()) getView().showCourseWareImageList(data.getData(), page);
-                    else getView().showError(data.getMessage());
-                }
-            }
-        };
-
-        addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
-    }
 
     @Override
     public void getCourseWareImageList(String wareId) {
@@ -166,120 +97,45 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
     }
 
-    @Override
-    public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage) {
+//    @Override
+//    public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage) {
+//
+//        ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
+//
+//        float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
+//
+////        setHalfScreenRate(rate);
+//
+//        if (!TextUtils.isEmpty(bean.WhiteboardDocID) && !TextUtils.isEmpty(bean.WhiteboardDocID)) {
+//            getCourseWareImageList(bean.WhiteboardDocID, Integer.parseInt(bean.WhiteboardDocPageID));
+//        } else {
+//            //设置比例转换白板的宽度和高度
+//            int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
+//            courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+//            courseWareImage.setImageResource(R.drawable.transparent);
+//            drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
+//            drawView.setCanvas(mImageWidth, imageHeight);
+//        }
+//
+//        //设置比例转换后的画笔大小
+//        drawView.setDrawWidth((float) (bean.WhiteboardPenSize) * rate);
+//
+//        //设置比例转换后的橡皮檫尺寸
+//        drawView.setEraserSize(((float) (bean.WhiteboardEraseSize) * rate));
+//
+//        //设置画笔颜色
+//        drawView.setDrawColor(Color.parseColor("#" + bean.WhiteboardPenColor));
+//
+//        //设置比例转化后的字体大小
+//        String fontType = bean.WhiteboardFontType;
+//        String[] split = fontType.split(",");
+//        String str = split[split.length - 1];
+//        float fintSize = parseFloat(str.substring(1, str.length()));
+//        drawView.setFontSize(fintSize * rate);
+//
+//    }
 
-        ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
-
-        float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
-
-//        setHalfScreenRate(rate);
-
-        if (!TextUtils.isEmpty(bean.WhiteboardDocID) && !TextUtils.isEmpty(bean.WhiteboardDocID)) {
-            getCourseWareImageList(bean.WhiteboardDocID, Integer.parseInt(bean.WhiteboardDocPageID));
-        } else {
-            //设置比例转换白板的宽度和高度
-            int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
-            courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-            courseWareImage.setImageResource(R.drawable.transparent);
-            drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-            drawView.setCanvas(mImageWidth, imageHeight);
-        }
-
-        //设置比例转换后的画笔大小
-        drawView.setDrawWidth((float) (bean.WhiteboardPenSize) * rate);
-
-        //设置比例转换后的橡皮檫尺寸
-        drawView.setEraserSize(((float) (bean.WhiteboardEraseSize) * rate));
-
-        //设置画笔颜色
-        drawView.setDrawColor(Color.parseColor("#" + bean.WhiteboardPenColor));
-
-        //设置比例转化后的字体大小
-        String fontType = bean.WhiteboardFontType;
-        String[] split = fontType.split(",");
-        String str = split[split.length - 1];
-        float fintSize = parseFloat(str.substring(1, str.length()));
-        drawView.setFontSize(fintSize * rate);
-
-    }
-
-    @Override
-    public void setDrawableStyle(DrawView drawView, NotifyWhiteboardOperator data) {
-        String s = data.NotifyParam.MethodParam;
-        drawView.setDrawWidth(Integer.parseInt(s.substring(s.indexOf("PenSize=") + 8, s.indexOf("|PenColor"))));
-        drawView.setDrawColor(Color.parseColor("#" + s.substring(s.indexOf("PenColor=") + 9, s.indexOf("|EraserSize"))));
-    }
-
-    @Override
-    public void setBoardCreate(ImageView courseWareImage, DrawView drawView, NotifyWhiteboardOperator data) {
-
-        //设置比例转换后的白板宽高
-        String[] split = data.NotifyParam.MethodParam.split("[|]");
-        float pcBoardWidth = parseFloat(split[2].split("=")[1]);
-        float pcBoardHeight = parseFloat(split[3].split("=")[1]);
-
-        float rate = (float) mImageWidth / pcBoardWidth;
-//        setHalfScreenRate(rate);
-        int imageHeight = (int) (pcBoardHeight * rate);
-
-
-        //设置比例转换白板的宽度和高度
-        courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-        courseWareImage.setImageResource(R.drawable.transparent);
-        drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-        drawView.setCanvas(mImageWidth, imageHeight);
-
-        //设置比例转换后的画笔大小
-        drawView.setDrawWidth((Float.parseFloat(split[7].split("=")[1]) * rate));
-
-        //设置画笔颜色
-        drawView.setDrawColor(Color.parseColor("#" + split[8].split("=")[1]));
-
-        //设置比例转换后的橡皮檫尺寸
-        drawView.setEraserSize(((Float.parseFloat(split[9].split("=")[1]) * rate)));
-
-        //设置比例转化后的字体大小
-        String FontTypeStr = split[10].split("=")[1];
-        String fontSize = FontTypeStr.substring(FontTypeStr.lastIndexOf("#") + 1, FontTypeStr.length());
-        drawView.setFontSize(((Float.parseFloat(fontSize) * rate)));
-
-
-    }
-
-
-    @Override
-    public NotifyWhiteboardOperator getNotifyWhiteboard(String msg) {
-        try {
-            JSONObject jsonObject = new JSONObject(msg);
-            String actionType = jsonObject.getString("ActionType");
-            if (actionType.equals(Notify_WhiteboardOperator)) {
-                return JsonUtil.parseJson(msg, NotifyWhiteboardOperator.class);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return null;
-    }
-
-    //获得请求下课msg
-    public ResponseFinishClassData getNotify_FinishClass(String msg) {
-        try {
-            JSONObject jsonObject = new JSONObject(msg);
-            String actionType = jsonObject.getString("ActionType");
-            if (actionType.equals("Response_FinishClass")) {
-                return JsonUtil.parseJson(msg, ResponseFinishClassData.class);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return null;
-    }
-
-
+    //不带课件的白板（true），带课件的白板（false）
     public void drawLine(DrawView view, String param) {
         List<String[]> datas = new ArrayList<>();
         String[] spit = param.split("[|]");
@@ -292,196 +148,91 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
         if (datas.size() > 0) {
             String[] xyAxle = datas.get(0);
-            view.eventActionDown(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
+            view.eventActionDown(parseFloat(xyAxle[0]) * getScreenRate(), parseFloat(xyAxle[1]) * getScreenRate());
             if (datas.size() == 2) {
                 String[] xyAxle2 = datas.get(1);
-                view.eventActionMove(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
-                view.eventActionUp(parseFloat(xyAxle2[0]) * getRate(), parseFloat(xyAxle2[1]) * getRate());
+                view.eventActionMove(parseFloat(xyAxle[0]) * getScreenRate(), parseFloat(xyAxle[1]) * getScreenRate());
+                view.eventActionUp(parseFloat(xyAxle2[0]) * getScreenRate(), parseFloat(xyAxle2[1]) * getScreenRate());
             } else {
                 for (int i = 1; i < datas.size() - 1; i++) {
-                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getRate(), parseFloat(datas.get(i)[1]) * getRate());
+                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getScreenRate(), parseFloat(datas.get(i)[1]) * getScreenRate());
                 }
-                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getRate());
+                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getScreenRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getScreenRate());
             }
         }
     }
 
 
-    @Override
-    public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
-        List<String[]> datas = new ArrayList<>();
-        String type = json.NotifyParam.MethodType;
-        if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE) || type.equals(MethodType.EraserPoint)) {
-            String[] spit = json.NotifyParam.MethodParam.split("[|]");
-            for (String str : spit) {
-                String[] data = new String[2];
-                String[] xyAxle = str.split(",");
-                data[0] = xyAxle[0];
-                data[1] = xyAxle[1];
-                datas.add(data);
-            }
-        }
-        if (datas.size() > 0) {
-            String[] xyAxle = datas.get(0);
-            view.eventActionDown(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
-            if (datas.size() == 2) {
-                String[] xyAxle2 = datas.get(1);
-                view.eventActionMove(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
-                view.eventActionUp(parseFloat(xyAxle2[0]) * getRate(), parseFloat(xyAxle2[1]) * getRate());
-            } else {
-                for (int i = 1; i < datas.size() - 1; i++) {
-                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getRate(), parseFloat(datas.get(i)[1]) * getRate());
-                }
-                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getRate());
-            }
-        }
-    }
-
-    @Override
-    public void ScrollDrawView(Activity activity, MyScrollView view, NotifyWhiteboardOperator bean) {
-//        String s = "255,0,520,520";  表示为视区矩形范围,X,Y,WIDTH,HEIGHT
-//        String s = bean.NotifyParam.MethodParam;
-//        String[] spit = s.split(",");
-//
-//        int height = getScreenHeight(activity) - getToolbarHeight(activity);
-//
-//        int viewHeight = view.getScrollY();
-//
-//        int y = (int) (Float.parseFloat(spit[1]) * mHalfScreenRate);
-//        if (y > height) {
-//            view.scrollTo(0, y);
+//    @Override
+//    public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
+//        List<String[]> datas = new ArrayList<>();
+//        String type = json.NotifyParam.MethodType;
+//        if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE) || type.equals(MethodType.EraserPoint)) {
+//            String[] spit = json.NotifyParam.MethodParam.split("[|]");
+//            for (String str : spit) {
+//                String[] data = new String[2];
+//                String[] xyAxle = str.split(",");
+//                data[0] = xyAxle[0];
+//                data[1] = xyAxle[1];
+//                datas.add(data);
+//            }
 //        }
+//        if (datas.size() > 0) {
+//            String[] xyAxle = datas.get(0);
+//            view.eventActionDown(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
+//            if (datas.size() == 2) {
+//                String[] xyAxle2 = datas.get(1);
+//                view.eventActionMove(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
+//                view.eventActionUp(parseFloat(xyAxle2[0]) * getRate(), parseFloat(xyAxle2[1]) * getRate());
+//            } else {
+//                for (int i = 1; i < datas.size() - 1; i++) {
+//                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getRate(), parseFloat(datas.get(i)[1]) * getRate());
+//                }
+//                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getRate());
+//            }
+//        }
+//    }
 
-//        int height = getScreenHeight(activity) - getToolbarHeight(activity);
+
+//    @Override
+//    public void drawEraser(DrawView view, NotifyWhiteboardOperator json) {
+//        drawPoint(view, json);
+//    }
 //
-//        float visibilityRegion = (float) (height) / mHalfScreenRate;
-    }
-
-    @Override
-    public void drawEraser(DrawView view, NotifyWhiteboardOperator json) {
-        drawPoint(view, json);
-    }
-
-    @Override
-    public void drawEraserRect(DrawView view, NotifyWhiteboardOperator json) {
-        drawOval(view, json);
-    }
-
-    @Override
-    public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
-        String s = json.NotifyParam.MethodParam;
-        String[] xyAxle = s.split(",");
-        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-
-        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
-        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
-        view.eventActionUp(x, y);
-    }
-
-    @Override
-    public void drawRectangle(DrawView view, NotifyWhiteboardOperator json) {
-        drawOval(view, json);
-    }
-
-    @Override
-    public void drawText(DrawView view, NotifyWhiteboardOperator json) {
-        String s = json.NotifyParam.MethodParam;
-        String spit[] = s.split("[|]");
-        String[] xyAxle = spit[0].split(",");
-        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
-        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
-        view.eventActionUp(x, y);
-        view.refreshLastText(spit[1]);
-    }
-
-    @Override
-    public int getActionType(NotifyWhiteboardOperator bean) {
-        String type = bean.NotifyParam.MethodType;
-        if (type.equals(MethodType.POINT)) {
-            return DRAW;
-        }
-        if (type.equals(MethodType.LINE)) {
-            return Line;
-        }
-        if (type.equals(MethodType.PaintSet)) {
-            return SET;
-        }
-        if (type.equals(MethodType.ViewRect)) {
-            return SCROLL;
-        }
-        if (type.equals(MethodType.EraserPoint)) {
-            return Eraser;
-        }
-        if (type.equals(MethodType.PaintEllipse)) {
-            return Oval;
-        }
-        if (type.equals(MethodType.PaintRect)) {
-            return Rect;
-        }
-        if (type.equals(MethodType.Destory)) {
-            return Destory;
-        }
-        if (type.equals(MethodType.Create)) {
-            return Create;
-        }
-        if (type.equals(MethodType.PaintText)) {
-            return PaintText;
-        }
-        if (type.equals(MethodType.EraserRect)) {
-            return EraserRect;
-        }
-        if (type.equals(MethodType.ChangeDoc)) {
-            return ChangeDoc;
-        }
-        if (type.equals(MethodType.ClearScreen)) {
-            return ClearScreen;
-        }
-        return 0;
-    }
-
-
-    public void startDraw(int type, DrawView view, NotifyWhiteboardOperator data) {
-        if (type == ChatPresenter.DRAW) {
-            view.setDrawingTool(DrawingTool.values()[0]);
-            view.setDrawingMode(DrawingMode.values()[0]);
-            drawPoint(view, data);
-        }
-        if (type == ChatPresenter.Line) {
-            view.setDrawingTool(DrawingTool.values()[1]);
-            view.setDrawingMode(DrawingMode.values()[0]);
-            drawPoint(view, data);
-        }
-        if (type == ChatPresenter.SET) {
-            setDrawableStyle(view, data);
-        }
-        if (type == ChatPresenter.Eraser) {
-            view.setDrawingMode(DrawingMode.values()[2]);
-            view.setDrawingTool(DrawingTool.values()[2]);
-            drawEraser(view, data);
-        }
-        if (type == ChatPresenter.Oval) {
-            view.setDrawingMode(DrawingMode.values()[0]);
-            view.setDrawingTool(DrawingTool.values()[4]);
-            drawOval(view, data);
-        }
-        if (type == ChatPresenter.Rect) {
-            view.setDrawingMode(DrawingMode.values()[0]);
-            view.setDrawingTool(DrawingTool.values()[2]);
-            drawRectangle(view, data);
-        }
-        if (type == ChatPresenter.PaintText) {
-            view.setDrawingMode(DrawingMode.values()[1]);
-            drawText(view, data);
-        }
-        if (type == ChatPresenter.EraserRect) {
-            view.setDrawingMode(DrawingMode.values()[3]);
-            drawEraserRect(view, data);
-        }
-
-    }
+//    @Override
+//    public void drawEraserRect(DrawView view, NotifyWhiteboardOperator json) {
+//        drawOval(view, json);
+//    }
+//
+//    @Override
+//    public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
+//        String s = json.NotifyParam.MethodParam;
+//        String[] xyAxle = s.split(",");
+//        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+//        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+//
+//        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
+//        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
+//        view.eventActionUp(x, y);
+//    }
+//
+//    @Override
+//    public void drawRectangle(DrawView view, NotifyWhiteboardOperator json) {
+//        drawOval(view, json);
+//    }
+//
+//    @Override
+//    public void drawText(DrawView view, NotifyWhiteboardOperator json) {
+//        String s = json.NotifyParam.MethodParam;
+//        String spit[] = s.split("[|]");
+//        String[] xyAxle = spit[0].split(",");
+//        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+//        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+//        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
+//        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
+//        view.eventActionUp(x, y);
+//        view.refreshLastText(spit[1]);
+//    }
 
 
     public void startDrawViewFullAnimation(DrawView view, float rate) {
