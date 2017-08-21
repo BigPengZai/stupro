@@ -32,8 +32,9 @@ public class SmallVideoViewAdapter extends VideoViewAdapter {
 //            mItemWidth = outMetrics.widthPixels / 4;
 //            mItemHeight = outMetrics.heightPixels / 4;
 
-            int screenHeight = ScreenUtil.getScreenHeight(mContext)-ScreenUtil.getToolbarHeight(mContext);
-            mItemWidth = ScreenUtil.dip2px(160);
+            int screenHeight = ScreenUtil.getScreenHeight(mContext);
+            int screenWidth = ScreenUtil.getScreenWidth(mContext);
+            mItemWidth = screenWidth/10*3;
             mItemHeight = screenHeight/2;
         }
     }

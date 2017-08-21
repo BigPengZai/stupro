@@ -84,6 +84,7 @@ import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
 import io.agore.propeller.preprocessing.VideoPreProcessing;
 
+import static com.onlyhiedu.mobile.R.id.error_layout;
 import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
@@ -204,6 +205,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         surfaceV.setZOrderMediaOverlay(false);
         mUidsList.put(0, new SoftReference<>(surfaceV)); // get first surface view
         mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
+        rtcEngine().muteLocalAudioStream(false);
+        //禁用本地视频功能
+        rtcEngine().enableLocalVideo(true);
+        //不发送本地视频流
+        rtcEngine().muteLocalVideoStream(false);
+        //暂停所有远端视频流
+        rtcEngine().muteAllRemoteAudioStreams(false);
+        //暂停所有远端音频
+        rtcEngine().muteAllRemoteAudioStreams(false);
         worker().preview(true, surfaceV, Integer.parseInt(mUid));
 
 
@@ -215,9 +225,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     }
 
-    private void initBoard() {
 
-    }
 
     @Override
     protected void onStart() {
@@ -760,6 +768,42 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void onLogout(int ecode) {
                 super.onLogout(ecode);
                 Log.d(TAG, "Logout:" + ecode);
+                //error  103 自动退出
+                if (ecode == 103) {
+                    //暂停音视频流
+                    //将自己静音
+                    rtcEngine().muteLocalAudioStream(true);
+                    //禁用本地视频功能
+                    rtcEngine().enableLocalVideo(false);
+                    //不发送本地视频流
+                    rtcEngine().muteLocalVideoStream(true);
+                    //暂停所有远端视频流
+                    rtcEngine().muteAllRemoteAudioStreams(true);
+                    //暂停所有远端音频
+                    rtcEngine().muteAllRemoteAudioStreams(true);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogUtil.showOnlyAlert(ChatActivity.this,
+                                    "提示"
+                                    , "该账号已经在别处登录。"
+                                    , "知道了"
+                                    , ""
+                                    , false, false, new DialogListener() {
+                                        @Override
+                                        public void onPositive(DialogInterface dialog) {
+                                            finishClassRoom();
+                                        }
+
+                                        @Override
+                                        public void onNegative(DialogInterface dialog) {
+                                        }
+                                    }
+                            );
+                        }
+                    });
+
+                }
             }
 
             //加入频道后 回调
@@ -1549,6 +1593,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
                         visableTag = 1;
 //                        return false;
+                    } else {
+                        if (visableTag == 1 && mToolbar != null) {
+                            visableTag = 0;
+                            mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                        }
                     }
                 }
         }
@@ -1612,7 +1661,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     ;
 
     /**
-     * 如果mControllButtonLayout可见, 则无操作second秒之后隐藏mControllButtonLayout.
+     * 如果可见, 则无操作second秒之后隐藏.
      */
     private class CountTimeThread extends Thread {
         private final long maxVisibleTime;
