@@ -84,7 +84,6 @@ import io.agore.propeller.headset.HeadsetPlugManager;
 import io.agore.propeller.headset.IHeadsetPlugListener;
 import io.agore.propeller.preprocessing.VideoPreProcessing;
 
-import static com.onlyhiedu.mobile.R.id.error_layout;
 import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
@@ -190,7 +189,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mScreenWidth = ScreenUtil.getScreenWidth(this);
         mRequestManager = Glide.with(this);
 
-
+        float v = (float) mScreenWidth * (float) 0.7;
+        rate = (float) mScreenWidth / v;
+        mImageFullScreen.setEnabled(false);
 //        int imageWidth = mScreenWidth - mLlVideo.getWidth();
 //        mPresenter.setImageWidth(imageWidth);
         setToolBar();
@@ -224,7 +225,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         visableTag = 1;
 
     }
-
 
 
     @Override
@@ -713,20 +713,30 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         }
                         if ("15".equals(boardBean.methodtype)) { //白板宽高
 
+                            Log.d(TAG, "接收到白板宽高消息...");
+
                             int imageWidth = (int) (mScreenWidth * 0.7);
 
                             float rate = (float) imageWidth / Float.valueOf(boardBean.methodparam);
                             mPresenter.setHalfScreenRate(rate);
-
-                            int imageHeight = (int) (Float.valueOf(boardBean.scaling) * rate);
+                            int halfImageHeight = (int) (Float.valueOf(boardBean.scaling) * rate);
                             if (!mSwitch) {
-                                mImageCourseWare.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
-                                mDrawView.setLayoutParams(new FrameLayout.LayoutParams(imageWidth, imageHeight));
+                                mDrawViewP = new FrameLayout.LayoutParams(imageWidth, halfImageHeight);
+                                mImageCourseWare.setLayoutParams(mDrawViewP);
+                                mDrawView.setLayoutParams(mDrawViewP);
                             }
 
                             float rates = (float) mScreenWidth / Float.valueOf(boardBean.methodparam);
                             mPresenter.setFullScreenRate(rates);
+                            int FullImageHeight = (int) (Float.valueOf(boardBean.scaling) * rates);
+                            if (mSwitch) {
+                                mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, FullImageHeight);
+                                mImageCourseWare.setLayoutParams(mDrawViewFullP);
+                                mDrawView.setLayoutParams(mDrawViewFullP);
+                            }
                             mDrawView.setDrawWidth(2 * rate);
+
+                            mImageFullScreen.setEnabled(true);
                         }
 
                     }
@@ -939,10 +949,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private FrameLayout.LayoutParams mDrawViewP;
-    private FrameLayout.LayoutParams mImageCourseWareP;
 
     private FrameLayout.LayoutParams mDrawViewFullP;
-    private FrameLayout.LayoutParams mImageCourseWareFullP;
 
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
     private float rate;      //缩放比例
@@ -954,23 +962,33 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 canFinshClass();
                 break;
             case R.id.image_full_screen:
+
                 if (visableTag == 1 && mToolbar != null) {
                     visableTag = 0;
                     mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
                 }
-                if (mDrawViewP == null) {
 
-                    mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
-                    mImageCourseWareP = (FrameLayout.LayoutParams) mImageCourseWare.getLayoutParams();
-                    float v = (float) mScreenWidth * (float) 0.7;
-                    rate = (float) mScreenWidth / v;
-                }
 
-                if (mDrawViewFullP == null) {
+                if (mSwitch) { //全屏
+                    mDrawViewP = new FrameLayout.LayoutParams((int) (mScreenWidth * 0.7), (int) (mImageCourseWare.getHeight() * 0.7));
+                } else {
                     int h = (int) ((float) mImageCourseWare.getHeight() * rate);
                     mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, h);
-                    mImageCourseWareFullP = new FrameLayout.LayoutParams(mScreenWidth, h);
                 }
+
+//                if (mDrawViewP == null) {
+//
+//                    mDrawViewP = (FrameLayout.LayoutParams) mDrawView.getLayoutParams();
+//                    mImageCourseWareP = (FrameLayout.LayoutParams) mImageCourseWare.getLayoutParams();
+//                    float v = (float) mScreenWidth * (float) 0.7;
+//                    rate = (float) mScreenWidth / v;
+//                }
+//
+//                if (mDrawViewFullP == null) {
+//                    int h = (int) ((float) mImageCourseWare.getHeight() * rate);
+//                    mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, h);
+//                    mImageCourseWareFullP = new FrameLayout.LayoutParams(mScreenWidth, h);
+//                }
 
                 setBoardViewLayoutParams(mSwitch);
 
@@ -1103,7 +1121,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mSwitch = false;
             mPresenter.setFullScreen(mSwitch);
             mDrawView.setLayoutParams(mDrawViewP);
-            mImageCourseWare.setLayoutParams(mImageCourseWareP);
+            mImageCourseWare.setLayoutParams(mDrawViewP);
 
             mDrawView.clearAnimation();
 
@@ -1113,7 +1131,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         } else {
             mLlVideo.setVisibility(View.GONE);
             mDrawView.setLayoutParams(mDrawViewFullP);
-            mImageCourseWare.setLayoutParams(mImageCourseWareFullP);
+            mImageCourseWare.setLayoutParams(mDrawViewFullP);
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
             mPresenter.startDrawViewFullAnimation(mDrawView, rate);
