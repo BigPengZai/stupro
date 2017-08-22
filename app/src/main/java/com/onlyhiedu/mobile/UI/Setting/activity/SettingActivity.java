@@ -56,7 +56,7 @@ public class SettingActivity extends SimpleActivity {
     @Override
     protected void initEventAndData() {
         setToolBar("设置");
-        mRelativeLayout.setVisibility(App.bIsGuestLogin ? View.GONE : View.VISIBLE);
+//        mRelativeLayout.setVisibility(App.bIsGuestLogin ? View.GONE : View.VISIBLE);
 
         mTvCacheSize.setText(UIUtils.calculateCacheSize(this));
         mToggle_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

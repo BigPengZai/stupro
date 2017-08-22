@@ -69,7 +69,9 @@
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="关于我们"/>
     <!--上课通知-->
+    <!--暂时关闭-->
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_toggleButton"
         android:layout_width="match_parent"
         android:layout_height="52dp"

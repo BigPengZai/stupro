@@ -191,12 +191,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
                 }
                 break;
             case R.id.tv_information:
-                //课程优惠
-                if(App.bIsGuestLogin){
-                    UIUtils.startGuestLoginActivity(mContext,0);
-                }else{
-                    mPresenter.getActivityTypeList();
-                }
+                //支付模块暂时隐藏
+                UIUtils.startHomeNewsWebViewAct(mContext, urls[0], titles[0]);
+//                //课程优惠
+//                if(App.bIsGuestLogin){
+//                    UIUtils.startGuestLoginActivity(mContext,0);
+//                }else{
+//                    mPresenter.getActivityTypeList();
+//                }
                 break;
         }
     }
