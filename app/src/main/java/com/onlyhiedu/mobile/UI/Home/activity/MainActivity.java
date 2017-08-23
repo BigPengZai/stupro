@@ -338,6 +338,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             case 1:
                 showHideFragment(mClassFragment);
                 mNavigation.setSelectedItemId(R.id.tow);
+
                 break;
             case 2:
                 mNavigation.setSelectedItemId(R.id.thr);

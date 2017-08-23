@@ -28,16 +28,5 @@ public interface ChatContract {
         //课件图片列表
         void getCourseWareImageList(String wareId );
 
-
-//        void drawEraser(DrawView view, NotifyWhiteboardOperator json);
-
-//        void drawEraserRect(DrawView view, NotifyWhiteboardOperator json);
-
-//        void drawOval(DrawView view, NotifyWhiteboardOperator json);
-
-//        void drawRectangle(DrawView view, NotifyWhiteboardOperator json);
-
-//        void drawText(DrawView view, NotifyWhiteboardOperator json);
-
     }
 }

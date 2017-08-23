@@ -251,6 +251,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         set.addAnimation(scaleX);
         set.addAnimation(scaleY);
         view.startAnimation(set);
+
+
+
     }
 
 
