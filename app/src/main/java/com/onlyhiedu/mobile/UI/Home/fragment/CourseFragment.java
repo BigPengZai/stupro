@@ -82,7 +82,8 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     }
 
     @Override
-    protected void initData() {
+    public void onResume() {
+        super.onResume();
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
@@ -90,7 +91,10 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
                 onRefreshing();
             }
         });
+    }
 
+    @Override
+    protected void initData() {
     }
 
     @Override
@@ -131,8 +135,10 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
         }
 
-
     }
+
+
+
 
     @Override
     public void showCourseListFailure() {

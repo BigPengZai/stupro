@@ -17,8 +17,6 @@ import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.pingplusplus.android.Pingpp;
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
@@ -49,7 +47,7 @@ public class App extends Application {
     }
 
     public boolean isTag;
-    public static boolean bIsGuestLogin = false;//是否游客登录
+//    public static boolean bIsGuestLogin = SPUtil.getGuest();//是否游客登录
     static {
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);

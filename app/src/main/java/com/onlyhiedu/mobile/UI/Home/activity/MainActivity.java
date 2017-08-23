@@ -39,6 +39,7 @@ import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.runtimepermissions.PermissionsManager;
@@ -61,8 +62,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     public static final int CALL_REQUEST_CODE = 110;
     public static String showPagePosition = "showPagePosition";
     private ClassFragment mClassFragment;
-    private MeFragment mMeFragment;
     private HomeFragment mHomeFragment;
+    private MeFragment mMeFragment;
     // user logged into another device
     public boolean isConflict = false;
     // user account was removed
@@ -153,7 +154,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mHomeFragment);
         }
         if (item.getItemId() == R.id.tow) {
-            if (App.bIsGuestLogin) {
+            if (SPUtil.getGuest()) {
                 UIUtils.startGuestLoginActivity(this, 0);
                 return false;
             } else showHideFragment(mClassFragment);
@@ -331,7 +332,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(MainActivityTabSelectPos event) {
-        App.bIsGuestLogin = false;
+
+        SPUtil.setGuest(false);
+
+//        App.bIsGuestLogin = false;
         mMeFragment.setTextStyle();
 
         switch (event.tabPosition) {
@@ -375,9 +379,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                 }
             }
         });
-
     }
-
 
     /**
      * get unread message count

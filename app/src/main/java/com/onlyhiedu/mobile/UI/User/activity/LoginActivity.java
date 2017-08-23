@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
@@ -22,7 +21,6 @@ import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
@@ -131,7 +129,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showUser() {
         addUTag();
-        App.bIsGuestLogin = false;
+//        App.bIsGuestLogin = false;
+
+        SPUtil.setGuest(false);
 
         if (mBooleanExtra) {
             startActivity(new Intent(this, MyInfoActivity.class));

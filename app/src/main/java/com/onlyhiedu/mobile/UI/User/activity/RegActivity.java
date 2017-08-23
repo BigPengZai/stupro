@@ -22,6 +22,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.RegPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.RegContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
@@ -248,8 +249,9 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     @Override
     public void showUser() {
         addUTag();
-        if (App.bIsGuestLogin) {
-            App.bIsGuestLogin = false;
+        if (SPUtil.getGuest()) {
+//            App.bIsGuestLogin = false;
+            SPUtil.setGuest(false);
             EventBus.getDefault().post(new MainActivityTabSelectPos(0));
         }
         if (mProgressDialog != null && mProgressDialog.isShowing()) {

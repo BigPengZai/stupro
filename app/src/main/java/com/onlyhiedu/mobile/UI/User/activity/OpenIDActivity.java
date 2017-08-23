@@ -8,7 +8,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
@@ -41,6 +40,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     private static final String TAG = OpenIDActivity.class.getSimpleName();
 //    public static final String cancelShow = "cancelShow";  //取消按钮是否可见
     public static final String information = "information"; //游客模式下，是否点击各人信息进入的首页
+
 
     private UMShareAPI mShareAPI;
     private boolean mBooleanExtra;
@@ -86,11 +86,11 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
     @Override
     public void showUser() {
-        if( App.bIsGuestLogin){  //如果之前是游客
-            App.bIsGuestLogin = false;
+        if( SPUtil.getGuest()){  //如果之前是游客
+//            App.bIsGuestLogin = false;
+            SPUtil.setGuest(false);
             EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
         }
-
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

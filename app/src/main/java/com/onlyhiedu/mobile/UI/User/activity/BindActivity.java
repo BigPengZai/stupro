@@ -17,6 +17,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.BindPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.BindContract;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.StringUtils;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.InputTextView;
@@ -70,7 +71,10 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
 
     @Override
     public void showUser() {
-        App.bIsGuestLogin = false;
+
+        SPUtil.setGuest(false);
+
+//        App.bIsGuestLogin = false;
         startActivity(new Intent(this, MainActivity.class));
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);

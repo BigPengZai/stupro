@@ -12,7 +12,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.hyphenate.EMCallBack;
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Listener.MyDialogListener;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
@@ -20,6 +19,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengCallback;
@@ -70,7 +70,7 @@ public class SettingActivity extends SimpleActivity {
             }
         });
 
-        mButton.setText(App.bIsGuestLogin ? "登录" : "退出登录");
+        mButton.setText(SPUtil.getGuest() ? "登录" : "退出登录");
     }
 
 
@@ -78,7 +78,7 @@ public class SettingActivity extends SimpleActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
-                if (App.bIsGuestLogin) {
+                if (SPUtil.getGuest()) {
                     UIUtils.startGuestLoginActivity(this, 0);
                 } else {
                     startActivity(new Intent(this, ModifyPwActivity.class));
@@ -86,14 +86,14 @@ public class SettingActivity extends SimpleActivity {
                 }
                 break;
             case R.id.setting_feedback:
-                if (App.bIsGuestLogin) {
+                if (SPUtil.getGuest()) {
                     UIUtils.startGuestLoginActivity(this, 0);
                 } else {
                     startActivity(new Intent(this, FeedBackActivity.class));
                 }
                 break;
             case R.id.btn_out:
-                if(App.bIsGuestLogin){
+                if(SPUtil.getGuest()){
                     UIUtils.startGuestLoginActivity(this, 0);
                 }else{
                     outApp();
@@ -113,7 +113,8 @@ public class SettingActivity extends SimpleActivity {
         DialogUtil.showOnlyAlert(this, "", "确定要退出登录", "确定", "取消", true, true, new MyDialogListener() {
             @Override
             public void onPositive(DialogInterface dialog) {
-                App.bIsGuestLogin = true;
+//                App.bIsGuestLogin = true;
+                SPUtil.setGuest(true);
                 EventBus.getDefault().post(new MainActivityShowGuest(true));
                 finish();
             }

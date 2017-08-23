@@ -54,6 +54,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
         return R.layout.layout_recycle_refresh;
     }
 
+
     @Override
     protected void initView() {
         mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
@@ -68,8 +69,10 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
         mAdapter.setOnItemClickListener(this);
     }
 
+
     @Override
-    protected void initData() {
+    public void onResume() {
+        super.onResume();
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
@@ -77,6 +80,10 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
                 onRefreshing();
             }
         });
+    }
+
+    @Override
+    protected void initData() {
     }
 
     @Override

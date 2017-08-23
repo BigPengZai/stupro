@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -109,14 +108,14 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
     @Override
     protected void initView() {
-        if (!App.bIsGuestLogin) {
+        if (!SPUtil.getGuest()) {
             mPresenter.getStuInfo();
         }
     }
 
     @Override
     protected void initData() {
-        if (App.bIsGuestLogin) {
+        if (SPUtil.getGuest()) {
             SPUtil.setAvatarUrl("");
             mTvName.setText("登录/注册");
             mTvName.setTextColor(getResources().getColor(R.color.c_F42440));
@@ -162,7 +161,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
 
     @OnClick({R.id.iv_portrait, R.id.iv_setting, R.id.setting_me, R.id.setting_consumption, R.id.setting_share, R.id.setting_know, R.id.tv_name, R.id.setting_orders})
     public void onClick(View view) {
-        if (App.bIsGuestLogin) {
+        if (SPUtil.getGuest()) {
             if (view.getId() == R.id.setting_know) {
                 startActivity(new Intent(getContext(), KnowActivity.class));
             } else if (view.getId() == R.id.iv_setting) {
@@ -242,7 +241,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
         umImageMark.setMarkBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.logoicon));
         UMWeb web = new UMWeb("http://www.onlyhi.cn/");
 
-        if (App.bIsGuestLogin) {
+        if (SPUtil.getGuest()) {
             web.setTitle("您的好友邀您体验[嗨课堂]");
         } else {
 

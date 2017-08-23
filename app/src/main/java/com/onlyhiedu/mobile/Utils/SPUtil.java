@@ -67,6 +67,13 @@ public class SPUtil {
         return getAppSp().getString(Constants.EMCAVATARURL, "");
     }
 
+    public static void setGuest(boolean guest) {
+        getAppSp().edit().putBoolean(Constants.IsGuest, guest).apply();
+    }
+
+    public static boolean getGuest() {
+        return getAppSp().getBoolean(Constants.IsGuest, true);
+    }
 
     //============================================= 设置基本信息
     public static void setUserInfo(String emcRegName, String token, String phone, String userName, String avatarUrl) {

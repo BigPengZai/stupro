@@ -4,15 +4,9 @@ package com.onlyhiedu.mobile.UI.Home.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.hyphenate.chat.EMClient;
-import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
-import com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 
 
@@ -41,6 +35,7 @@ public class SplashActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
+
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }else {
@@ -48,7 +43,8 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-                    startActivity(new Intent(SplashActivity.this, OpenIDActivity.class));
+                    SPUtil.setGuest(true);
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }
             }
