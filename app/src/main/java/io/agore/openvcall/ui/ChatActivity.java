@@ -1085,7 +1085,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(mDrawViewP);
 
             mDrawView.clearAnimation();
-            mDrawView.invalidate();
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
 
 
@@ -1096,7 +1095,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
             mPresenter.startDrawViewFullAnimation(mDrawView, rate);
-            mDrawView.invalidate();
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
 
         }
