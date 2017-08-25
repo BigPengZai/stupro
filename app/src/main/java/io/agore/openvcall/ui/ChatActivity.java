@@ -688,6 +688,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         if ("01".equals(boardBean.methodtype)) {
                             mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
                         }
+                        if ("02".equals(boardBean.methodtype)) {
+                            mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
+                        }
                         if ("08".equals(boardBean.methodtype)) {  //清屏
                             mDrawView.restartDrawing();
                         }
@@ -735,7 +738,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mImageCourseWare.setLayoutParams(mDrawViewFullP);
                                 mDrawView.setLayoutParams(mDrawViewFullP);
                             }
-                            mDrawView.setDrawWidth(2 * rate);
 
                             mImageFullScreen.setEnabled(true);
                         }
