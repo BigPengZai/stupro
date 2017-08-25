@@ -33,6 +33,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     protected Activity mActivity;
     protected Context mContext;
 
+
     private Unbinder mUnBinder;
     //String name = BaseActivity.class.getSimpleName();
     private String mPageName = this.getClass().getSimpleName();
