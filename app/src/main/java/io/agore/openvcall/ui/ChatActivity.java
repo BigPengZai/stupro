@@ -131,7 +131,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.but_dismiss)
     TextView mButDismiss;
     private AgoraAPIOnlySignal m_agoraAPI;
-
+    @BindView(R.id.ll_class_bg)
+    LinearLayout mLlClassBg;
 
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -1087,8 +1088,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mDrawView.clearAnimation();
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
 
-
+            mLlClassBg.setVisibility(View.VISIBLE);
         } else {
+            mLlClassBg.setVisibility(View.GONE);
             mLlVideo.setVisibility(View.GONE);
             mDrawView.setLayoutParams(mDrawViewFullP);
             mImageCourseWare.setLayoutParams(mDrawViewFullP);

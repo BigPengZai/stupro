@@ -13,6 +13,7 @@
         android:orientation="horizontal">
         <!--背景图-->
         <LinearLayout
+            android:id="@+id/ll_class_bg"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
