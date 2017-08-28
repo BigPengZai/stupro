@@ -1,5 +1,7 @@
 package io.agore.openvcall.ui;
 
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
@@ -13,6 +15,10 @@ import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +35,8 @@ import static java.lang.Float.parseFloat;
  */
 
 public class ChatPresenter extends RxPresenter<ChatContract.View> implements ChatContract.Presenter {
+
+    public static final String PEN = "03";
 
     private RetrofitHelper mRetrofitHelper;
 
@@ -81,14 +89,15 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
 
     @Override
-    public void getCourseWareImageList(String wareId) {
+    public void getCourseWareImageList(String wareId, int pageNum,boolean restart) {
         Flowable<onlyHttpResponse<List<CourseWareImageList>>> flowable = mRetrofitHelper.fetchGetCourseWareImageList(wareId);
 
         MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>> subscriber = new MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>>() {
             @Override
             public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
                 if (getView() != null) {
-                    if (!data.isHasError()) getView().showCourseWareImageList(data.getData());
+                    if (!data.isHasError())
+                        getView().showCourseWareImageList(data.getData(), pageNum,restart);
                     else getView().showError(data.getMessage());
                 }
             }
@@ -252,8 +261,57 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         set.addAnimation(scaleY);
         view.startAnimation(set);
 
+    }
 
 
+    public void initBoard(ChatActivity activity, DrawView view, String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            String boardWidth = jsonObject.getString("boardWidth");
+            String boardHeight = jsonObject.getString("boardHeight");
+            //设置白板宽高
+            activity.setBoardViewLayoutParams(Integer.valueOf(boardWidth), Integer.valueOf(boardHeight));
+            //设置课件
+            String coursewareId = jsonObject.getString("coursewareId");
+            if (!TextUtils.isEmpty(coursewareId)) {
+                getCourseWareImageList(coursewareId, Integer.valueOf(jsonObject.getString("pageNum")),false);
+            }
+            //画线
+            try {
+                JSONArray drawData = jsonObject.getJSONArray("drawData");
+                for (int i = 0; i < drawData.length(); i++) {
+                    JSONObject bean = (JSONObject) drawData.opt(i);
+                    switch (bean.getString("drawMode")) {
+                        case PEN:
+                            view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+                            drawLine(view, bean.getString("points"));
+                            break;
+                    }
+                }
+
+            } catch (Exception e) {
+            }
+
+            String color = jsonObject.getString("color");
+            if (!TextUtils.isEmpty(color)) {
+                view.setDrawColor(Color.parseColor("#" + color));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        if (boardBeanInfo.coursewareId != null) {
+//            getCourseWareImageList(boardBeanInfo.coursewareId, Integer.valueOf(boardBeanInfo.pageNum));
+//        }
+
+//        if (boardBeanInfo.drawData != null && boardBeanInfo.drawData.size() != 0) {
+//            List<BoardInfoBean.Methodparam.DrawData> drawData = boardBeanInfo.drawData;
+//            for (int i = 0; i < drawData.size(); i++) {
+//                switch (drawData.get(i).drawMode){
+//                    case
+//                }
+//            }
+//        }
     }
 
 

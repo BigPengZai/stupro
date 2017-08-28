@@ -19,14 +19,15 @@ public interface ChatContract {
         //流统计 Flow statistics
         void showFlowStatistics();
 
-        void showCourseWareImageList(List<CourseWareImageList> data);
+        void showCourseWareImageList(List<CourseWareImageList> data, int pageNum, boolean restart);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
         //上传流统计
-        void uploadStatistics(String classTime,String courseUuid);
+        void uploadStatistics(String classTime, String courseUuid);
+
         //课件图片列表
-        void getCourseWareImageList(String wareId );
+        void getCourseWareImageList(String wareId, int pageNum,boolean restart);
 
     }
 }

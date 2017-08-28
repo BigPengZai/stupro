@@ -38,9 +38,7 @@ import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
-import com.onlyhiedu.mobile.Model.bean.board.NotifyWhiteboardOperator;
 import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
-import com.onlyhiedu.mobile.Model.bean.board.ResponseWhiteboardList;
 import com.onlyhiedu.mobile.Model.bean.finishclass.RequestFinishClass;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
@@ -162,10 +160,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean isStartTime;
     private boolean isTeacherJoined;
 
-    private boolean isWhiteBoard; //不带课件白板（true），带课件的白板（false）
 
-    private ResponseWhiteboardList mResponseWhiteboardList;  //学生后进来白板数据
-    private NotifyWhiteboardOperator mNotifyWhiteboardOperator; //学生先进来白板数据
     int mLastDownY;
     private int mCurryY;
 
@@ -682,7 +677,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         if (boardBean == null) {
                             return;
                         }
-                        if ("03".equals(boardBean.methodtype)) {
+                        if (ChatPresenter.PEN.equals(boardBean.methodtype)) {
                             mPresenter.drawLine(mDrawView, boardBean.methodparam);
                         }
                         if ("01".equals(boardBean.methodtype)) {
@@ -698,9 +693,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             mDrawView.undo();
                         }
                         if ("09".equals(boardBean.methodtype)) {   //选择课件
-                            isWhiteBoard = false;
                             mDrawView.restartDrawing();
-                            mPresenter.getCourseWareImageList(boardBean.methodparam);
+                            mPresenter.getCourseWareImageList(boardBean.methodparam,0,true);
                         }
                         if ("11".equals(boardBean.methodtype)) {  //下一页
                             mDrawView.restartDrawing();
@@ -711,34 +705,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
                         }
                         if ("12".equals(boardBean.methodtype)) {  //关闭文档
-                            isWhiteBoard = true;
                             mDrawView.restartDrawing();
                             mImageCourseWare.setImageResource(R.drawable.transparent);
+                            setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam) ,Integer.valueOf(boardBean.scaling));
+                        }
+                        if("16".equals(boardBean.methodtype)){
+                            mPresenter.initBoard(ChatActivity.this,mDrawView, boardBean.methodparam);
+                            mImageFullScreen.setEnabled(true);
                         }
                         if ("15".equals(boardBean.methodtype)) { //白板宽高
-
                             Log.d(TAG, "接收到白板宽高消息...");
-
-                            int imageWidth = (int) (mScreenWidth * 0.7);
-
-                            float rate = (float) imageWidth / Float.valueOf(boardBean.methodparam);
-                            mPresenter.setHalfScreenRate(rate);
-                            int halfImageHeight = (int) (Float.valueOf(boardBean.scaling) * rate);
-                            mDrawViewP = new FrameLayout.LayoutParams(imageWidth, halfImageHeight);
-                            if (!mSwitch) {
-                                mImageCourseWare.setLayoutParams(mDrawViewP);
-                                mDrawView.setLayoutParams(mDrawViewP);
-                            }
-
-                            float rates = (float) mScreenWidth / Float.valueOf(boardBean.methodparam);
-                            mPresenter.setFullScreenRate(rates);
-                            int FullImageHeight = (int) (Float.valueOf(boardBean.scaling) * rates);
-                            mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, FullImageHeight);
-                            if (mSwitch) {
-                                mImageCourseWare.setLayoutParams(mDrawViewFullP);
-                                mDrawView.setLayoutParams(mDrawViewFullP);
-                            }
-
+                            setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam) ,Integer.valueOf(boardBean.scaling));
                             mImageFullScreen.setEnabled(true);
                         }
 
@@ -835,27 +812,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void onChannelUserList(String[] accounts, int[] uids) {
                 super.onChannelUserList(accounts, uids);
                 Log.d(TAG, "频道accounts：" + accounts.length);
-                for (String s : accounts) {
-
-                    Log.d(TAG, "accounts：" + s);
-                }
-                for (String str : accounts) {
-                    if (Integer.parseInt(str) == mRoomInfo.getChannelTeacherId()) {
-                        requestWhiteBoardData();
-                    }
-                    if (Integer.parseInt(str) == mRoomInfo.getChannelStudentId()) {
-                        String json = null;
-                        if (mResponseWhiteboardList != null) {
-                            json = JsonUtil.toJson(mResponseWhiteboardList);
-                        }
-                        if (mNotifyWhiteboardOperator != null) {
-                            json = JsonUtil.toJson(mNotifyWhiteboardOperator);
-                        }
-                        if (json != null) {
-                            m_agoraAPI.messageInstantSend(mRoomInfo.getChannelPatriarchId() + "", 0, json, sendPatriarch);
-                        }
-                    }
-                }
             }
         });
     }
@@ -929,10 +885,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     @Override
-    public void showCourseWareImageList(List<CourseWareImageList> data) {
+    public void showCourseWareImageList(List<CourseWareImageList> data,int pageNum,boolean restart) {
         mCourseWareImageLists = data;
-        mDrawView.restartDrawing();
-        ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(0).imageUrl);
+        if(restart){
+            mDrawView.restartDrawing();
+        }
+        ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(pageNum).imageUrl);
     }
 
     private FrameLayout.LayoutParams mDrawViewP;
@@ -1103,6 +1061,32 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
         }
     }
+
+    public void setBoardViewLayoutParams(int width, int height){
+        int imageWidth = (int) (mScreenWidth * 0.7);
+
+        float rate = (float) imageWidth / Float.valueOf(width);
+        mPresenter.setHalfScreenRate(rate);
+        int halfImageHeight = (int) (Float.valueOf(height) * rate);
+        mDrawViewP = new FrameLayout.LayoutParams(imageWidth, halfImageHeight);
+        if (!mSwitch) {
+            mImageCourseWare.setLayoutParams(mDrawViewP);
+            mDrawView.setLayoutParams(mDrawViewP);
+        }
+
+        float rates = (float) mScreenWidth / Float.valueOf(width);
+        mPresenter.setFullScreenRate(rates);
+        int FullImageHeight = (int) (Float.valueOf(height) * rates);
+        mDrawViewFullP = new FrameLayout.LayoutParams(mScreenWidth, FullImageHeight);
+        if (mSwitch) {
+            mImageCourseWare.setLayoutParams(mDrawViewFullP);
+            mDrawView.setLayoutParams(mDrawViewFullP);
+        }
+    }
+
+
+
+
 
 
     //请求 下课 tag
