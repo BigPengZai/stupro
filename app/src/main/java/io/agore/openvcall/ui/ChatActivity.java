@@ -475,7 +475,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (mIsBack) {
                     finishClassRoom();
                 } else {
-                    Toast.makeText(mContext, "课程未结束", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -575,93 +575,66 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                 }
             }
-
             //对方将收到 onMessageInstantReceive 回调。
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
                 Log.d(TAG, "点对点消息：" + account + " : " + (long) (uid & 0xffffffffl) + " : " + msg);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mRoomInfo.getChannelTeacherId() == Integer.parseInt(account)) {
+                            switch (msg) {
+                                case "00":
+                                    initDismissDialog();
+                                    break;
+                                case "ok":
+                                    //老师同意下课
+                                    if (m_agoraAPI != null) {
+                                        m_agoraAPI.logout();
+                                        Log.d(TAG, "信令退出");
+                                    }
+                                    if (mUidsList != null) {
+                                        mUidsList.clear();
+                                    }
 
+                                    DialogUtil.showOnlyAlert(ChatActivity.this,
+                                            "提示"
+                                            , "老师同意了您的下课请求"
+                                            , "离开教室"
+                                            , ""
+                                            , false, false, new DialogListener() {
+                                                @Override
+                                                public void onPositive(DialogInterface dialog) {
+                                                    quitCall();
+                                                }
 
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        try {
-//                            JSONObject obj = new JSONObject(msg);
-//                            String type = obj.getString("ActionType");
-//                            switch (type) {
-//                                case "Request_FinishClass":
-//                                    initDismissDialog();
-//                                    break;
-//                                case "Response_FinishClass":
-//
-//                                    JSONObject responParamBean = obj.getJSONObject("ResponseParam");
-//                                    if (responParamBean != null) {
-//                                        String confirm = responParamBean.getString("Confirm");
-//                                        if ("YES".equals(confirm)) {
-//
-//                                            //老师同意下课
-//                                            if (m_agoraAPI != null) {
-//                                                m_agoraAPI.logout();
-//                                                Log.d(TAG, "信令退出");
-//                                            }
-//                                            if (mUidsList != null) {
-//                                                mUidsList.clear();
-//                                            }
-//
-//                                            DialogUtil.showOnlyAlert(ChatActivity.this,
-//                                                    "提示"
-//                                                    , "老师同意了您的下课请求"
-//                                                    , "离开教室"
-//                                                    , ""
-//                                                    , false, false, new DialogListener() {
-//                                                        @Override
-//                                                        public void onPositive(DialogInterface dialog) {
-//                                                            quitCall();
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onNegative(DialogInterface dialog) {
-//                                                        }
-//                                                    }
-//                                            );
-//                                        } else if ("NO".equals(confirm)) {
-//                                            DialogUtil.showOnlyAlert(ChatActivity.this,
-//                                                    "提示"
-//                                                    , "老师拒绝了您的下课请求"
-//                                                    , "知道了"
-//                                                    , ""
-//                                                    , false, false, new DialogListener() {
-//                                                        @Override
-//                                                        public void onPositive(DialogInterface dialog) {
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onNegative(DialogInterface dialog) {
-//                                                        }
-//                                                    }
-//                                            );
-//                                        }
-//                                    }
-//
-//                                    break;
-//                                case "Response_WhiteboardList":
-//                                    ResponseWhiteboardList whiteboardData = JsonUtil.parseJson(msg, ResponseWhiteboardList.class);
-//                                    if (whiteboardData != null && whiteboardData.ResponseParam != null && whiteboardData.ResultDesc.equals("SUCCEED")) {
-//
-//                                        mResponseWhiteboardList = whiteboardData;
-//                                        mPresenter.setDrawableStyle(mDrawView, whiteboardData, mImageCourseWare);
-//                                        //TODO
-////                                        mImageFullScreen.setVisibility(View.VISIBLE);
-//                                    }
-//                                    break;
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
+                                                @Override
+                                                public void onNegative(DialogInterface dialog) {
+                                                }
+                                            }
+                                    );
+                                    break;
+                                case "no":
+                                    DialogUtil.showOnlyAlert(ChatActivity.this,
+                                            "提示"
+                                            , "老师拒绝了您的下课请求"
+                                            , "知道了"
+                                            , ""
+                                            , false, false, new DialogListener() {
+                                                @Override
+                                                public void onPositive(DialogInterface dialog) {
+                                                }
+
+                                                @Override
+                                                public void onNegative(DialogInterface dialog) {
+                                                }
+                                            }
+                                    );
+                                    break;
+                            }
+                        }
+                    }
+                });
 
             }
 
@@ -733,10 +706,19 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, "同意老师下课，已退出房间", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "同意老师下课，退出教室了。", Toast.LENGTH_SHORT).show();
                         }
                     });
                     finishClassRoom();
+                }
+                if (messageID.equals("stu_no")) {
+                    Log.d(TAG, "学生拒绝下课");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "拒绝了下课请求", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 if (messageID.equals(requestFinishClassTag)) {
                     runOnUiThread(new Runnable() {
@@ -835,8 +817,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         if (mRoomInfo != null) {
                             //call  的对象 假数据即老师信令的id
                             String peer = mRoomInfo.getChannelTeacherId() + "";
-                            String data = mPresenter.responseFinishClass("YES", mRoomInfo.getChannelStudentId(), mRoomInfo.getSignallingChannelId());
-                            m_agoraAPI.messageInstantSend(peer, 0, data, "stu_ok");
+                            m_agoraAPI.messageInstantSend(peer, 0, "yes", "stu_ok");
                         }
                     }
 
@@ -846,8 +827,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         Log.d(TAG, "取消");
                         if (mRoomInfo != null) {
                             String peer = mRoomInfo.getChannelTeacherId() + "";
-                            String data = mPresenter.responseFinishClass("NO", mRoomInfo.getChannelStudentId(), mRoomInfo.getSignallingChannelId());
-                            m_agoraAPI.messageInstantSend(peer, 0, data, "stu_no");
+                            m_agoraAPI.messageInstantSend(peer, 0, "no", "stu_no");
                         }
                     }
                 }
@@ -863,7 +843,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 , true, true, new DialogListener() {
                     @Override
                     public void onPositive(DialogInterface dialog) {
-                        finishClassRoom();
+                        //学生点击我要下课
+                        requestFinishClass();
                     }
 
                     @Override
@@ -945,14 +926,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void canFinshClass() {
-        initFinishClassDialog();
-//        if (isStartTime && (isTeacherJoined == false) || mIsBack) {
-//            initFinishClassDialog();
-//
-//        } else {
-//            //学生点击我要下课
-//            requestFinishClass();
-//        }
+        if (isStartTime && isTeacherJoined&& (mIsBack==false)) {
+            initFinishClassDialog();
+        } else {
+            //没有开始上课计时      老师没有进入教室         当文案现实 退出教室时
+            //isStartTime ==false isTeacherJoined==false mIsBack=true
+           finishClassRoom();
+        }
     }
 
 
@@ -1102,12 +1082,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             //学生 给老师发送 我要下课请求
             String peer = mRoomInfo.getChannelTeacherId() + "";
             //发送点对点 消息
-            RequestFinishClass finish = new RequestFinishClass();
-            finish.AccountID = mRoomInfo.getChannelStudentId() + "";
-            finish.ChannelID = mRoomInfo.getSignallingChannelId();
-            String json = JsonUtil.toJson(finish);
-            m_agoraAPI.messageInstantSend(peer, 0, json, requestFinishClassTag);
-            Log.d(TAG, "json:" + json);
+            m_agoraAPI.messageInstantSend(peer, 0, "00", requestFinishClassTag);
         }
     }
 
