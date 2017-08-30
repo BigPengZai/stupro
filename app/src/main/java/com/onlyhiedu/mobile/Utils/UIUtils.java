@@ -349,12 +349,17 @@ public class UIUtils {
 
 
     public static void callLine(Activity activity, String phoneNum) {
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNum));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        try {
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNum));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(activity,"拨打电话失败",Toast.LENGTH_SHORT).show();
         }
-        activity.startActivity(intent);
+
     }
 
     public static void getIMUserInfo(String name, Callback   call) {
