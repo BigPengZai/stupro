@@ -26,6 +26,7 @@ import com.onlyhiedu.mobile.UI.Home.adapter.HomeNewsAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.TeacherPageAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.HomePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.HomeContract;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.GlideImageLoader;
 import com.youth.banner.Banner;
@@ -183,7 +184,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
                 UIUtils.startHomeNewsWebViewAct(mContext, urls[0], titles[0]);
                 break;
             case R.id.tv_consume:
-                startActivity(new Intent(mContext, ConsumeActivity.class));
+                if (!SPUtil.getGuest()) {
+                    startActivity(new Intent(mContext, ConsumeActivity.class));
+                } else {
+                    UIUtils.startGuestLoginActivity(mContext,0);
+                }
                 break;
             case R.id.tv_service:
                 if (UIUtils.requestPermission(mActivity, MainActivity.CALL_REQUEST_CODE, new String[]{Manifest.permission.CALL_PHONE})) {

@@ -843,8 +843,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 , true, true, new DialogListener() {
                     @Override
                     public void onPositive(DialogInterface dialog) {
-                        //学生点击我要下课
-                        requestFinishClass();
+
+                        finishClassRoom();
                     }
 
                     @Override
@@ -927,11 +927,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void canFinshClass() {
         if (isStartTime && isTeacherJoined&& (mIsBack==false)) {
-            initFinishClassDialog();
+            //学生点击我要下课
+            requestFinishClass();
         } else {
             //没有开始上课计时      老师没有进入教室         当文案现实 退出教室时
             //isStartTime ==false isTeacherJoined==false mIsBack=true
-           finishClassRoom();
+            initFinishClassDialog();
+
         }
     }
 
