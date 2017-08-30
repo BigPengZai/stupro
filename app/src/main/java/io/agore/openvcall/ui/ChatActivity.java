@@ -817,7 +817,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         if (mRoomInfo != null) {
                             //call  的对象 假数据即老师信令的id
                             String peer = mRoomInfo.getChannelTeacherId() + "";
-                            m_agoraAPI.messageInstantSend(peer, 0, "yes", "stu_ok");
+                            m_agoraAPI.messageInstantSend(peer, 0, "ok", "stu_ok");
                         }
                     }
 
