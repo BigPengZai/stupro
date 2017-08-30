@@ -886,11 +886,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data,int pageNum,boolean restart) {
-        mCourseWareImageLists = data;
-        if(restart){
-            mDrawView.restartDrawing();
+        if (data != null && data.size() > 0) {
+            mCourseWareImageLists = data;
+            if (restart) {
+                mDrawView.restartDrawing();
+            }
+            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(pageNum).imageUrl);
+        } else {
+            Toast.makeText(this, "课件加载失败", Toast.LENGTH_SHORT).show();
         }
-        ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(pageNum).imageUrl);
     }
 
     private FrameLayout.LayoutParams mDrawViewP;

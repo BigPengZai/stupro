@@ -29,7 +29,7 @@
 #声网
 -keep class io.agore.**{*;}
 -keep class io.agora.rtc.audio.**{*;}
--keep class io.agora.rtc.xm.**{*;}
+-keep class io.agora.rtc.internal.**{*;}
 -keep class io.agora.rtc.video.**{*;}
 #声网
 

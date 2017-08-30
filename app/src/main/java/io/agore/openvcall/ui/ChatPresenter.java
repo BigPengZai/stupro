@@ -300,18 +300,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        if (boardBeanInfo.coursewareId != null) {
-//            getCourseWareImageList(boardBeanInfo.coursewareId, Integer.valueOf(boardBeanInfo.pageNum));
-//        }
-
-//        if (boardBeanInfo.drawData != null && boardBeanInfo.drawData.size() != 0) {
-//            List<BoardInfoBean.Methodparam.DrawData> drawData = boardBeanInfo.drawData;
-//            for (int i = 0; i < drawData.size(); i++) {
-//                switch (drawData.get(i).drawMode){
-//                    case
-//                }
-//            }
-//        }
     }
 
 
