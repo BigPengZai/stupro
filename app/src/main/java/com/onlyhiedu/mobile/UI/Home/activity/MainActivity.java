@@ -60,7 +60,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int CALL_REQUEST_CODE = 110;
-    public static String showPagePosition = "showPagePosition";
+    public static final String showPagePosition = "showPagePosition";
     private ClassFragment mClassFragment;
     private HomeFragment mHomeFragment;
     private MeFragment mMeFragment;
@@ -155,7 +155,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         if (item.getItemId() == R.id.tow) {
             if (SPUtil.getGuest()) {
-                UIUtils.startGuestLoginActivity(this, 0);
+                UIUtils.startGuestLoginActivity(this, 1);
                 return false;
             } else showHideFragment(mClassFragment);
 
@@ -332,17 +332,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(MainActivityTabSelectPos event) {
-
         SPUtil.setGuest(false);
-
-//        App.bIsGuestLogin = false;
         mMeFragment.setTextStyle();
-
         switch (event.tabPosition) {
             case 1:
                 showHideFragment(mClassFragment);
                 mNavigation.setSelectedItemId(R.id.tow);
-
                 break;
             case 2:
                 mNavigation.setSelectedItemId(R.id.thr);

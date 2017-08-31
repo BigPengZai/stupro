@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
@@ -177,7 +176,7 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
         mLlRegStep2.startAnimation(animation);
         mBtnNextName.startAnimation(animation);
         Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
-        animation.setFillAfter(true);
+        animation2.setFillAfter(true);
 
         setAnimation(animation2, mBtnRegister, mLlRegStep3);
 
@@ -216,10 +215,14 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
         animation.setFillAfter(true);
         mLlRegStep1.startAnimation(animation);
         mBtnNextNumber.startAnimation(animation);
-        Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
-        animation.setFillAfter(true);
 
-        setAnimation(animation2, mLlRegStep2, mBtnNextName);
+//        Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
+//        animation2.setFillAfter(true);
+//        mLlRegStep2.startAnimation(animation2);
+//        mBtnNextName.startAnimation(animation2);
+//        mLlRegStep2.setVisibility(View.VISIBLE);
+//        mBtnNextName.setVisibility(View.VISIBLE);
+
 
         mEditNumber.setInputEnable(false);
     }
@@ -250,7 +253,6 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     public void showUser() {
         addUTag();
         if (SPUtil.getGuest()) {
-//            App.bIsGuestLogin = false;
             SPUtil.setGuest(false);
             EventBus.getDefault().post(new MainActivityTabSelectPos(0));
         }

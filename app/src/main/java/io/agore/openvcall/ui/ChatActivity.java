@@ -39,7 +39,6 @@ import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
-import com.onlyhiedu.mobile.Model.bean.finishclass.RequestFinishClass;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.DateUtil;
@@ -1255,6 +1254,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 mRl_bg.setVisibility(View.GONE);
                 if (uid == mRoomInfo.getChannelTeacherId()) {
                     isTeacherJoined = true;
+                    mDrawView.restartDrawing();
+                    mImageCourseWare.setImageResource(R.drawable.transparent);
+
                 }
             }
         });

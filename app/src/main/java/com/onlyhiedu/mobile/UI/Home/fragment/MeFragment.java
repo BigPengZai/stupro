@@ -169,7 +169,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             }else if(view.getId() == R.id.setting_share){
                 shareUrl();
             } else {
-                UIUtils.startGuestLoginActivity(mContext, 0);
+                UIUtils.startGuestLoginActivity(mContext, 2);
             }
 
         } else {

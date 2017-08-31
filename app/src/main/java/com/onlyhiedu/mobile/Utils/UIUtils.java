@@ -97,9 +97,9 @@ public class UIUtils {
         context.startActivity(new Intent(context, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, url).putExtra(HomeNewsWebViewActivity.TITLE, title));
     }
 
-    public static void startGuestLoginActivity(Context cxt, int tabPisition) {
+    public static void startGuestLoginActivity(Context cxt, int tabPosition) {
         cxt.startActivity(new Intent(cxt, OpenIDActivity.class)
-                .putExtra(MainActivity.showPagePosition, tabPisition));
+                .putExtra(MainActivity.showPagePosition, tabPosition));
     }
 
     public static void initCursor(EditText mEdit) {

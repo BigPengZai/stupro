@@ -317,5 +317,4 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         return JsonUtil.toJson(finish);
     }
 
-
 }

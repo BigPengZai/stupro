@@ -39,12 +39,10 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
     private static final String TAG = OpenIDActivity.class.getSimpleName();
 //    public static final String cancelShow = "cancelShow";  //取消按钮是否可见
-    public static final String information = "information"; //游客模式下，是否点击各人信息进入的首页
 
 
     private UMShareAPI mShareAPI;
-    private boolean mBooleanExtra;
-    private int mIntExtra;
+    private int mShowHomePosition;
 
 
     @BindView(tv_cancel)
@@ -70,8 +68,7 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
         }
 
 //        boolean extra = getIntent().getBooleanExtra(cancelShow, false);
-        mBooleanExtra = getIntent().getBooleanExtra(information, false);
-        mIntExtra = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
+        mShowHomePosition = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
 
 //        if (extra) mTvCancel.setVisibility(View.VISIBLE);
 //        else mTvCancel.setVisibility(View.GONE);
@@ -86,13 +83,10 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
     @Override
     public void showUser() {
-        if( SPUtil.getGuest()){  //如果之前是游客
-//            App.bIsGuestLogin = false;
-            SPUtil.setGuest(false);
-            EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
-        }
-        startActivity(new Intent(this, MainActivity.class));
+        EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+        SPUtil.setGuest(false);
         finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     private UMAuthListener wxAuthLister = new MyUMAuthListener() {
@@ -211,11 +205,11 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     };
 
 
-    @OnClick({mobile_login, register,  btn_openid_wx, btn_openid_qq, btn_openid_sina, tv_cancel})
+    @OnClick({mobile_login, register, btn_openid_wx, btn_openid_qq, btn_openid_sina, tv_cancel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case mobile_login:
-                startActivity(new Intent(this, LoginActivity.class).putExtra(information, mBooleanExtra).putExtra(MainActivity.showPagePosition, mIntExtra));
+                startActivity(new Intent(this, LoginActivity.class).putExtra(MainActivity.showPagePosition, mShowHomePosition));
                 break;
             case register:
                 startActivity(new Intent(this, RegActivity.class));

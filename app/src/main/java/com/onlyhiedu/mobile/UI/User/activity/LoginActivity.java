@@ -12,7 +12,6 @@ import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
-import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.User.presenter.LoginPresenter;
 import com.onlyhiedu.mobile.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.mobile.Utils.Encrypt;
@@ -35,7 +34,6 @@ import static com.onlyhiedu.mobile.R.id.btn_sign;
 import static com.onlyhiedu.mobile.R.id.edit_phone;
 import static com.onlyhiedu.mobile.R.id.tv_find_pwd;
 import static com.onlyhiedu.mobile.R.id.tv_sms_sign;
-import static com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity.information;
 
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
@@ -49,8 +47,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @BindView(btn_sign)
     Button mButton;
 
-    private boolean mBooleanExtra;
-    private int mIntExtra;
+    private int mShowHomePosition;
     private ProgressDialog mPd;
 
     @Override
@@ -69,8 +66,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
         setToolBar("手机号登录");
 
-        mBooleanExtra = getIntent().getBooleanExtra(information, false);
-        mIntExtra = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
+        mShowHomePosition = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
 
         mEditNumber.setButton(mButton);
         mEditNumber.getEditTextView().setText(SPUtil.getPhone());
@@ -129,17 +125,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showUser() {
         addUTag();
-//        App.bIsGuestLogin = false;
-
         SPUtil.setGuest(false);
-
-        if (mBooleanExtra) {
-            startActivity(new Intent(this, MyInfoActivity.class));
-            EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
-        } else {
-            startActivity(new Intent(this, MainActivity.class));
-            EventBus.getDefault().post(new MainActivityTabSelectPos(mIntExtra));
-        }
+        EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
         mPd.dismiss();
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);
@@ -169,7 +156,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showError(String msg) {
-        if(mPd.isShowing()){
+        if (mPd.isShowing()) {
             mPd.dismiss();
         }
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
