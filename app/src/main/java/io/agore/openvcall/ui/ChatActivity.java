@@ -750,7 +750,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     //不发送本地视频流
                     rtcEngine().muteLocalVideoStream(true);
                     //暂停所有远端视频流
-                    rtcEngine().muteAllRemoteAudioStreams(true);
+                    rtcEngine().muteAllRemoteVideoStreams(true);
                     //暂停所有远端音频
                     rtcEngine().muteAllRemoteAudioStreams(true);
                     runOnUiThread(new Runnable() {
@@ -837,7 +837,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void initFinishClassDialog() {
         DialogUtil.showOnlyAlert(this,
                 ""
-                , "确定下课将结束本节课程！"
+                , "确定结束本次课程并离开教室？"
                 , "确定"
                 , "取消"
                 , true, true, new DialogListener() {
