@@ -50,9 +50,6 @@ public class WheelUtils {
 
     public static ArrayList<ProvinceBean> getGrade() {
         ArrayList<ProvinceBean> data = new ArrayList<>();
-        data.add(new ProvinceBean(0, "小一", "描述部分", "其他数据"));
-        data.add(new ProvinceBean(0, "小二", "描述部分", "其他数据"));
-        data.add(new ProvinceBean(0, "小三", "描述部分", "其他数据"));
         data.add(new ProvinceBean(0, "小四", "描述部分", "其他数据"));
         data.add(new ProvinceBean(0, "小五", "描述部分", "其他数据"));
         data.add(new ProvinceBean(0, "小六", "描述部分", "其他数据"));
