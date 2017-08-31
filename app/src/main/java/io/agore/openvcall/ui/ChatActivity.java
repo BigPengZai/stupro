@@ -38,7 +38,6 @@ import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
-import com.onlyhiedu.mobile.Model.bean.board.RequestWhiteBoard;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.DateUtil;
@@ -1228,21 +1227,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         });
     }
 
-    //请求白板数据
-    private static final String requestWhiteBoardData = "requestWhiteBoardData";
-    //发送家长白板数据
-    private static final String sendPatriarch = "sendPatriarch";
-
-
-    private void requestWhiteBoardData() {
-        if (mRoomInfo != null) {
-            RequestWhiteBoard requestStr = new RequestWhiteBoard();
-            requestStr.AccountID = mRoomInfo.getChannelStudentId() + "";
-            requestStr.ChannelID = mRoomInfo.getSignallingChannelId();
-            String json = JsonUtil.toJson(requestStr);
-            m_agoraAPI.messageInstantSend(mRoomInfo.getChannelTeacherId() + "", 0, json, requestWhiteBoardData);
-        }
-    }
 
     //其他用户加入当前频道回调
     @Override

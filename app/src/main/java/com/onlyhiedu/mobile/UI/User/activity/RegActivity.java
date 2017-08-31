@@ -177,19 +177,12 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
         mBtnNextName.startAnimation(animation);
         Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
         animation2.setFillAfter(true);
-
-        setAnimation(animation2, mBtnRegister, mLlRegStep3);
-
+        mBtnRegister.startAnimation(animation2);
+        mBtnRegister.setVisibility(View.VISIBLE);
+        mLlRegStep3.startAnimation(animation2);
+        mLlRegStep3.setVisibility(View.VISIBLE);
         mEditCode.setEnabled(false);
         mEditName.setInputEnable(false);
-    }
-
-
-    private void setAnimation(Animation animation, View view, View view2) {
-        view.startAnimation(animation);
-        view2.startAnimation(animation);
-        view.setVisibility(View.VISIBLE);
-        view2.setVisibility(View.VISIBLE);
     }
 
 
@@ -216,12 +209,12 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
         mLlRegStep1.startAnimation(animation);
         mBtnNextNumber.startAnimation(animation);
 
-//        Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
-//        animation2.setFillAfter(true);
-//        mLlRegStep2.startAnimation(animation2);
-//        mBtnNextName.startAnimation(animation2);
-//        mLlRegStep2.setVisibility(View.VISIBLE);
-//        mBtnNextName.setVisibility(View.VISIBLE);
+        Animation animation2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_right_in);
+        animation2.setFillAfter(true);
+        mLlRegStep2.startAnimation(animation2);
+        mBtnNextName.startAnimation(animation2);
+        mLlRegStep2.setVisibility(View.VISIBLE);
+        mBtnNextName.setVisibility(View.VISIBLE);
 
 
         mEditNumber.setInputEnable(false);
