@@ -56,7 +56,7 @@ import static com.onlyhiedu.mobile.Utils.AppUtil.isMethodsCompat;
  */
 
 public class UIUtils {
-    public static   void emcLogin() {
+    public static void emcLogin() {
         String pwd = Encrypt.SHA512(SPUtil.getEmcRegName() + "&" + "123456" + ":onlyhi");
         DemoDBManager.getInstance().closeDB();
         DemoHelper.getInstance().setCurrentUserName(SPUtil.getName());
@@ -81,16 +81,15 @@ public class UIUtils {
 
             @Override
             public void onError(final int code, final String message) {
-               Log.d("tag","登录失败:" + message);
+                Log.d("tag", "登录失败:" + message);
             }
         });
     }
+
     public static void startLoginActivity(Context context) {
-//        DemoHelper.getInstance().logout(false, null);
         SPUtil.removeKey(Constants.TOKEN);
         AppManager.getAppManager().AppExit();
-        context.startActivity(new Intent(context, OpenIDActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
+        context.startActivity(new Intent(context, OpenIDActivity.class).putExtra(OpenIDActivity.AccountEdgeOut, true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     public static void startHomeNewsWebViewAct(Context context, String url, String title) {
@@ -357,12 +356,12 @@ public class UIUtils {
             }
             activity.startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(activity,"拨打电话失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "拨打电话失败", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public static void getIMUserInfo(String name, Callback   call) {
+    public static void getIMUserInfo(String name, Callback call) {
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()
                 .add("token", SPUtil.getToken())

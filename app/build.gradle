@@ -54,7 +54,7 @@ android {
             java {
                 jniLibs.srcDirs = ['libs']
             }
-            assets.srcDirs = ['src/main/assets', 'src/main/assets/2']
+//            assets.srcDirs = ['src/main/assets', 'src/main/assets/2']
         }
     }
 

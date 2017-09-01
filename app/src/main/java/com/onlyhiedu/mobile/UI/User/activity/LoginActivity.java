@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     private int mShowHomePosition;
     private ProgressDialog mPd;
+    private boolean mAccountEdgeOut;
 
     @Override
     protected void initInject() {
@@ -67,6 +68,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         setToolBar("手机号登录");
 
         mShowHomePosition = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
+        mAccountEdgeOut = getIntent().getBooleanExtra(OpenIDActivity.AccountEdgeOut, false);
 
         mEditNumber.setButton(mButton);
         mEditNumber.getEditTextView().setText(SPUtil.getPhone());
@@ -126,7 +128,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void showUser() {
         addUTag();
         SPUtil.setGuest(false);
-        EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+        if (mAccountEdgeOut) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+        }
+
         mPd.dismiss();
         finish();
         AppManager.getAppManager().finishActivity(OpenIDActivity.class);

@@ -5,7 +5,6 @@ import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseActivity;
@@ -24,7 +23,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.onlyhiedu.mobile.R.id.btn_openid_qq;
@@ -38,15 +36,11 @@ import static com.onlyhiedu.mobile.R.id.tv_cancel;
 public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements OpenIDContract.View {
 
     private static final String TAG = OpenIDActivity.class.getSimpleName();
-//    public static final String cancelShow = "cancelShow";  //取消按钮是否可见
-
+    public static final String AccountEdgeOut = "AccountEdgeOut"; //账号被挤掉
 
     private UMShareAPI mShareAPI;
     private int mShowHomePosition;
-
-
-    @BindView(tv_cancel)
-    ImageView mTvCancel;
+    private boolean mAccountEdgeOut;
 
 
     @Override
@@ -66,14 +60,8 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
-//        boolean extra = getIntent().getBooleanExtra(cancelShow, false);
         mShowHomePosition = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
-
-//        if (extra) mTvCancel.setVisibility(View.VISIBLE);
-//        else mTvCancel.setVisibility(View.GONE);
-//        if (extra) mTvGuest.setVisibility(View.GONE);
-//        else mTvGuest.setVisibility(View.VISIBLE);
+        mAccountEdgeOut = getIntent().getBooleanExtra(AccountEdgeOut, false);
     }
 
     @Override
@@ -83,10 +71,13 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
 
     @Override
     public void showUser() {
-        EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
         SPUtil.setGuest(false);
+        if (mAccountEdgeOut) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+        }
         finish();
-        startActivity(new Intent(this, MainActivity.class));
     }
 
     private UMAuthListener wxAuthLister = new MyUMAuthListener() {
@@ -209,16 +200,11 @@ public class OpenIDActivity extends BaseActivity<OpenIDPresenter> implements Ope
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case mobile_login:
-                startActivity(new Intent(this, LoginActivity.class).putExtra(MainActivity.showPagePosition, mShowHomePosition));
+                startActivity(new Intent(this, LoginActivity.class).putExtra(MainActivity.showPagePosition, mShowHomePosition).putExtra(OpenIDActivity.AccountEdgeOut, mAccountEdgeOut));
                 break;
             case register:
                 startActivity(new Intent(this, RegActivity.class));
                 break;
-//            case guest:
-//                App.bIsGuestLogin = true;
-//                startActivity(new Intent(this, MainActivity.class));
-//                finish();
-//                break;
             case btn_openid_wx:
                 mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, wxAuthLister);
                 break;
