@@ -156,6 +156,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         if (item.getItemId() == R.id.tow) {
             if (SPUtil.getGuest()) {
                 UIUtils.startGuestLoginActivity(this, 1);
+
                 return false;
             } else showHideFragment(mClassFragment);
 
