@@ -196,7 +196,7 @@ public class WorkerThread extends Thread {
 
     public final void configEngine(int vProfile, String encryptionKey, String encryptionMode) {
         if (Thread.currentThread() != this) {
-//            log.warn("configEngine() - worker thread asynchronously " + vProfile + " " + encryptionMode);
+            Log.d(TAG,"configEngine() - worker thread asynchronously " + vProfile + " " + encryptionMode);
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_CONFIG_ENGINE;
             envelop.obj = new Object[]{vProfile, encryptionKey, encryptionMode};
@@ -215,7 +215,7 @@ public class WorkerThread extends Thread {
 
         mRtcEngine.setVideoProfile(mEngineConfig.mVideoProfile, false);
 
-//        log.debug("configEngine " + mEngineConfig.mVideoProfile + " " + encryptionMode);
+        Log.d(TAG,"configEngine " + mEngineConfig.mVideoProfile + " " + encryptionMode);
     }
 
     public final void preview(boolean start, SurfaceView view, int uid) {
