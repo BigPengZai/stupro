@@ -649,44 +649,47 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             return;
                         }
                         if (ChatPresenter.PEN.equals(boardBean.methodtype)) {
+                            mPresenter.add(ChatPresenter.PEN, boardBean.methodparam, mDrawView.getDrawColor(), (int) mDrawView.getDrawWidth());
                             mPresenter.drawLine(mDrawView, boardBean.methodparam);
                         }
                         if ("01".equals(boardBean.methodtype)) {
                             mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
                         }
                         if ("02".equals(boardBean.methodtype)) {
-                            mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
+                            mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam));
                         }
                         if ("08".equals(boardBean.methodtype)) {  //清屏
-                            mDrawView.restartDrawing();
+                            mPresenter.cleanDrawData(mDrawView);
                         }
                         if ("07".equals(boardBean.methodtype)) {  //上一步
-                            mDrawView.undo();
+                            mPresenter.undo(mDrawView);
                         }
                         if ("09".equals(boardBean.methodtype)) {   //选择课件
-                            mDrawView.restartDrawing();
-                            mPresenter.getCourseWareImageList(boardBean.methodparam,0,true);
+                            mPresenter.cleanDrawData(mDrawView);
+                            mPresenter.getCourseWareImageList(boardBean.methodparam, 0, true);
                         }
                         if ("11".equals(boardBean.methodtype)) {  //下一页
-                            mDrawView.restartDrawing();
+                            mPresenter.cleanDrawData(mDrawView);
                             ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
                         }
                         if ("10".equals(boardBean.methodtype)) {  //上一页
-                            mDrawView.restartDrawing();
+                            mPresenter.cleanDrawData(mDrawView);
                             ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
                         }
                         if ("12".equals(boardBean.methodtype)) {  //关闭文档
-                            mDrawView.restartDrawing();
+                            mPresenter.cleanDrawData(mDrawView);
                             mImageCourseWare.setImageResource(R.drawable.transparent);
-                            setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam) ,Integer.valueOf(boardBean.scaling));
+                            setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam), Integer.valueOf(boardBean.scaling));
+
                         }
-                        if("16".equals(boardBean.methodtype)){
-                            mPresenter.initBoard(ChatActivity.this,mDrawView, boardBean.methodparam);
+                        if ("16".equals(boardBean.methodtype)) {
+                            mPresenter.initBoard(ChatActivity.this, mDrawView, boardBean.methodparam);
                             mImageFullScreen.setEnabled(true);
                         }
                         if ("15".equals(boardBean.methodtype)) { //白板宽高
-                            Log.d(TAG, "接收到白板宽高消息...");
-                            setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam) ,Integer.valueOf(boardBean.scaling));
+                            Log.d(TAG, "接收到白板宽高消息：width" + boardBean.methodparam + ",height" + boardBean.scaling);
+                            setBoardViewLayoutParams(Integer.valueOf(
+                                    boardBean.methodparam), Integer.valueOf(boardBean.scaling));
                             mImageFullScreen.setEnabled(true);
                         }
 
@@ -1027,29 +1030,35 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             mSwitch = false;
             mPresenter.setFullScreen(mSwitch);
+
+            mDrawView.restartDrawing();
             mDrawView.setLayoutParams(mDrawViewP);
             mImageCourseWare.setLayoutParams(mDrawViewP);
+            mPresenter.reDraw(mDrawView);
 
-            mDrawView.clearAnimation();
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
-
             mLlClassBg.setVisibility(View.VISIBLE);
+
         } else {
             mLlClassBg.setVisibility(View.GONE);
             mLlVideo.setVisibility(View.GONE);
-            mDrawView.setLayoutParams(mDrawViewFullP);
-            mImageCourseWare.setLayoutParams(mDrawViewFullP);
+
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
-            mPresenter.startDrawViewFullAnimation(mDrawView, rate);
-            mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
 
+
+            mDrawView.restartDrawing();
+            mDrawView.setLayoutParams(mDrawViewFullP);
+            mImageCourseWare.setLayoutParams(mDrawViewFullP);
+            mPresenter.reDraw(mDrawView);
+
+            mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
         }
     }
 
-    public void setBoardViewLayoutParams(int width, int height){
-        int imageWidth = (int) (mScreenWidth * 0.7);
 
+    public void setBoardViewLayoutParams(int width, int height) {
+        int imageWidth = (int) (mScreenWidth * 0.7);
         float rate = (float) imageWidth / Float.valueOf(width);
         mPresenter.setHalfScreenRate(rate);
         int halfImageHeight = (int) (Float.valueOf(height) * rate);
@@ -1058,7 +1067,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(mDrawViewP);
             mDrawView.setLayoutParams(mDrawViewP);
         }
-
         float rates = (float) mScreenWidth / Float.valueOf(width);
         mPresenter.setFullScreenRate(rates);
         int FullImageHeight = (int) (Float.valueOf(height) * rates);
@@ -1068,8 +1076,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mDrawView.setLayoutParams(mDrawViewFullP);
         }
     }
-
-
 
 
 

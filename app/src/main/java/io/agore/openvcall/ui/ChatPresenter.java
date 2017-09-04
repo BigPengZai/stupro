@@ -2,18 +2,13 @@ package io.agore.openvcall.ui;
 
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
-import com.onlyhiedu.mobile.Model.bean.finishclass.ResponseFinishClassData;
+import com.onlyhiedu.mobile.Model.bean.board.MyBoardData;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
-import com.onlyhiedu.mobile.Utils.DateUtil;
-import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 
 import org.json.JSONArray;
@@ -21,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,14 +30,13 @@ import static java.lang.Float.parseFloat;
 
 public class ChatPresenter extends RxPresenter<ChatContract.View> implements ChatContract.Presenter {
 
-    public static final String PEN = "03";
-
     private RetrofitHelper mRetrofitHelper;
+
+    public static final String PEN = "03";
 
 
     private float mFullScreenRate;  //全屏缩放比例
     private float mHalfScreenRate;  //半屏缩放比例
-
 
     private boolean mFullScreen;  //全屏？
 
@@ -51,11 +44,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         mFullScreen = fullScreen;
     }
 
-
     public float getScreenRate() {
-        return mFullScreen ? mHalfScreenRate : mHalfScreenRate;
+        return mFullScreen ? mFullScreenRate : mHalfScreenRate;
     }
-
 
     public void setHalfScreenRate(float halfScreenRate) {
         mHalfScreenRate = halfScreenRate;
@@ -89,7 +80,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
 
     @Override
-    public void getCourseWareImageList(String wareId, int pageNum,boolean restart) {
+    public void getCourseWareImageList(String wareId, int pageNum, boolean restart) {
         Flowable<onlyHttpResponse<List<CourseWareImageList>>> flowable = mRetrofitHelper.fetchGetCourseWareImageList(wareId);
 
         MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>> subscriber = new MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>>() {
@@ -97,7 +88,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
                 if (getView() != null) {
                     if (!data.isHasError())
-                        getView().showCourseWareImageList(data.getData(), pageNum,restart);
+                        getView().showCourseWareImageList(data.getData(), pageNum, restart);
                     else getView().showError(data.getMessage());
                 }
             }
@@ -106,46 +97,86 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
     }
 
-//    @Override
-//    public void setDrawableStyle(DrawView drawView, ResponseWhiteboardList data, ImageView courseWareImage) {
-//
-//        ResponseWhiteboardList.ResponseParamBean.WhiteboardListBean bean = data.ResponseParam.WhiteboardList.get(0);
-//
-//        float rate = (float) mImageWidth / (float) bean.WhiteboardWidth;
-//
-////        setHalfScreenRate(rate);
-//
-//        if (!TextUtils.isEmpty(bean.WhiteboardDocID) && !TextUtils.isEmpty(bean.WhiteboardDocID)) {
-//            getCourseWareImageList(bean.WhiteboardDocID, Integer.parseInt(bean.WhiteboardDocPageID));
-//        } else {
-//            //设置比例转换白板的宽度和高度
-//            int imageHeight = (int) ((float) bean.WhiteboardHeight * rate);
-//            courseWareImage.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-//            courseWareImage.setImageResource(R.drawable.transparent);
-//            drawView.setLayoutParams(new FrameLayout.LayoutParams(mImageWidth, imageHeight));
-//            drawView.setCanvas(mImageWidth, imageHeight);
-//        }
-//
-//        //设置比例转换后的画笔大小
-//        drawView.setDrawWidth((float) (bean.WhiteboardPenSize) * rate);
-//
-//        //设置比例转换后的橡皮檫尺寸
-//        drawView.setEraserSize(((float) (bean.WhiteboardEraseSize) * rate));
-//
-//        //设置画笔颜色
-//        drawView.setDrawColor(Color.parseColor("#" + bean.WhiteboardPenColor));
-//
-//        //设置比例转化后的字体大小
-//        String fontType = bean.WhiteboardFontType;
-//        String[] split = fontType.split(",");
-//        String str = split[split.length - 1];
-//        float fintSize = parseFloat(str.substring(1, str.length()));
-//        drawView.setFontSize(fintSize * rate);
-//
-//    }
 
-    //不带课件的白板（true），带课件的白板（false）
+    private ArrayList<MyBoardData> drawData = new ArrayList<>();
+
+
+    public void reDraw(DrawView view) {
+        for (int t = 0; t < drawData.size(); t++) {
+            MyBoardData myBoardData = drawData.get(t);
+            if (myBoardData.type.equals(PEN)) {
+                view.setDrawWidth(myBoardData.lineWidth);
+                view.setDrawColor(myBoardData.color);
+                drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+            }
+        }
+    }
+
+    public void add(String type, String data, int color, int lineWidth) {
+        drawData.add(new MyBoardData(type, data, color, lineWidth, mFullScreenRate, mHalfScreenRate));
+    }
+
+    public void cleanDrawData(DrawView view) {
+        drawData.clear();
+        view.restartDrawing();
+    }
+
+    public void undo(DrawView view) {
+        view.undo();
+        if (drawData.size() > 0) {
+            drawData.remove(drawData.size() - 1);
+        }
+    }
+
+    public void initBoard(ChatActivity activity, DrawView view, String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            String boardWidth = jsonObject.getString("boardWidth");
+            String boardHeight = jsonObject.getString("boardHeight");
+            //设置白板宽高
+            activity.setBoardViewLayoutParams(Integer.valueOf(boardWidth), Integer.valueOf(boardHeight));
+            //设置课件
+
+            try {
+                String coursewareId = jsonObject.getString("coursewareId");
+                if (!TextUtils.isEmpty(coursewareId)) {
+                    getCourseWareImageList(coursewareId, Integer.valueOf(jsonObject.getString("pageNum")), false);
+                }
+            } catch (Exception e) {
+            }
+
+            //画线
+            try {
+                JSONArray drawData = jsonObject.getJSONArray("drawData");
+                for (int i = 0; i < drawData.length(); i++) {
+                    JSONObject bean = (JSONObject) drawData.opt(i);
+                    switch (bean.getString("drawMode")) {
+                        case PEN:
+                            int lineWidth = bean.getInt("lineWidth");
+                            view.setDrawWidth(lineWidth);
+                            view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+                            drawLine(view, bean.getString("points"));
+                            add(ChatPresenter.PEN, bean.getString("points"), Color.parseColor("#" + bean.getString("color")), lineWidth);
+                            break;
+                    }
+                }
+
+            } catch (Exception e) {
+            }
+
+            String color = jsonObject.getString("color");
+            if (!TextUtils.isEmpty(color)) {
+                view.setDrawColor(Color.parseColor("#" + color));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void drawLine(DrawView view, String param) {
+
         List<String[]> datas = new ArrayList<>();
         String[] spit = param.split("[|]");
         for (String str : spit) {
@@ -167,6 +198,33 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                     view.eventActionMove(parseFloat(datas.get(i)[0]) * getScreenRate(), parseFloat(datas.get(i)[1]) * getScreenRate());
                 }
                 view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getScreenRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getScreenRate());
+            }
+        }
+    }
+
+    public void drawLine(DrawView view, MyBoardData param, float rate) {
+
+        List<String[]> datas = new ArrayList<>();
+        String[] spit = param.XYData.split("[|]");
+        for (String str : spit) {
+            String[] data = new String[2];
+            String[] xyAxle = str.split(",");
+            data[0] = xyAxle[0];
+            data[1] = xyAxle[1];
+            datas.add(data);
+        }
+        if (datas.size() > 0) {
+            String[] xyAxle = datas.get(0);
+            view.eventActionDown(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
+            if (datas.size() == 2) {
+                String[] xyAxle2 = datas.get(1);
+                view.eventActionMove(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
+                view.eventActionUp(parseFloat(xyAxle2[0]) * rate, parseFloat(xyAxle2[1]) * rate);
+            } else {
+                for (int i = 1; i < datas.size() - 1; i++) {
+                    view.eventActionMove(parseFloat(datas.get(i)[0]) * rate, parseFloat(datas.get(i)[1]) * rate);
+                }
+                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * rate, parseFloat(datas.get(datas.size() - 1)[1]) * rate);
             }
         }
     }
@@ -243,78 +301,5 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 //        view.refreshLastText(spit[1]);
 //    }
 
-
-    public void startDrawViewFullAnimation(DrawView view, float rate) {
-        ScaleAnimation scaleX = new ScaleAnimation(1.0f, rate, 1.0f, 1.0f,
-                Animation.RELATIVE_TO_PARENT, 0,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleX.setDuration(0);
-
-        ScaleAnimation scaleY = new ScaleAnimation(1.0f, 1.0f, 1.0f, rate,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_PARENT, 0);
-        scaleY.setDuration(0);
-
-        AnimationSet set = new AnimationSet(true);
-        set.setFillAfter(true);
-        set.addAnimation(scaleX);
-        set.addAnimation(scaleY);
-        view.startAnimation(set);
-
-    }
-
-
-    public void initBoard(ChatActivity activity, DrawView view, String data) {
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String boardWidth = jsonObject.getString("boardWidth");
-            String boardHeight = jsonObject.getString("boardHeight");
-            //设置白板宽高
-            activity.setBoardViewLayoutParams(Integer.valueOf(boardWidth), Integer.valueOf(boardHeight));
-            //设置课件
-            String coursewareId = jsonObject.getString("coursewareId");
-            if (!TextUtils.isEmpty(coursewareId)) {
-                getCourseWareImageList(coursewareId, Integer.valueOf(jsonObject.getString("pageNum")),false);
-            }
-            //画线
-            try {
-                JSONArray drawData = jsonObject.getJSONArray("drawData");
-                for (int i = 0; i < drawData.length(); i++) {
-                    JSONObject bean = (JSONObject) drawData.opt(i);
-                    switch (bean.getString("drawMode")) {
-                        case PEN:
-                            view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-                            drawLine(view, bean.getString("points"));
-                            break;
-                    }
-                }
-
-            } catch (Exception e) {
-            }
-
-            String color = jsonObject.getString("color");
-            if (!TextUtils.isEmpty(color)) {
-                view.setDrawColor(Color.parseColor("#" + color));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public String responseFinishClass(String confirm, int stuId, String channelId) {
-        //发送点对点 消息
-        ResponseFinishClassData finish = new ResponseFinishClassData();
-        ResponseFinishClassData.ResponseParamBean responseParamBean = new ResponseFinishClassData.ResponseParamBean();
-        finish.AccountID = stuId + "";
-        finish.ActionType = "Response_FinishClass";
-        finish.Keyword = "HKT";
-        finish.ChannelID = channelId;
-        finish.ResponseParam = responseParamBean;
-        responseParamBean.Confirm = confirm;
-        responseParamBean.FinishTime = DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss);
-        return JsonUtil.toJson(finish);
-    }
 
 }
