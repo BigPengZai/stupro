@@ -110,7 +110,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     @Override
     public void showCourseListSuccess(List<CourseList.ListBean> data, boolean isRefresh) {
 
-        if (mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
+        if (mErrorLayout != null && mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         }
 
@@ -136,8 +136,6 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         }
 
     }
-
-
 
 
     @Override
