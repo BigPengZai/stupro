@@ -10,6 +10,8 @@ import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
+import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +35,10 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     private RetrofitHelper mRetrofitHelper;
 
     public static final String PEN = "03";
-
+    public static final String Eraser = "18";
+    public static final String Rectangle = "04";
+    public static final String Oval = "05";
+    public static final String Line = "22";
 
     private float mFullScreenRate;  //全屏缩放比例
     private float mHalfScreenRate;  //半屏缩放比例
@@ -107,6 +112,23 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             if (myBoardData.type.equals(PEN)) {
                 view.setDrawWidth(myBoardData.lineWidth);
                 view.setDrawColor(myBoardData.color);
+                setDrawingMode(view, PEN);
+                drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+            }
+            if (myBoardData.type.equals(Eraser)) {
+                setDrawingMode(view, Eraser);
+                drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+            }
+            if (myBoardData.type.equals(Rectangle)) {
+                setDrawingMode(view, Rectangle);
+                drawRectangle(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+            }
+            if (myBoardData.type.equals(Oval)) {
+                setDrawingMode(view, Oval);
+                drawOval(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+            }
+            if (myBoardData.type.equals(Line)) {
+                setDrawingMode(view, Line);
                 drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
             }
         }
@@ -229,6 +251,26 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         }
     }
 
+    public void drawEraser(DrawView view, String param) {
+        drawLine(view, param);
+    }
+
+    public void drawRectangle(DrawView view, String param, float rate) {
+        drawOval(view, param, rate);
+    }
+
+    public void drawOval(DrawView view, String json, float rate) {
+        String replace = json.replace("|", ",");
+        String[] xyAxle = replace.split(",");
+
+        view.eventActionDown(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
+        view.eventActionMove(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
+
+        float x = parseFloat(xyAxle[0]) * rate + parseFloat(xyAxle[2]) * rate;
+        float y = parseFloat(xyAxle[1]) * rate + parseFloat(xyAxle[3]) * rate;
+        view.eventActionUp(x, y);
+    }
+
 
 //    @Override
 //    public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
@@ -261,32 +303,15 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 //    }
 
 
-//    @Override
-//    public void drawEraser(DrawView view, NotifyWhiteboardOperator json) {
-//        drawPoint(view, json);
-//    }
 //
 //    @Override
 //    public void drawEraserRect(DrawView view, NotifyWhiteboardOperator json) {
 //        drawOval(view, json);
 //    }
 //
-//    @Override
-//    public void drawOval(DrawView view, NotifyWhiteboardOperator json) {
-//        String s = json.NotifyParam.MethodParam;
-//        String[] xyAxle = s.split(",");
-//        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-//        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
+
 //
-//        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
-//        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
-//        view.eventActionUp(x, y);
-//    }
-//
-//    @Override
-//    public void drawRectangle(DrawView view, NotifyWhiteboardOperator json) {
-//        drawOval(view, json);
-//    }
+
 //
 //    @Override
 //    public void drawText(DrawView view, NotifyWhiteboardOperator json) {
@@ -301,5 +326,31 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 //        view.refreshLastText(spit[1]);
 //    }
 
+
+    public void setDrawingMode(DrawView view, String type) {
+        switch (type) {
+            case PEN:
+                view.setDrawingMode(DrawingMode.values()[0]);
+                view.setDrawingTool(DrawingTool.values()[0]);
+                break;
+            case Eraser:
+                view.setDrawingMode(DrawingMode.values()[2]);
+                view.setDrawingTool(DrawingTool.values()[0]);
+                break;
+            case Rectangle:
+                view.setDrawingMode(DrawingMode.values()[0]);
+                view.setDrawingTool(DrawingTool.values()[2]);
+                break;
+            case Oval:
+                view.setDrawingMode(DrawingMode.values()[0]);
+                view.setDrawingTool(DrawingTool.values()[4]);
+                break;
+            case Line:
+                view.setDrawingMode(DrawingMode.values()[0]);
+                view.setDrawingTool(DrawingTool.values()[1]);
+                break;
+        }
+
+    }
 
 }

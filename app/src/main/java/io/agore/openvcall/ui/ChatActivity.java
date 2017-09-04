@@ -651,6 +651,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         }
                         if (ChatPresenter.PEN.equals(boardBean.methodtype)) {
                             mPresenter.add(ChatPresenter.PEN, boardBean.methodparam, mDrawView.getDrawColor(), (int) mDrawView.getDrawWidth());
+                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.PEN);
                             mPresenter.drawLine(mDrawView, boardBean.methodparam);
                         }
                         if ("01".equals(boardBean.methodtype)) {
@@ -693,7 +694,28 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     boardBean.methodparam), Integer.valueOf(boardBean.scaling));
                             mImageFullScreen.setEnabled(true);
                         }
+                        if (ChatPresenter.Eraser.equals(boardBean.methodtype)) {  //橡皮檫
+                            mPresenter.add(ChatPresenter.Eraser, boardBean.methodparam, 0, 0);
+                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Eraser);
+                            mPresenter.drawEraser(mDrawView, boardBean.methodparam);
+                        }
 
+                        if (ChatPresenter.Rectangle.equals(boardBean.methodtype)) {  //框
+                            mPresenter.add(ChatPresenter.Rectangle, boardBean.methodparam, 0, 0);
+                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Rectangle);
+                            mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
+                        }
+
+                        if (ChatPresenter.Oval.equals(boardBean.methodtype)) {  //框
+                            mPresenter.add(ChatPresenter.Oval, boardBean.methodparam, 0, 0);
+                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Oval);
+                            mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
+                        }
+                        if (ChatPresenter.Line.equals(boardBean.methodtype)) {
+                            mPresenter.add(ChatPresenter.Line, boardBean.methodparam, 0, 0);
+                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Line);
+                            mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                        }
                     }
                 });
 

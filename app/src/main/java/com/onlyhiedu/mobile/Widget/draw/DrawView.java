@@ -58,7 +58,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     private Paint.Cap mLineCap;
     private Typeface mFontFamily;
     private float mFontSize;
-    private float mEraserSize;
+    private float mEraserSize = 12;
     private int mBackgroundColor;
 
     private DrawingMode mDrawingMode;
