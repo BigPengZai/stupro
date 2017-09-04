@@ -101,6 +101,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     protected void initData() {
+
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
