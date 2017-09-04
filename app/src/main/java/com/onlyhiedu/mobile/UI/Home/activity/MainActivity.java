@@ -28,6 +28,7 @@ import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
+import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.R;
@@ -334,6 +335,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(MainActivityTabSelectPos event) {
+        EventBus.getDefault().post(new CourseFragmentRefresh(true));
         SPUtil.setGuest(false);
         mMeFragment.setTextStyle();
         switch (event.tabPosition) {
@@ -356,7 +358,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain2(MainActivityShowGuest event) {
-        if(event.isGuest){
+        if (event.isGuest) {
             mMeFragment.showGuestUI();
         }
     }
