@@ -2,8 +2,6 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 
 import android.Manifest;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -118,6 +116,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showCourseListSuccess(List<CourseList.ListBean> data, boolean isRefresh) {
+
         if (mErrorLayout != null && mErrorLayout.getErrorState() != ErrorLayout.HIDE_LAYOUT) {
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         }
