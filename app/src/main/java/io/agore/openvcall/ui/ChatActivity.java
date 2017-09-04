@@ -573,6 +573,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                 }
             }
+
             //对方将收到 onMessageInstantReceive 回调。
             @Override
             public void onMessageInstantReceive(String account, int uid, String msg) {
@@ -867,7 +868,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     @Override
-    public void showCourseWareImageList(List<CourseWareImageList> data,int pageNum,boolean restart) {
+    public void showCourseWareImageList(List<CourseWareImageList> data, int pageNum, boolean restart) {
         if (data != null && data.size() > 0) {
             mCourseWareImageLists = data;
             if (restart) {
@@ -927,7 +928,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void canFinshClass() {
-        if (isStartTime && isTeacherJoined&& (mIsBack==false)) {
+        if (isStartTime && isTeacherJoined && (mIsBack == false)) {
             //学生点击我要下课
             requestFinishClass();
         } else {
@@ -1078,8 +1079,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-
-
     //请求 下课 tag
     private static final String requestFinishClassTag = "requestFinishClassTag";
 
@@ -1126,7 +1125,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void doLeaveChannel() {
         worker().leaveChannel(mChannelName);
         worker().preview(false, null, 0);
-        finish();
+
     }
 
     @Override
@@ -1292,10 +1291,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void run() {
                 BigDecimal b = new BigDecimal((double) stats.totalDuration / 60.00);
                 float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                if (mListBean != null) {
-                    mUuid = mListBean.getUuid();
-                    mPresenter.uploadStatistics(String.valueOf(f1), mUuid);
-                    event().removeEventHandler(ChatActivity.this);
+                try {
+                    if (mListBean != null) {
+                        mUuid = mListBean.getUuid();
+                        mPresenter.uploadStatistics(String.valueOf(f1), mUuid);
+                        event().removeEventHandler(ChatActivity.this);
+                    }
+                } catch (Exception e) {
+                    finish();
                 }
 //                Toast.makeText(ChatActivity.this, "流统计时长: " + f1 + " 分钟", Toast.LENGTH_SHORT).show();
             }

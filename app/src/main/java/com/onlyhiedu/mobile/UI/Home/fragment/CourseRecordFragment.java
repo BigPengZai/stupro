@@ -103,26 +103,29 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
             mErrorLayout.setState(ErrorLayout.HIDE_LAYOUT);
         }
 
-        if (isRefresh) {  //刷新
-            mSwipeRefresh.setRefreshing(false);
-            if (data == null || data.size() == 0) { //没有数据
-                mErrorLayout.isLlPhoneVisibility(View.VISIBLE);
-                mErrorLayout.setState(ErrorLayout.NODATA);
-            } else {
-                mErrorLayout.isLlPhoneVisibility(View.GONE);
-                mAdapter.clear();
+        if (mAdapter != null) {
+            if (isRefresh) {  //刷新
+                mSwipeRefresh.setRefreshing(false);
+                if (data == null || data.size() == 0) { //没有数据
+                    mErrorLayout.isLlPhoneVisibility(View.VISIBLE);
+                    mErrorLayout.setState(ErrorLayout.NODATA);
+                } else {
+                    mErrorLayout.isLlPhoneVisibility(View.GONE);
+                    mAdapter.clear();
+                    mAdapter.addAll(data);
+                }
+            } else {//加载更多
                 mAdapter.addAll(data);
-            }
-        } else {//加载更多
-            mAdapter.addAll(data);
-            if (data.size() < 10) {
-                mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-                mSwipeRefresh.setOnLoading(true);  //设置不可加更多
-            } else {
-                mSwipeRefresh.setOnLoading(false);  //设置可加加载
-            }
+                if (data.size() < 10) {
+                    mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
+                    mSwipeRefresh.setOnLoading(true);  //设置不可加更多
+                } else {
+                    mSwipeRefresh.setOnLoading(false);  //设置可加加载
+                }
 
+            }
         }
+
 
 
     }
