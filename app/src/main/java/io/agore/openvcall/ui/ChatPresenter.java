@@ -112,31 +112,30 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public void reDraw(DrawView view) {
         for (int t = 0; t < drawData.size(); t++) {
             MyBoardData myBoardData = drawData.get(t);
-            if (myBoardData.type.equals(PEN)) {
-                view.setDrawWidth(myBoardData.lineWidth);
-                view.setDrawColor(myBoardData.color);
-                setDrawingMode(view, PEN);
-                drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+            setDrawingMode(view, myBoardData.type);
+            switch (myBoardData.type) {
+                case PEN:
+                    view.setDrawWidth(myBoardData.lineWidth);
+                    view.setDrawColor(myBoardData.color);
+                    drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    break;
+                case Eraser:
+                    drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    break;
+                case Rectangle:
+                    view.setDrawColor(myBoardData.color);
+                    drawRectangle(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    break;
+                case Oval:
+                    view.setDrawColor(myBoardData.color);
+                    drawOval(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    break;
+                case Line:
+                    view.setDrawColor(myBoardData.color);
+                    drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    break;
             }
-            if (myBoardData.type.equals(Eraser)) {
-                setDrawingMode(view, Eraser);
-                drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
-            }
-            if (myBoardData.type.equals(Rectangle)) {
-                view.setDrawColor(myBoardData.color);
-                setDrawingMode(view, Rectangle);
-                drawRectangle(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
-            }
-            if (myBoardData.type.equals(Oval)) {
-                view.setDrawColor(myBoardData.color);
-                setDrawingMode(view, Oval);
-                drawOval(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
-            }
-            if (myBoardData.type.equals(Line)) {
-                view.setDrawColor(myBoardData.color);
-                setDrawingMode(view, Line);
-                drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
-            }
+
         }
     }
 
@@ -168,37 +167,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             for (int i = 0; i < drawData.length(); i++) {
                 JSONObject bean = (JSONObject) drawData.opt(i);
                 draw(bean, view);
-//                String drawMode = bean.getString("drawMode");
-//                String points = bean.getString("points");
-//                setDrawingMode(view, drawMode);
-//                switch (drawMode) {
-//                    case PEN:
-//                        int lineWidth = bean.getInt("lineWidth");
-//                        view.setDrawWidth(lineWidth * getScreenRate());
-//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-//                        drawLine(view, points);
-//                        add(ChatPresenter.PEN, points, view.getDrawColor(), view.getDrawWidth());
-//                        break;
-//                    case Oval:
-//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-//                        drawRectangle(view, points, getScreenRate());
-//                        add(ChatPresenter.Oval, points, view.getDrawColor(), 0);
-//                        break;
-//                    case Rectangle:
-//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-//                        drawRectangle(view, points, getScreenRate());
-//                        add(ChatPresenter.Rectangle, points, view.getDrawColor(), 0);
-//                        break;
-//                    case Line:
-//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-//                        drawLine(view, points);
-//                        add(ChatPresenter.Line, points, view.getDrawColor(), 0);
-//                        break;
-//                    case Eraser:
-//                        drawEraser(view, points);
-//                        add(ChatPresenter.Eraser, points, 0, 0);
-//                        break;
-//                }
             }
 
         } catch (JSONException e) {
@@ -268,7 +236,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
             } catch (Exception e) {
             }
-
 
             String color = jsonObject.getString("color");
             if (!TextUtils.isEmpty(color)) {

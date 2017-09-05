@@ -649,69 +649,69 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         if (boardBean == null) {
                             return;
                         }
-                        if (ChatPresenter.PEN.equals(boardBean.methodtype)) {
-                            mPresenter.add(ChatPresenter.PEN, boardBean.methodparam, mDrawView.getDrawColor(), (int) mDrawView.getDrawWidth());
-                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.PEN);
-                            mPresenter.drawLine(mDrawView, boardBean.methodparam);
-                        }
-                        if ("01".equals(boardBean.methodtype)) {
-                            mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
-                        }
-                        if ("02".equals(boardBean.methodtype)) {
-                            mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
-                        }
-                        if ("08".equals(boardBean.methodtype)) {  //清屏
-                            mPresenter.cleanDrawData(mDrawView);
-                        }
-                        if ("07".equals(boardBean.methodtype)) {  //上一步
-                            mPresenter.undo(mDrawView);
-                        }
-                        if ("09".equals(boardBean.methodtype)) {   //选择课件
-                            mPresenter.cleanDrawData(mDrawView);
-                            mPresenter.getCourseWareImageList(boardBean.methodparam, 0, true);
-                        }
-                        if ("11".equals(boardBean.methodtype)) {  //下一页
-                            mPresenter.changePage(ChatActivity.this, mDrawView, mImageCourseWare, boardBean.methodparam);
-                        }
-                        if ("10".equals(boardBean.methodtype)) {  //上一页
-                            mPresenter.changePage(ChatActivity.this, mDrawView, mImageCourseWare, boardBean.methodparam);
-                        }
-                        if ("12".equals(boardBean.methodtype)) {  //关闭文档
-                            mPresenter.cleanDrawData(mDrawView);
-                            mImageCourseWare.setImageResource(R.drawable.transparent);
-                            setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam), Integer.valueOf(boardBean.scaling));
-                        }
-                        if ("16".equals(boardBean.methodtype)) {  //重连
-                            mPresenter.initBoard(ChatActivity.this, mDrawView, boardBean.methodparam);
-                            mImageFullScreen.setEnabled(true);
-                        }
-                        if ("15".equals(boardBean.methodtype)) { //白板宽高
-                            Log.d(TAG, "接收到白板宽高消息：width" + boardBean.methodparam + ",height" + boardBean.scaling);
-                            setBoardViewLayoutParams(Integer.valueOf(
-                                    boardBean.methodparam), Integer.valueOf(boardBean.scaling));
-                            mImageFullScreen.setEnabled(true);
-                        }
-                        if (ChatPresenter.Eraser.equals(boardBean.methodtype)) {  //橡皮檫
-                            mPresenter.add(ChatPresenter.Eraser, boardBean.methodparam, 0, 0);
-                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Eraser);
-                            mPresenter.drawEraser(mDrawView, boardBean.methodparam);
-                        }
-
-                        if (ChatPresenter.Rectangle.equals(boardBean.methodtype)) {  //框
-                            mPresenter.add(ChatPresenter.Rectangle, boardBean.methodparam, mDrawView.getDrawColor(), 0);
-                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Rectangle);
-                            mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
-                        }
-
-                        if (ChatPresenter.Oval.equals(boardBean.methodtype)) {  //圆
-                            mPresenter.add(ChatPresenter.Oval, boardBean.methodparam, mDrawView.getDrawColor(), 0);
-                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Oval);
-                            mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
-                        }
-                        if (ChatPresenter.Line.equals(boardBean.methodtype)) {
-                            mPresenter.add(ChatPresenter.Line, boardBean.methodparam, 0, 0);
-                            mPresenter.setDrawingMode(mDrawView, ChatPresenter.Line);
-                            mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                        switch (boardBean.methodtype) {
+                            case ChatPresenter.PEN:
+                                mPresenter.add(ChatPresenter.PEN, boardBean.methodparam, mDrawView.getDrawColor(), (int) mDrawView.getDrawWidth());
+                                mPresenter.setDrawingMode(mDrawView, ChatPresenter.PEN);
+                                mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                                break;
+                            case "01":
+                                mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
+                                break;
+                            case "02":
+                                mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
+                                break;
+                            case "08"://清屏
+                                mPresenter.cleanDrawData(mDrawView);
+                                break;
+                            case "07"://上一步
+                                mPresenter.undo(mDrawView);
+                                break;
+                            case "09"://选择课件
+                                mPresenter.cleanDrawData(mDrawView);
+                                mPresenter.getCourseWareImageList(boardBean.methodparam, 0, true);
+                                break;
+                            case "11": //下一页
+                                mPresenter.changePage(ChatActivity.this, mDrawView, mImageCourseWare, boardBean.methodparam);
+                                break;
+                            case "10": //上一页
+                                mPresenter.changePage(ChatActivity.this, mDrawView, mImageCourseWare, boardBean.methodparam);
+                                break;
+                            case "12": //关闭文档
+                                mPresenter.cleanDrawData(mDrawView);
+                                mImageCourseWare.setImageResource(R.drawable.transparent);
+                                setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam), Integer.valueOf(boardBean.scaling));
+                                break;
+                            case "16":  //重连
+                                mPresenter.initBoard(ChatActivity.this, mDrawView, boardBean.methodparam);
+                                mImageFullScreen.setEnabled(true);
+                                break;
+                            case "15": //白板宽高
+                                Log.d(TAG, "接收到白板宽高消息：width" + boardBean.methodparam + ",height" + boardBean.scaling);
+                                setBoardViewLayoutParams(Integer.valueOf(
+                                        boardBean.methodparam), Integer.valueOf(boardBean.scaling));
+                                mImageFullScreen.setEnabled(true);
+                                break;
+                            case ChatPresenter.Eraser:  //橡皮檫
+                                mPresenter.add(ChatPresenter.Eraser, boardBean.methodparam, 0, 0);
+                                mPresenter.setDrawingMode(mDrawView, ChatPresenter.Eraser);
+                                mPresenter.drawEraser(mDrawView, boardBean.methodparam);
+                                break;
+                            case ChatPresenter.Rectangle:  //框
+                                mPresenter.add(ChatPresenter.Rectangle, boardBean.methodparam, mDrawView.getDrawColor(), 0);
+                                mPresenter.setDrawingMode(mDrawView, ChatPresenter.Rectangle);
+                                mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
+                                break;
+                            case ChatPresenter.Oval:  //圆
+                                mPresenter.add(ChatPresenter.Oval, boardBean.methodparam, mDrawView.getDrawColor(), 0);
+                                mPresenter.setDrawingMode(mDrawView, ChatPresenter.Oval);
+                                mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
+                                break;
+                            case ChatPresenter.Line:
+                                mPresenter.add(ChatPresenter.Line, boardBean.methodparam, 0, 0);
+                                mPresenter.setDrawingMode(mDrawView, ChatPresenter.Line);
+                                mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                                break;
                         }
                     }
                 });
