@@ -132,8 +132,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private String mChannelName;
     private RoomInfo mRoomInfo;
-    private RequestManager mRequestManager;
-    private List<CourseWareImageList> mCourseWareImageLists;//课件列表数据
+    public RequestManager mRequestManager;
+    public List<CourseWareImageList> mCourseWareImageLists;//课件列表数据
 
     //课程id
     private String mUuid;
@@ -658,7 +658,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
                         }
                         if ("02".equals(boardBean.methodtype)) {
-                            mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam));
+                            mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
                         }
                         if ("08".equals(boardBean.methodtype)) {  //清屏
                             mPresenter.cleanDrawData(mDrawView);
@@ -671,20 +671,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             mPresenter.getCourseWareImageList(boardBean.methodparam, 0, true);
                         }
                         if ("11".equals(boardBean.methodtype)) {  //下一页
-                            mPresenter.cleanDrawData(mDrawView);
-                            ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
+                            mPresenter.changePage(ChatActivity.this, mDrawView, mImageCourseWare, boardBean.methodparam);
                         }
                         if ("10".equals(boardBean.methodtype)) {  //上一页
-                            mPresenter.cleanDrawData(mDrawView);
-                            ImageLoader.loadImage(mRequestManager, mImageCourseWare, mCourseWareImageLists.get(Integer.valueOf(boardBean.methodparam)).imageUrl);
+                            mPresenter.changePage(ChatActivity.this, mDrawView, mImageCourseWare, boardBean.methodparam);
                         }
                         if ("12".equals(boardBean.methodtype)) {  //关闭文档
                             mPresenter.cleanDrawData(mDrawView);
                             mImageCourseWare.setImageResource(R.drawable.transparent);
                             setBoardViewLayoutParams(Integer.valueOf(boardBean.methodparam), Integer.valueOf(boardBean.scaling));
-
                         }
-                        if ("16".equals(boardBean.methodtype)) {
+                        if ("16".equals(boardBean.methodtype)) {  //重连
                             mPresenter.initBoard(ChatActivity.this, mDrawView, boardBean.methodparam);
                             mImageFullScreen.setEnabled(true);
                         }
@@ -701,13 +698,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         }
 
                         if (ChatPresenter.Rectangle.equals(boardBean.methodtype)) {  //框
-                            mPresenter.add(ChatPresenter.Rectangle, boardBean.methodparam, 0, 0);
+                            mPresenter.add(ChatPresenter.Rectangle, boardBean.methodparam, mDrawView.getDrawColor(), 0);
                             mPresenter.setDrawingMode(mDrawView, ChatPresenter.Rectangle);
                             mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
                         }
 
-                        if (ChatPresenter.Oval.equals(boardBean.methodtype)) {  //框
-                            mPresenter.add(ChatPresenter.Oval, boardBean.methodparam, 0, 0);
+                        if (ChatPresenter.Oval.equals(boardBean.methodtype)) {  //圆
+                            mPresenter.add(ChatPresenter.Oval, boardBean.methodparam, mDrawView.getDrawColor(), 0);
                             mPresenter.setDrawingMode(mDrawView, ChatPresenter.Oval);
                             mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
                         }
@@ -1077,6 +1074,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
         }
+        mDrawView.setEraserSize(12 * mPresenter.getScreenRate());
     }
 
 
@@ -1098,6 +1096,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageCourseWare.setLayoutParams(mDrawViewFullP);
             mDrawView.setLayoutParams(mDrawViewFullP);
         }
+        mDrawView.setEraserSize(mSwitch ? 12 * rates : 12 * rate);
     }
 
 
@@ -1265,8 +1264,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 mRl_bg.setVisibility(View.GONE);
                 if (uid == mRoomInfo.getChannelTeacherId()) {
                     isTeacherJoined = true;
-                    mDrawView.restartDrawing();
-                    mImageCourseWare.setImageResource(R.drawable.transparent);
+//                    mDrawView.restartDrawing();
+//                    mImageCourseWare.setImageResource(R.drawable.transparent);
 
                 }
             }

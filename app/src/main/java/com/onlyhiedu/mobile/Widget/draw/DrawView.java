@@ -29,6 +29,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.agore.openvcall.ui.ChatPresenter;
+
 /**
  * Created by Ing. Oscar G. Medina Cruz on 06/11/2016.
  * <p>
@@ -76,6 +78,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     private Rect mCanvasClipBounds;
     private RectF mAuxRect;
 
+
     /**
      * Default constructor
      *
@@ -97,6 +100,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         initVars();
         initAttributes(context, attrs);
     }
+
 
     /**
      * Default constructor
@@ -125,6 +129,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         initVars();
         initAttributes(context, attrs);
     }
+
 
     /**
      * Draw custom content in the view
@@ -206,7 +211,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                         Paint paint = drawMove.getPaint();
                         paint.setStyle(Paint.Style.FILL);
                         paint.setStrokeWidth(mEraserSize);
-                        mContentCanvas.drawRect(drawMove.getStartX(), drawMove.getStartY(), drawMove.getEndX(), drawMove.getEndY(),paint);
+                        mContentCanvas.drawRect(drawMove.getStartX(), drawMove.getStartY(), drawMove.getEndX(), drawMove.getEndY(), paint);
                         drawMove.getPaint().setXfermode(null);
                     }
                     break;
@@ -330,7 +335,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
             if (mDrawMoveHistory.size() > 0) {
                 mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).setEndX(touchX).setEndY(touchY);
 
-                if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER ) {
+                if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER) {
                     mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).getDrawingPathList()
                             .get(mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).getDrawingPathList().size() - 1)
                             .lineTo(touchX, touchY);
@@ -361,14 +366,13 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
     }
 
-    public void  setCanvas(int x,int y ){
+    public void setCanvas(int x, int y) {
         mAuxRect = new RectF();
         Bitmap init = Bitmap.createBitmap(x, y, Bitmap.Config.ARGB_8888);
         mContentBitmap = init.copy(Bitmap.Config.ARGB_8888, true);
         init.recycle();
         mContentCanvas = new Canvas(mContentBitmap);
     }
-
 
 
     /**
@@ -449,11 +453,20 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
             }
             paint.setColor(mBackgroundColor);
         } else {
+
             paint.setColor(mDrawColor);
         }
         paint.setStyle(mPaintStyle);
         paint.setDither(mDither);
-        paint.setStrokeWidth(mDrawWidth);
+        if (mDrawingMode == DrawingMode.DRAW) {
+            if (mDrawingTool == DrawingTool.OVAL || mDrawingTool == DrawingTool.RECTANGLE || mDrawingTool == DrawingTool.LINE) {
+                Log.d("DrawView", "几何图形线框："+ 3 * ChatPresenter.getScreenRate() + "");
+                paint.setStrokeWidth(3 * ChatPresenter.getScreenRate());
+            } else {
+                paint.setStrokeWidth(mDrawWidth);
+            }
+        }
+
         paint.setAlpha(mDrawAlpha);
         paint.setAntiAlias(mAntiAlias);
         paint.setStrokeCap(mLineCap);
@@ -810,9 +823,6 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         this.mFontSize = fontSize;
         return this;
     }
-
-
-
 
 
     /**

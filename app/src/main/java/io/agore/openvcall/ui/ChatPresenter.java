@@ -2,6 +2,7 @@ package io.agore.openvcall.ui;
 
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.widget.ImageView;
 
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
@@ -9,6 +10,7 @@ import com.onlyhiedu.mobile.Model.bean.board.MyBoardData;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
+import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
 import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
@@ -18,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,16 +43,16 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public static final String Oval = "05";
     public static final String Line = "22";
 
-    private float mFullScreenRate;  //全屏缩放比例
-    private float mHalfScreenRate;  //半屏缩放比例
+    private static float mFullScreenRate;  //全屏缩放比例
+    private static float mHalfScreenRate;  //半屏缩放比例
 
-    private boolean mFullScreen;  //全屏？
+    private static boolean mFullScreen;  //全屏？
 
     public void setFullScreen(boolean fullScreen) {
         mFullScreen = fullScreen;
     }
 
-    public float getScreenRate() {
+    public static float getScreenRate() {
         return mFullScreen ? mFullScreenRate : mHalfScreenRate;
     }
 
@@ -103,7 +106,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
 
-    private ArrayList<MyBoardData> drawData = new ArrayList<>();
+    private LinkedList<MyBoardData> drawData = new LinkedList<>();
 
 
     public void reDraw(DrawView view) {
@@ -120,21 +123,24 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
             }
             if (myBoardData.type.equals(Rectangle)) {
+                view.setDrawColor(myBoardData.color);
                 setDrawingMode(view, Rectangle);
                 drawRectangle(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
             }
             if (myBoardData.type.equals(Oval)) {
+                view.setDrawColor(myBoardData.color);
                 setDrawingMode(view, Oval);
                 drawOval(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
             }
             if (myBoardData.type.equals(Line)) {
+                view.setDrawColor(myBoardData.color);
                 setDrawingMode(view, Line);
                 drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
             }
         }
     }
 
-    public void add(String type, String data, int color, int lineWidth) {
+    public void add(String type, String data, int color, float lineWidth) {
         drawData.add(new MyBoardData(type, data, color, lineWidth, mFullScreenRate, mHalfScreenRate));
     }
 
@@ -149,6 +155,91 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             drawData.remove(drawData.size() - 1);
         }
     }
+
+    public void changePage(ChatActivity activity, DrawView view, ImageView imageView, String data) {
+
+        cleanDrawData(view);
+
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            String pageNum = jsonObject.getString("pageNum");
+            ImageLoader.loadImage(activity.mRequestManager, imageView, activity.mCourseWareImageLists.get(Integer.valueOf(pageNum)).imageUrl);
+            JSONArray drawData = jsonObject.getJSONArray("drawData");
+            for (int i = 0; i < drawData.length(); i++) {
+                JSONObject bean = (JSONObject) drawData.opt(i);
+                draw(bean, view);
+//                String drawMode = bean.getString("drawMode");
+//                String points = bean.getString("points");
+//                setDrawingMode(view, drawMode);
+//                switch (drawMode) {
+//                    case PEN:
+//                        int lineWidth = bean.getInt("lineWidth");
+//                        view.setDrawWidth(lineWidth * getScreenRate());
+//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+//                        drawLine(view, points);
+//                        add(ChatPresenter.PEN, points, view.getDrawColor(), view.getDrawWidth());
+//                        break;
+//                    case Oval:
+//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+//                        drawRectangle(view, points, getScreenRate());
+//                        add(ChatPresenter.Oval, points, view.getDrawColor(), 0);
+//                        break;
+//                    case Rectangle:
+//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+//                        drawRectangle(view, points, getScreenRate());
+//                        add(ChatPresenter.Rectangle, points, view.getDrawColor(), 0);
+//                        break;
+//                    case Line:
+//                        view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+//                        drawLine(view, points);
+//                        add(ChatPresenter.Line, points, view.getDrawColor(), 0);
+//                        break;
+//                    case Eraser:
+//                        drawEraser(view, points);
+//                        add(ChatPresenter.Eraser, points, 0, 0);
+//                        break;
+//                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void draw(JSONObject bean, DrawView view) throws JSONException {
+        String drawMode = bean.getString("drawMode");
+        String points = bean.getString("points");
+        setDrawingMode(view, drawMode);
+        switch (drawMode) {
+            case PEN:
+                int lineWidth = bean.getInt("lineWidth");
+                view.setDrawWidth(lineWidth * getScreenRate());
+                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+                drawLine(view, points);
+                add(ChatPresenter.PEN, points, view.getDrawColor(), view.getDrawWidth());
+                break;
+            case Oval:
+                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+                drawRectangle(view, points, getScreenRate());
+                add(ChatPresenter.Oval, points, view.getDrawColor(), 0);
+                break;
+            case Rectangle:
+                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+                drawRectangle(view, points, getScreenRate());
+                add(ChatPresenter.Rectangle, points, view.getDrawColor(), 0);
+                break;
+            case Line:
+                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
+                drawLine(view, points);
+                add(ChatPresenter.Line, points, view.getDrawColor(), 0);
+                break;
+            case Eraser:
+                drawEraser(view, points);
+                add(ChatPresenter.Eraser, points, 0, 0);
+                break;
+        }
+    }
+
 
     public void initBoard(ChatActivity activity, DrawView view, String data) {
         try {
@@ -172,25 +263,25 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 JSONArray drawData = jsonObject.getJSONArray("drawData");
                 for (int i = 0; i < drawData.length(); i++) {
                     JSONObject bean = (JSONObject) drawData.opt(i);
-                    switch (bean.getString("drawMode")) {
-                        case PEN:
-                            int lineWidth = bean.getInt("lineWidth");
-                            view.setDrawWidth(lineWidth);
-                            view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-                            drawLine(view, bean.getString("points"));
-                            add(ChatPresenter.PEN, bean.getString("points"), Color.parseColor("#" + bean.getString("color")), lineWidth);
-                            break;
-                    }
+                    draw(bean, view);
                 }
 
             } catch (Exception e) {
             }
 
+
             String color = jsonObject.getString("color");
             if (!TextUtils.isEmpty(color)) {
                 view.setDrawColor(Color.parseColor("#" + color));
             }
-
+            String drawMode = jsonObject.getString("drawMode");
+            if (!TextUtils.isEmpty(drawMode)) {
+                setDrawingMode(view, drawMode);
+            }
+            String lineWidth = jsonObject.getString("lineWidth");
+            if (!TextUtils.isEmpty(lineWidth)) {
+                view.setDrawWidth(Float.valueOf(lineWidth) * getScreenRate());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -265,52 +356,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
         view.eventActionDown(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
         view.eventActionMove(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
-
-        float x = parseFloat(xyAxle[0]) * rate + parseFloat(xyAxle[2]) * rate;
-        float y = parseFloat(xyAxle[1]) * rate + parseFloat(xyAxle[3]) * rate;
-        view.eventActionUp(x, y);
+        view.eventActionUp(parseFloat(xyAxle[2]) * rate, parseFloat(xyAxle[3]) * rate);
     }
 
-
-//    @Override
-//    public void drawPoint(DrawView view, NotifyWhiteboardOperator json) {
-//        List<String[]> datas = new ArrayList<>();
-//        String type = json.NotifyParam.MethodType;
-//        if (type.equals(MethodType.POINT) || type.equals(MethodType.LINE) || type.equals(MethodType.EraserPoint)) {
-//            String[] spit = json.NotifyParam.MethodParam.split("[|]");
-//            for (String str : spit) {
-//                String[] data = new String[2];
-//                String[] xyAxle = str.split(",");
-//                data[0] = xyAxle[0];
-//                data[1] = xyAxle[1];
-//                datas.add(data);
-//            }
-//        }
-//        if (datas.size() > 0) {
-//            String[] xyAxle = datas.get(0);
-//            view.eventActionDown(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
-//            if (datas.size() == 2) {
-//                String[] xyAxle2 = datas.get(1);
-//                view.eventActionMove(parseFloat(xyAxle[0]) * getRate(), parseFloat(xyAxle[1]) * getRate());
-//                view.eventActionUp(parseFloat(xyAxle2[0]) * getRate(), parseFloat(xyAxle2[1]) * getRate());
-//            } else {
-//                for (int i = 1; i < datas.size() - 1; i++) {
-//                    view.eventActionMove(parseFloat(datas.get(i)[0]) * getRate(), parseFloat(datas.get(i)[1]) * getRate());
-//                }
-//                view.eventActionUp(parseFloat(datas.get(datas.size() - 1)[0]) * getRate(), parseFloat(datas.get(datas.size() - 1)[1]) * getRate());
-//            }
-//        }
-//    }
-
-
-//
-//    @Override
-//    public void drawEraserRect(DrawView view, NotifyWhiteboardOperator json) {
-//        drawOval(view, json);
-//    }
-//
-
-//
 
 //
 //    @Override
@@ -350,7 +398,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 view.setDrawingTool(DrawingTool.values()[1]);
                 break;
         }
-
     }
 
 }

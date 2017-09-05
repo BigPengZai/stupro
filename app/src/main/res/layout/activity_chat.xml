@@ -93,14 +93,14 @@
                     <ImageView
                         android:id="@+id/image_course_ware"
                         android:layout_width="match_parent"
-                        android:layout_height="697px"
+                        android:layout_height="wrap_content"
                         android:scaleType="fitXY"/>
 
                     <com.onlyhiedu.mobile.Widget.draw.DrawView
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/draw_view"
-                        android:layout_width="936px"
-                        android:layout_height="697px"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         app:dv_draw_alpha="255"
                         app:dv_draw_anti_alias="true"

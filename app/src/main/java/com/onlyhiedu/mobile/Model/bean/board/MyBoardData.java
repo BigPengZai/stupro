@@ -9,12 +9,12 @@ public class MyBoardData {
     public String type;     //类型
     public String XYData;
     public int color;
-    public int lineWidth;
+    public float lineWidth;
     public float fullRate;  //全屏缩放比例
     public float halfRate;  //半屏缩放比例
 
 
-    public MyBoardData(String type, String XYData, int color, int lineWidth, float fullRate, float halfRate) {
+    public MyBoardData(String type, String XYData, int color, float lineWidth, float fullRate, float halfRate) {
         this.type = type;
         this.XYData = XYData;
         this.color = color;
