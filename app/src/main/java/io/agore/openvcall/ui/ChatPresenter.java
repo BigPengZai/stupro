@@ -135,7 +135,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                     drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
                     break;
             }
-
         }
     }
 
@@ -238,7 +237,8 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             }
 
             String color = jsonObject.getString("color");
-            if (!TextUtils.isEmpty(color)) {
+            if (!TextUtils.isEmpty(
+                    color)) {
                 view.setDrawColor(Color.parseColor("#" + color));
             }
             String drawMode = jsonObject.getString("drawMode");
@@ -324,6 +324,23 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         view.eventActionDown(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
         view.eventActionMove(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
         view.eventActionUp(parseFloat(xyAxle[2]) * rate, parseFloat(xyAxle[3]) * rate);
+    }
+
+
+    public String setDrawViewStyle(DrawView view, String param) {
+        String drawData = "";
+
+        try {
+            JSONObject jsonObject = new JSONObject(param);
+            String color = jsonObject.getString("color");
+            view.setDrawColor(Color.parseColor("#" + color));
+            view.setDrawWidth(jsonObject.getInt("lineWidth") * getScreenRate());
+            drawData = jsonObject.getString("drawData");
+            return drawData;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return drawData;
     }
 
 

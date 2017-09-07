@@ -50,6 +50,9 @@ import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
@@ -82,6 +85,7 @@ import io.agore.propeller.preprocessing.VideoPreProcessing;
 
 import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
+import static io.agore.openvcall.ui.ChatPresenter.PEN;
 
 public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, ChatContract.View, Chronometer.OnChronometerTickListener {
 
@@ -650,17 +654,18 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             return;
                         }
                         switch (boardBean.methodtype) {
-                            case ChatPresenter.PEN:
-                                mPresenter.add(ChatPresenter.PEN, boardBean.methodparam, mDrawView.getDrawColor(), (int) mDrawView.getDrawWidth());
-                                mPresenter.setDrawingMode(mDrawView, ChatPresenter.PEN);
-                                mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                            case PEN:
+                                mPresenter.setDrawingMode(mDrawView, PEN);
+                                String drawData = mPresenter.setDrawViewStyle(mDrawView, boardBean.methodparam);
+                                mPresenter.drawLine(mDrawView, drawData);
+                                mPresenter.add(ChatPresenter.PEN, drawData, mDrawView.getDrawColor(), mDrawView.getDrawWidth());
                                 break;
-                            case "01":
-                                mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
-                                break;
-                            case "02":
-                                mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
-                                break;
+//                            case "01":
+//                                mDrawView.setDrawColor(Color.parseColor("#" + boardBean.methodparam));
+//                                break;
+//                            case "02":
+//                                mDrawView.setDrawWidth(Float.valueOf(boardBean.methodparam) * mPresenter.getScreenRate());
+//                                break;
                             case "08"://清屏
                                 mPresenter.cleanDrawData(mDrawView);
                                 break;
@@ -693,24 +698,35 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mImageFullScreen.setEnabled(true);
                                 break;
                             case ChatPresenter.Eraser:  //橡皮檫
-                                mPresenter.add(ChatPresenter.Eraser, boardBean.methodparam, 0, 0);
+                                JSONObject object = null;
+                                String drawData1 = null;
+                                try {
+                                    object = new JSONObject(boardBean.methodparam);
+                                    drawData1 = object.getString("drawData");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                mPresenter.add(ChatPresenter.Eraser, drawData1, 0, 0);
                                 mPresenter.setDrawingMode(mDrawView, ChatPresenter.Eraser);
-                                mPresenter.drawEraser(mDrawView, boardBean.methodparam);
+                                mPresenter.drawEraser(mDrawView, drawData1);
                                 break;
                             case ChatPresenter.Rectangle:  //框
-                                mPresenter.add(ChatPresenter.Rectangle, boardBean.methodparam, mDrawView.getDrawColor(), 0);
+                                String drawData2 = mPresenter.setDrawViewStyle(mDrawView, boardBean.methodparam);
+                                mPresenter.add(ChatPresenter.Rectangle, drawData2, mDrawView.getDrawColor(), 0);
                                 mPresenter.setDrawingMode(mDrawView, ChatPresenter.Rectangle);
-                                mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
+                                mPresenter.drawRectangle(mDrawView, drawData2, mPresenter.getScreenRate());
                                 break;
                             case ChatPresenter.Oval:  //圆
-                                mPresenter.add(ChatPresenter.Oval, boardBean.methodparam, mDrawView.getDrawColor(), 0);
+                                String drawData3 = mPresenter.setDrawViewStyle(mDrawView, boardBean.methodparam);
+                                mPresenter.add(ChatPresenter.Oval, drawData3, mDrawView.getDrawColor(), 0);
                                 mPresenter.setDrawingMode(mDrawView, ChatPresenter.Oval);
-                                mPresenter.drawRectangle(mDrawView, boardBean.methodparam, mPresenter.getScreenRate());
+                                mPresenter.drawRectangle(mDrawView, drawData3, mPresenter.getScreenRate());
                                 break;
                             case ChatPresenter.Line:
-                                mPresenter.add(ChatPresenter.Line, boardBean.methodparam, 0, 0);
+                                String drawData4 = mPresenter.setDrawViewStyle(mDrawView, boardBean.methodparam);
+                                mPresenter.add(ChatPresenter.Line, drawData4, 0, 0);
                                 mPresenter.setDrawingMode(mDrawView, ChatPresenter.Line);
-                                mPresenter.drawLine(mDrawView, boardBean.methodparam);
+                                mPresenter.drawLine(mDrawView, drawData4);
                                 break;
                         }
                     }
@@ -1070,7 +1086,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mDrawView.restartDrawing();
             mDrawView.setLayoutParams(mDrawViewFullP);
             mImageCourseWare.setLayoutParams(mDrawViewFullP);
-            mPresenter.reDraw(mDrawView);
+            mPresenter.  reDraw(mDrawView);
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
         }
