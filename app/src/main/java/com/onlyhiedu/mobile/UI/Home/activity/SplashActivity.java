@@ -16,7 +16,7 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
  */
 
 public class SplashActivity extends Activity {
-    private static final int sleepTime = 1500;
+    private static final int sleepTime = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

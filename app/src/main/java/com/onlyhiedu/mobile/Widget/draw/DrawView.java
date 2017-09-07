@@ -463,10 +463,10 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                 Log.d("DrawView", "几何图形线框："+ 3 * ChatPresenter.getScreenRate() + "");
                 paint.setStrokeWidth(3 * ChatPresenter.getScreenRate());
             } else {
-                paint.setStrokeWidth(mDrawWidth);
+
             }
         }
-
+        paint.setStrokeWidth(mDrawWidth);
         paint.setAlpha(mDrawAlpha);
         paint.setAntiAlias(mAntiAlias);
         paint.setStrokeCap(mLineCap);
