@@ -23,7 +23,6 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.RtcEngineEx;
 import io.agora.rtc.video.VideoCanvas;
-import io.agore.propeller.Constant;
 
 public class WorkerThread extends Thread {
 //    private final static Logger log = LoggerFactory.getLogger(WorkerThread.class);
@@ -118,12 +117,6 @@ public class WorkerThread extends Thread {
 
     public final void enablePreProcessor() {
     }
-
-    public final void setPreParameters(float lightness, int smoothness) {
-        Constant.PRP_DEFAULT_LIGHTNESS = lightness;
-        Constant.PRP_DEFAULT_SMOOTHNESS = smoothness;
-    }
-
     public final void disablePreProcessor() {
     }
 
@@ -212,8 +205,8 @@ public class WorkerThread extends Thread {
 
             mRtcEngine.setEncryptionSecret(encryptionKey);
         }
-
-        mRtcEngine.setVideoProfile(mEngineConfig.mVideoProfile, false);
+//240P_4	24	424x240	15	220
+        mRtcEngine.setVideoProfile(24, false);
 
         Log.d(TAG,"configEngine " + mEngineConfig.mVideoProfile + " " + encryptionMode);
     }

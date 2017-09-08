@@ -76,18 +76,13 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
 import io.agore.openvcall.model.User;
-import io.agore.propeller.Constant;
-import io.agore.propeller.UserStatusData;
-import io.agore.propeller.VideoInfoData;
-import io.agore.propeller.headset.HeadsetPlugManager;
-import io.agore.propeller.headset.IHeadsetPlugListener;
-import io.agore.propeller.preprocessing.VideoPreProcessing;
+
 
 import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 import static io.agore.openvcall.ui.ChatPresenter.PEN;
 
-public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, IHeadsetPlugListener, ChatContract.View, Chronometer.OnChronometerTickListener {
+public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, ChatContract.View, Chronometer.OnChronometerTickListener {
 
     private RelativeLayout mSmallVideoViewDock;
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
@@ -100,8 +95,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @BindView(ll_video)
     LinearLayout mLlVideo;
-    @BindView(R.id.grid_video_view_container)
-    TeacherVideoView mGridVideoViewContainer;
     @BindView(R.id.scrollView)
     MyScrollView mScrollView;
     @BindView(R.id.rl_bg)
@@ -131,8 +124,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.but_dismiss)
     TextView mButDismiss;
     private AgoraAPIOnlySignal m_agoraAPI;
-    @BindView(R.id.ll_class_bg)
-    LinearLayout mLlClassBg;
+    @BindView(R.id.rel_tea)
+    RelativeLayout mRel_Tea;
+    @BindView(R.id.rel_stu)
+    RelativeLayout mRel_Stu;
+
+
 
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -169,6 +166,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private int mDelY;
     //向上滑动基数
     private int mUpValue = 3;
+    private SurfaceView mStuSurfView;
 
     @Override
     protected void initInject() {
@@ -198,12 +196,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         initRoomData();
         //登录信令系统成功后  登录通信频道
         initSignalling();
-        SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
-        rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, 0));
-        surfaceV.setZOrderOnTop(false);
-        surfaceV.setZOrderMediaOverlay(false);
-        mUidsList.put(0, new SoftReference<>(surfaceV)); // get first surface view
-        mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
+        mStuSurfView = RtcEngine.CreateRendererView(getApplicationContext());
+        rtcEngine().setupLocalVideo(new VideoCanvas(mStuSurfView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
+        mStuSurfView.setZOrderOnTop(false);
+        mStuSurfView.setZOrderMediaOverlay(false);
+        mUidsList.put(0, new SoftReference<>(mStuSurfView)); // get first surface view
+//        mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
+
         rtcEngine().muteLocalAudioStream(false);
         //禁用本地视频功能
         rtcEngine().enableLocalVideo(true);
@@ -213,7 +212,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         rtcEngine().muteAllRemoteAudioStreams(false);
         //暂停所有远端音频
         rtcEngine().muteAllRemoteAudioStreams(false);
-        worker().preview(true, surfaceV, Integer.parseInt(mUid));
+        worker().preview(true, mStuSurfView, Integer.parseInt(mUid));
 
 
         initMessageList();
@@ -1074,10 +1073,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mPresenter.reDraw(mDrawView);
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
-            mLlClassBg.setVisibility(View.VISIBLE);
 
         } else {
-            mLlClassBg.setVisibility(View.GONE);
             mLlVideo.setVisibility(View.GONE);
 
             mSwitch = true;
@@ -1138,22 +1135,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         return "1:" + appID + ":" + expiredTime + ":" + sign;
 
     }
-
-
-    private int getVideoProfileIndex() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        int profileIndex = pref.getInt(ConstantApp.PrefManager.PREF_PROPERTY_PROFILE_IDX, ConstantApp.DEFAULT_PROFILE_IDX);
-        if (profileIndex > ConstantApp.VIDEO_PROFILES.length - 1) {
-            profileIndex = ConstantApp.DEFAULT_PROFILE_IDX;
-
-            // save the new value
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putInt(ConstantApp.PrefManager.PREF_PROPERTY_PROFILE_IDX, profileIndex);
-            editor.apply();
-        }
-        return profileIndex;
-    }
-
     @Override
     protected void deInitUIandEvent() {
         doLeaveChannel();
@@ -1162,19 +1143,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void doLeaveChannel() {
         worker().leaveChannel(mChannelName);
         worker().preview(false, null, 0);
-
-    }
-
-    @Override
-    public void onBackPressedSupport() {
-//        if (m_agoraAPI != null) {
-//            m_agoraAPI.logout();
-//            Log.d(TAG, "信令退出");
-//        }
-//        if (mUidsList != null) {
-//            mUidsList.clear();
-//        }
-//        quitCall();
 
     }
 
@@ -1197,36 +1165,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         deInitUIandEvent();
     }
 
-    private VideoPreProcessing mVideoPreProcessing;
-
-
-    private void doHideTargetView(int targetUid, boolean hide) {
-        HashMap<Integer, Integer> status = new HashMap<>();
-        status.put(targetUid, hide ? UserStatusData.VIDEO_MUTED : UserStatusData.DEFAULT_STATUS);
-        if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
-            mGridVideoViewContainer.notifyUiChanged(mUidsList, targetUid, status, null);
-            Log.d(TAG, "LAYOUT_TYPE_DEFAULT");
-        } else if (mLayoutType == LAYOUT_TYPE_SMALL) {
-            UserStatusData bigBgUser = mGridVideoViewContainer.getItem(0);
-            Log.d(TAG, "LAYOUT_TYPE_SMALL");
-            if (bigBgUser.mUid == targetUid) { // big background is target view
-                mGridVideoViewContainer.notifyUiChanged(mUidsList, targetUid, status, null);
-            } else { // find target view in small video view list
-//                log.warn("SmallVideoViewAdapter call notifyUiChanged " + mUidsList + " " + (bigBgUser.mUid & 0xFFFFFFFFL) + " taget: " + (targetUid & 0xFFFFFFFFL) + "==" + targetUid + " " + status);
-                mSmallVideoViewAdapter.notifyUiChanged(mUidsList, bigBgUser.mUid, status, null);
-            }
-        }
-    }
-
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
         if (uid == mRoomInfo.getChannelTeacherId()) {
-            doRenderRemoteUi(uid);
+            initTeaView(uid);
         }
     }
 
-    private void doRenderRemoteUi(final int uid) {
+    private void initTeaView(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1239,12 +1186,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
                 mUidsList.put(uid, new SoftReference<>(surfaceV));
                 Log.d(TAG, "远端下 集合长度：" + mUidsList.size());
-                boolean useDefaultLayout = mLayoutType == LAYOUT_TYPE_DEFAULT && mUidsList.size() != 2;
                 surfaceV.setZOrderOnTop(false);
                 surfaceV.setZOrderMediaOverlay(false);
                 //设置远端视频显示属性 (setupRemoteVideo)
                 rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-                switchToSmallVideoView(uid);
+                mRel_Tea.addView(surfaceV);
             }
         });
     }
@@ -1264,7 +1210,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     return;
                 }
                 mUidsList.put(uid, local);
-                mRl_bg.setVisibility(View.GONE);
+                if (mRel_Stu!=null&&mStuSurfView!=null) {
+                    mRel_Stu.addView(mStuSurfView);
+                }
             }
         });
     }
@@ -1348,65 +1296,20 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         boolean muted;
         switch (type) {
             case AGEventHandler.EVENT_TYPE_ON_USER_AUDIO_MUTED:
-                peerUid = (Integer) data[0];
-                muted = (boolean) data[1];
-                if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
-                    HashMap<Integer, Integer> status = new HashMap<>();
-                    status.put(peerUid, muted ? UserStatusData.AUDIO_MUTED : UserStatusData.DEFAULT_STATUS);
-                    mGridVideoViewContainer.notifyUiChanged(mUidsList, config().mUid, status, null);
-                }
 
                 break;
 
             case AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_MUTED:
-                peerUid = (Integer) data[0];
-                muted = (boolean) data[1];
-                doHideTargetView(peerUid, muted);
+//                peerUid = (Integer) data[0];
+//                muted = (boolean) data[1];
+//                doHideTargetView(peerUid, muted);
                 break;
             //远端视频统计回调
             case AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_STATS:
-                IRtcEngineEventHandler.RemoteVideoStats stats = (IRtcEngineEventHandler.RemoteVideoStats) data[0];
-                if (Constant.SHOW_VIDEO_INFO) {
-                    if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
-                        Log.d(TAG, "远端视频统计回调 LAYOUT_TYPE_DEFAULT");
-                        Log.d(TAG, "stats.uid:" + stats.uid);
-                        mGridVideoViewContainer.addVideoInfo(stats.uid, new VideoInfoData(stats.width, stats.height, stats.delay, stats.receivedFrameRate, stats.receivedBitrate));
-                        int uid = config().mUid;
-                        int profileIndex = getVideoProfileIndex();
-                        String resolution = getResources().getStringArray(R.array.string_array_resolutions)[profileIndex];
-                        String fps = getResources().getStringArray(R.array.string_array_frame_rate)[profileIndex];
-                        String bitrate = getResources().getStringArray(R.array.string_array_bit_rate)[profileIndex];
-                        String[] rwh = resolution.split("x");
-                        int width = Integer.valueOf(rwh[0]);
-                        int height = Integer.valueOf(rwh[1]);
-                        mGridVideoViewContainer.addVideoInfo(uid, new VideoInfoData(width > height ? width : height,
-                                width > height ? height : width,
-                                0, Integer.valueOf(fps), Integer.valueOf(bitrate)));
-                    }
-                } else {
-                    mGridVideoViewContainer.cleanVideoInfo();
-                    Log.d(TAG, "远端视频统计回调 else");
-                }
+
                 break;
             case AGEventHandler.EVENT_TYPE_ON_SPEAKER_STATS:
-                IRtcEngineEventHandler.AudioVolumeInfo[] infos = (IRtcEngineEventHandler.AudioVolumeInfo[]) data[0];
-                if (infos.length == 1 && infos[0].uid == 0) { // local guy, ignore it
-                    break;
-                }
-                if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
-                    HashMap<Integer, Integer> volume = new HashMap<>();
-                    for (IRtcEngineEventHandler.AudioVolumeInfo each : infos) {
-                        peerUid = each.uid;
-                        int peerVolume = each.volume;
-                        if (peerUid == 0) {
-                            continue;
-                        }
-                        volume.put(peerUid, peerVolume);
-                    }
-                    if (mGridVideoViewContainer != null) {
-                        mGridVideoViewContainer.notifyUiChanged(mUidsList, config().mUid, null, volume);
-                    }
-                }
+
                 break;
             case AGEventHandler.EVENT_TYPE_ON_APP_ERROR:
                 //网络发生波动，请检查网络哦！
@@ -1422,17 +1325,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 notifyMessageChanged(new io.agore.openvcall.model.Message(new User(peerUid, String.valueOf(peerUid)), new String(content)));
                 break;
             case AGEventHandler.EVENT_TYPE_ON_AGORA_MEDIA_ERROR: {
-//                int error = (int) data[0];
-//                String description = (String) data[1];
-//                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(0, null), error + " " + description));
                 break;
             }
         }
     }
 
-    private void requestRemoteStreamType(final int currentHostCount) {
-//        log.debug("requestRemoteStreamType " + currentHostCount);
-    }
 
     private void doRemoveRemoteUi(final int uid) {
         runOnUiThread(new Runnable() {
@@ -1441,116 +1338,22 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (isFinishing()) {
                     return;
                 }
-
                 Object target = mUidsList.remove(uid);
                 if (target == null) {
                     return;
                 }
-                int bigBgUid = -1;
-                if (mSmallVideoViewAdapter != null) {
-                    bigBgUid = mSmallVideoViewAdapter.getExceptedUid();
-                }
-//                log.debug("doRemoveRemoteUi " + (uid & 0xFFFFFFFFL) + " " + (bigBgUid & 0xFFFFFFFFL) + " " + mLayoutType);
-                if (mLayoutType == LAYOUT_TYPE_DEFAULT || uid == bigBgUid) {
-                    switchToDefaultVideoView();
-                } else {
-                    switchToSmallVideoView(bigBgUid);
+                if (mRel_Tea != null && mRoomInfo != null&&mRoomInfo.getChannelTeacherId()==uid) {
+
+                    mRel_Tea.removeAllViews();
                 }
             }
         });
     }
 
-    private SmallVideoViewAdapter mSmallVideoViewAdapter;
-
-    private void switchToDefaultVideoView() {
-        if (mSmallVideoViewDock != null) {
-            mSmallVideoViewDock.setVisibility(View.GONE);
-        }
-        if (mGridVideoViewContainer != null) {
-            mGridVideoViewContainer.initViewContainer(getApplicationContext(), config().mUid, mUidsList);
-            mLayoutType = LAYOUT_TYPE_DEFAULT;
-        }
-    }
-
-    private void switchToSmallVideoView(int bigBgUid) {
-        HashMap<Integer, SoftReference<SurfaceView>> slice = new HashMap<>(1);
-        slice.put(bigBgUid, mUidsList.get(bigBgUid));
-        if (mGridVideoViewContainer != null) {
-            mGridVideoViewContainer.initViewContainer(getApplicationContext(), bigBgUid, slice);
-        }
-        bindToSmallVideoView(bigBgUid);
-        mLayoutType = LAYOUT_TYPE_SMALL;
-        requestRemoteStreamType(mUidsList.size());
-
-    }
-
-    public int mLayoutType = LAYOUT_TYPE_DEFAULT;
 
     public static final int LAYOUT_TYPE_DEFAULT = 0;
 
-    public static final int LAYOUT_TYPE_SMALL = 1;
 
-    private void bindToSmallVideoView(int exceptUid) {
-        if (mSmallVideoViewDock == null) {
-            ViewStub stub = (ViewStub) findViewById(R.id.small_video_view_dock);
-            mSmallVideoViewDock = (RelativeLayout) stub.inflate();
-        }
-
-        boolean twoWayVideoCall = mUidsList.size() == 2;
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.small_video_view_container);
-
-        boolean create = false;
-
-        if (mSmallVideoViewAdapter == null) {
-            create = true;
-            mSmallVideoViewAdapter = new SmallVideoViewAdapter(this, config().mUid, exceptUid, mUidsList, new VideoViewEventListener() {
-                @Override
-                public void onItemDoubleClick(View v, Object item) {
-//                    switchToDefaultVideoView();
-                }
-            });
-//            mSmallVideoViewAdapter.setHasStableIds(true);
-        }
-//        recycler.setHasFixedSize(true);
-
-//        log.debug("bindToSmallVideoView " + twoWayVideoCall + " " + (exceptUid & 0xFFFFFFFFL));
-
-        if (twoWayVideoCall) {
-//            recycler.setLayoutManager(new RtlLinearLayoutManager(this, RtlLinearLayoutManager.HORIZONTAL, false));
-        } else {
-        }
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false) {
-
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-
-
-            }
-        };
-        recycler.setLayoutManager(linearLayoutManager);
-        recycler.addItemDecoration(new SmallVideoViewDecoration());
-        recycler.setAdapter(mSmallVideoViewAdapter);
-
-        if (!create) {
-        }
-        mSmallVideoViewAdapter.setLocalUid(config().mUid);
-        mSmallVideoViewAdapter.notifyUiChanged(mUidsList, exceptUid, null, null);
-        recycler.setVisibility(View.VISIBLE);
-        mSmallVideoViewDock.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    public void notifyHeadsetPlugged(final boolean plugged, Object... extraData) {
-//        log.info("notifyHeadsetPlugged " + plugged + " " + extraData);
-        boolean bluetooth = false;
-        if (extraData != null && extraData.length > 0 && (Integer) extraData[0] == HeadsetPlugManager.BLUETOOTH) { // this is only for bluetooth
-            bluetooth = true;
-        }
-        mWithHeadset = plugged;
-    }
 
 
     @Override

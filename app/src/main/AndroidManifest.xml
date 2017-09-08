@@ -134,11 +134,6 @@
             android:name="io.agore.openvcall.ui.ChatActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"/>
-        <activity
-            android:name="io.agore.openvcall.ui.SettingsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/label_settings"
-            android:screenOrientation="portrait"/>
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumeActivity"/>
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
