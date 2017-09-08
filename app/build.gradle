@@ -18,7 +18,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi-v7a", 'armeabi'
+            abiFilters    'armeabi-v7a' ,'armeabi'
         }
     }
 
@@ -160,6 +160,6 @@ dependencies {
     compile 'com.tencent.bugly:crashreport:latest.release'
     //ping++
     compile project(':lib:pingpp')
-    compile 'com.baidu.wallet:wallet-sdk-business:6.4.14-SNAPSHOT'
+    compile 'com.baidu.wallet:wallet-sdk-business:6.9.0-03'
 
 }

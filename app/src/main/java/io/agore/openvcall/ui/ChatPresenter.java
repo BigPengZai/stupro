@@ -335,7 +335,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             String color = jsonObject.getString("color");
             view.setDrawColor(Color.parseColor("#" + color));
             view.setDrawWidth(jsonObject.getInt("lineWidth") * getScreenRate());
-            drawData = jsonObject.getString("drawData");
+            drawData = jsonObject.getString("points");
             return drawData;
         } catch (JSONException e) {
             e.printStackTrace();

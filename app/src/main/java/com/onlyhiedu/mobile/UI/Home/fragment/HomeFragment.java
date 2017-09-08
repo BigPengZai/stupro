@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter.OnItemClickListener;
 import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
@@ -133,7 +132,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
     private void initListener() {
         mRefreshLayout.setOnRefreshListener(this);
         mBanner.setOnBannerListener(bannerListener);
-
     }
 
 
@@ -197,13 +195,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
                 break;
             case R.id.tv_information:
                 //支付模块暂时隐藏
-                UIUtils.startHomeNewsWebViewAct(mContext, urls[0], titles[0]);
-//                //课程优惠
-//                if(App.bIsGuestLogin){
-//                    UIUtils.startGuestLoginActivity(mContext,0);
-//                }else{
-//                    mPresenter.getActivityTypeList();
-//                }
+//                UIUtils.startHomeNewsWebViewAct(mContext, urls[0], titles[0]);
+                //课程优惠
+                if(SPUtil.getGuest()){
+                    UIUtils.startGuestLoginActivity(mContext,0);
+                }else{
+                    mPresenter.getActivityTypeList();
+                }
                 break;
         }
     }

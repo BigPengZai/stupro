@@ -124,11 +124,12 @@ public class App extends Application {
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
 //        DemoHelper.getInstance().init(this);
         //bugly
+
         CrashReport.initCrashReport(getApplicationContext(), "5c1349523c", false);
         //ping++
         Pingpp.enableDebugLog(true);
         //百度钱包
-        BaiduWallet.getInstance().initWallet(this,"outyahei");
+        BaiduWallet.getInstance().initWallet(this,"outanglihai");
         //bugly 热跟新
 //        Bugly.init(this,"5c1349523c",true);
     }

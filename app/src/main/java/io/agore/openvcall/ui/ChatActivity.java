@@ -702,7 +702,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 String drawData1 = null;
                                 try {
                                     object = new JSONObject(boardBean.methodparam);
-                                    drawData1 = object.getString("drawData");
+                                    drawData1 = object.getString("points");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -1070,6 +1070,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mDrawView.restartDrawing();
             mDrawView.setLayoutParams(mDrawViewP);
             mImageCourseWare.setLayoutParams(mDrawViewP);
+            mDrawView.setEraserSize(12 * mPresenter.getScreenRate());
             mPresenter.reDraw(mDrawView);
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
@@ -1081,16 +1082,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
-
-
             mDrawView.restartDrawing();
             mDrawView.setLayoutParams(mDrawViewFullP);
             mImageCourseWare.setLayoutParams(mDrawViewFullP);
-            mPresenter.  reDraw(mDrawView);
+            mDrawView.setEraserSize(12 * mPresenter.getScreenRate());
+            mPresenter.reDraw(mDrawView);
 
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen2);
         }
-        mDrawView.setEraserSize(12 * mPresenter.getScreenRate());
+
     }
 
 
