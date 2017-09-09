@@ -42,7 +42,13 @@ public class SPUtil {
     public static void setPhone(String phone) {
         getAppSp().edit().putString(Constants.PHONE, phone).apply();
     }
+    public static void setUpdateApkId(long id) {
+        getAppSp().edit().putLong(Constants.UpdateApkId,id).apply();
+    }
 
+    public static long getUpdateApkId() {
+        return getAppSp().getLong(Constants.UpdateApkId, 0);
+    }
     public static String getName() {
         return getAppSp().getString(Constants.USERNAME, "");
     }

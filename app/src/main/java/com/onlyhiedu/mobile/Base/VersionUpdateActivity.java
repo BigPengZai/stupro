@@ -3,13 +3,17 @@ package com.onlyhiedu.mobile.Base;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.onlyhiedu.mobile.Model.bean.CommonCons;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
 import com.onlyhiedu.mobile.UI.Setting.presenter.UpdatePresenter;
@@ -18,8 +22,11 @@ import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.Config;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.onlyhiedu.mobile.Utils.FileUtil;
 import com.onlyhiedu.mobile.Utils.OKHttpUICallback;
 import com.onlyhiedu.mobile.Utils.OkHttpManger;
+import com.onlyhiedu.mobile.Utils.SPUtil;
+import com.onlyhiedu.mobile.Utils.UpdateAppManager;
 import com.onlyhiedu.mobile.Utils.VersionUpdateHelper;
 
 import java.io.IOException;
@@ -102,54 +109,71 @@ public abstract class VersionUpdateActivity extends BaseActivity<UpdatePresenter
     }
 
     private void downApk(String url) {
-        if (mDownDialog == null) {
-            mVersionUpdateHelper = new VersionUpdateHelper();
-        }
-        mDownDialog = mVersionUpdateHelper.getDialog(this);
-        mDownDialog.show();
-        try {
-            //更新
-            mCall = OkHttpManger.getInstance().downloadAsync(url, Config.getDirFile("download").getAbsolutePath(), new OKHttpUICallback.ProgressCallback() {
-                @Override
-                public void onSuccess(Call call, Response response, String path) {
-                    mDownDialog.cancel();
-                    Log.d(TAG, "path:" + path);
-                    startActivity(mVersionUpdateHelper.installAppIntent(path));
-                }
-
-                @Override
-                public void onProgress(long byteReadOrWrite, long contentLength, boolean done) {
-                    Log.d(TAG, "byteReadOrWrite:" + byteReadOrWrite + ",contentLength:" + contentLength + ",done:" + done);
-                    if (!done) {
-                        mDownDialog.setMax((int) contentLength / 1024 / 1024);
-                    }
-                    mDownDialog.setProgress((int) byteReadOrWrite / 1024 / 1024);
-                }
-
-                @Override
-                public void onError(Call call, IOException e) {
-                    e.printStackTrace();
-                    if (mDownDialog != null) {
-                        mDownDialog.dismiss();
-                    }
-                    Toast.makeText(VersionUpdateActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
-                }
-
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mDownDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (mCall != null) {
-                    if(!mCall.isCanceled()){
-                        mCall.cancel();
-                    }
-                    Log.d(TAG, "取消下载。。。。。。。");
-                }
+        UpdateAppManager.initManger(mContext);
+//        UpdateAppManager.downloadApk(mContext,url,"版本升级","嗨课堂");
+        if (UpdateAppManager.queryApk(mContext)&& FileUtil.isExistPath(CommonCons.APP_FILE_NAME)) {
+            try {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                String filePath = CommonCons.APP_FILE_NAME;
+                i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+            } catch (Exception e) {
+                Toast.makeText(mContext, "请重新下载", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
-        });
+        } else {
+            UpdateAppManager.downloadApk(mContext,url,"版本升级","嗨课堂");
+        }
+
+//        if (mDownDialog == null) {
+//            mVersionUpdateHelper = new VersionUpdateHelper();
+//        }
+//        mDownDialog = mVersionUpdateHelper.getDialog(this);
+//        mDownDialog.show();
+//        try {
+//            //更新
+//            mCall = OkHttpManger.getInstance().downloadAsync(url, Config.getDirFile("download").getAbsolutePath(), new OKHttpUICallback.ProgressCallback() {
+//                @Override
+//                public void onSuccess(Call call, Response response, String path) {
+//                    mDownDialog.cancel();
+//                    Log.d(TAG, "path:" + path);
+//                    startActivity(mVersionUpdateHelper.installAppIntent(path));
+//                }
+//
+//                @Override
+//                public void onProgress(long byteReadOrWrite, long contentLength, boolean done) {
+//                    Log.d(TAG, "byteReadOrWrite:" + byteReadOrWrite + ",contentLength:" + contentLength + ",done:" + done);
+//                    if (!done) {
+//                        mDownDialog.setMax((int) contentLength / 1024 / 1024);
+//                    }
+//                    mDownDialog.setProgress((int) byteReadOrWrite / 1024 / 1024);
+//                }
+//
+//                @Override
+//                public void onError(Call call, IOException e) {
+//                    e.printStackTrace();
+//                    if (mDownDialog != null) {
+//                        mDownDialog.dismiss();
+//                    }
+//                    Toast.makeText(VersionUpdateActivity.this, "下载出错", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        mDownDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                if (mCall != null) {
+//                    if(!mCall.isCanceled()){
+//                        mCall.cancel();
+//                    }
+//                    Log.d(TAG, "取消下载。。。。。。。");
+//                }
+//            }
+//        });
     }
 
 

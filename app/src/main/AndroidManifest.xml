@@ -34,6 +34,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
     <application
         android:name=".App.App"
         android:icon="@mipmap/logoicon"
@@ -354,6 +355,13 @@
 
        <activity android:name=".UI.Course.activity.BaiduWalletWebViewActivity"/>
         <activity android:name=".UI.Course.activity.LenderActivity"/>
+
+        <!-- 广播注册 -->
+        <receiver android:name=".receiver.InstallReceiver">
+            <intent-filter android:priority="20" >
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

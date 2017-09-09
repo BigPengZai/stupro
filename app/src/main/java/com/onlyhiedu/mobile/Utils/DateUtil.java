@@ -252,4 +252,11 @@ public class DateUtil {
             }
         }
     }
+
+    //获得当前系统时间值
+    public static String getNowTime() {
+        SimpleDateFormat   sDateFormat   =   new   SimpleDateFormat("yyyy-MM-dd");
+        String   date   =   sDateFormat.format(new   java.util.Date());
+        return date;
+    }
 }

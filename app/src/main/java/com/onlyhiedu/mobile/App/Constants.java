@@ -35,4 +35,5 @@ public class Constants {
     public static final String EMCREGNAME = "emcregname";
     public static final String EMCAVATARURL = "emcavatarurl";
     public static final String IsGuest = "IsGuest"; //是否是游客
+    public static final String UpdateApkId = "UpdateApkId"; //下载完成后bao的id
 }
