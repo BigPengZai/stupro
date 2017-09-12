@@ -117,6 +117,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
+
+//        if(!SPUtil.getGuest()){
+//            TcpClient client = new TcpClient();
+//            client.start();
+//        }
     }
 
     @Override
@@ -177,6 +182,14 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         return true;
     }
+
+
+
+
+
+
+
+
 
 
     @Override

@@ -106,7 +106,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
     public void showTeacherData(HomeTeacher data) {
         mViewPager.setAdapter(new TeacherPageAdapter(mContext, data));
         mViewPager.setOffscreenPageLimit(5);
-
     }
 
     @Override

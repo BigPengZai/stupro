@@ -1,7 +1,6 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
-import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
@@ -15,9 +14,11 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.StarContentList;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
@@ -441,7 +442,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/coursepay/directPingppPayment")
-    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel,@Field("code") String code);
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
 
 
     /**
@@ -451,7 +452,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/coursepay/directBaiduStagingPayment")
-    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid,@Field("code")String code,@Field("patriarchName")String patriarchName,@Field("patriarchPhone")String patriarchPhone);
+    Flowable<onlyHttpResponse<String>> getBaiduPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("code") String code, @Field("patriarchName") String patriarchName, @Field("patriarchPhone") String patriarchPhone);
 
     /**
      * 科目
@@ -471,13 +472,13 @@ public interface onlyApis {
      */
     @GET(" client/coursepay/getOrderList")
     Flowable<onlyHttpResponse<OrderList>> getOrderList(@Query("payStatus") String payStatus, @Query("pageNo") int pageNo);
+
     /**
-     *
      * 订单 Ping++支付
-     * */
+     */
     @FormUrlEncoded
     @POST("client/coursepay/orderPingppPay")
-    Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel,@Field("code") String code);
+    Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
 
     /**
      * 订单 百度分期直接支付
@@ -486,9 +487,27 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/coursepay/orderBaiduStagingPay")
-    Flowable<onlyHttpResponse<String>> getOrderBaiduPay(@Field("orderUuid") String coursePriceUuid,@Field("code") String code);
+    Flowable<onlyHttpResponse<String>> getOrderBaiduPay(@Field("orderUuid") String coursePriceUuid, @Field("code") String code);
 
+    /**
+     * 获取星级评价选项列表
+     *
+     * @param num
+     * @return
+     */
+    @GET("client/course/getStarContentList")
+    Flowable<onlyHttpResponse<List<StarContentList>>> getStarContentList(@Query("star") int num);
 
-
-
+    /**
+     * 保存评价
+     *
+     * @param num
+     * @param classAppraiseStarUuids
+     * @param remark
+     * @param courseUuid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/course/saveAppraise")
+    Flowable<onlyHttpResponse> saveAppraise(@Field("star") int num, @Field("classAppraiseStarUuids") String classAppraiseStarUuids, @Field("remark") String remark, @Field("courseUuid") String courseUuid);
 }

@@ -16,6 +16,7 @@ import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Course.activity.EvaluateActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
@@ -96,6 +97,14 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
         mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
+            @Override
+            public void onLongClick(int position, long itemId) {
+                Intent intent = new Intent(mContext, EvaluateActivity.class);
+                intent.putExtra(EvaluateActivity.courseUuidKey, mAdapter.getItem(position).getUuid());
+                startActivity(intent);
+            }
+        });
     }
 
 

@@ -3,7 +3,6 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
-import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
@@ -17,9 +16,11 @@ import com.onlyhiedu.mobile.Model.bean.HomeBannerBean;
 import com.onlyhiedu.mobile.Model.bean.HomeTeacher;
 import com.onlyhiedu.mobile.Model.bean.IMAllUserInfo;
 import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
+import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.StarContentList;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
@@ -336,38 +337,44 @@ public class RetrofitHelper {
         return sOnlyApis.getPayMoney(coursePriceUuid, code);
     }
 
-    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel,String code) {
-        return sOnlyApis.getPingPay(coursePriceUuid, channel,code);
+    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel, String code) {
+        return sOnlyApis.getPingPay(coursePriceUuid, channel, code);
     }
 
-    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid,String code,String name ,String phone) {
-        return sOnlyApis.getBaiduPay(coursePriceUuid,code,name,phone);
+    public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid, String code, String name, String phone) {
+        return sOnlyApis.getBaiduPay(coursePriceUuid, code, name, phone);
     }
 
     //科目
     public Flowable<onlyHttpResponse> fetchUpdateSubject(String subject) {
         return sOnlyApis.updateSubject(subject);
     }
+
     //PIng++ 订单支付状态查询
     public Flowable<onlyHttpResponse<PingPayStatus>> fetchPingPayStatus(String id) {
         return sOnlyApis.getPingPayStatus(id);
     }
 
 
-    public Flowable<onlyHttpResponse<OrderList>> fetchGetOrderList(String state,int page) {
-        return sOnlyApis.getOrderList(state,page);
+    public Flowable<onlyHttpResponse<OrderList>> fetchGetOrderList(String state, int page) {
+        return sOnlyApis.getOrderList(state, page);
     }
 
 
-
-    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchOrderGetPingPay(String coursePriceUuid, String channel,String code) {
-        return sOnlyApis.getOrderPingPay(coursePriceUuid, channel,code);
+    public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchOrderGetPingPay(String coursePriceUuid, String channel, String code) {
+        return sOnlyApis.getOrderPingPay(coursePriceUuid, channel, code);
     }
 
-    public Flowable<onlyHttpResponse<String>> fetchOrderGetBaiduPay(String coursePriceUuid,String code) {
-        return sOnlyApis.getOrderBaiduPay(coursePriceUuid,code);
+    public Flowable<onlyHttpResponse<String>> fetchOrderGetBaiduPay(String coursePriceUuid, String code) {
+        return sOnlyApis.getOrderBaiduPay(coursePriceUuid, code);
     }
 
+    public Flowable<onlyHttpResponse<List<StarContentList>>> fetchGetStarContentList(int num) {
+        return sOnlyApis.getStarContentList(num);
+    }
 
+    public Flowable<onlyHttpResponse> fetchSaveAppraise(int num, String classAppraiseStarUuids, String remark, String courseUuid) {
+        return sOnlyApis.saveAppraise(num, classAppraiseStarUuids, remark, courseUuid);
+    }
 
 }

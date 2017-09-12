@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'android-apt'
+
 def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
@@ -18,7 +19,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters    'armeabi-v7a' ,'armeabi'
+            abiFilters 'armeabi-v7a', 'armeabi'
         }
     }
 
@@ -51,10 +52,7 @@ android {
     }
     sourceSets {
         main {
-            java {
-                jniLibs.srcDirs = ['libs']
-            }
-//            assets.srcDirs = ['src/main/assets', 'src/main/assets/2']
+            jniLibs.srcDirs = ['libs']
         }
     }
 
@@ -94,7 +92,7 @@ android {
                     fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
                 } else if (variant.buildType.name.equals('debug')) {
                     // apk_渠道名-版本号-版本名称-编译时间.apk
-                   fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}_debug.apk"
+                    fileName = "apk_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}_debug.apk"
                 }
 
                 output.outputFile = new File(outputFile.parent, fileName)
@@ -121,13 +119,21 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
     //插件
-    apt 'com.jakewharton:butterknife-compiler:8.6.0'
-    apt 'com.google.dagger:dagger-compiler:2.11-rc2'
-
-    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     //UI
+    //Widget
+    //友盟
+    compile project(':PushSDK')
+    compile project(':easeui')
+    //裁剪
+    // 多dex配置
+    //bugly
+    //ping++
+    compile project(':lib:pingpp')
+    //protobuf
+//    compile 'com.google.protobuf:protobuf-java:3.4.0'
+//    compile 'com.google.protobuf:protoc:3.4.0'
+//    compile 'io.netty:netty-all:5.0.0.Alpha2'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
@@ -141,25 +147,23 @@ dependencies {
     compile 'com.google.dagger:dagger:2.11-rc2'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.5.0'
     compile 'org.greenrobot:eventbus:3.0.0'
-    //Widget
     compile 'com.contrarywind:Android-PickerView:3.0.4'
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
     compile 'com.youth.banner:banner:1.4.9'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    //友盟
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile project(':PushSDK')
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile project(':easeui')
-    //裁剪
     compile 'com.github.yalantis:ucrop:2.2.1'
     compile 'com.j256.ormlite:ormlite-android:5.0'
-    //bugly
-    compile "com.android.support:multidex:1.0.1" // 多dex配置
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.tencent.bugly:crashreport:latest.release'
-    //ping++
-    compile project(':lib:pingpp')
     compile 'com.baidu.wallet:wallet-sdk-business:6.9.0-03'
-
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.6.0'
+    apt 'com.google.dagger:dagger-compiler:2.11-rc2'
+    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
+
+

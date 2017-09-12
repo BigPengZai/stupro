@@ -2,13 +2,11 @@ package io.agore.openvcall.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +15,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -76,7 +73,6 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
 import io.agore.openvcall.model.User;
-
 
 import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
@@ -969,7 +965,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             //没有开始上课计时      老师没有进入教室         当文案现实 退出教室时
             //isStartTime ==false isTeacherJoined==false mIsBack=true
             initFinishClassDialog();
-
         }
     }
 
@@ -1230,11 +1225,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     isTeacherJoined = true;
 //                    mDrawView.restartDrawing();
 //                    mImageCourseWare.setImageResource(R.drawable.transparent);
-
                 }
             }
         });
-
     }
 
     //其他用户离开当前频道回调
@@ -1295,6 +1288,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         int peerUid;
         boolean muted;
         switch (type) {
+
+
+
             case AGEventHandler.EVENT_TYPE_ON_USER_AUDIO_MUTED:
 
                 break;

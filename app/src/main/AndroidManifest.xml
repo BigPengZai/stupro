@@ -352,9 +352,9 @@
         <activity
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
-
-       <activity android:name=".UI.Course.activity.BaiduWalletWebViewActivity"/>
+        <activity android:name=".UI.Course.activity.BaiduWalletWebViewActivity"/>
         <activity android:name=".UI.Course.activity.LenderActivity"/>
+        <activity android:name=".UI.Course.activity.EvaluateActivity"/>
 
         <!-- 广播注册 -->
         <receiver android:name=".receiver.InstallReceiver">
