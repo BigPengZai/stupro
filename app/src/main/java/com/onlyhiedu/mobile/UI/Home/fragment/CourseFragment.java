@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -221,7 +222,8 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
             bundle.putSerializable("ListBean", mItem);
             Log.d(TAG, "uuid:" + mItem.getUuid());
             mIntent.putExtras(bundle);
-            mActivity.startActivity(mIntent);
+//            mActivity.startActivity(mIntent);
+            startActivityForResult(mIntent, Activity.RESULT_FIRST_USER);
         }
     }
 
@@ -232,4 +234,12 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case RESULT_OK:
+
+                break;
+        }
+    }
 }
