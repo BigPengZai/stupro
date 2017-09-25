@@ -1,8 +1,8 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +22,7 @@ import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
+import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import io.agore.openvcall.ui.ChatActivity;
+import io.agore.openvcall.ui.ChatActivity2;
 
 /**
  * Created by Administrator on 2017/3/1.
@@ -216,14 +218,39 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     public void showRoomInfoSucess(RoomInfo roomInfo) {
         if (roomInfo != null && mItem != null) {
             DialogUtil.dismiss(mDialog);
-            mIntent = new Intent(mActivity, ChatActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("roomInfo", roomInfo);
-            bundle.putSerializable("ListBean", mItem);
-            Log.d(TAG, "uuid:" + mItem.getUuid());
-            mIntent.putExtras(bundle);
-//            mActivity.startActivity(mIntent);
-            startActivityForResult(mIntent, Activity.RESULT_FIRST_USER);
+
+            DialogUtil.showOnlyAlert(mContext,
+                    "提示"
+                    , "A  B"
+                    , "A"
+                    , "RobotPen"
+                    , false, false, new DialogListener() {
+                        @Override
+                        public void onPositive(DialogInterface dialog) {
+                            mIntent = new Intent(mActivity, ChatActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("roomInfo", roomInfo);
+                            bundle.putSerializable("ListBean", mItem);
+                            Log.d(TAG, "uuid:" + mItem.getUuid());
+                            mIntent.putExtras(bundle);
+                            mActivity.startActivity(mIntent);
+//                            startActivityForResult(mIntent, Activity.RESULT_FIRST_USER);
+                        }
+
+                        @Override
+                        public void onNegative(DialogInterface dialog) {
+                            mIntent = new Intent(mActivity, ChatActivity2.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("roomInfo", roomInfo);
+                            bundle.putSerializable("ListBean", mItem);
+                            Log.d(TAG, "uuid:" + mItem.getUuid());
+                            mIntent.putExtras(bundle);
+                            mActivity.startActivity(mIntent);
+                        }
+                    }
+            );
+
+
         }
     }
 
@@ -234,12 +261,4 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case RESULT_OK:
-
-                break;
-        }
-    }
 }

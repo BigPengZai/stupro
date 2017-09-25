@@ -40,6 +40,9 @@ android {
                 url "https://jitpack.io"
             }
             maven { url "file:///D:/wallet-sdk/m2repository" }
+            flatDir {
+                dirs 'libs'
+            }
         }
     }
     buildTypes {
@@ -59,7 +62,7 @@ android {
 
     productFlavors {
 //        onlyedu{}
-       qihu360 {}
+        qihu360 {}
 //         yingyongbao {} // 腾讯应用宝
 //       wandoujia {} // 豌豆荚
 //        baidu {} // 百度手机助手
@@ -169,6 +172,11 @@ dependencies {
     apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    //robotpen
+    compile(name: "robotview_lib-release", ext: "aar")
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile "cn.robotpen.pen:penservice:1.5.35"
 }
 
 

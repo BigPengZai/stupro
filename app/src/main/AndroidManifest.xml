@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.onlyhiedu.mobile">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
@@ -12,10 +13,7 @@
 
     <!-- Required -->
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -23,23 +21,24 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"/>
     <!-- 银联需要的权限 -->
-    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.NFC"/>
 
     <!-- 百度支付需要的权限 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+<!--    <permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>-->
     <application
         android:name=".App.App"
+        android:allowBackup="false"
         android:icon="@mipmap/logoicon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:supportsRtl,android:allowBackup">
 
         <!-- 网络状态 -->
         <service android:name=".Service.NetworkStateService">
@@ -50,8 +49,8 @@
 
         <!-- UMENG -->
         <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="${UMENG_CHANNEL_VALUE}"/>-->
+        <!--android:name="UMENG_CHANNEL"-->
+        <!--android:value="${UMENG_CHANNEL_VALUE}"/>-->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="591d1b53677baa102c00175c">
@@ -60,7 +59,7 @@
             android:name="UMENG_MESSAGE_SECRET"
             android:value="25e92a031cccf6e3d941b9c9d857eb2c">
         </meta-data>
-<!--截图 n以上可能会跟 bugyly 冲突-->
+        <!--截图 n以上可能会跟 bugyly 冲突-->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.onlyhiedu.mobile.fileprovider"
@@ -70,13 +69,9 @@
             <!--指定Uri的共享路径-->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
 
         </provider>
-
-
-
-
 
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -122,8 +117,8 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".UI.Home.activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".UI.User.activity.RegActivity"/>
         <activity android:name=".UI.User.activity.FindPwdActivity"/>
         <activity android:name=".UI.Setting.activity.AboutActivity"/>
@@ -133,6 +128,10 @@
         <activity android:name=".UI.Home.activity.KnowTitleActivity"/>
         <activity
             android:name="io.agore.openvcall.ui.ChatActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name="io.agore.openvcall.ui.ChatActivity2"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"/>
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
@@ -192,7 +191,7 @@
         <activity
             android:name=".UI.Emc.ExitGroupDialog"
             android:screenOrientation="portrait"/>
-      <!--  android:theme="@style/MyDialogStyleBottom"-->
+        <!--  android:theme="@style/MyDialogStyleBottom"-->
 
         <!-- 群组选人 -->
         <activity
@@ -221,7 +220,7 @@
         <activity
             android:name=".UI.Emc.ContextMenuActivity"
             android:screenOrientation="portrait"/>
-   <!--     android:theme="@style/MyDialogStyle"-->
+        <!--     android:theme="@style/MyDialogStyle"-->
         <!-- 显示下载大图页面 -->
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
@@ -284,30 +283,30 @@
             android:screenOrientation="portrait"/>
 
         <!-- 设置环信应用的AppKey -->
-     <!--   <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="1157170704115696#hiketangtest"/>-->
+        <!--   <meta-data
+               android:name="EASEMOB_APPKEY"
+               android:value="1157170704115696#hiketangtest"/>-->
         <!-- 声明SDK所需的service SDK核心功能 -->
-    <!--    <service
-            android:name="com.hyphenate.chat.EMChatService"
-            android:exported="true"/>
-        <service
-            android:name="com.hyphenate.chat.EMJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>-->
+        <!--    <service
+                android:name="com.hyphenate.chat.EMChatService"
+                android:exported="true"/>
+            <service
+                android:name="com.hyphenate.chat.EMJobService"
+                android:exported="true"
+                android:permission="android.permission.BIND_JOB_SERVICE"/>-->
         <!-- 声明SDK所需的receiver -->
-      <!--  <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+        <!--  <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+              <intent-filter>
+                  <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
-                <data android:scheme="package"/>
-            </intent-filter>
-            &lt;!&ndash; 可选filter &ndash;&gt;
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-            </intent-filter>
-        </receiver>-->
+                  <data android:scheme="package"/>
+              </intent-filter>
+              &lt;!&ndash; 可选filter &ndash;&gt;
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                  <action android:name="android.intent.action.USER_PRESENT"/>
+              </intent-filter>
+          </receiver>-->
 
         <activity android:name=".UI.User.activity.BindActivity"/>
         <activity android:name=".UI.User.activity.OpenIDActivity">
@@ -323,7 +322,7 @@
             android:name="com.pingplusplus.android.PaymentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
         <!-- 微信支付 -->
         <!-- 1.需要将以下"替换成自己 APK 的包名"换成在微信平台上注册填写的包名 -->
@@ -331,20 +330,20 @@
         <activity-alias
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:targetActivity="com.pingplusplus.android.PaymentActivity" />
+            android:targetActivity="com.pingplusplus.android.PaymentActivity"/>
 
         <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind" >
+            android:screenOrientation="behind">
         </activity>
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind" >
+            android:screenOrientation="behind">
         </activity>
 
 
@@ -358,8 +357,8 @@
 
         <!-- 广播注册 -->
         <receiver android:name=".receiver.InstallReceiver">
-            <intent-filter android:priority="20" >
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            <intent-filter android:priority="20">
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
             </intent-filter>
         </receiver>
 

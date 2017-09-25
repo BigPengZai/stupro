@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/c33"
+             android:keepScreenOn="true"
+>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        android:orientation="horizontal">
+        <!--上课  比例 横 3.5-->
+        <LinearLayout
+            android:id="@+id/ll_video"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/rel_tea"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@color/bcd_gray1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/bg_class_default"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rel_stu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@color/bcd_gray1"
+            >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/bg_class_default"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <!--白版  比例 横 5-->
+        <LinearLayout
+            android:id="@+id/ll_board"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:orientation="vertical">
+            <!--白版-->
+            <com.onlyhiedu.mobile.Widget.MyWhiteBoardView
+                android:id="@+id/whiteBoardView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"/>
+
+
+        </LinearLayout>
+
+        <!-- IM   比例 横 4-->
+        <LinearLayout
+            android:id="@+id/ll_msg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_weight="3"
+            android:background="#80000000"
+            android:orientation="vertical"
+            android:visibility="gone"
+        >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/msg_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:transcriptMode="normal"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:maxLines="2"
+                    android:scrollbars="vertical"/>
+
+                <TextView
+                    android:id="@+id/tv_send"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:background="@color/c_D8D8D8"
+                    android:gravity="center"
+                    android:text="发送"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--Toolbar-->
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="-50dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/elevation"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:textColor="@color/c_F42440"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:text="/"
+                android:textColor="@color/c_F42440"/>
+
+            <TextView
+                android:id="@+id/tv_total_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_7"
+                android:text="01:00:00"/>
+
+            <TextView
+                android:id="@+id/but_dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_log_out"
+                android:paddingBottom="@dimen/size_7"
+                android:paddingLeft="@dimen/size_18"
+                android:paddingRight="@dimen/size_18"
+                android:paddingTop="@dimen/size_7"
+                android:text="我要下课"
+                android:textColor="@color/select_log_out"
+                android:textSize="@dimen/size_16"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/but_im"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_15"
+                    android:background="@drawable/im_text_bg"
+                    android:paddingBottom="@dimen/size_7"
+                    android:paddingLeft="@dimen/size_18"
+                    android:paddingRight="@dimen/size_18"
+                    android:paddingTop="@dimen/size_7"
+                    android:text="聊天"
+                    android:textColor="@color/im_text_color"
+                    android:textSize="@dimen/size_16"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:id="@+id/im_point"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="75dp"
+                    android:background="@drawable/im_oval"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:id="@+id/rl_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/iv_loading"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+</FrameLayout>
