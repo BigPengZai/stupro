@@ -62,52 +62,7 @@
 
         </LinearLayout>
 
-        <!-- IM   比例 横 4-->
-        <LinearLayout
-            android:id="@+id/ll_msg"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_weight="3"
-            android:background="#80000000"
-            android:orientation="vertical"
-            android:visibility="gone"
-        >
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/msg_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:transcriptMode="normal"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/edit"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:maxLines="2"
-                    android:scrollbars="vertical"/>
-
-                <TextView
-                    android:id="@+id/tv_send"
-                    android:layout_width="45dp"
-                    android:layout_height="40dp"
-                    android:background="@color/c_D8D8D8"
-                    android:gravity="center"
-                    android:text="发送"/>
-
-            </LinearLayout>
-
-
-        </LinearLayout>
     </LinearLayout>
 
     <!--Toolbar-->
@@ -180,8 +135,7 @@
                     android:paddingTop="@dimen/size_7"
                     android:text="聊天"
                     android:textColor="@color/im_text_color"
-                    android:textSize="@dimen/size_16"
-                    android:visibility="invisible"/>
+                    android:textSize="@dimen/size_16"/>
 
                 <View
                     android:id="@+id/im_point"
@@ -211,4 +165,49 @@
             android:layout_height="50dp"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
+    <!-- IM   比例 横 4-->
+    <LinearLayout
+        android:id="@+id/ll_msg"
+        android:layout_width="210dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_weight="3"
+        android:background="#80000000"
+        android:orientation="vertical"
+    >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/msg_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:transcriptMode="normal"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:maxLines="2"
+                android:scrollbars="vertical"/>
+
+            <TextView
+                android:id="@+id/tv_send"
+                android:layout_width="45dp"
+                android:layout_height="40dp"
+                android:background="@color/c_D8D8D8"
+                android:gravity="center"
+                android:text="发送"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 </FrameLayout>

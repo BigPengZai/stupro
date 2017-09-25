@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.App;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -14,14 +15,9 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.onlyhiedu.mobile.Dagger.Component.AppComponent;
 import com.onlyhiedu.mobile.Dagger.Component.DaggerAppComponent;
 import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
-import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
-import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.pingplusplus.android.Pingpp;
-import com.tencent.bugly.Bugly;
-//import com.tencent.bugly.beta.Beta;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -34,10 +30,16 @@ import com.umeng.socialize.common.QueuedWork;
 
 import java.io.InputStream;
 
+import cn.robotpen.model.db.DBConfig;
+import cn.robotpen.model.db.DaoMaster;
+import cn.robotpen.model.db.DaoSession;
 import io.agora.AgoraAPIOnlySignal;
 import io.agore.openvcall.model.CurrentUserSettings;
 import io.agore.openvcall.model.WorkerThread;
 import okhttp3.OkHttpClient;
+
+//import com.tencent.bugly.beta.Beta;
+
 /**
  * 全局应用程序类
  * Created by xuwc on 2016/11/21.
@@ -47,12 +49,16 @@ public class App extends Application {
     private static App instance;
     private PushAgent mPushAgent;
     public AgoraAPIOnlySignal mAgoraSocket;
+
     public static synchronized App getInstance() {
         return instance;
     }
 
+    private DaoSession daoSession;
+
     public boolean isTag;
-//    public static boolean bIsGuestLogin = SPUtil.getGuest();//是否游客登录
+
+    //    public static boolean bIsGuestLogin = SPUtil.getGuest();//是否游客登录
     static {
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);
@@ -70,9 +76,10 @@ public class App extends Application {
         }
     }
 
-    public  synchronized WorkerThread getWorkerThread() {
+    public synchronized WorkerThread getWorkerThread() {
         return mWorkerThread;
     }
+
     public static String currentUserNick = "";
 
     @Override
@@ -112,7 +119,7 @@ public class App extends Application {
 
             @Override
             public void onFailure(String s, String s1) {
-                Log.d("App", "onFailure:" + s+s1);
+                Log.d("App", "onFailure:" + s + s1);
             }
         });
 
@@ -134,13 +141,11 @@ public class App extends Application {
         //ping++
         Pingpp.enableDebugLog(true);
         //百度钱包
-        BaiduWallet.getInstance().initWallet(this,"outanglihai");
+        BaiduWallet.getInstance().initWallet(this, "outanglihai");
         //bugly 热跟新 调试时，将第三个参数改为true
 //        Bugly.init(this,"5c1349523c",false);
 
     }
-
-
 
 
     private void initGlide() {
@@ -160,7 +165,18 @@ public class App extends Application {
         //配置 微信 以及 QQ app_id
         PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "bed2a2109e97ec3b280eaff88dd0a03f");
         PlatformConfig.setQQZone("1105946445", "yp52LFZMgwMx35h2");
-        PlatformConfig.setSinaWeibo("3139333765", "65fe958da4bcd72a1c701c98fec4f91e","http://www.onlyhi.cn/");
+        PlatformConfig.setSinaWeibo("3139333765", "65fe958da4bcd72a1c701c98fec4f91e", "http://www.onlyhi.cn/");
     }
 
+    /*
+   * 统一创建session
+   * @return
+   */
+    public DaoSession getDaoSession() {
+        if (null == daoSession) {
+            SQLiteDatabase db = new DaoMaster.DevOpenHelper(instance, DBConfig.DB_NAME).getWritableDatabase();
+            this.daoSession = new DaoMaster(db).newSession();
+        }
+        return daoSession;
+    }
 }

@@ -177,7 +177,6 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
 //        mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
 
         rtcEngine().muteLocalAudioStream(false);
-        //禁用本地视频功能
         rtcEngine().enableLocalVideo(true);
         //不发送本地视频流
         rtcEngine().muteLocalVideoStream(false);
@@ -193,8 +192,17 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
         mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
         visableTag = 1;
 
+        //白板
+        mWhiteBoardView.setIsTouchWrite(false);//默认用手输入
+//        mWhiteBoardView.setDaoSession(App.getInstance().getDaoSession());
+        mWhiteBoardView.setLoadIgnorePhoto(false);//设置加载时是否忽略图片
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mWhiteBoardView.initDrawArea();
+    }
 
     @Override
     protected void onStart() {
@@ -552,19 +560,6 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
                     @Override
                     public void run() {
                         if (mRoomInfo.getChannelTeacherId() == Integer.parseInt(account)) {
-                            if (msg.startsWith("onPenPositionChanged_")) {
-                                Log.d("Xwc", msg);
-                                if (!BOARD_AREA_COMPLETE) {
-                                    return;
-                                }
-
-                                Log.d("Xwc", msg);
-                                String[] split = msg.split("_");
-                                DeviceType type = DeviceType.toDeviceType(0);
-                                mWhiteBoardView.drawDevicePoint(type, Integer.valueOf(split[2]), Integer.valueOf(split[3]), Integer.valueOf(split[4]), Byte.valueOf(split[5]));
-
-                                return;
-                            }
                             switch (msg) {
                                 case "00":
                                     initDismissDialog();
@@ -628,7 +623,16 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (msg.startsWith("onPenPositionChanged_")) {
+                            if (!BOARD_AREA_COMPLETE) {
+                                return;
+                            }
 
+                            Log.d("Xwc", msg);
+                            String[] split = msg.split("_");
+                            DeviceType type = DeviceType.toDeviceType(Integer.valueOf(split[1]));
+                            mWhiteBoardView.drawDevicePoint(type, Integer.valueOf(split[2]), Integer.valueOf(split[3]), Integer.valueOf(split[4]), Byte.valueOf(split[5]));
+                        }
                     }
                 });
 
@@ -809,7 +813,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
     }
 
 
-    @OnClick({R.id.but_dismiss, R.id.but_im, R.id.tv_send})
+    @OnClick({R.id.but_dismiss,  R.id.tv_send,R.id.but_im})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -980,6 +984,12 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
             mHandler = null;
         }
         isStartTime = false;
+
+        if (mWhiteBoardView != null) {
+            mWhiteBoardView.cleanScreen();  // 清屏
+            mWhiteBoardView.dispose();
+            mWhiteBoardView = null;
+        }
     }
 
     private void quitCall() {
@@ -1394,7 +1404,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
         return false;
     }
 
-    DeviceType mDeDeviceType = DeviceType.P1;//默认连接设备为P1 当与连接设备有冲突时则需要进行切换
+    DeviceType mDeDeviceType = DeviceType.T7;//默认连接设备为P1 当与连接设备有冲突时则需要进行切换
     float mPenWeight = 2;//笔粗细
     int mPenColor = Color.BLACK;//笔颜色
     int isRubber;//是否是橡皮
