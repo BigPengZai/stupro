@@ -1,12 +1,19 @@
 package io.agore.openvcall.ui;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 
+import java.lang.reflect.Type;
+
 import javax.inject.Inject;
 
+import cn.robotpen.model.entity.note.TrailsEntity;
+import cn.robotpen.model.symbol.DeviceType;
+import cn.robotpen.views.widget.WhiteBoardView;
 import io.reactivex.Flowable;
 
 /**
@@ -17,6 +24,7 @@ public class ChatPresenter2 extends RxPresenter<ChatContract2.View> implements C
 
     private RetrofitHelper mRetrofitHelper;
 
+    private Gson mGson;
 
     @Inject
     public ChatPresenter2(RetrofitHelper mRetrofitHelper) {
@@ -41,8 +49,36 @@ public class ChatPresenter2 extends RxPresenter<ChatContract2.View> implements C
     }
 
 
+    public TrailsEntity getJson(String s) {
+        if (mGson == null) {
+            mGson = new Gson();
+        }
+        Type listType = new TypeToken<TrailsEntity>() {
+        }.getType();
+        return mGson.fromJson(s, listType);
+    }
 
-
+    public void drawDevicePoint(String msg, WhiteBoardView view) {
+        String[] split = msg.split("[|]");
+        for (String str : split) {
+            String[] data = str.split("_");
+            DeviceType type = DeviceType.toDeviceType(Integer.valueOf(data[1]));
+            byte state = 0;
+            switch (data[5]) {
+                case "A":
+                    state = 0;
+                    break;
+                case "B":
+                    state = 17;
+                    break;
+                case "C":
+                    state = 16;
+                    break;
+            }
+            view.drawDevicePoint(type, Integer.valueOf(data[2]), Integer.valueOf(data[3]), Integer.valueOf(data[4]), state);
+//            view.drawLine();
+        }
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.Widget;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import cn.robotpen.model.entity.note.TrailsEntity;
 import cn.robotpen.views.widget.WhiteBoardView;
 
 /**
@@ -24,5 +25,9 @@ public class MyWhiteBoardView extends WhiteBoardView {
 
     public void setBg(String url) {
         this.setBgPhotoSelf(url);
+    }
+
+    public void drawTrailsPoint(TrailsEntity trails) {
+        this.mPenDrawView.drawTrailsPoint(trails,true);
     }
 }

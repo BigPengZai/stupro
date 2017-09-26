@@ -176,7 +176,7 @@ dependencies {
     //robotpen
     compile(name: "robotview_lib-release", ext: "aar")
     compile 'org.greenrobot:greendao:3.2.0'
-    compile "cn.robotpen.pen:penservice:1.5.35"
+    compile "cn.robotpen.pen:penservice:1.5.36.1"
 }
 
 

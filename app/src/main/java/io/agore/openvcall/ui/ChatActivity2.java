@@ -57,6 +57,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.robotpen.model.entity.note.NoteEntity;
+import cn.robotpen.model.entity.note.TrailsEntity;
 import cn.robotpen.model.symbol.DeviceType;
 import cn.robotpen.views.widget.WhiteBoardView;
 import io.agora.AgoraAPI;
@@ -72,7 +73,7 @@ import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.R.id.whiteBoardView;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
-public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEventHandler, ChatContract.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
+public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEventHandler, ChatContract.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
 
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
     public static final String TAG = ChatActivity2.class.getSimpleName();
@@ -559,7 +560,21 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         if (mRoomInfo.getChannelTeacherId() == Integer.parseInt(account)) {
+                            if (mRoomInfo.getChannelTeacherId() == Integer.parseInt(account)) {
+                                if (msg.startsWith("{\"Block\":")) {
+                                    Log.d("Xwc","进来了");
+                                    TrailsEntity json = mPresenter.getJson(msg);
+                                    mWhiteBoardView.drawTrailsPoint(json);
+                                }
+                            }
+
+
+//                            if (msg.startsWith("p_")) {
+//                                mPresenter.drawDevicePoint(msg, mWhiteBoardView);
+//                                return;
+//                            }
                             switch (msg) {
                                 case "00":
                                     initDismissDialog();
@@ -608,6 +623,9 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
                                             }
                                     );
                                     break;
+                                case "clean":
+                                    mWhiteBoardView.cleanScreen();
+                                    break;
                             }
                         }
                     }
@@ -623,16 +641,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (msg.startsWith("onPenPositionChanged_")) {
-                            if (!BOARD_AREA_COMPLETE) {
-                                return;
-                            }
 
-                            Log.d("Xwc", msg);
-                            String[] split = msg.split("_");
-                            DeviceType type = DeviceType.toDeviceType(Integer.valueOf(split[1]));
-                            mWhiteBoardView.drawDevicePoint(type, Integer.valueOf(split[2]), Integer.valueOf(split[3]), Integer.valueOf(split[4]), Byte.valueOf(split[5]));
-                        }
                     }
                 });
 
@@ -813,7 +822,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
     }
 
 
-    @OnClick({R.id.but_dismiss,  R.id.tv_send,R.id.but_im})
+    @OnClick({R.id.but_dismiss, R.id.tv_send, R.id.but_im})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -843,6 +852,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter> implements AGEve
                 break;
         }
     }
+
 
     private void canFinshClass() {
         if (isStartTime && isTeacherJoined && (mIsBack == false)) {
