@@ -29,8 +29,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.agore.openvcall.ui.ChatPresenter;
-
 /**
  * Created by Ing. Oscar G. Medina Cruz on 06/11/2016.
  * <p>
@@ -458,14 +456,14 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         }
         paint.setStyle(mPaintStyle);
         paint.setDither(mDither);
-        if (mDrawingMode == DrawingMode.DRAW) {
-            if (mDrawingTool == DrawingTool.OVAL || mDrawingTool == DrawingTool.RECTANGLE || mDrawingTool == DrawingTool.LINE) {
-                Log.d("DrawView", "几何图形线框："+ 3 * ChatPresenter.getScreenRate() + "");
-                paint.setStrokeWidth(3 * ChatPresenter.getScreenRate());
-            } else {
-
-            }
-        }
+//        if (mDrawingMode == DrawingMode.DRAW) {
+//            if (mDrawingTool == DrawingTool.OVAL || mDrawingTool == DrawingTool.RECTANGLE || mDrawingTool == DrawingTool.LINE) {
+//                Log.d("DrawView", "几何图形线框："+ 3 * ChatPresenter.getScreenRate() + "");
+//                paint.setStrokeWidth(3 * ChatPresenter.getScreenRate());
+//            } else {
+//
+//            }
+//        }
         paint.setStrokeWidth(mDrawWidth);
         paint.setAlpha(mDrawAlpha);
         paint.setAntiAlias(mAntiAlias);

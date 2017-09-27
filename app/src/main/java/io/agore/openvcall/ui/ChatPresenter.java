@@ -37,11 +37,19 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     private RetrofitHelper mRetrofitHelper;
 
-    public static final String PEN = "03";
-    public static final String Eraser = "18";
-    public static final String Rectangle = "04";
-    public static final String Oval = "05";
-    public static final String Line = "22";
+    public int mBoardWidth;
+    public int mBoardHeight;
+
+
+    public static final String AfterJoin = "14";
+
+
+    public static final String PEN = "01";
+    public static final String Line = "02";
+    public static final String Rectangle = "03";
+    public static final String Oval = "04";
+    public static final String Text = "05";
+    public static final String Eraser = "07";
 
     private static float mFullScreenRate;  //全屏缩放比例
     private static float mHalfScreenRate;  //半屏缩放比例
@@ -95,9 +103,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             @Override
             public void onNextData(onlyHttpResponse<List<CourseWareImageList>> data) {
                 if (getView() != null) {
-                    if (!data.isHasError())
+                    if (!data.isHasError()) {
                         getView().showCourseWareImageList(data.getData(), pageNum, restart);
-                    else getView().showError(data.getMessage());
+                    } else getView().showError(data.getMessage());
                 }
             }
         };
@@ -117,29 +125,29 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 case PEN:
                     view.setDrawWidth(myBoardData.lineWidth);
                     view.setDrawColor(myBoardData.color);
-                    drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    drawLine(view, myBoardData, getScreenRate());
                     break;
                 case Eraser:
-                    drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    drawLine(view, myBoardData, getScreenRate());
                     break;
                 case Rectangle:
                     view.setDrawColor(myBoardData.color);
-                    drawRectangle(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    drawRectangle(view, myBoardData.XYData, getScreenRate());
                     break;
                 case Oval:
                     view.setDrawColor(myBoardData.color);
-                    drawOval(view, myBoardData.XYData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    drawOval(view, myBoardData.XYData, getScreenRate());
                     break;
                 case Line:
                     view.setDrawColor(myBoardData.color);
-                    drawLine(view, myBoardData, mFullScreen ? myBoardData.fullRate : myBoardData.halfRate);
+                    drawLine(view, myBoardData, getScreenRate());
                     break;
             }
         }
     }
 
-    public void add(String type, String data, int color, float lineWidth) {
-        drawData.add(new MyBoardData(type, data, color, lineWidth, mFullScreenRate, mHalfScreenRate));
+    public void add(String type, String data, int color, float lineWidth, String text) {
+        drawData.add(new MyBoardData(type, data, color, lineWidth, text/*, mFullScreenRate, mHalfScreenRate*/));
     }
 
     public void cleanDrawData(DrawView view) {
@@ -160,95 +168,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
         try {
             JSONObject jsonObject = new JSONObject(data);
-            String pageNum = jsonObject.getString("pageNum");
-            ImageLoader.loadImage(activity.mRequestManager, imageView, activity.mCourseWareImageLists.get(Integer.valueOf(pageNum)).imageUrl);
-            JSONArray drawData = jsonObject.getJSONArray("drawData");
-            for (int i = 0; i < drawData.length(); i++) {
-                JSONObject bean = (JSONObject) drawData.opt(i);
-                draw(bean, view);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void draw(JSONObject bean, DrawView view) throws JSONException {
-        String drawMode = bean.getString("drawMode");
-        String points = bean.getString("points");
-        setDrawingMode(view, drawMode);
-        switch (drawMode) {
-            case PEN:
-                int lineWidth = bean.getInt("lineWidth");
-                view.setDrawWidth(lineWidth * getScreenRate());
-                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-                drawLine(view, points);
-                add(ChatPresenter.PEN, points, view.getDrawColor(), view.getDrawWidth());
-                break;
-            case Oval:
-                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-                drawRectangle(view, points, getScreenRate());
-                add(ChatPresenter.Oval, points, view.getDrawColor(), 0);
-                break;
-            case Rectangle:
-                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-                drawRectangle(view, points, getScreenRate());
-                add(ChatPresenter.Rectangle, points, view.getDrawColor(), 0);
-                break;
-            case Line:
-                view.setDrawColor(Color.parseColor("#" + bean.getString("color")));
-                drawLine(view, points);
-                add(ChatPresenter.Line, points, view.getDrawColor(), 0);
-                break;
-            case Eraser:
-                drawEraser(view, points);
-                add(ChatPresenter.Eraser, points, 0, 0);
-                break;
-        }
-    }
-
-
-    public void initBoard(ChatActivity activity, DrawView view, String data) {
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String boardWidth = jsonObject.getString("boardWidth");
-            String boardHeight = jsonObject.getString("boardHeight");
-            //设置白板宽高
-            activity.setBoardViewLayoutParams(Integer.valueOf(boardWidth), Integer.valueOf(boardHeight));
-            //设置课件
-
-            try {
-                String coursewareId = jsonObject.getString("coursewareId");
-                if (!TextUtils.isEmpty(coursewareId)) {
-                    getCourseWareImageList(coursewareId, Integer.valueOf(jsonObject.getString("pageNum")), false);
-                }
-            } catch (Exception e) {
-            }
-
-            //画线
-            try {
-                JSONArray drawData = jsonObject.getJSONArray("drawData");
-                for (int i = 0; i < drawData.length(); i++) {
-                    JSONObject bean = (JSONObject) drawData.opt(i);
-                    draw(bean, view);
-                }
-
-            } catch (Exception e) {
-            }
-
-            String color = jsonObject.getString("color");
-            if (!TextUtils.isEmpty(
-                    color)) {
-                view.setDrawColor(Color.parseColor("#" + color));
-            }
-            String drawMode = jsonObject.getString("drawMode");
-            if (!TextUtils.isEmpty(drawMode)) {
-                setDrawingMode(view, drawMode);
-            }
-            String lineWidth = jsonObject.getString("lineWidth");
-            if (!TextUtils.isEmpty(lineWidth)) {
-                view.setDrawWidth(Float.valueOf(lineWidth) * getScreenRate());
-            }
+            int pageNum = jsonObject.optInt("pageNum");
+            ImageLoader.loadImage(activity.mRequestManager, imageView, activity.mCourseWareImageLists.get(pageNum).imageUrl);
+            drawPoints(jsonObject, view);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -327,36 +249,16 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     }
 
 
-    public String setDrawViewStyle(DrawView view, String param) {
-        String drawData = "";
+    public void drawText(DrawView view, String data, String text) {
+        String replace = data.replace("|", ",");
+        String[] xyAxle = replace.split(",");
 
-        try {
-            JSONObject jsonObject = new JSONObject(param);
-            String color = jsonObject.getString("color");
-            view.setDrawColor(Color.parseColor("#" + color));
-            view.setDrawWidth(jsonObject.getInt("lineWidth") * getScreenRate());
-            drawData = jsonObject.getString("points");
-            return drawData;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return drawData;
+        view.eventActionDown(parseFloat(xyAxle[0]) * getScreenRate(), parseFloat(xyAxle[1]) * getScreenRate());
+        view.eventActionMove(parseFloat(xyAxle[0]) * getScreenRate(), parseFloat(xyAxle[1]) * getScreenRate());
+        view.eventActionUp(parseFloat(xyAxle[2]) * getScreenRate(), parseFloat(xyAxle[3]) * getScreenRate());
+
+        view.refreshLastText(text);
     }
-
-
-//
-//    @Override
-//    public void drawText(DrawView view, NotifyWhiteboardOperator json) {
-//        String s = json.NotifyParam.MethodParam;
-//        String spit[] = s.split("[|]");
-//        String[] xyAxle = spit[0].split(",");
-//        view.eventActionDown(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-//        view.eventActionMove(parseFloat(xyAxle[0]) * mHalfScreenRate, parseFloat(xyAxle[1]) * mHalfScreenRate);
-//        float x = parseFloat(xyAxle[0]) * mHalfScreenRate + parseFloat(xyAxle[2]) * mHalfScreenRate;
-//        float y = parseFloat(xyAxle[1]) * mHalfScreenRate + parseFloat(xyAxle[3]) * mHalfScreenRate;
-//        view.eventActionUp(x, y);
-//        view.refreshLastText(spit[1]);
-//    }
 
 
     public void setDrawingMode(DrawView view, String type) {
@@ -365,9 +267,9 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 view.setDrawingMode(DrawingMode.values()[0]);
                 view.setDrawingTool(DrawingTool.values()[0]);
                 break;
-            case Eraser:
-                view.setDrawingMode(DrawingMode.values()[2]);
-                view.setDrawingTool(DrawingTool.values()[0]);
+            case Line:
+                view.setDrawingMode(DrawingMode.values()[0]);
+                view.setDrawingTool(DrawingTool.values()[1]);
                 break;
             case Rectangle:
                 view.setDrawingMode(DrawingMode.values()[0]);
@@ -377,11 +279,124 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 view.setDrawingMode(DrawingMode.values()[0]);
                 view.setDrawingTool(DrawingTool.values()[4]);
                 break;
-            case Line:
-                view.setDrawingMode(DrawingMode.values()[0]);
-                view.setDrawingTool(DrawingTool.values()[1]);
+            case Text:
+                view.setDrawingMode(DrawingMode.values()[1]);
+                break;
+            case Eraser:
+                view.setDrawingMode(DrawingMode.values()[2]);
+                view.setDrawingTool(DrawingTool.values()[0]);
                 break;
         }
     }
+
+    public void AfterJoin(String methodparam, ChatActivity activity, DrawView view) {
+        try {
+            JSONObject jsonObject = new JSONObject(methodparam);
+            int boardWidth = jsonObject.getInt("boardWidth");
+            int boardHeight = jsonObject.getInt("boardHeight");
+            activity.setBoardViewLayoutParams(boardWidth, boardHeight);
+
+            drawPoints(jsonObject, view);
+
+            String coursewareId = jsonObject.optString("coursewareId");
+            if (!TextUtils.isEmpty(coursewareId)) {  //有课件
+                int pageNum = jsonObject.optInt("pageNum");
+                getCourseWareImageList(coursewareId, pageNum, false);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void drawPoints(JSONObject jsonObject, DrawView view) throws JSONException {
+
+        String drawDataStr = jsonObject.optString("drawData");
+        if (!TextUtils.isEmpty(drawDataStr)) {  //有数据
+            JSONArray drawData = new JSONArray(drawDataStr);
+
+            for (int i = 0; i < drawData.length(); i++) {
+                String objStr = drawData.getString(i);
+                JSONObject obj = new JSONObject(objStr);
+                draw(obj, view);
+            }
+        }
+    }
+
+
+    public void draw2(String methodparam, DrawView view, ChatActivity activity) {
+        try {
+            JSONObject jsonObject = new JSONObject(methodparam);
+            if (mFullScreenRate == 0.0) {
+                int boardWidth = jsonObject.getInt("boardWidth");
+                int boardHeight = jsonObject.getInt("boardHeight");
+                activity.setBoardViewLayoutParams(boardWidth, boardHeight);
+            }
+
+            draw(jsonObject, view);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void draw(JSONObject jsonObject, DrawView view) throws JSONException {
+        String points = jsonObject.optString("points");
+        if (TextUtils.isEmpty(points)) {
+            return;
+        }
+        String drawMode = jsonObject.getString("drawMode");
+
+        String color = jsonObject.getString("color");
+        String[] split = color.substring(1, color.length() - 1).split(",");
+        view.setDrawColor(Color.argb(0, Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2])));
+
+        String lineWidth = jsonObject.getString("lineWidth");
+        view.setDrawWidth(Float.valueOf(lineWidth) * getScreenRate());
+
+        setDrawingMode(view, drawMode);
+
+
+        if (PEN.equals(drawMode)) { //画线
+            drawLine(view, points);
+        }
+        if (Line.equals(drawMode)) { //直线
+            drawLine(view, points);
+        }
+        if (Rectangle.equals(drawMode)) { //框
+            drawRectangle(view, points, getScreenRate());
+        }
+        if (Oval.equals(drawMode)) { //画圆
+            drawOval(view, points, getScreenRate());
+        }
+        if (Text.equals(drawMode)) {
+            String text = jsonObject.getString("text");
+            view.setDrawWidth(1);
+            view.setFontSize(20);
+            drawText(view, points, text);
+        }
+        if (Eraser.equals(drawMode)) { //橡皮檫
+            drawEraser(view, points);
+        }
+
+        if (Text.equals(drawMode)) {
+            add(drawMode, points, view.getDrawColor(), view.getDrawWidth(), jsonObject.getString("text"));
+        } else {
+            add(drawMode, points, view.getDrawColor(), view.getDrawWidth(), null);
+        }
+    }
+
+    public void initBoard(String methodparam, DrawView drawView, ChatActivity activity) {
+        try {
+            JSONObject object = new JSONObject(methodparam);
+            mBoardWidth = object.getInt("boardWidth");
+            mBoardHeight = object.getInt("boardHeight");
+            activity.setBoardViewLayoutParams(mBoardWidth, mBoardHeight);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
