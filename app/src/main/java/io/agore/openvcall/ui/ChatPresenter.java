@@ -291,10 +291,18 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
     public void AfterJoin(String methodparam, ChatActivity activity, DrawView view) {
         try {
+            cleanDrawData(view);
             JSONObject jsonObject = new JSONObject(methodparam);
-            int boardWidth = jsonObject.getInt("boardWidth");
-            int boardHeight = jsonObject.getInt("boardHeight");
-            activity.setBoardViewLayoutParams(boardWidth, boardHeight);
+            mBoardWidth = jsonObject.getInt("boardWidth");
+            mBoardHeight = jsonObject.getInt("boardHeight");
+            activity.setBoardViewLayoutParams(mBoardWidth, mBoardHeight);
+
+
+            boolean openDocFlag = jsonObject.optBoolean("openDocFlag");
+            if (openDocFlag) {
+                mBoardWidth = jsonObject.getInt("WhiteBoardWidth");
+                mBoardHeight = jsonObject.getInt("WhiteBoardHeight");
+            }
 
             drawPoints(jsonObject, view);
 
@@ -313,6 +321,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public void drawPoints(JSONObject jsonObject, DrawView view) throws JSONException {
 
         String drawDataStr = jsonObject.optString("drawData");
+
         if (!TextUtils.isEmpty(drawDataStr)) {  //有数据
             JSONArray drawData = new JSONArray(drawDataStr);
 

@@ -31,10 +31,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.google.gson.Gson;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
+import com.onlyhiedu.mobile.Model.bean.board.LineBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.DateUtil;
@@ -46,6 +48,10 @@ import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
@@ -123,7 +129,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.rel_stu)
     RelativeLayout mRel_Stu;
 
-
     private String mChannelName;
     private RoomInfo mRoomInfo;
     public RequestManager mRequestManager;
@@ -151,7 +156,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean mIsBack; //返回键是否可点击
     private boolean isStartTime;
     private boolean isTeacherJoined;
-
+    private Gson mGson;
 
     int mLastDownY;
     private int mCurryY;
@@ -173,6 +178,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     protected void initUIandEvent() {
+        EventBus.getDefault().register(this);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mScreenWidth = ScreenUtil.getScreenWidth(this);
@@ -181,8 +188,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         float v = (float) mScreenWidth * (float) 0.7;
         rate = (float) mScreenWidth / v;
         mImageFullScreen.setEnabled(false);
-//        int imageWidth = mScreenWidth - mLlVideo.getWidth();
-//        mPresenter.setImageWidth(imageWidth);
+
         setToolBar();
         event().addEventHandler(this);
 
@@ -214,8 +220,25 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
         visableTag = 1;
 
+        mScrollView.setIntercept(false);
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMain(LineBean event) {
+        event.boardWidth = mDrawView.getWidth();
+        event.boardHeight = mDrawView.getHeight();
+        if (mGson == null) {
+            mGson = new Gson();
+        }
+        String s = mGson.toJson(event);
+        BoardBean boardBean = new BoardBean();
+        boardBean.methodtype = "01";
+        boardBean.methodparam = s;
+        boardBean.scaling = "";
+        mPresenter.add(event.drawMode, event.points, Color.BLACK, event.lineWidth, null);
+        m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendDrawLine");
+    }
 
     @Override
     protected void onStart() {
@@ -641,12 +664,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (mRoomInfo.getChannelTeacherId() != Integer.parseInt(account)) {
+                            return;
+                        }
+
                         BoardBean boardBean = JsonUtil.parseJson(msg, BoardBean.class);
                         if (boardBean == null) {
                             return;
                         }
                         switch (boardBean.methodtype) {
                             case AfterJoin:
+                                mImageCourseWare.setImageResource(R.drawable.transparent);
                                 mPresenter.AfterJoin(boardBean.methodparam, ChatActivity.this, mDrawView);
                                 break;
                             case PEN:
@@ -844,11 +872,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
         if (mPresenter.mBoardWidth > data.get(0).width) {  //PC白板宽度如果大于课件图片宽度
             setBoardViewLayoutParams(data.get(0).width, data.get(0).height);
-            //TODO
-//            mPresenter.mBoardWidth = data.get(0).width;
-//            mPresenter.mBoardHeight = data.get(0).height;
         } else {
+            double v = (double) mPresenter.mBoardWidth / (double) data.get(0).width;
+            double height = v * (double) data.get(0).height;
 
+            setBoardViewLayoutParams(mPresenter.mBoardWidth, (int) (height + 0.5));
         }
 
 
@@ -870,7 +898,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -905,7 +933,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 io.agore.openvcall.model.Message msg = new io.agore.openvcall.model.Message(io.agore.openvcall.model.Message.MSG_TYPE_TEXT,
                         new User(config().mUid, String.valueOf(config().mUid)), msgStr);
                 notifyMessageChanged(msg);
-
+                break;
+            case R.id.switch_btn:
+                if (mScrollView.isIntercept()) {
+                    mScrollView.setIntercept(false);
+                } else {
+                    mScrollView.setIntercept(true);
+                }
                 break;
         }
     }
@@ -1110,6 +1144,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mHandler = null;
         }
         isStartTime = false;
+        EventBus.getDefault().unregister(this);
     }
 
     private void quitCall() {

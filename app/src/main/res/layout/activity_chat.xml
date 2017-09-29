@@ -3,8 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/c33"
-             android:keepScreenOn="true"
->
+             android:keepScreenOn="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,8 +35,7 @@
                 android:layout_height="0dp"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:background="@color/bcd_gray1"
-            >
+                android:background="@color/bcd_gray1">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,8 +95,7 @@
             android:layout_weight="3"
             android:background="#80000000"
             android:orientation="vertical"
-            android:visibility="gone"
-        >
+            android:visibility="gone">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/msg_list"
@@ -226,6 +223,11 @@
 
             </RelativeLayout>
 
+
+            <Switch android:id="@+id/switch_btn" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="画笔"/>
 
         </LinearLayout>
 

@@ -22,7 +22,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.onlyhiedu.mobile.Model.bean.board.LineBean;
 import com.onlyhiedu.mobile.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -238,6 +241,9 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         canvas.drawBitmap(this.mBackgroundImageBitmap, centreX, centreY, null);
     }
 
+
+    StringBuffer sb = new StringBuffer();
+
     /**
      * Handle touch events in the view
      *
@@ -254,17 +260,32 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         if (motionEvent.getPointerCount() == 1) {
             switch (motionEvent.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
+                    setDrawingMode(DrawingMode.values()[0]);
+                    setDrawingTool(DrawingTool.values()[0]);
 
-                    eventActionDown(touchX, touchY);
+                    eventActionDown2(touchX, touchY);
 
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    setDrawingMode(DrawingMode.values()[0]);
+                    setDrawingTool(DrawingTool.values()[0]);
+                    sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
                     eventActionMove(touchX, touchY);
                     break;
                 case MotionEvent.ACTION_UP:
-
+                    setDrawingMode(DrawingMode.values()[0]);
+                    setDrawingTool(DrawingTool.values()[0]);
+                    sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
                     eventActionUp(motionEvent.getX(), motionEvent.getY());
 
+                    LineBean lineBean = new LineBean();
+                    lineBean.points = sb.toString();
+                    sb.delete(0, sb.length());
+                    lineBean.drawMode = "01";
+                    lineBean.lineWidth = (int) (mDrawWidth + 0.5);
+                    lineBean.color = "(0,0,0)";
+                    EventBus.getDefault().post(lineBean);
                     break;
                 default:
                     return false;
@@ -289,6 +310,34 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
         mDrawMoveHistory.add(DrawMove.newInstance()
                 .setPaint(getNewPaintParams())
+                .setStartX(touchX).setStartY(touchY)
+                .setEndX(touchX).setEndY(touchY)
+                .setDrawingMode(mDrawingMode).setDrawingTool(mDrawingTool));
+
+        mDrawMoveHistoryIndex++;
+
+        if (mDrawingTool == DrawingTool.PEN || mDrawingMode == DrawingMode.ERASER) {
+            Path path = new Path();
+            path.moveTo(touchX, touchY);
+            path.lineTo(touchX, touchY);
+
+            mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).setDrawingPathList(new ArrayList<Path>());
+            mDrawMoveHistory.get(mDrawMoveHistory.size() - 1).getDrawingPathList().add(path);
+        }
+    }
+
+    public void eventActionDown2(float touchX, float touchY) {
+        mLastTouchEvent = MotionEvent.ACTION_DOWN;
+
+        if (onDrawViewListener != null)
+            onDrawViewListener.onStartDrawing();
+
+        if (mDrawMoveHistoryIndex >= -1 &&
+                mDrawMoveHistoryIndex < mDrawMoveHistory.size() - 1)
+            mDrawMoveHistory = mDrawMoveHistory.subList(0, mDrawMoveHistoryIndex + 1);
+
+        mDrawMoveHistory.add(DrawMove.newInstance()
+                .setPaint(getNewPaintParams2())
                 .setStartX(touchX).setStartY(touchY)
                 .setEndX(touchX).setEndY(touchY)
                 .setDrawingMode(mDrawingMode).setDrawingTool(mDrawingTool));
@@ -346,7 +395,6 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
         if (onDrawViewListener != null)
             onDrawViewListener.onEndDrawing();
-
 
         invalidate();
     }
@@ -451,7 +499,6 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
             }
             paint.setColor(mBackgroundColor);
         } else {
-
             paint.setColor(mDrawColor);
         }
         paint.setStyle(mPaintStyle);
@@ -474,6 +521,11 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         return paint;
     }
 
+    private Paint getNewPaintParams2() {
+        Paint paint = getNewPaintParams();
+        paint.setColor(Color.BLACK);
+        return paint;
+    }
 
     // PUBLIC METHODS
 

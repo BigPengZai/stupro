@@ -224,7 +224,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
                     , "A  B"
                     , "A"
                     , "RobotPen"
-                    , false, false, new DialogListener() {
+                    , true, true, new DialogListener() {
                         @Override
                         public void onPositive(DialogInterface dialog) {
                             mIntent = new Intent(mActivity, ChatActivity.class);
