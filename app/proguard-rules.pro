@@ -287,3 +287,7 @@ public static final ** CREATOR;
   #==================百度SDK======================
  -dontwarn com.baidu.wallet.**
  -dontwarn com.gieseckedevrient.android.**
+
+ #==================robotPen===================
+  -dontwarn org.greenrobot.greendao.**
+
