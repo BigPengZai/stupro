@@ -74,7 +74,7 @@ import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.R.id.whiteBoardView;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
-public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEventHandler, ChatContract.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
+public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEventHandler, ChatContract2.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
 
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
     public static final String TAG = ChatActivity2.class.getSimpleName();
@@ -816,12 +816,12 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
 //        Toast.makeText(ChatActivity.this, "上传流时长完成", Toast.LENGTH_SHORT).show();
         finish();
     }
-
+/*
     @Override
     public void showCourseWareImageList(List<CourseWareImageList> data, int pageNum, boolean restart) {
         mCourseWareImageLists = data;
 
-    }
+    }*/
 
 
     @OnClick({R.id.but_dismiss, R.id.tv_send, R.id.but_im})

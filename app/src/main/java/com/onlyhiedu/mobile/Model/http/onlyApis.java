@@ -129,15 +129,15 @@ public interface onlyApis {
     Flowable<onlyHttpResponse> updateExamArea(@Field("examArea") String examArea);
 
     /**
-     * 获取学生课程列表
+     * 获取学生课程列表 1v1
      *
      * @param page
      * @return
      */
-    @GET("client/student/noEndCourseList")
+    @GET("client/student/noEndCourseV1List")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
 
-    @POST("client/student/getEndCourseList")
+    @GET("client/student/getEndCourseList")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
 
     /**
