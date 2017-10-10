@@ -12,5 +12,5 @@ public class UserDataBean {
     public boolean registerIMFlag;
     public String userUuid;
     public String avatarUrl;
-
+    public String agoraUid;
 }

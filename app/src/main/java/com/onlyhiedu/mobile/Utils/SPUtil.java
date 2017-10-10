@@ -73,6 +73,13 @@ public class SPUtil {
         return getAppSp().getString(Constants.EMCAVATARURL, "");
     }
 
+    public static void setAgoraUid(String agoraUid) {
+        getAppSp().edit().putString(Constants.AGORAUID, agoraUid).apply();
+    }
+    public static String getAgoraUid() {
+        return getAppSp().getString(Constants.AGORAUID, "");
+    }
+
     public static void setGuest(boolean guest) {
         getAppSp().edit().putBoolean(Constants.IsGuest, guest).apply();
     }
@@ -82,12 +89,13 @@ public class SPUtil {
     }
 
     //============================================= 设置基本信息
-    public static void setUserInfo(String emcRegName, String token, String phone, String userName, String avatarUrl) {
+    public static void setUserInfo(String emcRegName, String token, String phone, String userName, String avatarUrl,String agoraUid) {
         SPUtil.setEmcRegName(emcRegName);
         SPUtil.setToken(token);
         SPUtil.setPhone(phone);
         SPUtil.setName(userName);
         SPUtil.setAvatarUrl(avatarUrl);
+        SPUtil.setAgoraUid(agoraUid);
     }
 
 

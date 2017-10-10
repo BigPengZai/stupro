@@ -90,7 +90,7 @@ public class App extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(base);
-        Beta.installTinker();
+//        Beta.installTinker();
     }
 
     @Override
@@ -141,13 +141,13 @@ public class App extends Application {
 //        DemoHelper.getInstance().init(this);
         //bugly
 
-//        CrashReport.initCrashReport(getApplicationContext(), "5c1349523c", false);
+        CrashReport.initCrashReport(getApplicationContext(), "8f4d5d918c", true);
         //ping++
         Pingpp.enableDebugLog(true);
         //百度钱包
         BaiduWallet.getInstance().initWallet(this, "outanglihai");
         //bugly 热跟新 调试时，将第三个参数改为true
-        Bugly.init(this,"8f4d5d918c",true);
+//        Bugly.init(this,"8f4d5d918c",true);
 
     }
 

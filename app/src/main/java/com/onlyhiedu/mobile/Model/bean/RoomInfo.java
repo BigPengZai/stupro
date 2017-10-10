@@ -18,17 +18,6 @@ public class RoomInfo implements Serializable {
 
     private String commChannelId;
     private String signallingChannelId;
-    private int channelTeacherId;
-    private int channelStudentId;
-    private int channelPatriarchId;
-
-    public int getChannelPatriarchId() {
-        return channelPatriarchId;
-    }
-
-    public void setChannelPatriarchId(int channelPatriarchId) {
-        this.channelPatriarchId = channelPatriarchId;
-    }
 
     public String getCommChannelId() {
         return commChannelId;
@@ -46,20 +35,7 @@ public class RoomInfo implements Serializable {
         this.signallingChannelId = signallingChannelId;
     }
 
-    public int getChannelTeacherId() {
-        return channelTeacherId;
-    }
 
-    public void setChannelTeacherId(int channelTeacherId) {
-        this.channelTeacherId = channelTeacherId;
-    }
 
-    public int getChannelStudentId() {
-        return channelStudentId;
-    }
-
-    public void setChannelStudentId(int channelStudentId) {
-        this.channelStudentId = channelStudentId;
-    }
 
 }

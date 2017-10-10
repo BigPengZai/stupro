@@ -39,6 +39,7 @@ public class CourseList {
         public String subject;
         public String teacherName;
 
+        public int channelTeacherId;
         //增加字段 是否点击
         public boolean isClickAble=false;
 

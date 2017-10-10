@@ -78,7 +78,7 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
                         String emcRegName = data.getData().userUuid.contains("-") ? data.getData().userUuid.replaceAll("-", "") : data.getData().userUuid;
-                        SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().getPhone(), data.getData().userName, data.getData().avatarUrl);
+                        SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().getPhone(), data.getData().userName, data.getData().avatarUrl,data.getData().agoroUid);
                         getView().showUser();
 //                        if (!data.getData().registerIMFlag) {
 //                            emcRegister(mRetrofitHelper,getView());

@@ -45,9 +45,9 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://192.168.1.219/";
+    String HOST = "http://101.132.116.184/";
     //公网环境
-    String HOST = "http://api.onlyeduhi.cn/";
+//    String HOST = "http://api.onlyeduhi.cn/";
 
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
@@ -134,7 +134,7 @@ public interface onlyApis {
      * @param page
      * @return
      */
-    @POST("client/student/getNoStartCourseList")
+    @GET("client/student/noEndCourseList")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
 
     @POST("client/student/getEndCourseList")

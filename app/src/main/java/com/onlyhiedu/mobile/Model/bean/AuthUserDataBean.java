@@ -20,7 +20,7 @@ public class AuthUserDataBean {
     public String userUuid;
     public boolean registerIMFlag;
     public String avatarUrl;
-
+    public String agoroUid;
 
     public String getToken() {
         return token;

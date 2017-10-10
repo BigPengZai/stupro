@@ -350,6 +350,9 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                  */
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
+                Log.d(TAG, "result:"+result);
+                Log.d(TAG, "errorMsg:"+errorMsg);
+                Log.d(TAG, "extraMsg:"+extraMsg);
                 showMsg(result, errorMsg, extraMsg);
             }
         }
@@ -391,6 +394,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
             }, 1000);
         } else {
+            Log.d(TAG, "str:"+str);
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
         }
     }

@@ -38,6 +38,7 @@ import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyWhiteBoardView;
 
@@ -254,7 +255,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
             //课程频道
             mChannelName = mRoomInfo.getCommChannelId();
             //学生uid
-            mUid = mRoomInfo.getChannelStudentId() + "";
+            mUid = SPUtil.getAgoraUid() + "";
         }
     }
 
@@ -497,6 +498,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
 
     }
 
+
     private void finishClassRoom() {
         if (m_agoraAPI != null) {
             m_agoraAPI.logout();
@@ -520,7 +522,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
         //从服务器获取
         String certificate = this.getString(R.string.private_app_cate);
         String appId = this.getString(R.string.private_app_id);
-        String account = mRoomInfo.getChannelStudentId() + "";
+        String account = SPUtil.getAgoraUid() + "";
         m_agoraAPI = AgoraAPIOnlySignal.getInstance(this, appId);
         long expiredTime = System.currentTimeMillis() / 1000 + 3600;
         String token = calcToken(appId, certificate, account, expiredTime);
@@ -548,7 +550,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
             @Override
             public void onChannelUserLeaved(String account, int uid) {
                 //信令通道当有其他用户退出
-                if (uid == mRoomInfo.getChannelTeacherId()) {
+                if (uid == mListBean.channelTeacherId) {
                     SnackBarUtils.show(mToolbar, "老师已退出课堂", Color.GREEN);
                 }
             }
@@ -561,8 +563,8 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                     @Override
                     public void run() {
 
-                        if (mRoomInfo.getChannelTeacherId() == Integer.parseInt(account)) {
-                            if (mRoomInfo.getChannelTeacherId() == Integer.parseInt(account)) {
+                        if (mListBean.channelTeacherId == Integer.parseInt(account)) {
+                            if (mListBean.channelTeacherId == Integer.parseInt(account)) {
                                 if (msg.startsWith("{\"Block\":")) {
                                     Log.d("Xwc","进来了");
                                     TrailsEntity json = mPresenter.getJson(msg);
@@ -766,7 +768,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                     public void onPositive(DialogInterface dialog) {
                         if (mRoomInfo != null) {
                             //call  的对象 假数据即老师信令的id
-                            String peer = mRoomInfo.getChannelTeacherId() + "";
+                            String peer = mListBean.channelTeacherId + "";
                             m_agoraAPI.messageInstantSend(peer, 0, "ok", "stu_ok");
                         }
                     }
@@ -776,7 +778,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                         //取消
                         Log.d(TAG, "取消");
                         if (mRoomInfo != null) {
-                            String peer = mRoomInfo.getChannelTeacherId() + "";
+                            String peer = mListBean.channelTeacherId + "";
                             m_agoraAPI.messageInstantSend(peer, 0, "no", "stu_no");
                         }
                     }
@@ -953,7 +955,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
     private void requestFinishClass() {
         if (mRoomInfo != null) {
             //学生 给老师发送 我要下课请求
-            String peer = mRoomInfo.getChannelTeacherId() + "";
+            String peer = mListBean.channelTeacherId+ "";
             //发送点对点 消息
             m_agoraAPI.messageInstantSend(peer, 0, "00", requestFinishClassTag);
         }
@@ -979,6 +981,12 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
         worker().leaveChannel(mChannelName);
         worker().preview(false, null, 0);
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
     }
 
     @Override
@@ -1009,7 +1017,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-        if (uid == mRoomInfo.getChannelTeacherId()) {
+        if (uid == mListBean.channelTeacherId) {
             initTeaView(uid);
         }
     }
@@ -1067,7 +1075,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
             @Override
             public void run() {
                 mRl_bg.setVisibility(View.GONE);
-                if (uid == mRoomInfo.getChannelTeacherId()) {
+                if (uid == mListBean.channelTeacherId) {
                     isTeacherJoined = true;
                 }
             }
@@ -1082,7 +1090,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
             public void run() {
                 isTeacherJoined = false;
                 //当有其他用户退出
-                if (uid == mRoomInfo.getChannelTeacherId()) {
+                if (uid == mListBean.channelTeacherId) {
                     SnackBarUtils.show(mToolbar, "老师已退出课堂", Color.GREEN);
                 }
             }
@@ -1181,7 +1189,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                 if (target == null) {
                     return;
                 }
-                if (mRel_Tea != null && mRoomInfo != null && mRoomInfo.getChannelTeacherId() == uid) {
+                if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId== uid) {
 
                     mRel_Tea.removeAllViews();
                 }

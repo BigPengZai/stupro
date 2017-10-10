@@ -178,7 +178,7 @@
                     style="@style/wrap_wrap"
                     android:text="《用户条款》"
                     android:textColor="@color/c_ACABAB"
-                    android:textSize="@dimen/sp_14"/>
+                    android:textSize="@dimen/sp_14" android:layout_width="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
 
