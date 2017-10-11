@@ -4,6 +4,7 @@ import com.onlyhiedu.mobile.Base.BasePresenter;
 import com.onlyhiedu.mobile.Base.BaseView;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfoAliPay;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 
 /**
@@ -16,6 +17,7 @@ public interface CoursePayContract {
 
         void showPingPaySucess(PingPaySucessInfo info);
 
+        void showPingPaySucessAliPay(PingPaySucessInfoAliPay info);
         void getBaiduPaySuccess(String url);
         void getBaiduPayFailure();
 
@@ -29,6 +31,7 @@ public interface CoursePayContract {
         void getPayMoney(String coursePriceUuid, String code);
 
         void getPingppPaymentByJson(String coursePriceUuid, String channel,String code);
+        void getPingppPaymentByJsonAlipay(String coursePriceUuid, String channel,String code);
 
         void getBaiduPay(String uuid,String code,String name,String phone);
         void updateGrade(String grade);

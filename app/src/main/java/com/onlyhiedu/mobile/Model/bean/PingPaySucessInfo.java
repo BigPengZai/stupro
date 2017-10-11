@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.Model.bean;
 
 /**
  * Created by pengpeng on 2017/7/27.
+ *  微信
  */
 
 public class PingPaySucessInfo {

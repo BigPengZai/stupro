@@ -19,6 +19,7 @@ import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfoAliPay;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StarContentList;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -336,10 +337,16 @@ public class RetrofitHelper {
     public Flowable<onlyHttpResponse> fetchGetPayMoney(String coursePriceUuid, String code) {
         return sOnlyApis.getPayMoney(coursePriceUuid, code);
     }
-
+    //微信
     public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchGetPingPay(String coursePriceUuid, String channel, String code) {
         return sOnlyApis.getPingPay(coursePriceUuid, channel, code);
     }
+
+    //支付宝
+    public Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> fetchGetPingPayAliPay(String coursePriceUuid, String channel, String code) {
+        return sOnlyApis.getPingPayAliPay(coursePriceUuid, channel, code);
+    }
+
 
     public Flowable<onlyHttpResponse<String>> fetchGetBaiduPay(String coursePriceUuid, String code, String name, String phone) {
         return sOnlyApis.getBaiduPay(coursePriceUuid, code, name, phone);

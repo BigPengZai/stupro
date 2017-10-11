@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Course.persenter;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfoAliPay;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
@@ -118,6 +119,30 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
 
     }
+
+    //课时包 Ping++ 支付  alipay
+    @Override
+    public void getPingppPaymentByJsonAlipay(String coursePriceUuid, String channel,String code) {
+        Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> flowable = mRetrofitHelper.fetchGetPingPayAliPay(coursePriceUuid, channel,code);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<PingPaySucessInfoAliPay>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<PingPaySucessInfoAliPay> data) {
+                if (null != getView() && null != data) {
+                    if (!data.isHasError()) {
+                        getView().showPingPaySucessAliPay(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+
+    }
+
+
+
     //课时包百度支付
     @Override
     public void getBaiduPay(String uuid,String code,String name,String phone ) {

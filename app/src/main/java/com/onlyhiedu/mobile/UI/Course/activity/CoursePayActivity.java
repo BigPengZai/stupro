@@ -23,6 +23,7 @@ import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfoAliPay;
 import com.onlyhiedu.mobile.Model.bean.ProvinceBean;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
@@ -239,6 +240,12 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     }
 
     @Override
+    public void showPingPaySucessAliPay(PingPaySucessInfoAliPay info) {
+        mChargeId = info.getId();
+        Pingpp.createPayment(CoursePayActivity.this, JsonUtil.toJson(info));
+    }
+
+    @Override
     public void getBaiduPaySuccess(String url) {
         if (dialog.isShowing()) {
             dialog.dismiss();
@@ -262,6 +269,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         switch (view.getId()) {
             case confirm_pay:
 //               startActivity(new Intent(this, OrderSucessActivity.class));
+                //com.tencent.mm  com.eg.android.AlipayGphone
                 //确认支付
                 if (checkInfo()) {
                     if (payMethod.equals(CHANNEL_BDF)) {
@@ -312,17 +320,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 if ("order".equals(mPayFrom)) {
                     mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
+                    mPresenter.getPingppPaymentByJsonAlipay(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 }
                 break;
             case CHANNEL_WECHAT:
-                if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
-                } else {
-                    mPresenter.getPingppPaymentByJson(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
-                }
-                break;
-            case CHANNEL_UPACP:
                 if ("order".equals(mPayFrom)) {
                     mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
@@ -347,6 +348,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                  * "fail"    - payment failed
                  * "cancel"  - user canceld
                  * "invalid" - payment plugin not installed
+                 *   result:fail
+                     errorMsg:channel_returns_fail
+                     extraMsg:null
+                     str:fail
                  */
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
@@ -375,12 +380,12 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     public void showMsg(String title, String msg1, String msg2) {
         String str = title;
-        if (null != msg1 && msg1.length() != 0) {
+      /*  if (null != msg1 && msg1.length() != 0) {
             str += "\n" + msg1;
         }
         if (null != msg2 && msg2.length() != 0) {
             str += "\n" + msg2;
-        }
+        }*/
         if ("success".equals(str) && mChargeId != null && !TextUtils.isEmpty(mChargeId)) {
             if (dialog == null) {
                 dialog = ProgressDialog.show(CoursePayActivity.this, null, "请稍等...");
@@ -393,8 +398,11 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     mPresenter.getPingPayStatus(mChargeId);
                 }
             }, 1000);
+        } else if ("invalid".equals(str)) {
+            Toast.makeText(this, "未安装应用", Toast.LENGTH_SHORT).show();
+        } else if ("alipay".equals(payMethod)&&"channel_returns_fail".equals(msg1)&&"fail".equals(str)) {
+            Toast.makeText(this, "未安装应用", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d(TAG, "str:"+str);
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
         }
     }

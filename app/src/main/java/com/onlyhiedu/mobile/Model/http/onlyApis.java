@@ -17,6 +17,7 @@ import com.onlyhiedu.mobile.Model.bean.IMUserInfo;
 import com.onlyhiedu.mobile.Model.bean.OrderList;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
 import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfo;
+import com.onlyhiedu.mobile.Model.bean.PingPaySucessInfoAliPay;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.StarContentList;
 import com.onlyhiedu.mobile.Model.bean.StudentInfo;
@@ -443,6 +444,19 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/coursepay/directPingppPayment")
     Flowable<onlyHttpResponse<PingPaySucessInfo>> getPingPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
+
+
+    /**
+     * 课时包 Ping++直接支付
+     * 支付宝
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("client/coursepay/directPingppPayment")
+    Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> getPingPayAliPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
+
+
+
 
 
     /**

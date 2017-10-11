@@ -15,6 +15,7 @@
 
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_yl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/edit_height"

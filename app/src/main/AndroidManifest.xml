@@ -334,12 +334,6 @@
 
         <!-- 支付宝 -->
         <activity
-            android:name="com.alipay.sdk.app.H5PayActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:exported="false"
-            android:screenOrientation="behind">
-        </activity>
-        <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
