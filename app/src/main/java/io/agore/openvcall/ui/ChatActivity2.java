@@ -30,19 +30,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.google.gson.Gson;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyWhiteBoardView;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
@@ -148,6 +150,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
     //向上滑动基数
     private int mUpValue = 3;
     private SurfaceView mStuSurfView;
+    private Gson mGson;
 
     @Override
     protected void initInject() {
@@ -566,7 +569,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                         if (mListBean.channelTeacherId == Integer.parseInt(account)) {
                             if (mListBean.channelTeacherId == Integer.parseInt(account)) {
                                 if (msg.startsWith("{\"Block\":")) {
-                                    Log.d("Xwc","进来了");
+                                    Log.d("Xwc", "进来了");
                                     TrailsEntity json = mPresenter.getJson(msg);
                                     mWhiteBoardView.drawTrailsPoint(json);
                                 }
@@ -643,7 +646,18 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (mUid.equals(account)) {
+                            return;
+                        }
+                        BoardBean boardBean = JsonUtil.parseJson(msg, BoardBean.class);
+                        if (boardBean == null) {
+                            return;
+                        }
+                        switch (boardBean.methodtype) {
+                            case "IM":
+                                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(Integer.valueOf(boardBean.scaling), boardBean.scaling), boardBean.methodparam));
+                                break;
+                        }
                     }
                 });
 
@@ -816,12 +830,6 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
 //        Toast.makeText(ChatActivity.this, "上传流时长完成", Toast.LENGTH_SHORT).show();
         finish();
     }
-/*
-    @Override
-    public void showCourseWareImageList(List<CourseWareImageList> data, int pageNum, boolean restart) {
-        mCourseWareImageLists = data;
-
-    }*/
 
 
     @OnClick({R.id.but_dismiss, R.id.tv_send, R.id.but_im})
@@ -906,25 +914,34 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
     private int mDataStreamId;
 
     private void sendChannelMsg(String msgStr) {
-        RtcEngine rtcEngine = rtcEngine();
-        if (mDataStreamId <= 0) {
-            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
+        BoardBean boardBean = new BoardBean();
+        boardBean.methodtype = "IM";
+        boardBean.methodparam = msgStr;
+        boardBean.scaling = mUid;
+        if (mGson == null) {
+            mGson = new Gson();
         }
+        m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendIM");
 
-        if (mDataStreamId < 0) {
-            String errorMsg = "Create data stream error happened " + mDataStreamId;
-            showLongToast(errorMsg);
-            return;
-        }
-
-        byte[] encodedMsg;
-        try {
-            encodedMsg = msgStr.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            encodedMsg = msgStr.getBytes();
-        }
-
-        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
+//        RtcEngine rtcEngine = rtcEngine();
+//        if (mDataStreamId <= 0) {
+//            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
+//        }
+//
+//        if (mDataStreamId < 0) {
+//            String errorMsg = "Create data stream error happened " + mDataStreamId;
+//            showLongToast(errorMsg);
+//            return;
+//        }
+//
+//        byte[] encodedMsg;
+//        try {
+//            encodedMsg = msgStr.getBytes("UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            encodedMsg = msgStr.getBytes();
+//        }
+//
+//        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
     }
 
     private void notifyMessageChanged(io.agore.openvcall.model.Message msg) {
@@ -955,7 +972,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
     private void requestFinishClass() {
         if (mRoomInfo != null) {
             //学生 给老师发送 我要下课请求
-            String peer = mListBean.channelTeacherId+ "";
+            String peer = mListBean.channelTeacherId + "";
             //发送点对点 消息
             m_agoraAPI.messageInstantSend(peer, 0, "00", requestFinishClassTag);
         }
@@ -1189,7 +1206,7 @@ public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEv
                 if (target == null) {
                     return;
                 }
-                if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId== uid) {
+                if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId == uid) {
 
                     mRel_Tea.removeAllViews();
                 }

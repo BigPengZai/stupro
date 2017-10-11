@@ -54,7 +54,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
@@ -598,7 +597,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mListBean.channelTeacherId== Integer.parseInt(account)) {
+                        if (mListBean.channelTeacherId == Integer.parseInt(account)) {
                             switch (msg) {
                                 case "00":
                                     initDismissDialog();
@@ -691,6 +690,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             case "12":
                                 mPresenter.initBoard(boardBean.methodparam, mDrawView, ChatActivity.this);
                                 break;
+                            case "IM":
+                                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(Integer.valueOf(boardBean.scaling), boardBean.scaling), boardBean.methodparam));
+                                break;
                         }
                     }
                 });
@@ -721,6 +723,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     });
                 }
                 if (messageID.equals(requestFinishClassTag)) {
+
+
+
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -896,7 +902,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -989,28 +995,38 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-    private int mDataStreamId;
+//    private int mDataStreamId;
 
     private void sendChannelMsg(String msgStr) {
-        RtcEngine rtcEngine = rtcEngine();
-        if (mDataStreamId <= 0) {
-            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
-        }
 
-        if (mDataStreamId < 0) {
-            String errorMsg = "Create data stream error happened " + mDataStreamId;
-            showLongToast(errorMsg);
-            return;
+        BoardBean boardBean = new BoardBean();
+        boardBean.methodtype = "IM";
+        boardBean.methodparam = msgStr;
+        boardBean.scaling = mUid;
+        if (mGson == null) {
+            mGson = new Gson();
         }
+        m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendIM");
 
-        byte[] encodedMsg;
-        try {
-            encodedMsg = msgStr.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            encodedMsg = msgStr.getBytes();
-        }
-
-        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
+//        RtcEngine rtcEngine = rtcEngine();
+//        if (mDataStreamId <= 0) {
+//            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
+//        }
+//
+//        if (mDataStreamId < 0) {
+//            String errorMsg = "Create data stream error happened " + mDataStreamId;
+//            showLongToast(errorMsg);
+//            return;
+//        }
+//
+//        byte[] encodedMsg;
+//        try {
+//            encodedMsg = msgStr.getBytes("UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            encodedMsg = msgStr.getBytes();
+//        }
+//
+//        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
     }
 
     private void notifyMessageChanged(io.agore.openvcall.model.Message msg) {
@@ -1264,7 +1280,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 BigDecimal b = new BigDecimal((double) stats.totalDuration / 60.00);
                 float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                 try {
-                    if (mListBean != null&&mPresenter!=null) {
+                    if (mListBean != null && mPresenter != null) {
                         mUuid = mListBean.getUuid();
                         mPresenter.uploadStatistics(String.valueOf(f1), mUuid);
                         event().removeEventHandler(ChatActivity.this);
@@ -1338,8 +1354,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
     }
-
-
 
 
     @Override

@@ -159,15 +159,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_15"
-                    android:background="@drawable/im_text_bg"
+                    android:background="@drawable/im_text_bg2"
                     android:paddingBottom="@dimen/size_7"
                     android:paddingLeft="@dimen/size_18"
                     android:paddingRight="@dimen/size_18"
                     android:paddingTop="@dimen/size_7"
                     android:text="聊天"
-                    android:textColor="@color/im_text_color"
+                    android:textColor="@color/im_text_color2"
                     android:textSize="@dimen/size_16"
-                    android:visibility="invisible"/>
+                    android:visibility="visible"/>
 
                 <View
                     android:id="@+id/im_point"
@@ -193,12 +193,12 @@
     <!-- IM   比例 横 4-->
     <LinearLayout
         android:id="@+id/ll_msg"
+        android:visibility="gone"
         android:layout_width="210dp"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:background="#80000000"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"

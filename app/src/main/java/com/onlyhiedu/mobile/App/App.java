@@ -18,9 +18,6 @@ import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.pingplusplus.android.Pingpp;
-import com.tencent.bugly.Bugly;
-//import com.tencent.bugly.beta.Beta;
-import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
@@ -37,10 +34,11 @@ import java.io.InputStream;
 import cn.robotpen.model.db.DBConfig;
 import cn.robotpen.model.db.DaoMaster;
 import cn.robotpen.model.db.DaoSession;
-import io.agora.AgoraAPIOnlySignal;
 import io.agore.openvcall.model.CurrentUserSettings;
 import io.agore.openvcall.model.WorkerThread;
 import okhttp3.OkHttpClient;
+
+//import com.tencent.bugly.beta.Beta;
 
 //import com.tencent.bugly.beta.Beta;
 
@@ -52,7 +50,7 @@ public class App extends Application {
 
     private static App instance;
     private PushAgent mPushAgent;
-    public AgoraAPIOnlySignal mAgoraSocket;
+//    public AgoraAPIOnlySignal mAgoraSocket;
 
     public static synchronized App getInstance() {
         return instance;
@@ -67,6 +65,7 @@ public class App extends Application {
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);
     }
+
 
 
     private WorkerThread mWorkerThread;
@@ -166,6 +165,7 @@ public class App extends Application {
     public static final CurrentUserSettings mVideoSettings = new CurrentUserSettings();
 
     {
+
         //配置 微信 以及 QQ app_id
         PlatformConfig.setWeixin("wxfeb18b738b0c2f1c", "bed2a2109e97ec3b280eaff88dd0a03f");
         PlatformConfig.setQQZone("1105946445", "yp52LFZMgwMx35h2");

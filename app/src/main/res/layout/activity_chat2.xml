@@ -126,13 +126,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_15"
-                    android:background="@drawable/im_text_bg"
+                    android:background="@drawable/im_text_bg2"
                     android:paddingBottom="@dimen/size_7"
                     android:paddingLeft="@dimen/size_18"
                     android:paddingRight="@dimen/size_18"
                     android:paddingTop="@dimen/size_7"
                     android:text="聊天"
-                    android:textColor="@color/im_text_color"
+                    android:textColor="@color/im_text_color2"
                     android:textSize="@dimen/size_16"/>
 
                 <View
@@ -172,7 +172,7 @@
         android:layout_weight="3"
         android:background="#80000000"
         android:orientation="vertical"
-    >
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"
