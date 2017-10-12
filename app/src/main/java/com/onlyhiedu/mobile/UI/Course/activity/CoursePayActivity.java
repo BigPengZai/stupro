@@ -29,6 +29,7 @@ import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.persenter.CoursePayPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
+import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
 import com.onlyhiedu.mobile.Widget.PayItemView;
@@ -317,6 +318,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     private void confirmPayment() {
         switch (payMethod) {
             case CHANNEL_ALIPAY:
+                if (!AppUtil.isPkgInstalled("com.eg.android.AlipayGphone")) {
+                    Toast.makeText(this, "请先安装应用", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if ("order".equals(mPayFrom)) {
                     mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
@@ -324,6 +329,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 }
                 break;
             case CHANNEL_WECHAT:
+                if (!AppUtil.isPkgInstalled("com.tencent.mm")) {
+                    Toast.makeText(this, "请先安装应用", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if ("order".equals(mPayFrom)) {
                     mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
@@ -380,12 +389,6 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     public void showMsg(String title, String msg1, String msg2) {
         String str = title;
-      /*  if (null != msg1 && msg1.length() != 0) {
-            str += "\n" + msg1;
-        }
-        if (null != msg2 && msg2.length() != 0) {
-            str += "\n" + msg2;
-        }*/
         if ("success".equals(str) && mChargeId != null && !TextUtils.isEmpty(mChargeId)) {
             if (dialog == null) {
                 dialog = ProgressDialog.show(CoursePayActivity.this, null, "请稍等...");
@@ -398,11 +401,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     mPresenter.getPingPayStatus(mChargeId);
                 }
             }, 1000);
-        } else if ("invalid".equals(str)) {
-            Toast.makeText(this, "未安装应用", Toast.LENGTH_SHORT).show();
-        } else if ("alipay".equals(payMethod)&&"channel_returns_fail".equals(msg1)&&"fail".equals(str)) {
-            Toast.makeText(this, "未安装应用", Toast.LENGTH_SHORT).show();
-        } else {
+        }else {
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
         }
     }
