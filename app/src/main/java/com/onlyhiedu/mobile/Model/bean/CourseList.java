@@ -95,16 +95,16 @@ public class CourseList {
             return endTime;
         }
 
-        public void setEndTime(String endTime) {
-            this.endTime = endTime;
-        }
-
         public String getSubject() {
             return subject;
         }
 
         public void setSubject(String subject) {
             this.subject = subject;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
         }
 
         public String getTeacherName() {
