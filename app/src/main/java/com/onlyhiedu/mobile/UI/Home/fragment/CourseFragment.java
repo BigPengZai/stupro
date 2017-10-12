@@ -218,7 +218,14 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     public void showRoomInfoSucess(RoomInfo roomInfo) {
         if (roomInfo != null && mItem != null) {
             DialogUtil.dismiss(mDialog);
-
+            mIntent = new Intent(mActivity, ChatActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("roomInfo", roomInfo);
+            bundle.putSerializable("ListBean", mItem);
+            Log.d(TAG, "uuid:" + mItem.getUuid());
+            mIntent.putExtras(bundle);
+            mActivity.startActivity(mIntent);
+           /*
             DialogUtil.showOnlyAlert(mContext,
                     "提示"
                     , "A  B"
@@ -248,7 +255,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
                             mActivity.startActivity(mIntent);
                         }
                     }
-            );
+            );*/
 
 
         }

@@ -1140,8 +1140,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void doLeaveChannel() {
-        worker().leaveChannel(mChannelName);
-        worker().preview(false, null, 0);
+        if (worker() != null) {
+            worker().leaveChannel(mChannelName);
+            worker().preview(false, null, 0);
+        }
 
     }
 
