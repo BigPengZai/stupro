@@ -151,6 +151,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
     @Override
     public void onRefresh() {
         Log.d("Swipe", "Refreshing Number");
+        mPresenter.getBannerData();
+        mPresenter.getTeacherData();
+        mPresenter.getArticle();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

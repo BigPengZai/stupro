@@ -380,10 +380,16 @@ public class RetrofitHelper {
         return sOnlyApis.getOrderList(state, page);
     }
 
-
+    //订单 wx 支付
     public Flowable<onlyHttpResponse<PingPaySucessInfo>> fetchOrderGetPingPay(String coursePriceUuid, String channel, String code) {
         return sOnlyApis.getOrderPingPay(coursePriceUuid, channel, code);
     }
+
+    //订单 alipay 支付
+    public Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> fetchOrderGetPingPayAliPay(String coursePriceUuid, String channel, String code) {
+        return sOnlyApis.getOrderPingPayAliPay(coursePriceUuid, channel, code);
+    }
+
 
     public Flowable<onlyHttpResponse<String>> fetchOrderGetBaiduPay(String coursePriceUuid, String code) {
         return sOnlyApis.getOrderBaiduPay(coursePriceUuid, code);

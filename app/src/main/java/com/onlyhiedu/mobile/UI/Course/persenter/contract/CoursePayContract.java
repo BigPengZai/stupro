@@ -42,6 +42,7 @@ public interface CoursePayContract {
         void getStudentInfo();
 
         void getOrderPingppPayment(String coursePriceUuid, String channel,String code);
+        void getOrderPingppPaymentAlipay(String coursePriceUuid, String channel,String code);
 
         void getOrderBaiduPay(String uuid,String code);
     }

@@ -65,7 +65,6 @@
 
     <!--我的订单-->
     <com.onlyhiedu.mobile.Widget.SettingItemView
-        android:visibility="gone"
         android:id="@+id/setting_orders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -45,7 +45,7 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
-    //订单 Ping++ 支付
+    //订单 Ping++ 支付 wx
     @Override
     public void getOrderPingppPayment(String coursePriceUuid, String channel,String code) {
         Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchOrderGetPingPay(coursePriceUuid, channel,code);
@@ -65,6 +65,29 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
 
     }
+    //订单 Ping++ 支付 alipay
+    @Override
+    public void getOrderPingppPaymentAlipay(String coursePriceUuid, String channel,String code) {
+        Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> flowable = mRetrofitHelper.fetchOrderGetPingPayAliPay(coursePriceUuid, channel,code);
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<PingPaySucessInfoAliPay>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<PingPaySucessInfoAliPay> data) {
+                if (null != getView() && null != data) {
+                    if (!data.isHasError()) {
+                        getView().showPingPaySucessAliPay(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+
+    }
+
+
+
     //订单 百度支付
     @Override
     public void getOrderBaiduPay(String uuid,String code) {
@@ -99,7 +122,7 @@ public class CoursePayPresenter extends RxPresenter<CoursePayContract.View> impl
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
-    //课时包 Ping++ 支付
+    //课时包 Ping++ 支付 wx
     @Override
     public void getPingppPaymentByJson(String coursePriceUuid, String channel,String code) {
         Flowable<onlyHttpResponse<PingPaySucessInfo>> flowable = mRetrofitHelper.fetchGetPingPay(coursePriceUuid, channel,code);

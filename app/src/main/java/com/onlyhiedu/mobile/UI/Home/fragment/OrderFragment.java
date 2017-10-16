@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/8/1.
  */
 
-public class OrderFragment extends BaseFragment<OrdersPresenter> implements OrdersContract.View, View.OnClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener {
+public class OrderFragment extends BaseFragment<OrdersPresenter> implements OrdersContract.View, View.OnClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener, BaseRecyclerAdapter.OnItemClickListener, OrderAdapter.OnGoPayTextClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -43,8 +44,10 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
 
 
     private String mPayState;
+    private boolean mPendingPay;
     private OrderAdapter mAdapter;
 
+    public static final String TAG = OrderFragment.class.getSimpleName();
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
@@ -59,6 +62,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
     protected void initView() {
         if (getArguments() != null) {
             mPayState = getArguments().getString("payState");
+            mPendingPay = getArguments().getBoolean("mPendingPay");
         }
 
         mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
@@ -70,6 +74,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
         mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnGoPayTextClickListener(this);
     }
 
 
@@ -146,7 +151,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
 
     @Override
     public void onItemClick(int position, long itemId) {
-        if (mAdapter.getItem(position).orderStatus == 1) {
+      /*  if (mAdapter.getItem(position).orderStatus == 1) {
             Intent mPayIntent = new Intent(getActivity(), CoursePayActivity.class);
             mPayIntent
                     .putExtra("originalPrice", (long) Double.parseDouble(mAdapter.getItem(position).originalPrice))
@@ -156,9 +161,40 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
                     .putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
                     .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
             startActivity(mPayIntent);
-        }
+        }*/
     }
 
+    //去支付按钮
+    @Override
+    public void onGoPayTextClick(String text, int position) {
+        if ("去支付".equals(text)&&mPendingPay) {
+            Intent intent = new Intent();
+            intent
+                    .putExtra("originalPrice", (long) Double.parseDouble(mAdapter.getItem(position).originalPrice))
+                    .putExtra("nowPrice", (long) Double.parseDouble(mAdapter.getItem(position).money))
+                    .putExtra("specialPrice", (long) Double.parseDouble(mAdapter.getItem(position).discountPrice))
+                    .putExtra("mPayFrom", "order")
+                    .putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
+                    .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
+            getActivity().setResult(10001, intent);
+            getActivity().finish();
+        } else {
+            if (mAdapter.getItem(position).orderStatus == 1) {
+                Intent mPayIntent = new Intent(mContext, CoursePayActivity.class);
+                mPayIntent
+                        .putExtra("originalPrice", (long) Double.parseDouble(mAdapter.getItem(position).originalPrice))
+                        .putExtra("nowPrice", (long) Double.parseDouble(mAdapter.getItem(position).money))
+                        .putExtra("specialPrice", (long) Double.parseDouble(mAdapter.getItem(position).discountPrice))
+                        .putExtra("mPayFrom", "order")
+                        .putExtra("mPayFromOrder", true)
+                        .putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
+                        .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
+
+                Log.d(TAG, "coursePriceUuid:"+mAdapter.getItem(position).orderUuid);
+                startActivity(mPayIntent);
+            }
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -171,12 +207,14 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(MineOrdersActivityTabSelecPos event) {
-        if (mAdapter==null) {
+        if (mAdapter == null) {
             return;
         }
         mAdapter.clear();
         mPresenter.getOrderList(true, mPayState);
     }
+
 }

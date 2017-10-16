@@ -36,8 +36,10 @@ public class MineOrdersActivity extends SimpleActivity {
     ViewPager mViewpager;
 
     private ViewPagerAdapterFragment mAdapter;
+    //mOrderSucessIntent  已经支付
     private boolean mMOrderSucessIntent;
-
+    //pendingPay  待支付
+    private boolean mPendingPay;
     public static final String TAG = MineOrdersActivity.class.getSimpleName();
 
     @Override
@@ -48,16 +50,20 @@ public class MineOrdersActivity extends SimpleActivity {
     @Override
     protected void initEventAndData() {
         setToolBar("我的订单");
+
         mMOrderSucessIntent = getIntent().getBooleanExtra("mOrderSucessIntent", false);
+
+        mPendingPay = getIntent().getBooleanExtra("pendingPay", false);
         mAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(), mContext);
         Bundle bundle = new Bundle();
         bundle.putString("payState", "1");
+        bundle.putBoolean("mPendingPay",mPendingPay);
         Bundle bundle2 = new Bundle();
         bundle2.putString("payState", "2");
         Bundle bundle3 = new Bundle();
         bundle3.putString("payState", "0");
 
-        mAdapter.addTab("全部", "全部", OrderFragment.class, null);
+        mAdapter.addTab("全部", "全部", OrderFragment.class, bundle);
         mAdapter.addTab("待支付", "待支付", OrderFragment.class, bundle);
         mAdapter.addTab("已支付", "已支付", OrderFragment.class, bundle2);
         mAdapter.addTab("已关闭", "已关闭", OrderFragment.class, bundle3);
@@ -66,6 +72,9 @@ public class MineOrdersActivity extends SimpleActivity {
         mTabLayout.setupWithViewPager(mViewpager);
         if (mMOrderSucessIntent) {
             mViewpager.setCurrentItem(2);
+        }
+        if (mPendingPay) {
+            mViewpager.setCurrentItem(1);
         }
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

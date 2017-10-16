@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/8/1.
  */
 
-public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean> {
+public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean>  {
 
 
     public OrderAdapter(Context context) {
@@ -51,14 +51,28 @@ public class OrderAdapter extends BaseRecyclerAdapter<OrderList.ListBean> {
                 h.mGoPay.setText("已支付");
                 break;
         }
+        h.mGoPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnGoPayTextClickListener != null) {
+                    mOnGoPayTextClickListener.onGoPayTextClick(h.mGoPay.getText().toString(),position);
+                }
+            }
+        });
         View view = h.itemView;
         view.setScaleY(0.7f);
         view.setScaleX(0.7f);
         ViewCompat.animate(view).scaleX(1.0f).scaleY(1.0f).setDuration(500).setInterpolator(new OvershootInterpolator()).start();
 
     }
+    public  interface OnGoPayTextClickListener {
+        void onGoPayTextClick(String text,int position);
+    }
+    private OnGoPayTextClickListener mOnGoPayTextClickListener = null;
 
-
+    public void setOnGoPayTextClickListener(OnGoPayTextClickListener listener) {
+        this.mOnGoPayTextClickListener = listener;
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 

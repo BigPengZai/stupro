@@ -18,6 +18,8 @@ import com.onlyhiedu.mobile.Dagger.Modul.AppModule;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.Utils.DaoUtil;
 import com.pingplusplus.android.Pingpp;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
@@ -89,7 +91,7 @@ public class App extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(base);
-//        Beta.installTinker();
+        Beta.installTinker();
     }
 
     @Override
@@ -140,13 +142,13 @@ public class App extends Application {
 //        DemoHelper.getInstance().init(this);
         //bugly
 
-        CrashReport.initCrashReport(getApplicationContext(), "8f4d5d918c", true);
+//        CrashReport.initCrashReport(getApplicationContext(), "8f4d5d918c", true);
         //ping++
         Pingpp.enableDebugLog(true);
         //百度钱包
         BaiduWallet.getInstance().initWallet(this, "outanglihai");
         //bugly 热跟新 调试时，将第三个参数改为true
-//        Bugly.init(this,"8f4d5d918c",true);
+        Bugly.init(this,"8f4d5d918c",false);
 
     }
 

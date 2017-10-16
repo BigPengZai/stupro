@@ -14,9 +14,12 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.hyphenate.EMContactListener;
@@ -28,6 +31,7 @@ import com.hyphenate.util.EMLog;
 import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
+import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
@@ -76,6 +80,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
+    private boolean mHideSmall;
 
     @Override
     protected void initInject() {
@@ -92,7 +97,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -136,13 +140,25 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
 //   IM     showExceptionDialogFromIntent(getIntent());
         inviteMessgeDao = new InviteMessgeDao(this);
+        mHideSmall = BuildConfig.HIDE_SMALL;
+
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
+            if (mHideSmall) {
+                BottomNavigationViewHelper.hideItemView(mNavigation,3);
+                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
+            } else {
+                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
+            }
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
+            if (mHideSmall) {
+                BottomNavigationViewHelper.hideItemView(mNavigation,3);
+                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
+            } else {
+                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
+            }
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -183,7 +199,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
-        if (item.getItemId() == R.id.four) {
+        if (item.getItemId() == R.id.four && mHideSmall) {
             showHideFragment(mSmallClassFragment);
         }
 

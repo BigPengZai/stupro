@@ -29,6 +29,7 @@ import com.onlyhiedu.mobile.Model.bean.StudentInfo;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.persenter.CoursePayPresenter;
 import com.onlyhiedu.mobile.UI.Course.persenter.contract.CoursePayContract;
+import com.onlyhiedu.mobile.UI.Home.activity.MineOrdersActivity;
 import com.onlyhiedu.mobile.Utils.AppUtil;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
 import com.onlyhiedu.mobile.Utils.WheelUtils;
@@ -57,7 +58,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
 
     public static final String TAG = CoursePayActivity.class.getSimpleName();
     private static final int REQURSE_CODE = 10000;
-
+    private static final int PENDINTENT = 10001;
     @BindView(R.id.rl_edit)
     RelativeLayout mRelativeLayout;
     @BindView(R.id.gradeSubject)
@@ -96,6 +97,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     private String mCoursePriceUuid;
     private String mChargeId;
     private String mPayFrom;
+    private boolean mPayFromOrder;
     private Long mNowPrice;
     //小计
     @BindView(R.id.tv_total)
@@ -136,6 +138,16 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
     @Override
     public void onResume() {
         super.onResume();
+        if ("order".equals(mPayFrom)||mPayFromOrder) {
+            mRelativeLayout.setVisibility(View.GONE);
+            mSettingGrade.setClickable(false);
+            mSettingSubject.setClickable(false);
+        } else {
+            mRelativeLayout.setVisibility(View.VISIBLE);
+            mSettingGrade.setClickable(true);
+            mSettingSubject.setClickable(true);
+        }
+
         mRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -157,18 +169,24 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPayFrom = "";
+    }
 
     private void initIntentDate() {
         mCoursePriceUuid = getIntent().getStringExtra("coursePriceUuid");
         mTvCourseName.setText(getIntent().getStringExtra("coursePricePackageName"));
         mPayFrom = getIntent().getStringExtra("mPayFrom");
+        mPayFromOrder = getIntent().getBooleanExtra("mPayFromOrder", false);
         //原价 originalPrice
         mOriginalPrice = getIntent().getLongExtra("originalPrice", 0);
         //现价
         mNowPrice = getIntent().getLongExtra("nowPrice", 0);
         //优惠
         mSpecialPrice = getIntent().getLongExtra("specialPrice", 0);
-        if ("order".equals(mPayFrom)) {
+        if ("order".equals(mPayFrom)||mPayFromOrder) {
             mRelativeLayout.setVisibility(View.GONE);
             mSettingGrade.setClickable(false);
             mSettingSubject.setClickable(false);
@@ -323,7 +341,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                     return;
                 }
                 if ("order".equals(mPayFrom)) {
-                    mPresenter.getOrderPingppPayment(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
+                    mPresenter.getOrderPingppPaymentAlipay(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 } else {
                     mPresenter.getPingppPaymentByJsonAlipay(mCoursePriceUuid, payMethod, mCoupon.getText().toString());
                 }
@@ -385,6 +403,19 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 mPresenter.getBaiduPay(mCoursePriceUuid, mCoupon.getText().toString(),name,phone);
             }
         }
+        //订单
+        if (requestCode == PENDINTENT
+                &&data!=null&&mRelativeLayout!=null
+                &&mSettingGrade!=null&&mSettingSubject!=null) {
+            mCoursePriceUuid = data.getStringExtra("coursePriceUuid");
+            mPayFrom = data.getStringExtra("mPayFrom");
+            if ("order".equals(mPayFrom)||mPayFromOrder) {
+                mRelativeLayout.setVisibility(View.GONE);
+                mSettingGrade.setClickable(false);
+                mSettingSubject.setClickable(false);
+            }
+
+        }
     }
 
     public void showMsg(String title, String msg1, String msg2) {
@@ -395,15 +426,15 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             } else {
                 dialog.show();
             }
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mPresenter.getPingPayStatus(mChargeId);
-                }
-            }, 1000);
         }else {
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.getPingPayStatus(mChargeId);
+            }
+        }, 300);
     }
 
     @Override
@@ -420,8 +451,15 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             mToOrderSuceIntent.putExtra("payMethod", payMethod);
             mToOrderSuceIntent.putExtra("mPayFrom", mPayFrom);
             startActivity(mToOrderSuceIntent);
+        } else if (data.getPayStatus() == 0) {
+            Intent pendIntent = new Intent(this, MineOrdersActivity.class);
+            pendIntent.putExtra("pendingPay", true);
+            pendIntent.putExtra("jumpFrom", true);
+//            startActivity(pendIntent);
+            startActivityForResult(pendIntent,PENDINTENT);
         } else {
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -433,4 +471,10 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
         }
     }
 
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

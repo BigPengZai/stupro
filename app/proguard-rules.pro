@@ -222,12 +222,12 @@ public static final ** CREATOR;
 }
 
 #（可选）避免Log打印输出
-#-assumenosideeffects class android.util.Log {
-#   public static *** v(...);
-#   public static *** d(...);
-#   public static *** i(...);
-#   public static *** w(...);
-#}
+-assumenosideeffects class android.util.Log {
+   public static *** v(...);
+   public static *** d(...);
+   public static *** i(...);
+   public static *** w(...);
+}
 #微信分享
 -keep class com.tencent.mm.opensdk.** {
    *;

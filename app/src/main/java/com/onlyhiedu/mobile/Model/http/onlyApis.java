@@ -505,11 +505,23 @@ public interface onlyApis {
     Flowable<onlyHttpResponse<OrderList>> getOrderList(@Query("payStatus") String payStatus, @Query("pageNo") int pageNo);
 
     /**
-     * 订单 Ping++支付
+     * 订单 Ping++支付 wx
      */
     @FormUrlEncoded
     @POST("client/coursepay/orderPingppPay")
     Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
+
+
+
+    /**
+     * 订单 Ping++支付 alipay
+     */
+    @FormUrlEncoded
+    @POST("client/coursepay/orderPingppPay")
+    Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> getOrderPingPayAliPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
+
+
+
 
     /**
      * 订单 百度分期直接支付
