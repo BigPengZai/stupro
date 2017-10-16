@@ -222,8 +222,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(LineBean event) {
-        event.boardWidth = mDrawView.getWidth();
-        event.boardHeight = mDrawView.getHeight();
+        event.boardWidth = mPresenter.mCurrentBoardWidth;
+        event.boardHeight = mPresenter.mCurrentBoardHeight;
         if (mGson == null) {
             mGson = new Gson();
         }
@@ -1076,6 +1076,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
+
             mDrawView.restartDrawing();
             mDrawView.setLayoutParams(mDrawViewFullP);
             mImageCourseWare.setLayoutParams(mDrawViewFullP);

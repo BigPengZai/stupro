@@ -32,6 +32,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.agore.openvcall.ui.ChatPresenter;
+
 /**
  * Created by Ing. Oscar G. Medina Cruz on 06/11/2016.
  * <p>
@@ -255,6 +257,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     float touchX2 = 0;
     float touchY2 = 0;
 
+
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -265,7 +268,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
             switch (motionEvent.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
+                    sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "|");
                     setDrawingMode(DrawingMode.values()[0]);
                     setDrawingTool(DrawingTool.values()[0]);
                     eventActionDown2(touchX, touchY);
@@ -275,7 +278,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                 case MotionEvent.ACTION_MOVE:
                     setDrawingMode(DrawingMode.values()[0]);
                     setDrawingTool(DrawingTool.values()[0]);
-                    sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
+                    sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "|");
 
                     if (Math.abs(touchX2 - touchX) > 5 || Math.abs(touchY2 - touchY) > 5) {
                         isMoved = true;
@@ -287,7 +290,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                     if (isMoved) {
                         setDrawingMode(DrawingMode.values()[0]);
                         setDrawingTool(DrawingTool.values()[0]);
-                        sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
+                        sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "|");
                         eventActionUp(motionEvent.getX(), motionEvent.getY());
 
                         LineBean lineBean = new LineBean();

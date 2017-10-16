@@ -40,6 +40,8 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public int mBoardWidth;
     public int mBoardHeight;
 
+    public int mCurrentBoardWidth;
+    public int mCurrentBoardHeight;
 
     public static final String AfterJoin = "14";
 
@@ -295,6 +297,8 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             JSONObject jsonObject = new JSONObject(methodparam);
             mBoardWidth = jsonObject.getInt("boardWidth");
             mBoardHeight = jsonObject.getInt("boardHeight");
+            mCurrentBoardWidth = mBoardWidth;
+            mCurrentBoardHeight = mBoardHeight;
             activity.setBoardViewLayoutParams(mBoardWidth, mBoardHeight);
 
 
