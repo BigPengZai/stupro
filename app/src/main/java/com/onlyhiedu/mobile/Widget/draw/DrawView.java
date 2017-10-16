@@ -251,6 +251,10 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
      * @param motionEvent
      * @return
      */
+    private boolean isMoved;
+    float touchX2 = 0;
+    float touchY2 = 0;
+
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -258,34 +262,43 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
         float touchY = motionEvent.getY() / mZoomFactor + mCanvasClipBounds.top;
 
         if (motionEvent.getPointerCount() == 1) {
+
             switch (motionEvent.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
                     setDrawingMode(DrawingMode.values()[0]);
                     setDrawingTool(DrawingTool.values()[0]);
-
                     eventActionDown2(touchX, touchY);
-
+                    touchX2 = motionEvent.getX() / mZoomFactor + mCanvasClipBounds.left;
+                    touchY2 = motionEvent.getY() / mZoomFactor + mCanvasClipBounds.top;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     setDrawingMode(DrawingMode.values()[0]);
                     setDrawingTool(DrawingTool.values()[0]);
                     sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
+
+                    if (Math.abs(touchX2 - touchX) > 5 || Math.abs(touchY2 - touchY) > 5) {
+                        isMoved = true;
+                    }
+
                     eventActionMove(touchX, touchY);
                     break;
                 case MotionEvent.ACTION_UP:
-                    setDrawingMode(DrawingMode.values()[0]);
-                    setDrawingTool(DrawingTool.values()[0]);
-                    sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
-                    eventActionUp(motionEvent.getX(), motionEvent.getY());
+                    if (isMoved) {
+                        setDrawingMode(DrawingMode.values()[0]);
+                        setDrawingTool(DrawingTool.values()[0]);
+                        sb.append((int) (touchX + 0.5) + "," + (int) (touchY + 0.5) + "|");
+                        eventActionUp(motionEvent.getX(), motionEvent.getY());
 
-                    LineBean lineBean = new LineBean();
-                    lineBean.points = sb.toString();
+                        LineBean lineBean = new LineBean();
+                        lineBean.points = sb.toString();
+                        lineBean.drawMode = "01";
+                        lineBean.lineWidth = (int) (mDrawWidth + 0.5);
+                        lineBean.color = "(0,0,0)";
+                        EventBus.getDefault().post(lineBean);
+                        isMoved = false;
+                    }
                     sb.delete(0, sb.length());
-                    lineBean.drawMode = "01";
-                    lineBean.lineWidth = (int) (mDrawWidth + 0.5);
-                    lineBean.color = "(0,0,0)";
-                    EventBus.getDefault().post(lineBean);
                     break;
                 default:
                     return false;

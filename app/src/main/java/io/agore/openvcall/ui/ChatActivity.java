@@ -227,26 +227,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mGson == null) {
             mGson = new Gson();
         }
-        String[] split = event.points.split("[|]");
 
-        String[] xy = split[0].split(","); //第一个坐标
-        String[] xy2 = split[split.length - 1].split(","); //最后一个坐标
-
-        int x = Integer.valueOf(xy[0]);
-        int y = Integer.valueOf(xy[1]);
-
-        int x2 = Integer.valueOf(xy2[0]);
-        int y2 = Integer.valueOf(xy2[1]);
-
-        if (Math.abs(x2 - x) > 5 || Math.abs(y2 - y) > 5) {
-            String s = mGson.toJson(event);
-            BoardBean boardBean = new BoardBean();
-            boardBean.methodtype = "01";
-            boardBean.methodparam = s;
-            boardBean.scaling = "";
-            mPresenter.add(event.drawMode, event.points, Color.BLACK, event.lineWidth, null);
-            m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendDrawLine");
-        }
+        String s = mGson.toJson(event);
+        BoardBean boardBean = new BoardBean();
+        boardBean.methodtype = "01";
+        boardBean.methodparam = s;
+        boardBean.scaling = "";
+        mPresenter.add(event.drawMode, event.points, Color.BLACK, event.lineWidth, null);
+        m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendDrawLine");
+//        }
     }
 
     @Override
@@ -684,7 +673,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         switch (boardBean.methodtype) {
                             case AfterJoin:
                                 mImageCourseWare.setImageResource(R.drawable.transparent);
+                                long l = System.currentTimeMillis();
                                 mPresenter.AfterJoin(boardBean.methodparam, ChatActivity.this, mDrawView);
+                                Log.d("xwc", System.currentTimeMillis() - l + "");
                                 break;
                             case PEN:
                                 mPresenter.draw2(boardBean.methodparam, mDrawView, ChatActivity.this);

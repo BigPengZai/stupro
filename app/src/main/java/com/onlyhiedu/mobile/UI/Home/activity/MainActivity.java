@@ -39,6 +39,7 @@ import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
+import com.onlyhiedu.mobile.UI.Home.fragment.SmallClassFragment;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -65,6 +66,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     private ClassFragment mClassFragment;
     private HomeFragment mHomeFragment;
     private MeFragment mMeFragment;
+    private SmallClassFragment mSmallClassFragment;
     // user logged into another device
     public boolean isConflict = false;
     // user account was removed
@@ -129,6 +131,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
         mHomeFragment = new HomeFragment();
+        mSmallClassFragment = new SmallClassFragment();
         conversationListFragment = new ConversationListFragment();
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
 //   IM     showExceptionDialogFromIntent(getIntent());
@@ -136,10 +139,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -180,16 +183,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
+        if (item.getItemId() == R.id.four) {
+            showHideFragment(mSmallClassFragment);
+        }
+
         return true;
     }
-
-
-
-
-
-
-
-
 
 
     @Override

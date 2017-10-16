@@ -178,17 +178,30 @@ public class RetrofitHelper {
         return sOnlyApis.updateExamArea(grade);
     }
 
+    //1V1 未完成课程列表
     public Flowable<onlyHttpResponse<CourseList>> fetchGetNoStartCourseList(int page) {
         return sOnlyApis.getNoStartCourseList(page);
+    }
+
+    //1VN 未完成课程列表
+    public Flowable<onlyHttpResponse<CourseList>> fetchGetNoEndCourseList(int page) {
+        return sOnlyApis.getNoEndCourseList(page);
+    }
+
+    // 1V1 已完成课程列表
+    public Flowable<onlyHttpResponse<CourseList>> fetchGetEndCourseList(int page) {
+        return sOnlyApis.getEndCourseList(page);
+    }
+    // 1VN 已完成课程列表
+    public Flowable<onlyHttpResponse<CourseList>> fetchGetCourseRecordList(int page) {
+        return sOnlyApis.getCourseRecordList(page);
     }
 
     public Flowable<onlyHttpResponse<RoomInfo>> fetchGetRoomInfoList(String uuid) {
         return sOnlyApis.getRoomInfoList(uuid);
     }
 
-    public Flowable<onlyHttpResponse<CourseList>> fetchGetEndCourseList(int page) {
-        return sOnlyApis.getEndCourseList(page);
-    }
+
 
     public Flowable<onlyHttpResponse> fetchUpdatePassword(String oldPassword, Long timestamp, String newPassword) {
         return sOnlyApis.updatePassword(oldPassword, timestamp, newPassword);

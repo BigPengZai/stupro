@@ -20,8 +20,8 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Course.activity.EvaluateActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
-import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
-import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
+import com.onlyhiedu.mobile.UI.Home.presenter.SmallCoursePresenter;
+import com.onlyhiedu.mobile.UI.Home.presenter.contract.SmallCourseContract;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -42,14 +42,14 @@ import io.agore.openvcall.ui.ChatActivity2;
  * Created by Administrator on 2017/3/1.
  */
 
-public class CourseFragment extends BaseFragment<CoursePresenter>
+public class SmallCourseFragment extends BaseFragment<SmallCoursePresenter>
         implements
         View.OnClickListener,
         BaseRecyclerAdapter.OnItemClickListener,
-        CourseContract.View,
+        SmallCourseContract.View,
         RecyclerRefreshLayout.SuperRefreshLayoutListener {
 
-    public static final String TAG = CourseFragment.class.getSimpleName();
+    public static final String TAG = SmallCourseFragment.class.getSimpleName();
 
 
     private CourseFragmentAdapter mAdapter;

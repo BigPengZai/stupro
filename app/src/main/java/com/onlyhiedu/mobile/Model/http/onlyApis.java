@@ -138,10 +138,26 @@ public interface onlyApis {
     @GET("client/student/noEndCourseV1List")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
 
+    /**
+     * 获取学生课程列表1VN
+     * @param page
+     * @return
+     */
+    @GET("client/student/noEndCourseList")
+    Flowable<onlyHttpResponse<CourseList>> getNoEndCourseList(@Query("pageNo") int page);
+
+
     //课程记录 已经完成
     @GET("client/student/getCourseRecordV1List")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
 
+    /**
+     * 一对多课程记录 已经完成
+     * @param page
+     * @return
+     */
+    @GET("client/student/getCourseRecordList")
+    Flowable<onlyHttpResponse<CourseList>> getCourseRecordList(@Query("pageNo") int page);
     /**
      * 获取教室信息
      *

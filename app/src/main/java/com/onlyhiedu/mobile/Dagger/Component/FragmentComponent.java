@@ -8,7 +8,9 @@ import com.onlyhiedu.mobile.UI.Course.fragment.CourseDiscountFragment;
 import com.onlyhiedu.mobile.UI.Emc.ContactListFragment;
 import com.onlyhiedu.mobile.UI.Emc.EaseConversationListFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseFragment;
+import com.onlyhiedu.mobile.UI.Home.fragment.SmallCourseFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.CourseRecordFragment;
+import com.onlyhiedu.mobile.UI.Home.fragment.SmallCourseRecordFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.OrderFragment;
@@ -38,4 +40,8 @@ public interface FragmentComponent {
     void inject(CourseDiscountFragment courseDiscountFragment);
 
     void inject(OrderFragment fragment);
+
+    void inject(SmallCourseFragment fragment);
+
+    void inject(SmallCourseRecordFragment fragment);
 }

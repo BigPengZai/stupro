@@ -1,13 +1,10 @@
 package com.onlyhiedu.mobile.UI.Home.fragment;
 
+
 import android.Manifest;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,16 +14,14 @@ import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Course.activity.EvaluateActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
-import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
-import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
-import com.onlyhiedu.mobile.Utils.DialogListener;
-import com.onlyhiedu.mobile.Utils.DialogUtil;
+import com.onlyhiedu.mobile.UI.Home.presenter.SmallCoursePresenter;
+import com.onlyhiedu.mobile.UI.Home.presenter.contract.SmallCourseContract;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,28 +30,19 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
-import io.agore.openvcall.ui.ChatActivity;
-import io.agore.openvcall.ui.ChatActivity2;
 
 /**
- * Created by Administrator on 2017/3/1.
+ * Created by xwc on 2017/3/1.
  */
 
-public class CourseFragment extends BaseFragment<CoursePresenter>
+public class SmallCourseRecordFragment extends BaseFragment<SmallCoursePresenter>
         implements
         View.OnClickListener,
         BaseRecyclerAdapter.OnItemClickListener,
-        CourseContract.View,
+        SmallCourseContract.View,
         RecyclerRefreshLayout.SuperRefreshLayoutListener {
 
-    public static final String TAG = CourseFragment.class.getSimpleName();
-
-
     private CourseFragmentAdapter mAdapter;
-    private Intent mIntent;
-    private CourseList.ListBean mItem;
-    private Dialog mDialog;
-
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -64,7 +50,6 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     RecyclerRefreshLayout mSwipeRefresh;
     @BindView(R.id.error_layout)
     ErrorLayout mErrorLayout;
-
 
     @Override
     protected void initInject() {
@@ -88,6 +73,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         EventBus.getDefault().unregister(this);
     }
 
+
     @Override
     protected void initView() {
         mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
@@ -100,20 +86,10 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
         mAdapter.setOnItemClickListener(this);
-        mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
-            @Override
-            public void onLongClick(int position, long itemId) {
-                Intent intent = new Intent(mContext, EvaluateActivity.class);
-                intent.putExtra(EvaluateActivity.courseUuidKey, mAdapter.getItem(position).getUuid());
-                startActivity(intent);
-            }
-        });
     }
-
 
     @Override
     protected void initData() {
-
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
@@ -130,15 +106,14 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         }
     }
 
-
     @Override
     public void onRefreshing() {
-        mPresenter.getCourseList(true);
+        mPresenter.getEndCourseList(true);
     }
 
     @Override
     public void onLoadMore() {
-        mPresenter.getCourseList(false);
+        mPresenter.getEndCourseList(false);
     }
 
     @Override
@@ -150,7 +125,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
         if (isRefresh) {  //刷新
             mSwipeRefresh.setRefreshing(false);
-            if (data.size() == 0) { //没有数据
+            if (data == null || data.size() == 0) { //没有数据
                 mErrorLayout.isLlPhoneVisibility(View.VISIBLE);
                 mErrorLayout.setState(ErrorLayout.NODATA);
             } else {
@@ -166,44 +141,26 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
             } else {
                 mSwipeRefresh.setOnLoading(false);  //设置可加加载
             }
-
         }
-
     }
-
 
     @Override
     public void showCourseListFailure() {
         if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
-        mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
+        mErrorLayout.setState(ErrorLayout.NODATA);
     }
-
-    @Override
-    public void onClick(View view) {
-        mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
-        mPresenter.getCourseList(true);
-    }
-
 
     @Override
     public void showNetWorkError() {
         mErrorLayout.setState(ErrorLayout.NETWORK_ERROR);
         mSwipeRefresh.setRefreshing(false);
-        DialogUtil.dismiss(mDialog);
     }
 
     @Override
-    public void onItemClick(int position, long itemId) {
-        mItem = mAdapter.getItem(position);
-        Log.d(TAG, "uuid:" + mItem.getUuid());
-        if (mItem != null && mItem.isClickAble) {
-            mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
-            mPresenter.getRoomInfoList(mItem.getUuid());
-        } else {
-            Toast.makeText(mContext, "课程还没有开始哦", Toast.LENGTH_SHORT).show();
-        }
+    public void showRoomInfoSucess(RoomInfo roomInfo) {
 
     }
+
 
     View.OnClickListener phoneListener = new View.OnClickListener() {
         @Override
@@ -213,58 +170,21 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         }
     };
 
+    @Override
+    public void onClick(View view) {
+        mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
+        mPresenter.getEndCourseList(true);
+    }
 
     @Override
-    public void showRoomInfoSucess(RoomInfo roomInfo) {
-        if (roomInfo != null && mItem != null) {
-            DialogUtil.dismiss(mDialog);
-       /*     mIntent = new Intent(mActivity, ChatActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("roomInfo", roomInfo);
-            bundle.putSerializable("ListBean", mItem);
-            Log.d(TAG, "uuid:" + mItem.getUuid());
-            mIntent.putExtras(bundle);
-            mActivity.startActivity(mIntent);*/
-            DialogUtil.showOnlyAlert(mContext,
-                    "提示"
-                    , "A  B"
-                    , "A"
-                    , "RobotPen"
-                    , true, true, new DialogListener() {
-                        @Override
-                        public void onPositive(DialogInterface dialog) {
-                            mIntent = new Intent(mActivity, ChatActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("roomInfo", roomInfo);
-                            bundle.putSerializable("ListBean", mItem);
-                            Log.d(TAG, "uuid:" + mItem.getUuid());
-                            mIntent.putExtras(bundle);
-                            mActivity.startActivity(mIntent);
-//                            startActivityForResult(mIntent, Activity.RESULT_FIRST_USER);
-                        }
-
-                        @Override
-                        public void onNegative(DialogInterface dialog) {
-                            mIntent = new Intent(mActivity, ChatActivity2.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("roomInfo", roomInfo);
-                            bundle.putSerializable("ListBean", mItem);
-                            Log.d(TAG, "uuid:" + mItem.getUuid());
-                            mIntent.putExtras(bundle);
-                            mActivity.startActivity(mIntent);
-                        }
-                    }
-            );
-
-
-        }
+    public void onItemClick(int position, long itemId) {
+//        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
+        MobclickAgent.onEvent(mContext, "item_finish_item");
     }
 
 
     @Override
     public void showError(String msg) {
-        DialogUtil.dismiss(mDialog);
         Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
     }
-
 }
