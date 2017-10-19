@@ -341,9 +341,12 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
     public void draw2(String methodparam, DrawView view, ChatActivity activity) {
         try {
             JSONObject jsonObject = new JSONObject(methodparam);
-            if (mFullScreenRate == 0.0) {
-                int boardWidth = jsonObject.getInt("boardWidth");
-                int boardHeight = jsonObject.getInt("boardHeight");
+
+            int boardWidth = jsonObject.getInt("boardWidth");
+            int boardHeight = jsonObject.getInt("boardHeight");
+            if (mCurrentBoardHeight != boardHeight && mCurrentBoardWidth != boardWidth) {
+                mCurrentBoardHeight = boardHeight;
+                mCurrentBoardWidth = boardWidth;
                 activity.setBoardViewLayoutParams(boardWidth, boardHeight);
             }
 
@@ -405,6 +408,8 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             JSONObject object = new JSONObject(methodparam);
             mBoardWidth = object.getInt("boardWidth");
             mBoardHeight = object.getInt("boardHeight");
+            mCurrentBoardWidth = mBoardWidth;
+            mCurrentBoardHeight = mBoardHeight;
             activity.setBoardViewLayoutParams(mBoardWidth, mBoardHeight);
         } catch (JSONException e) {
             e.printStackTrace();
