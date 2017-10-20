@@ -192,6 +192,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
 
                 Log.d(TAG, "coursePriceUuid:"+mAdapter.getItem(position).orderUuid);
                 startActivity(mPayIntent);
+                getActivity().finish();
             }
         }
     }

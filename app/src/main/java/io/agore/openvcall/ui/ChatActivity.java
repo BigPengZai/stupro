@@ -712,6 +712,22 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         @Override
                         public void run() {
                             Toast.makeText(mContext, "同意老师下课，退出教室了。", Toast.LENGTH_SHORT).show();
+                           /* DialogUtil.showOnlyAlert(ChatActivity.this,
+                                    "提示"
+                                    , "对方同意了您的下课请求"
+                                    , "离开教室"
+                                    , ""
+                                    , false, false, new DialogListener() {
+                                        @Override
+                                        public void onPositive(DialogInterface dialog) {
+
+                                        }
+
+                                        @Override
+                                        public void onNegative(DialogInterface dialog) {
+                                        }
+                                    }
+                            );*/
                         }
                     });
                     finishClassRoom();

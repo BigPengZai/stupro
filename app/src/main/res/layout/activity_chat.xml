@@ -17,17 +17,40 @@
             android:layout_weight="3"
             android:orientation="vertical">
             <RelativeLayout
-                android:id="@+id/rel_tea"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:background="@color/bcd_gray1">
-                <ImageView
+                <RelativeLayout
+                    android:id="@+id/rel_tea"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:background="@color/bcd_gray1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/bg_class_default"/>
+                </RelativeLayout>
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@mipmap/bg_class_default"/>
+                    android:layout_alignParentBottom="true"
+                    android:text="视频打开"/>
+                <TextView
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_video"
+                    android:id="@+id/tv_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="音频打开"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/rel_stu"
@@ -194,12 +217,12 @@
     <!-- IM   比例 横 4-->
     <LinearLayout
         android:id="@+id/ll_msg"
-        android:visibility="gone"
         android:layout_width="210dp"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:background="#80000000"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"
@@ -235,7 +258,6 @@
 
 
     </LinearLayout>
-
 
 
     <RelativeLayout
