@@ -90,12 +90,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private String mUid;
     private int mScreenWidth;
 
-    @BindView(ll_video)
-    LinearLayout mLlVideo;
     @BindView(R.id.scrollView)
     MyScrollView mScrollView;
-    @BindView(R.id.rl_bg)
-    RelativeLayout mRl_bg;
+
     @BindView(R.id.draw_view)
     DrawView mDrawView;
     @BindView(R.id.image_course_ware)
@@ -103,7 +100,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.chronometer)
     Chronometer mChronometer;
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    RelativeLayout mToolbar;
     @BindView(R.id.tv_total_room)
     TextView mTv_Total_Room;
     @BindView(R.id.image_full_screen)
@@ -481,10 +478,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void setToolBar() {
         mToolbar.setBackgroundResource(R.color.c33);
-        setSupportActionBar(mToolbar);
-        mToolbar.setTitle("");
-        mToolbar.setNavigationIcon(R.drawable.back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsBack) {
@@ -1074,7 +1068,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
      */
     public void setBoardViewLayoutParams(boolean flag) {
         if (flag) {
-            mLlVideo.setVisibility(View.VISIBLE);
+            mRel_Stu.setVisibility(View.VISIBLE);
+            mRel_Tea.setVisibility(View.VISIBLE);
+
+
 
             mSwitch = false;
             mPresenter.setFullScreen(mSwitch);
@@ -1088,7 +1085,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mImageFullScreen.setImageResource(R.mipmap.ic_full_screen);
 
         } else {
-            mLlVideo.setVisibility(View.GONE);
+            mRel_Stu.setVisibility(View.GONE);
+            mRel_Tea.setVisibility(View.GONE);
 
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
@@ -1226,7 +1224,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 Log.d(TAG, "加入成功后uid: " + uid);
-                mRl_bg.setVisibility(View.GONE);
                 if (isFinishing()) {
                     return;
                 }
@@ -1250,7 +1247,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mRl_bg.setVisibility(View.GONE);
                 if (uid == mListBean.channelTeacherId) {
                     isTeacherJoined = true;
 //                    mDrawView.restartDrawing();

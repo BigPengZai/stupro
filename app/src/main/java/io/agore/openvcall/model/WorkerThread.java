@@ -247,11 +247,11 @@ public class WorkerThread extends Thread {
             } catch (Exception e) {
             }
             mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
-            //关闭视频模式 (disableVideo)
+            //
             mRtcEngine.enableVideo();
             mRtcEngine.setDefaultAudioRoutetoSpeakerphone(true);
             mRtcEngine.setEnableSpeakerphone(true);
-            mRtcEngine.setSpeakerphoneVolume(180);
+            mRtcEngine.setSpeakerphoneVolume(90);
             mRtcEngine.setLogFile(Environment.getExternalStorageDirectory()
                     + File.separator + mContext.getPackageName() + "/log/agora-rtc.log");
         }

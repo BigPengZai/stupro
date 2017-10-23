@@ -1,165 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@color/c33"
-             android:keepScreenOn="true">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/c33"
+    android:keepScreenOn="true"
+
+>
+    <!-- android:background="@color/c33"-->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0"
+    />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_v1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3"
+    />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_v2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="1.0"
+    />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_h0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0"
+    />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"
+    />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_h1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0"
+    />
+    <RelativeLayout
+        android:id="@+id/rel_tea"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="3dp"
+        android:background="@color/bcd_gray2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
+        app:layout_constraintDimensionRatio="1:1"
+    >
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_margin="3dp"
+        android:id="@+id/rel_stu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/cmbkb_red"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
+
+    >
+    </RelativeLayout>
+    <!--白版  比例 横 5-->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:keepScreenOn="true"
-        android:orientation="horizontal">
-        <!--上课  比例 横 3.5-->
-        <LinearLayout
-            android:id="@+id/ll_video"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical">
-            <RelativeLayout
+        android:id="@+id/ll_board"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/agora_blue"
+        android:orientation="vertical"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_v1"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_v2"
+    >
+        <!--白版-->
+        <com.onlyhiedu.mobile.Widget.MyScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="@color/bcd_gray1">
-                <RelativeLayout
-                    android:id="@+id/rel_tea"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:background="@color/bcd_gray1">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/bg_class_default"/>
-                </RelativeLayout>
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/tv_video"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:text="视频打开"/>
-                <TextView
-                    android:visibility="gone"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/tv_video"
-                    android:id="@+id/tv_audio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:text="音频打开"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/rel_stu"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="@color/bcd_gray1">
+                android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@mipmap/bg_class_default"/>
-            </RelativeLayout>
-        </LinearLayout>
-        <!--白版  比例 横 5-->
-        <LinearLayout
-            android:id="@+id/ll_board"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:orientation="vertical">
-            <!--白版-->
-            <com.onlyhiedu.mobile.Widget.MyScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <FrameLayout
+                    android:id="@+id/image_course_ware"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/image_course_ware"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scaleType="fitXY"/>
-
-                    <com.onlyhiedu.mobile.Widget.draw.DrawView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/draw_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        app:dv_draw_alpha="255"
-                        app:dv_draw_anti_alias="true"
-                        app:dv_draw_color="@color/black"
-                        app:dv_draw_corners="round"
-                        app:dv_draw_dither="true"
-                        app:dv_draw_font_family="default_font"
-                        app:dv_draw_font_size="12"
-                        app:dv_draw_mode="draw"
-                        app:dv_draw_style="stroke"
-                        app:dv_draw_tool="pen"
-                        app:dv_draw_width="5"/>
-                </FrameLayout>
-
-            </com.onlyhiedu.mobile.Widget.MyScrollView>
-        </LinearLayout>
-
-
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"/>
+                <com.onlyhiedu.mobile.Widget.draw.DrawView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/draw_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:dv_draw_alpha="255"
+                    app:dv_draw_anti_alias="true"
+                    app:dv_draw_color="@color/black"
+                    app:dv_draw_corners="round"
+                    app:dv_draw_dither="true"
+                    app:dv_draw_font_family="default_font"
+                    app:dv_draw_font_size="12"
+                    app:dv_draw_mode="draw"
+                    app:dv_draw_style="stroke"
+                    app:dv_draw_tool="pen"
+                    app:dv_draw_width="5"/>
+            </FrameLayout>
+        </com.onlyhiedu.mobile.Widget.MyScrollView>
     </LinearLayout>
     <ImageView
         android:id="@+id/image_full_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
         android:padding="@dimen/size_12"
         android:src="@mipmap/ic_full_screen"
-    />
+        app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
     <!--Toolbar-->
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="-50dp"
-        android:background="?attr/colorPrimary"
-        android:elevation="@dimen/elevation"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:gravity="center"
-            android:orientation="horizontal">
-
-
+            android:orientation="horizontal"
+        >
             <Chronometer
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
                 android:textColor="@color/c_F42440"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
                 android:text="/"
                 android:textColor="@color/c_F42440"/>
-
             <TextView
                 android:id="@+id/tv_total_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/size_7"
                 android:text="01:00:00"/>
-
             <TextView
                 android:id="@+id/but_dismiss"
                 android:layout_width="wrap_content"
@@ -172,13 +175,10 @@
                 android:text="我要下课"
                 android:textColor="@color/select_log_out"
                 android:textSize="@dimen/size_16"/>
-
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
                 <TextView
-
                     android:id="@+id/but_im"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -192,7 +192,6 @@
                     android:textColor="@color/im_text_color2"
                     android:textSize="@dimen/size_16"
                     android:visibility="invisible"/>
-
                 <View
                     android:id="@+id/im_point"
                     android:layout_width="10dp"
@@ -200,43 +199,32 @@
                     android:layout_marginLeft="75dp"
                     android:background="@drawable/im_oval"
                     android:visibility="gone"/>
-
             </RelativeLayout>
-
-
             <Switch android:id="@+id/switch_btn" android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:text="画笔"/>
-
         </LinearLayout>
-
-
-    </android.support.v7.widget.Toolbar>
-
+    </RelativeLayout>
     <!-- IM   比例 横 4-->
     <LinearLayout
         android:id="@+id/ll_msg"
-        android:layout_width="210dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:background="#80000000"
         android:orientation="vertical"
-        android:visibility="gone">
-
+        android:visibility="gone"
+    >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:transcriptMode="normal"/>
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <EditText
                 android:id="@+id/edit"
                 android:layout_width="0dp"
@@ -245,7 +233,6 @@
                 android:background="@color/white"
                 android:maxLines="2"
                 android:scrollbars="vertical"/>
-
             <TextView
                 android:id="@+id/tv_send"
                 android:layout_width="45dp"
@@ -253,24 +240,8 @@
                 android:background="@color/c_D8D8D8"
                 android:gravity="center"
                 android:text="发送"/>
-
         </LinearLayout>
-
-
     </LinearLayout>
 
+</android.support.constraint.ConstraintLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_bg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/iv_loading"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-</FrameLayout>
