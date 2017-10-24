@@ -9,7 +9,6 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -77,7 +76,6 @@ import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
 import io.agore.openvcall.model.User;
 
-import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 import static io.agore.openvcall.ui.ChatPresenter.AfterJoin;
 import static io.agore.openvcall.ui.ChatPresenter.PEN;
@@ -1087,7 +1085,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         } else {
             mRel_Stu.setVisibility(View.GONE);
             mRel_Tea.setVisibility(View.GONE);
-
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
 
