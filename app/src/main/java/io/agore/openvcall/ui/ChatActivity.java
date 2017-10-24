@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -88,6 +89,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private String mUid;
     private int mScreenWidth;
 
+    @BindView(R.id.ll_board)
+    LinearLayout mLl_Board;
+
+
     @BindView(R.id.scrollView)
     MyScrollView mScrollView;
 
@@ -120,6 +125,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     RelativeLayout mRel_Tea;
     @BindView(R.id.rel_stu)
     RelativeLayout mRel_Stu;
+
+    @BindView(R.id.tv_video_local)
+    TextView mTv_Video_Local;
+    @BindView(R.id.tv_video_mute)
+    TextView mTv_Video_Mute;
+    @BindView(R.id.tv_audio_local)
+    TextView mTv_Audio_Local;
+    @BindView(R.id.tv_audio_mute)
+    TextView mTv_Audio_Mute;
 
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -158,8 +172,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private int mUpValue = 3;
     private SurfaceView mStuSurfView;
 
+
+
     @Override
     protected void initInject() {
+
         getActivityComponent().inject(this);
     }
 
@@ -175,6 +192,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mScreenWidth = ScreenUtil.getScreenWidth(this);
+
         mRequestManager = Glide.with(this);
 
         float v = (float) mScreenWidth * (float) 0.7;
@@ -529,6 +547,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     private void finishClassRoom() {
         if (m_agoraAPI != null) {
+            m_agoraAPI.channelLeave(mRoomInfo.getSignallingChannelId());
             m_agoraAPI.logout();
             Log.d(TAG, "信令退出");
         }
@@ -566,6 +585,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     }
                 });
 
+            }
+
+            @Override
+            public void onChannelLeaved(String channelID, int ecode) {
+                super.onChannelLeaved(channelID, ecode);
+                Log.d(TAG, "离开信令频道：" + channelID);
             }
 
             @Override
@@ -803,6 +828,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         initRoom();
                     }
                 });
+            }
+
+            //当有用户加入频道触发此回调。
+            @Override
+            public void onChannelUserJoined(String account, int uid) {
+                Log.d(TAG, "当有信令用户加入频道account:" + account + "uid:" + uid);
+            }
+
+            @Override
+            public void onChannelQueryUserNumResult(String channelID, int ecode, int num) {
+                Log.d(TAG, "查询的用户数量num:" + num);
             }
 
             @Override
@@ -1068,9 +1104,20 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (flag) {
             mRel_Stu.setVisibility(View.VISIBLE);
             mRel_Tea.setVisibility(View.VISIBLE);
-
-
-
+            mTv_Video_Local.setVisibility(View.VISIBLE);
+            mTv_Video_Mute.setVisibility(View.VISIBLE);
+            mTv_Audio_Local.setVisibility(View.VISIBLE);
+            mTv_Audio_Mute.setVisibility(View.VISIBLE);
+  /*    app:layout_constraintLeft_toLeftOf="@+id/guideline_v1"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_v2"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h0"*/
+            ConstraintLayout.LayoutParams constraint = new ConstraintLayout.LayoutParams(0, 0);
+            constraint.leftToRight = R.id.guideline_v1;
+            constraint.rightToLeft = R.id.guideline_v2;
+            constraint.bottomToBottom = R.id.guideline_h1;
+            constraint.topToBottom = R.id.guideline_h0;
+            mLl_Board.setLayoutParams(constraint);
             mSwitch = false;
             mPresenter.setFullScreen(mSwitch);
 
@@ -1085,6 +1132,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         } else {
             mRel_Stu.setVisibility(View.GONE);
             mRel_Tea.setVisibility(View.GONE);
+            mTv_Video_Local.setVisibility(View.GONE);
+            mTv_Video_Mute.setVisibility(View.GONE);
+            mTv_Audio_Local.setVisibility(View.GONE);
+            mTv_Audio_Mute.setVisibility(View.GONE);
+            ConstraintLayout.LayoutParams constraint2 = new ConstraintLayout.LayoutParams(0, 0);
+            constraint2.leftToRight = R.id.guideline_v;
+            constraint2.rightToLeft = R.id.guideline_v2;
+            constraint2.bottomToBottom = R.id.guideline_h1;
+            constraint2.topToBottom = R.id.guideline_h0;
+            mLl_Board.setLayoutParams(constraint2);
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
 
@@ -1168,6 +1225,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (m_agoraAPI != null) {
+            m_agoraAPI.channelLeave(mRoomInfo.getSignallingChannelId());
+            m_agoraAPI.logout();
+            Log.d(TAG, "信令退出");
+        }
+        if (mUidsList != null) {
+            mUidsList.clear();
+        }
         stopTimer();
         stopFinishTimer();
         if (mChronometer != null) {

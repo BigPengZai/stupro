@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/c33"
@@ -22,6 +23,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.3"
+    />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_v3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
     />
     <android.support.constraint.Guideline
         android:id="@+id/guideline_v2"
@@ -51,43 +59,85 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="1.0"
     />
+    <!--tea-->
     <RelativeLayout
         android:id="@+id/rel_tea"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="3dp"
-        android:background="@color/bcd_gray2"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
+        android:background="@color/bcd_gray1"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
-        app:layout_constraintDimensionRatio="1:1"
-    >
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h0">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/bg_class_default"/>
     </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_video_mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="视频关闭"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h"/>
+    <TextView
+        android:id="@+id/tv_audio_mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="音频关闭"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h"
+        app:layout_constraintLeft_toRightOf="@+id/tv_video_mute"/>
+    <!--stu-->
     <RelativeLayout
-        android:layout_margin="3dp"
         android:id="@+id/rel_stu"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/cmbkb_red"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_h"
+        android:layout_margin="3dp"
+        android:background="@color/bcd_gray1"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h"
 
     >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/bg_class_default"/>
     </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_video_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="视频关闭"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"/>
+    <TextView
+        android:id="@+id/tv_audio_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="音频关闭"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintLeft_toRightOf="@+id/tv_video_local"/>
     <!--白版  比例 横 5-->
     <LinearLayout
         android:id="@+id/ll_board"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/agora_blue"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_v1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
     >
         <!--白版-->
@@ -131,7 +181,7 @@
         android:src="@mipmap/ic_full_screen"
         app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
-    <!--Toolbar-->
+    <!--Toolbar       -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -206,6 +256,7 @@
                     android:checked="false"
                     android:text="画笔"/>
         </LinearLayout>
+
     </RelativeLayout>
     <!-- IM   比例 横 4-->
     <LinearLayout
@@ -243,6 +294,7 @@
                 android:text="发送"/>
         </LinearLayout>
     </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>
 

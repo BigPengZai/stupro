@@ -12,7 +12,6 @@ public interface AGEventHandler {
     void onUserJoined(int uid, int elapsed);
     void onExtraCallback(int type, Object... data);
 
-
     int EVENT_TYPE_ON_DATA_CHANNEL_MSG = 3;
 
     int EVENT_TYPE_ON_USER_VIDEO_MUTED = 6;
