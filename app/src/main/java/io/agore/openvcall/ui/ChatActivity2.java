@@ -76,7 +76,7 @@ import static com.onlyhiedu.mobile.R.id.ll_video;
 import static com.onlyhiedu.mobile.R.id.whiteBoardView;
 import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 
-public class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEventHandler, ChatContract2.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
+public abstract class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEventHandler, ChatContract2.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
 
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
     public static final String TAG = ChatActivity2.class.getSimpleName();

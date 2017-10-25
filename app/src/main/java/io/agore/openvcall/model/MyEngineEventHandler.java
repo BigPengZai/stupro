@@ -70,12 +70,22 @@ public class MyEngineEventHandler {
             }
         }
 
+        //其他用户 停止/重启视频回调
         @Override
         public void onUserMuteVideo(int uid, boolean muted) {
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
-                handler.onExtraCallback(AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_MUTED, uid, muted);
+                handler.onUserMuteVideo( uid, muted);
+            }
+        }
+        //其他用户 停止/重启音频回调
+        @Override
+        public void onUserMuteAudio(int uid, boolean muted) {
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onUserMuteAudio( uid, muted);
             }
         }
 

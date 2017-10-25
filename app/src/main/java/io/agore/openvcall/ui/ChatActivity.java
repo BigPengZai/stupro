@@ -125,13 +125,17 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     RelativeLayout mRel_Tea;
     @BindView(R.id.rel_stu)
     RelativeLayout mRel_Stu;
-
+    //本地视频流
     @BindView(R.id.tv_video_local)
     TextView mTv_Video_Local;
-    @BindView(R.id.tv_video_mute)
-    TextView mTv_Video_Mute;
+    //本地音频流
     @BindView(R.id.tv_audio_local)
     TextView mTv_Audio_Local;
+
+    //远端视频流
+    @BindView(R.id.tv_video_mute)
+    TextView mTv_Video_Mute;
+    //远端音频流
     @BindView(R.id.tv_audio_mute)
     TextView mTv_Audio_Mute;
 
@@ -171,7 +175,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //向上滑动基数
     private int mUpValue = 3;
     private SurfaceView mStuSurfView;
-
+    private SurfaceView mTeaSurfaceV;
 
 
     @Override
@@ -947,7 +951,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -990,6 +994,89 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     mScrollView.setIntercept(true);
                 }
                 break;
+
+            case R.id.tv_video_local:
+                //本地视频关闭
+                initLocalVideo();
+                break;
+            case R.id.tv_audio_local:
+                //本地音频关闭
+                initLocalAudio();
+                break;
+            case R.id.tv_video_mute:
+                //远端视频
+                initMuteVideo();
+                break;
+            case R.id.tv_audio_mute:
+                //远端音频
+                initMuteAudio();
+                break;
+        }
+    }
+
+    private void initMuteAudio() {
+        if ("音频关闭".equals(mTv_Audio_Mute.getText().toString())) {
+            int i = rtcEngine().muteRemoteAudioStream(mListBean.channelTeacherId, true);
+            if (i == 0) {
+                mTv_Audio_Mute.setText("音频打开");
+            }
+        } else {
+            int i = rtcEngine().muteRemoteAudioStream(mListBean.channelTeacherId, false);
+            if (i == 0) {
+                mTv_Audio_Mute.setText("音频关闭");
+            }
+        }
+    }
+
+    private void initMuteVideo() {
+        if ("视频关闭".equals(mTv_Video_Mute.getText().toString())) {
+            int i = rtcEngine().muteRemoteVideoStream(mListBean.channelTeacherId, true);
+            if (i == 0) {
+                mTv_Video_Mute.setText("视频打开");
+                mRel_Tea.removeAllViews();
+            }
+        } else {
+            int i = rtcEngine().muteRemoteVideoStream(mListBean.channelTeacherId, false);
+            if (i == 0 && mTeaSurfaceV != null) {
+                mTv_Video_Mute.setText("视频关闭");
+                mRel_Tea.addView(mTeaSurfaceV);
+            }
+        }
+    }
+
+    private void initLocalAudio() {
+        if ("音频关闭".equals(mTv_Audio_Local.getText().toString())) {
+            int i = rtcEngine().muteLocalAudioStream(true);
+            if (i == 0) {
+                mTv_Audio_Local.setText("音频打开");
+            }
+        } else {
+            int i = rtcEngine().muteLocalAudioStream(false);
+            if (i == 0) {
+                mTv_Audio_Local.setText("音频关闭");
+            }
+        }
+    }
+
+    private void initLocalVideo() {
+        if ("视频关闭".equals(mTv_Video_Local.getText().toString())) {
+            int i = rtcEngine().muteLocalVideoStream(true);
+            int i1 = rtcEngine().enableLocalVideo(false);
+            if (i == 0 && i1 == 0) {
+                mRel_Stu.removeAllViews();
+                mTv_Video_Local.setText("视频打开");
+            } else {
+                rtcEngine().muteLocalVideoStream(false);
+                rtcEngine().enableLocalVideo(true);
+                mTv_Video_Local.setText("视频关闭");
+            }
+        } else {
+            int i = rtcEngine().muteLocalVideoStream(false);
+            int i1 = rtcEngine().enableLocalVideo(true);
+            if (i == 0 && i1 == 0) {
+                mRel_Stu.addView(mStuSurfView);
+                mTv_Video_Local.setText("视频关闭");
+            }
         }
     }
 
@@ -1258,6 +1345,44 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    //其他用户停止/重启视频回调
+    @Override
+    public void onUserMuteVideo(int uid, boolean muted) {
+        if (uid == mListBean.channelTeacherId) {
+            if (muted) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatActivity.this, "老师关闭视频", Toast.LENGTH_SHORT).show();
+                        mRel_Tea.removeAllViews();
+                    }
+                });
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatActivity.this, "老师打开视频", Toast.LENGTH_SHORT).show();
+                        if (mTeaSurfaceV != null) {
+                            mRel_Tea.addView(mTeaSurfaceV);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onUserMuteAudio(int uid, boolean muted) {
+        if (uid == mListBean.channelTeacherId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(ChatActivity.this, "老师" + (muted ? "静音" : "取消静音"), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     private void initTeaView(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
@@ -1268,14 +1393,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (mUidsList.containsKey(uid)) {
                     return;
                 }
-                SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
-                mUidsList.put(uid, new SoftReference<>(surfaceV));
+                mTeaSurfaceV = RtcEngine.CreateRendererView(getApplicationContext());
+                mUidsList.put(uid, new SoftReference<>(mTeaSurfaceV));
                 Log.d(TAG, "远端下 集合长度：" + mUidsList.size());
-                surfaceV.setZOrderOnTop(false);
-                surfaceV.setZOrderMediaOverlay(false);
+                mTeaSurfaceV.setZOrderOnTop(false);
+                mTeaSurfaceV.setZOrderMediaOverlay(false);
                 //设置远端视频显示属性 (setupRemoteVideo)
-                rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-                mRel_Tea.addView(surfaceV);
+                rtcEngine().setupRemoteVideo(new VideoCanvas(mTeaSurfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+                mRel_Tea.addView(mTeaSurfaceV);
             }
         });
     }
