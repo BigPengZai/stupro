@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.baidu.wallet.api.BaiduWallet;
 import com.bigkoo.pickerview.OptionsPickerView;
+import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.BaseActivity;
 import com.onlyhiedu.mobile.Model.bean.PingPayStatus;
@@ -404,7 +405,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             }
         }
         //订单
-        if (requestCode == PENDINTENT
+      /*  if (requestCode == PENDINTENT
                 &&data!=null&&mRelativeLayout!=null
                 &&mSettingGrade!=null&&mSettingSubject!=null) {
             mCoursePriceUuid = data.getStringExtra("coursePriceUuid");
@@ -415,7 +416,7 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
                 mSettingSubject.setClickable(false);
             }
 
-        }
+        }*/
     }
 
     public void showMsg(String title, String msg1, String msg2) {
@@ -455,8 +456,13 @@ public class CoursePayActivity extends BaseActivity<CoursePayPresenter> implemen
             Intent pendIntent = new Intent(this, MineOrdersActivity.class);
             pendIntent.putExtra("pendingPay", true);
             pendIntent.putExtra("jumpFrom", true);
-//            startActivity(pendIntent);
-            startActivityForResult(pendIntent,PENDINTENT);
+            startActivity(pendIntent);
+            AppManager.getAppManager().finishActivity(CourseDiscountActivity.class);
+            if (mPayFromOrder) {
+                AppManager.getAppManager().finishActivity(MineOrdersActivity.class);
+            }
+            finish();
+//            startActivityForResult(pendIntent,PENDINTENT);
         } else {
             Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
 

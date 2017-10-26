@@ -167,7 +167,26 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
     //去支付按钮
     @Override
     public void onGoPayTextClick(String text, int position) {
-        if ("去支付".equals(text)&&mPendingPay) {
+
+        if ("去支付".equals(text)&&mAdapter.getItem(position).orderStatus == 1) {
+            Intent mPayIntent = new Intent(mContext, CoursePayActivity.class);
+            mPayIntent
+                    .putExtra("originalPrice", (long) Double.parseDouble(mAdapter.getItem(position).originalPrice))
+                    .putExtra("nowPrice", (long) Double.parseDouble(mAdapter.getItem(position).money))
+                    .putExtra("specialPrice", (long) Double.parseDouble(mAdapter.getItem(position).discountPrice))
+                    .putExtra("mPayFrom", "order")
+                    .putExtra("mPayFromOrder", true)
+                    .putExtra("coursePriceUuid", mAdapter.getItem(position).orderUuid)
+                    .putExtra("coursePricePackageName", mAdapter.getItem(position).coursePricePackageName);
+
+            Log.d(TAG, "coursePriceUuid:"+mAdapter.getItem(position).orderUuid);
+            startActivity(mPayIntent);
+
+        }
+
+
+
+        /*if ("去支付".equals(text)&&mPendingPay) {
             Intent intent = new Intent();
             intent
                     .putExtra("originalPrice", (long) Double.parseDouble(mAdapter.getItem(position).originalPrice))
@@ -194,7 +213,7 @@ public class OrderFragment extends BaseFragment<OrdersPresenter> implements Orde
                 startActivity(mPayIntent);
                 getActivity().finish();
             }
-        }
+        }*/
     }
 
     @Override

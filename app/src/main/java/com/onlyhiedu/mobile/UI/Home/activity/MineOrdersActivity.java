@@ -57,7 +57,7 @@ public class MineOrdersActivity extends SimpleActivity {
         mAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(), mContext);
         Bundle bundle = new Bundle();
         bundle.putString("payState", "1");
-        bundle.putBoolean("mPendingPay",mPendingPay);
+        bundle.putBoolean("mPendingPay", mPendingPay);
         Bundle bundle2 = new Bundle();
         bundle2.putString("payState", "2");
         Bundle bundle3 = new Bundle();
@@ -79,10 +79,7 @@ public class MineOrdersActivity extends SimpleActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMOrderSucessIntent) {
-                    EventBus.getDefault().post(new MainActivityTabSelectPos(2));
-                }
-
+                EventBus.getDefault().post(new MainActivityTabSelectPos(2));
                 AppManager.getAppManager().finishActivity(MineOrdersActivity.class);
             }
         });
@@ -99,9 +96,7 @@ public class MineOrdersActivity extends SimpleActivity {
     @Override
     public void onBackPressedSupport() {
 //        super.onBackPressedSupport();
-        if (mMOrderSucessIntent) {
-            EventBus.getDefault().post(new MainActivityTabSelectPos(2));
-        }
+        EventBus.getDefault().post(new MainActivityTabSelectPos(2));
         finish();
     }
 
