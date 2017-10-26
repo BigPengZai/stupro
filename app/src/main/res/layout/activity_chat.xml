@@ -181,12 +181,12 @@
         android:src="@mipmap/ic_full_screen"
         app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
-    <!--Toolbar    app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"   -->
+    <!--Toolbar      -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="50dp"
-
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
