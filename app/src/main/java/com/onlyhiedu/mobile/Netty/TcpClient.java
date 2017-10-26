@@ -14,7 +14,7 @@
 //
 //public class TcpClient extends Thread {
 //
-//    public static String HOST = "192.168.1.219";
+//    public static String HOST = "192.168.3.251";
 //    public static int PORT = 30000;
 //
 //    public void run() {

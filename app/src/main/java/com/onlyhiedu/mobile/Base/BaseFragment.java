@@ -72,6 +72,11 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     }
 
     @Override
+    public void useNightMode(boolean isNight) {
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(mPageName);

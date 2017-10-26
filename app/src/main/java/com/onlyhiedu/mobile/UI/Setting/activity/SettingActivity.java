@@ -2,6 +2,9 @@ package com.onlyhiedu.mobile.UI.Setting.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import com.hyphenate.EMCallBack;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Listener.MyDialogListener;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
+import com.onlyhiedu.mobile.Model.event.NightModeEvent;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.Utils.DialogListener;
@@ -34,7 +38,7 @@ import butterknife.OnClick;
  * Created by pengpeng on 2017/3/2.
  */
 
-public class SettingActivity extends SimpleActivity {
+public class SettingActivity extends SimpleActivity implements CompoundButton.OnCheckedChangeListener {
 
 
     @BindView(R.id.tv_cache_size)
@@ -45,8 +49,11 @@ public class SettingActivity extends SimpleActivity {
     RelativeLayout mRelativeLayout;
     @BindView(R.id.btn_out)
     Button mButton;
+    @BindView(R.id.check_box)
+    AppCompatCheckBox mCheckBox;
 
     public static final String TAG = SettingActivity.class.getSimpleName();
+    private boolean isNull = true;
 
     @Override
     protected int getLayout() {
@@ -54,10 +61,17 @@ public class SettingActivity extends SimpleActivity {
     }
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        isNull = savedInstanceState == null;
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void initEventAndData() {
         setToolBar("设置");
 //        mRelativeLayout.setVisibility(App.bIsGuestLogin ? View.GONE : View.VISIBLE);
 
+        mCheckBox.setOnCheckedChangeListener(this);
         mTvCacheSize.setText(UIUtils.calculateCacheSize(this));
         mToggle_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -74,7 +88,7 @@ public class SettingActivity extends SimpleActivity {
     }
 
 
-    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out, R.id.ll_clean_cache, R.id.setting_about})
+    @OnClick({R.id.setting_pwd, R.id.setting_feedback, R.id.btn_out, R.id.ll_clean_cache, R.id.setting_about, R.id.setting_device_test})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.setting_pwd:
@@ -93,9 +107,9 @@ public class SettingActivity extends SimpleActivity {
                 }
                 break;
             case R.id.btn_out:
-                if(SPUtil.getGuest()){
+                if (SPUtil.getGuest()) {
                     UIUtils.startGuestLoginActivity(this, 0);
-                }else{
+                } else {
                     outApp();
                 }
                 break;
@@ -105,9 +119,20 @@ public class SettingActivity extends SimpleActivity {
             case R.id.setting_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case R.id.setting_device_test:
+                startActivity(new Intent(this, DeviceTestActivity.class));
+                break;
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (isNull) {   //防止夜间模式MainActivity执行reCreate后重复调用
+            SPUtil.setNightModeStatt(b);
+            NightModeEvent event = new NightModeEvent(b);
+            EventBus.getDefault().post(event);
+        }
+    }
 
     private void outApp() {
         DialogUtil.showOnlyAlert(this, "", "确定要退出登录", "确定", "取消", true, true, new MyDialogListener() {
@@ -229,4 +254,6 @@ public class SettingActivity extends SimpleActivity {
             }
         });
     }
+
+
 }

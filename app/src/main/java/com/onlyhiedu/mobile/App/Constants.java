@@ -22,7 +22,6 @@ public class Constants {
     public static final int TYPE_C = 103;
 
 
-
     //================= KEY ==================== //
 
     //================= Intent ================= //
@@ -37,4 +36,5 @@ public class Constants {
     public static final String IsGuest = "IsGuest"; //是否是游客
     public static final String UpdateApkId = "UpdateApkId"; //下载完成后bao的id
     public static final String AGORAUID = "AGORAUID"; //信令角色uid
+    public static final String NightModeState = "NightModeState";
 }

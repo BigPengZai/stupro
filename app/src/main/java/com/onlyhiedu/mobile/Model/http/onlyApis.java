@@ -49,7 +49,7 @@ public interface onlyApis {
     String HOST = "http://101.132.116.184/";
     //公网环境
 //    String HOST = "http://api.onlyeduhi.cn/";
-
+    String IP = "101.132.116.184";
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
 

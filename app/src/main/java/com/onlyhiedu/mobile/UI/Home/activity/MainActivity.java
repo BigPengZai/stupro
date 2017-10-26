@@ -32,6 +32,7 @@ import com.onlyhiedu.mobile.BuildConfig;
 import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
+import com.onlyhiedu.mobile.Model.event.NightModeEvent;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.ChatActivity;
 import com.onlyhiedu.mobile.UI.Emc.Constant;
@@ -93,7 +94,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         EventBus.getDefault().register(this);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -125,7 +129,66 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 //            TcpClient client = new TcpClient();
 //            client.start();
 //        }
+//        new Thread() {
+//            public void run() {
+//                try {
+//                    Socket socket = new Socket("192.168.3.251", 30000);
+//                    //得到发送消息的对象
+//
+//                    LoginProto.Login msg = LoginProto.Login.newBuilder().setPhone(SPUtil.getPhone())
+//                            .setType(2).build();
+//                    // 向服务器发送信息
+//                    msg.writeDelimitedTo(socket.getOutputStream());
+//                    while (true) {
+//                        // 接受服务器的信息
+//                        InputStream input = socket.getInputStream();
+//                     DataInputStream dataInput=new DataInputStream();
+//                    byte[] by = smsobj.recvMsg(input);
+//                        byte[] by = recvMsg(input);
+//                        LoginProto.Login login = msg.parseFrom(by);
+//                        Log.d("xwc", login.getReply() + "");
+//                        input.close();
+//                        Thread.sleep(2000);
+//                    }
+
+//                    BufferedReader br = new BufferedReader(
+//                            new InputStreamReader(socket.getInputStream()));
+//                    String mstr = br.readLine();
+//                    if (!str .equals("")) {
+//                        text1.setText(str);
+//                    } else {
+//                        text1.setText("数据错误");
+//                    }
+//                    out.close();
+//                    br.close();
+
+
+                    //smsobj.close();
+//                } catch (UnknownHostException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (Exception e) {
+//                    System.out.println(e.toString());
+//                }
+//            }
+//        }.start();
+//
+//
     }
+//
+//    public byte[] recvMsg(InputStream inStream) throws Exception {
+//        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+//        byte[] buffer = new byte[100];
+//        int len = -1;
+//        while ((len = inStream.read(buffer)) != -1) {
+//            outSteam.write(buffer, 0, len);
+//        }
+//        outSteam.close();
+//        inStream.close();
+//        return outSteam.toByteArray();
+//    }
+
 
     @Override
     protected void initView() {
@@ -143,7 +206,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
             if (mHideSmall) {
-                BottomNavigationViewHelper.hideItemView(mNavigation,3);
+                BottomNavigationViewHelper.hideItemView(mNavigation, 3);
                 loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
             } else {
                 loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
@@ -151,7 +214,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             App.getInstance().isTag = false;
         } else {
             if (mHideSmall) {
-                BottomNavigationViewHelper.hideItemView(mNavigation,3);
+                BottomNavigationViewHelper.hideItemView(mNavigation, 3);
                 loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
             } else {
                 loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
@@ -159,6 +222,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
+
     }
 
     @Override
@@ -364,6 +428,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         EventBus.getDefault().post(new CourseFragmentRefresh(true));
         SPUtil.setGuest(false);
         mMeFragment.setTextStyle();
+
         switch (event.tabPosition) {
             case 1:
                 showHideFragment(mClassFragment);
@@ -387,6 +452,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         if (event.isGuest) {
             mMeFragment.showGuestUI();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEventMain3(NightModeEvent event) {
+        useNightMode(event.mode);
     }
 
 

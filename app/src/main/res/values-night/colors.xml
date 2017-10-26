@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="white">#000000</color>
+    <color name="colorPrimary2">#000000</color>
+    <color name="black">#000000</color>
+    <color name="window_bg">#000000</color>
+    <color name="flux_sub_text_02">#000000</color>
+    <color name="transparent">#000000</color>
+    <color name="list_divider_color">#000000</color>
+    <color name="list_divider">#000000</color>
+    <color name="text_color_hint">#000000</color>
+
+    <color name="c_F42440">#000000</color>
+    <color name="c_E61B36">#000000</color>
+    <color name="c_929292">#000000</color>
+    <color name="c_999999">#000000</color>
+    <color name="c_262626">#000000</color>
+    <color name="c_F74D64">#000000</color>
+    <color name="c_F2F2F2">#000000</color>
+    <color name="c_CCCCCC">#000000</color>
+    <color name="c_070707">#000000</color>
+    <color name="c_ACABAB">#000000</color>
+    <color name="c_666666">#000000</color>
+    <color name="c_242424">#242424</color>
+    <color name="c_eeeeee">#000000</color>
+    <color name="c_535353">#535353</color>
+    <color name="c_08BB08">#000000</color>
+    <color name="c_D8D8D8">#000000</color>
+    <color name="c_F5F5F5">#000000</color>
+    <color name="c_FFAEBA">#000000</color>
+    <color name="c_D2D0D0">#D2D0D0</color>
+    <color name="c_EDEDED">#EDEDED</color>
+    <color name="c_2A2A2A">#2A2A2A</color>
+    <color name="c_00121C">#00121C</color>
+    <color name="c_333333">#333333</color>
+    <color name="c_F9F9F9">#F9F9F9</color>
+    <color name="c_151515">#151515</color>
+    <color name="c_3d3d3d">#3d3d3d</color>
+    <color name="c_f6f6f6">#f6f6f6</color>
+    <color name="c_b1b1b1">#000000</color>
+    <color name="c_f2f4f5">#f2f4f5</color>
+
+    <!--wheelview-->
+    <color name="c3">#000000</color>
+    <color name="c7">#000000</color>
+    <color name="c9">#000000</color>
+    <color name="c33">#55dedede</color>
+    <!--session room-->
+    <color name="agora_blue">#000000</color>
+
+
+    <color name="lightColorAccent">#000000</color>
+
+    <color name="dark_black">#000000</color>
+
+    <color name="transparent_75_white">#000000</color>
+
+    <color name="dark_gray">#000000</color>
+
+
+</resources>
