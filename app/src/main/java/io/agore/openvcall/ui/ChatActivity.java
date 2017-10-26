@@ -4,9 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +20,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -63,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -81,11 +81,10 @@ import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
 import static io.agore.openvcall.ui.ChatPresenter.AfterJoin;
 import static io.agore.openvcall.ui.ChatPresenter.PEN;
 
-public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, ChatContract.View, Chronometer.OnChronometerTickListener {
+public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEventHandler, ChatContract.View {
 
     private final HashMap<Integer, SoftReference<SurfaceView>> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
     public static final String TAG = ChatActivity.class.getSimpleName();
-    //    private GoogleApiClient client;
     private String mUid;
     private int mScreenWidth;
 
@@ -100,8 +99,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     DrawView mDrawView;
     @BindView(R.id.image_course_ware)
     ImageView mImageCourseWare;
-    @BindView(R.id.chronometer)
-    Chronometer mChronometer;
+
     @BindView(R.id.toolbar)
     RelativeLayout mToolbar;
     @BindView(R.id.tv_total_room)
@@ -138,6 +136,15 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //远端音频流
     @BindView(R.id.tv_audio_mute)
     TextView mTv_Audio_Mute;
+    //倒计时
+    @BindView(R.id.tv_count)
+    TextView mTv_Count;
+    private CountDownTimer timer;
+    private final long INTERVAL = 1000L;
+    private Timer mTimer = null;
+    private TimerTask mTimerTask = null;
+    private static final int UPDATE_TIME = 0;
+
 
     private String mChannelName;
     private RoomInfo mRoomInfo;
@@ -147,16 +154,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //课程id
     private String mUuid;
     private CourseList.ListBean mListBean;
-    private Handler mHandler = null;
-    private static final int UPDATE_TIME = 0;
-    private static final int UPDATE_FINISH_ROOM = 1;
-    private static final int UPDATE_NOTIFY = 2;
-    private Timer mTimer = null;
-    private TimerTask mTimerTask = null;
-    private Timer mFinishTimer = null;
-    private TimerTask mFinishTimerTask = null;
-    private static int delay = 1000;  //1s
-    private static int period = 1000;  //1s
+
     private String mRoomStartTime;
     private String mRoomEndTime;
     private String mEndtime1;
@@ -214,8 +212,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mStuSurfView.setZOrderOnTop(false);
         mStuSurfView.setZOrderMediaOverlay(false);
         mUidsList.put(0, new SoftReference<>(mStuSurfView)); // get first surface view
-//        mGridVideoViewContainer.initViewContainer(getApplicationContext(), Integer.parseInt(mUid), mUidsList); // first is now full view
-
         rtcEngine().muteLocalAudioStream(false);
         //禁用本地视频功能
         rtcEngine().enableLocalVideo(true);
@@ -291,11 +287,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
     private void initRoomData() {
-        mChronometer.setBase(SystemClock.elapsedRealtime());
-        int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
-        mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
-        mChronometer.setText("00:00:00");
-        mChronometer.setOnChronometerTickListener(this);
         //获取频道 id  老师uid 学生uid
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
@@ -315,30 +306,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
     private void initRoomTime() {
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case UPDATE_TIME:
-                        startRoomTime();
-                        break;
-                    case UPDATE_FINISH_ROOM:
-                        finishRoom();
-                        break;
-                    case UPDATE_NOTIFY:
-                        initSoonDialog();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
         String startTime = mListBean.getStartTime() + ":00";
         String courseDate = mListBean.getCourseDate();
         String endTime_start = mListBean.getEndTime() + ":00";
-//        String startTime = "11:55:00";
-//        String courseDate = "2017-04-14";
-//        String endTime_start = "11:56:00";
+//        String startTime = "17:40:00";
+//        String courseDate = "2017-10-26";
+//        String endTime_start = "17:59:00";
         mTime = DateUtil.getTime(courseDate + " " + startTime);
         mEndtime1 = DateUtil.getTime(courseDate + " " + endTime_start);
         mRoomStartTime = DateUtil.getStrTime(mTime);
@@ -355,17 +328,64 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
             //没到开始时间
             if (diff > 0) {
-                startTimer();
-            } else if (diff < 0) {
-                //从迟到时间开始计时
-                mChronometer.setBase(SystemClock.elapsedRealtime() + diff);
-                mChronometer.start();
+                startTimer(mRoomDix);
             } else {
-//                mChronometer.start();
-
+                //从迟到时间开始计时
+                startCountTime(mRoomDix+diff);
             }
         } catch (Exception e) {
         }
+    }
+
+    private void startTimer(long diff) {
+        if (mTimer == null) {
+            mTimer = new Timer();
+        }
+        if (mTimerTask == null) {
+            mTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if (DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss).equals(mRoomStartTime)) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                startCountTime(diff);
+                            }
+                        });
+
+                    }
+                }
+            };
+        }
+        if (mTimer != null && mTimerTask != null)
+            mTimer.schedule(mTimerTask, 1000, 1000);
+
+    }
+
+    private void startCountTime(long diff) {
+        timer = new CountDownTimer(diff + 1050L, INTERVAL) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
+                String hms = formatter.format(millisUntilFinished - 1000L);
+                mTv_Count.setText(hms);
+                if ("00:03:00".equals(mTv_Count.getText().toString())) {
+                    initSoonDialog();
+                }
+              /*  if ("00:00:10".equals(mTv_Count.getText().toString())) {
+                    initSoonDialog();
+                }*/
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+                Log.d(TAG, "停止计时");
+                finishRoom();
+            }
+
+        }.start();
     }
 
     private void initSoonDialog() {
@@ -394,106 +414,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (mUidsList != null) {
             mUidsList.clear();
         }
-        DialogUtil.showOnlyAlert(this,
-                "提示"
-                , "已超出课堂15分钟，自动关闭"
-                , "离开教室"
-                , ""
-                , false, false, new DialogListener() {
-                    @Override
-                    public void onPositive(DialogInterface dialog) {
-                        quitCall();
-                    }
-
-                    @Override
-                    public void onNegative(DialogInterface dialog) {
-                    }
-                }
-        );
-    }
-
-    private void startTimer() {
-        if (mTimer == null) {
-            mTimer = new Timer();
-        }
-        if (mTimerTask == null) {
-            mTimerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    if (DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss).equals(mRoomStartTime)) {
-                        sendMessage(UPDATE_TIME);
-                    }
-                }
-            };
-        }
-        if (mTimer != null && mTimerTask != null)
-            mTimer.schedule(mTimerTask, delay, period);
-    }
-
-    private void startFinishTimer() {
-        if (mFinishTimer == null) {
-            mFinishTimer = new Timer();
-        }
-        if (mFinishTimerTask == null) {
-            mFinishTimerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    long l = SystemClock.elapsedRealtime() - mChronometer.getBase();
-                    //超时15分钟
-                    if (l > (mRoomDix + 15 * 60 * 1000) && l < (mRoomDix + 15 * 60 * 1000 + 1000)) {
-                        sendMessage(UPDATE_FINISH_ROOM);
-                    }
-                    // 提前3分钟 通知即将推出教室
-                    if (l > (mRoomDix + 12 * 60 * 1000) && l < (mRoomDix + 12 * 60 * 1000 + 1000)) {
-                        sendMessage(UPDATE_NOTIFY);
-                    }
-                }
-            };
-        }
-        if (mFinishTimer != null && mFinishTimerTask != null)
-            mFinishTimer.schedule(mFinishTimerTask, delay, period);
-    }
-
-    private void stopTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-        if (mTimerTask != null) {
-            mTimerTask.cancel();
-            mTimerTask = null;
-        }
-    }
-
-    private void stopFinishTimer() {
-        if (mFinishTimer != null) {
-            mFinishTimer.cancel();
-            mFinishTimer = null;
-        }
-        if (mFinishTimerTask != null) {
-            mFinishTimerTask.cancel();
-            mFinishTimerTask = null;
-        }
-    }
-
-    public void sendMessage(int id) {
-        if (mHandler != null) {
-            Message message = Message.obtain(mHandler, id);
-            mHandler.sendMessage(message);
-        }
-    }
-
-    private void startRoomTime() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mChronometer.setBase(SystemClock.elapsedRealtime());
-                int hour = (int) ((SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000 / 60);
-                mChronometer.setFormat("0" + String.valueOf(hour) + ":%s");
-                mChronometer.setText("00:00:00");
-                mChronometer.start();
-            }
-        });
+        quitCall();
     }
 
     private void setToolBar() {
@@ -508,12 +429,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
             }
         });
-        /*mToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
 
         mToolbar.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -733,22 +648,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         @Override
                         public void run() {
                             Toast.makeText(mContext, "同意老师下课，退出教室了。", Toast.LENGTH_SHORT).show();
-                           /* DialogUtil.showOnlyAlert(ChatActivity.this,
-                                    "提示"
-                                    , "对方同意了您的下课请求"
-                                    , "离开教室"
-                                    , ""
-                                    , false, false, new DialogListener() {
-                                        @Override
-                                        public void onPositive(DialogInterface dialog) {
-
-                                        }
-
-                                        @Override
-                                        public void onNegative(DialogInterface dialog) {
-                                        }
-                                    }
-                            );*/
                         }
                     });
                     finishClassRoom();
@@ -763,8 +662,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     });
                 }
                 if (messageID.equals(requestFinishClassTag)) {
-
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1127,8 +1024,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-//    private int mDataStreamId;
-
     private void sendChannelMsg(String msgStr) {
 
         BoardBean boardBean = new BoardBean();
@@ -1139,26 +1034,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mGson = new Gson();
         }
         m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendIM");
-
-//        RtcEngine rtcEngine = rtcEngine();
-//        if (mDataStreamId <= 0) {
-//            mDataStreamId = rtcEngine.createDataStream(true, true); // boolean reliable, boolean ordered
-//        }
-//
-//        if (mDataStreamId < 0) {
-//            String errorMsg = "Create data stream error happened " + mDataStreamId;
-//            showLongToast(errorMsg);
-//            return;
-//        }
-//
-//        byte[] encodedMsg;
-//        try {
-//            encodedMsg = msgStr.getBytes("UTF-8");
-//        } catch (UnsupportedEncodingException e) {
-//            encodedMsg = msgStr.getBytes();
-//        }
-//
-//        rtcEngine.sendStreamMessage(mDataStreamId, encodedMsg);
     }
 
     private void notifyMessageChanged(io.agore.openvcall.model.Message msg) {
@@ -1188,6 +1063,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
      * @param flag
      */
     public void setBoardViewLayoutParams(boolean flag) {
+        ConstraintLayout.LayoutParams constraint = new ConstraintLayout.LayoutParams(0, 0);
         if (flag) {
             mRel_Stu.setVisibility(View.VISIBLE);
             mRel_Tea.setVisibility(View.VISIBLE);
@@ -1199,7 +1075,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintTop_toBottomOf="@+id/guideline_h0"*/
-            ConstraintLayout.LayoutParams constraint = new ConstraintLayout.LayoutParams(0, 0);
             constraint.leftToRight = R.id.guideline_v1;
             constraint.rightToLeft = R.id.guideline_v2;
             constraint.bottomToBottom = R.id.guideline_h1;
@@ -1223,12 +1098,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mTv_Video_Mute.setVisibility(View.GONE);
             mTv_Audio_Local.setVisibility(View.GONE);
             mTv_Audio_Mute.setVisibility(View.GONE);
-            ConstraintLayout.LayoutParams constraint2 = new ConstraintLayout.LayoutParams(0, 0);
-            constraint2.leftToRight = R.id.guideline_v;
-            constraint2.rightToLeft = R.id.guideline_v2;
-            constraint2.bottomToBottom = R.id.guideline_h1;
-            constraint2.topToBottom = R.id.guideline_h0;
-            mLl_Board.setLayoutParams(constraint2);
+            constraint.rightToLeft = R.id.guideline_v2;
+            constraint.bottomToBottom = R.id.guideline_h1;
+            constraint.topToBottom = R.id.guideline_h0;
+            constraint.leftToRight = R.id.guideline_v;
+            mLl_Board.setLayoutParams(constraint);
             mSwitch = true;
             mPresenter.setFullScreen(mSwitch);
 
@@ -1245,6 +1119,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
     public void setBoardViewLayoutParams(int width, int height) {
+
+        ConstraintLayout.LayoutParams constraint = new ConstraintLayout.LayoutParams(0, 0);
+        constraint.leftToRight = R.id.guideline_v1;
+        constraint.rightToLeft = R.id.guideline_v2;
+        constraint.bottomToBottom = R.id.guideline_h1;
+        constraint.topToBottom = R.id.guideline_h0;
+        mLl_Board.setLayoutParams(constraint);
         int imageWidth = (int) (mScreenWidth * 0.7);
         float rate = (float) imageWidth / Float.valueOf(width);
         mPresenter.setHalfScreenRate(rate);
@@ -1283,12 +1164,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     //封装到uitl中
     public String calcToken(String appID, String certificate, String account, long expiredTime) {
-        // Token = 1:appID:expiredTime:sign
-        // Token = 1:appID:expiredTime:md5(account + vendorID + certificate + expiredTime)
-
         String sign = md5hex((account + appID + certificate + expiredTime).getBytes());
         return "1:" + appID + ":" + expiredTime + ":" + sign;
-
     }
 
     @Override
@@ -1306,12 +1183,24 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void onBackPressedSupport() {
-//        super.onBackPressedSupport();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
         if (m_agoraAPI != null) {
             m_agoraAPI.channelLeave(mRoomInfo.getSignallingChannelId());
             m_agoraAPI.logout();
@@ -1319,15 +1208,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
         if (mUidsList != null) {
             mUidsList.clear();
-        }
-        stopTimer();
-        stopFinishTimer();
-        if (mChronometer != null) {
-            mChronometer.stop();
-        }
-        if (mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-            mHandler = null;
         }
         isStartTime = false;
         EventBus.getDefault().unregister(this);
@@ -1501,12 +1381,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         int peerUid;
         boolean muted;
         switch (type) {
-
-
             case AGEventHandler.EVENT_TYPE_ON_USER_AUDIO_MUTED:
-
                 break;
-
             case AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_MUTED:
 //                peerUid = (Integer) data[0];
 //                muted = (boolean) data[1];
@@ -1551,7 +1427,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     return;
                 }
                 if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId == uid) {
-
                     mRel_Tea.removeAllViews();
                 }
             }
@@ -1698,23 +1573,5 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public void showError(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void onChronometerTick(Chronometer chronometer) {
-        isStartTime = true;
-        mLong = SystemClock.elapsedRealtime() - chronometer.getBase();
-        if (mLong > mRoomDix) {
-            mIsBack = true;
-            chronometer.stop();
-            startFinishTimer();
-            mButDismiss.setText("退出教室");
-        }
-        //真实数据不会 截取
-        if (chronometer.getText().toString().length() > 8) {
-            String substring = chronometer.getText().toString().substring(3);
-            chronometer.setText(substring);
-        }
-    }
-
 
 }

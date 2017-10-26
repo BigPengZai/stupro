@@ -181,12 +181,12 @@
         android:src="@mipmap/ic_full_screen"
         app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
-    <!--Toolbar       -->
+    <!--Toolbar    app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"   -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"
+
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -196,8 +196,9 @@
             android:gravity="center"
             android:orientation="horizontal"
         >
-            <Chronometer
-                android:id="@+id/chronometer"
+            <TextView
+                android:text="00:00:00"
+                android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
@@ -256,7 +257,6 @@
                     android:checked="false"
                     android:text="画笔"/>
         </LinearLayout>
-
     </RelativeLayout>
     <!-- IM   比例 横 4-->
     <LinearLayout
