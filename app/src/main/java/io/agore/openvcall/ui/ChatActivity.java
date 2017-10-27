@@ -59,6 +59,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +140,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //倒计时
     @BindView(R.id.tv_count)
     TextView mTv_Count;
+    //提示
+    @BindView(R.id.tv_point)
+    TextView mTv_Point;
     private CountDownTimer timer;
     private final long INTERVAL = 1000L;
     private Timer mTimer = null;
@@ -164,6 +168,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private boolean mIsBack; //返回键是否可点击
     private boolean isStartTime;
     private boolean isTeacherJoined;
+    private boolean selfJoinChannelSuccess;
     private Gson mGson;
 
     int mLastDownY;
@@ -328,6 +333,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
             //没到开始时间
             if (diff > 0) {
+                mIsBack = true;
                 startTimer(mRoomDix);
             } else {
                 //从迟到时间开始计时
@@ -363,6 +369,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void startCountTime(long diff) {
+        mIsBack = false;
+        isStartTime = true;
         timer = new CountDownTimer(diff + 1050L, INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -382,6 +390,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void onFinish() {
                 // TODO Auto-generated method stub
                 Log.d(TAG, "停止计时");
+                isStartTime = false;
                 finishRoom();
             }
 
@@ -681,6 +690,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void onLogout(int ecode) {
                 super.onLogout(ecode);
                 Log.d(TAG, "Logout:" + ecode);
+                if (!selfJoinChannelSuccess) {
+                    finish();
+                }
                 //error  103 自动退出
                 if (ecode == 103) {
                     //暂停音视频流
@@ -726,7 +738,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initRoom();
+
                     }
                 });
             }
@@ -734,7 +746,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             //当有用户加入频道触发此回调。
             @Override
             public void onChannelUserJoined(String account, int uid) {
-                Log.d(TAG, "当有信令用户加入频道account:" + account + "uid:" + uid);
+                if (account.equals(String.valueOf(mListBean.channelTeacherId))) {
+                    Log.d(TAG, "信令频道其他用户加入："+account);
+                    initRoom();
+                }
             }
 
             @Override
@@ -745,7 +760,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onChannelUserList(String[] accounts, int[] uids) {
                 super.onChannelUserList(accounts, uids);
-                Log.d(TAG, "频道accounts：" + accounts.length);
+                List<String> strings = Arrays.asList(accounts);
+                if (strings.contains(String.valueOf(mListBean.channelTeacherId))) {
+                    Log.d(TAG, "信令频道有老师加入:"+mListBean.channelTeacherId);
+                    initRoom();
+                }
             }
         });
     }
@@ -1296,6 +1315,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 Log.d(TAG, "加入成功后uid: " + uid);
+                selfJoinChannelSuccess = true;
+                mTv_Point.setVisibility(View.GONE);
                 if (isFinishing()) {
                     return;
                 }
