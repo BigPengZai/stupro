@@ -10,10 +10,15 @@ public interface AGEventHandler {
     void onUserOffline(int uid, int reason);
 
     void onUserJoined(int uid, int elapsed);
+
     void onExtraCallback(int type, Object... data);
 
     void onUserMuteVideo(int uid,boolean muted);
+
     void onUserMuteAudio(int uid,boolean muted);
+
+    void onLastmileQuality(int quality);
+
     int EVENT_TYPE_ON_DATA_CHANNEL_MSG = 3;
 
     int EVENT_TYPE_ON_USER_VIDEO_MUTED = 6;

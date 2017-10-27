@@ -1263,6 +1263,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    @Override
+    public void onLastmileQuality(int quality) {
+            Log.d("Xwc","QQ"+quality);
+    }
+
     private void initTeaView(final int uid) {
         runOnUiThread(new Runnable() {
             @Override

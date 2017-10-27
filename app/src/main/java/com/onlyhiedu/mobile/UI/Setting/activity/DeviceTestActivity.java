@@ -3,6 +3,8 @@ package com.onlyhiedu.mobile.UI.Setting.activity;
 import android.app.Dialog;
 import android.hardware.Camera;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -51,6 +53,8 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
     private SurfaceHolder holder;
     private Camera camera;//声明相机
     private File mAudioDir;
+
+
     @Override
     protected int getLayout() {
         return R.layout.activity_device_text;
@@ -60,15 +64,15 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
     protected void initEventAndData() {
         setToolBar("设备检测");
 
-        AudioRecordManager.getInstance(this).setMaxVoiceDuration(12);
+        AudioRecordManager.getInstance(this).setMaxVoiceDuration(20);
         mAudioDir = new File(getCacheDir(), "AUDIO");
         if (!mAudioDir.exists()) {
             mAudioDir.mkdirs();
         }
         AudioRecordManager.getInstance(this).setAudioSavePath(mAudioDir.getAbsolutePath());
 
-        initListener();
 
+        initListener();
     }
 
     private void initListener() {
@@ -118,12 +122,12 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
             @Override
             public void setTimeoutTipView(int counter) {
                 if (this.mRecordWindow != null) {
-                    this.mStateIV.setVisibility(View.GONE);
+//                    this.mStateIV.setVisibility(View.GONE);
                     this.mStateTV.setVisibility(View.VISIBLE);
                     this.mStateTV.setText(R.string.voice_rec);
                     this.mStateTV.setBackgroundResource(R.drawable.bg_voice_popup);
-                    this.mTimerTV.setText(String.format("%s", new Object[]{Integer.valueOf(counter)}));
-                    this.mTimerTV.setVisibility(View.VISIBLE);
+//                    this.mTimerTV.setText(String.format("%s", new Object[]{Integer.valueOf(counter)}));
+//                    this.mTimerTV.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -184,7 +188,7 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
 
                         @Override
                         public void onStart(Uri var1) {
-
+                            mBtnAudio.setEnabled(false);
                         }
 
                         @Override
@@ -192,9 +196,10 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
 
                         }
 
+
                         @Override
                         public void onComplete(Uri var1) {
-
+                            mBtnAudio.setEnabled(true);
                         }
                     });
                 }
@@ -241,34 +246,61 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
         return false;
     }
 
-    @OnClick({ R.id.btn_network, R.id.btn_video})
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Toast.makeText(DeviceTestActivity.this, msg.obj.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @OnClick({R.id.btn_network, R.id.btn_video})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_network:
-                try {
-                    p = Runtime.getRuntime().exec("/system/bin/ping -c 2 " + onlyApis.IP);
-                    BufferedReader buf = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    String str = new String();
-                    while ((str = buf.readLine()) != null) {
-                        if (str.contains("avg")) {
-                            String substring = str.substring(str.indexOf("mdev =") + 7, str.length());
-                            String[] split = substring.split("/");
-                            int minDelay = (int) (Double.valueOf(split[0]) + 0.5);
-                            int maxDelay = (int) (Double.valueOf(split[2]) + 0.5);
-                            if (maxDelay < 100) {
-                                Toast.makeText(DeviceTestActivity.this, "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状态良好", Toast.LENGTH_SHORT).show();
-                            } else if (maxDelay >= 100 && maxDelay < 200) {
-                                Toast.makeText(DeviceTestActivity.this, "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状况良好，但是不太稳定", Toast.LENGTH_SHORT).show();
-                            } else if (maxDelay >= 200 && maxDelay < 500) {
-                                Toast.makeText(DeviceTestActivity.this, "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状况一般，并且不太稳定", Toast.LENGTH_SHORT).show();
-                            } else if (maxDelay >= 500) {
-                                Toast.makeText(DeviceTestActivity.this, "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状况较差，且不太稳定", Toast.LENGTH_SHORT).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            p = Runtime.getRuntime().exec("/system/bin/ping -c 2 " + onlyApis.IP);
+                            BufferedReader buf = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                            String str = new String();
+                            if (buf.readLine() == null) {
+                                Message message = new Message();
+                                message.obj = "无网络连接";
+                                mHandler.sendMessage(message);
+                                return;
                             }
+                            while ((str = buf.readLine()) != null) {
+                                if (str.contains("avg")) {
+                                    String substring = str.substring(str.indexOf("mdev =") + 7, str.length());
+                                    String[] split = substring.split("/");
+                                    int minDelay = (int) (Double.valueOf(split[0]) + 0.5);
+                                    int maxDelay = (int) (Double.valueOf(split[2]) + 0.5);
+                                    if (maxDelay < 100) {
+                                        Message message = new Message();
+                                        message.obj = "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状态良好";
+                                        mHandler.sendMessage(message);
+                                    } else if (maxDelay >= 100 && maxDelay < 200) {
+                                        Message message = new Message();
+                                        message.obj = "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状况良好，但是不太稳定";
+                                        mHandler.sendMessage(message);
+                                    } else if (maxDelay >= 200 && maxDelay < 500) {
+                                        Message message = new Message();
+                                        message.obj = "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状况一般，并且不太稳定";
+                                        mHandler.sendMessage(message);
+                                    } else if (maxDelay >= 500) {
+                                        Message message = new Message();
+                                        message.obj = "网络延迟： " + minDelay + "ms-" + maxDelay + "ms" + "网络状况较差，且不太稳定";
+                                        mHandler.sendMessage(message);
+                                    }
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                }).start();
+
                 break;
             case R.id.btn_video:
                 final Dialog dialog = new Dialog(this, R.style.dialog);
@@ -319,4 +351,5 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
         holder = null;
         surface = null;
     }
+
 }

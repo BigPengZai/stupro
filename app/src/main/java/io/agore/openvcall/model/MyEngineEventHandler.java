@@ -42,8 +42,6 @@ public class MyEngineEventHandler {
         }
 
 
-
-
         @Override
         public void onFirstLocalVideoFrame(int width, int height, int elapsed) {
         }
@@ -76,31 +74,22 @@ public class MyEngineEventHandler {
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
-                handler.onUserMuteVideo( uid, muted);
+                handler.onUserMuteVideo(uid, muted);
             }
         }
+
         //其他用户 停止/重启音频回调
         @Override
         public void onUserMuteAudio(int uid, boolean muted) {
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {
                 AGEventHandler handler = it.next();
-                handler.onUserMuteAudio( uid, muted);
+                handler.onUserMuteAudio(uid, muted);
             }
         }
 
         @Override
         public void onRtcStats(RtcStats stats) {
-        }
-
-        //远端视频统计回调 (onRemoteVideoStats)
-        @Override
-        public void onRemoteVideoStats(RemoteVideoStats stats) {
-            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
-            while (it.hasNext()) {
-                AGEventHandler handler = it.next();
-                handler.onExtraCallback(AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_STATS, stats);
-            }
         }
 
         //说话声音音量提示回调 (onAudioVolumeIndication)
@@ -119,6 +108,16 @@ public class MyEngineEventHandler {
 //            }
         }
 
+        //远端视频统计回调 (onRemoteVideoStats)
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onExtraCallback(AGEventHandler.EVENT_TYPE_ON_USER_VIDEO_STATS, stats);
+            }
+        }
+
         @Override
         public void onLeaveChannel(RtcStats stats) {
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
@@ -130,6 +129,11 @@ public class MyEngineEventHandler {
 
         @Override
         public void onLastmileQuality(int quality) {
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onLastmileQuality(quality);
+            }
         }
 
         @Override

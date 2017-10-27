@@ -237,7 +237,7 @@ public class AudioRecordManager implements Handler.Callback {
             this.mMediaRecorder.start();
             Message e1 = Message.obtain();
             e1.what = 7;
-            e1.obj = Integer.valueOf(10);
+            e1.obj = Integer.valueOf(1);
             this.mHandler.sendMessageDelayed(e1, (long) (this.RECORD_INTERVAL * 1000 - 10000));
         } catch (Exception var4) {
             var4.printStackTrace();
@@ -252,7 +252,6 @@ public class AudioRecordManager implements Handler.Callback {
 
     private void stopRec() {
         Log.d(TAG, "stopRec");
-
         try {
             this.muteAudioFocus(this.mAudioManager, false);
             if (this.mMediaRecorder != null) {

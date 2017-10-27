@@ -13,6 +13,7 @@ import com.onlyhiedu.mobile.UI.Emc.UserProfileActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
+import com.onlyhiedu.mobile.UI.Setting.activity.DeviceTestActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.FeedBackActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.ModifyPwActivity;
 import com.onlyhiedu.mobile.UI.User.activity.BindActivity;
@@ -72,4 +73,6 @@ public interface ActivityComponent {
     void inject(EvaluateActivity activity);
 
     void inject(ChatActivity2 chatActivity2);
+
+    void inject(DeviceTestActivity activity);
 }
