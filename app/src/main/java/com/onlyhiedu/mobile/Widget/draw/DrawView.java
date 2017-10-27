@@ -81,6 +81,11 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
     private Rect mCanvasClipBounds;
     private RectF mAuxRect;
 
+    private Long mySchoolTime;
+
+    public void setMySchoolTime(Long mySchoolTime) {
+        this.mySchoolTime = mySchoolTime;
+    }
 
     /**
      * Default constructor
@@ -268,7 +273,8 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 
             switch (motionEvent.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "|");
+                    long l = System.currentTimeMillis() - mySchoolTime;
+                    sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "," + l + "|");
                     setDrawingMode(DrawingMode.values()[0]);
                     setDrawingTool(DrawingTool.values()[0]);
                     eventActionDown2(touchX, touchY);
@@ -278,7 +284,8 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                 case MotionEvent.ACTION_MOVE:
                     setDrawingMode(DrawingMode.values()[0]);
                     setDrawingTool(DrawingTool.values()[0]);
-                    sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "|");
+                    long ll = System.currentTimeMillis() - mySchoolTime;
+                    sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "," + ll + "|");
 
                     if (Math.abs(touchX2 - touchX) > 5 || Math.abs(touchY2 - touchY) > 5) {
                         isMoved = true;
@@ -290,7 +297,8 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                     if (isMoved) {
                         setDrawingMode(DrawingMode.values()[0]);
                         setDrawingTool(DrawingTool.values()[0]);
-                        sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "|");
+                        long lll = System.currentTimeMillis() - mySchoolTime;
+                        sb.append((int) (touchX / ChatPresenter.getScreenRate() + 0.5) + "," + (int) (touchY / ChatPresenter.getScreenRate() + 0.5) + "," + lll + "|");
                         eventActionUp(motionEvent.getX(), motionEvent.getY());
 
                         LineBean lineBean = new LineBean();

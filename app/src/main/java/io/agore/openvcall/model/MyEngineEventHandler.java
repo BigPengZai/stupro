@@ -127,14 +127,6 @@ public class MyEngineEventHandler {
             }
         }
 
-        @Override
-        public void onLastmileQuality(int quality) {
-            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
-            while (it.hasNext()) {
-                AGEventHandler handler = it.next();
-                handler.onLastmileQuality(quality);
-            }
-        }
 
         @Override
         public void onError(int error) {

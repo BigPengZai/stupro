@@ -17,7 +17,6 @@ public interface AGEventHandler {
 
     void onUserMuteAudio(int uid,boolean muted);
 
-    void onLastmileQuality(int quality);
 
     int EVENT_TYPE_ON_DATA_CHANNEL_MSG = 3;
 

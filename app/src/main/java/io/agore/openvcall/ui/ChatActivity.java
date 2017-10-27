@@ -189,6 +189,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     protected void initUIandEvent() {
+        mDrawView.setMySchoolTime(System.currentTimeMillis());
+
         EventBus.getDefault().register(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -331,7 +333,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 startTimer(mRoomDix);
             } else {
                 //从迟到时间开始计时
-                startCountTime(mRoomDix+diff);
+                startCountTime(mRoomDix + diff);
             }
         } catch (Exception e) {
         }
@@ -1263,10 +1265,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
-    @Override
-    public void onLastmileQuality(int quality) {
-            Log.d("Xwc","QQ"+quality);
-    }
 
     private void initTeaView(final int uid) {
         runOnUiThread(new Runnable() {
