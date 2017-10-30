@@ -184,8 +184,13 @@ public class MyEngineEventHandler {
 
             }
         }
-
+        //SDK会进行自动重连，自动重连成功后触发此回调方法。
         public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onRejoinChannelSuccess(channel, uid, elapsed);
+            }
         }
 
 

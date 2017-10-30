@@ -18,6 +18,8 @@ public interface AGEventHandler {
     void onUserMuteAudio(int uid,boolean muted);
 
 
+    void onRejoinChannelSuccess(String channel, int uid, int elapsed );
+
     int EVENT_TYPE_ON_DATA_CHANNEL_MSG = 3;
 
     int EVENT_TYPE_ON_USER_VIDEO_MUTED = 6;

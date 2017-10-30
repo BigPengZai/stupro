@@ -759,6 +759,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "查询的用户数量num:" + num);
             }
 
+            //信令频道list  有老师 再加入老师
             @Override
             public void onChannelUserList(String[] accounts, int[] uids) {
                 super.onChannelUserList(accounts, uids);
@@ -816,7 +817,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 , true, true, new DialogListener() {
                     @Override
                     public void onPositive(DialogInterface dialog) {
-
                         finishClassRoom();
                     }
 
@@ -876,13 +876,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 canFinshClass();
                 break;
             case R.id.image_full_screen:
-
                 if (visableTag == 1 && mToolbar != null) {
                     visableTag = 0;
                     mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
                 }
                 setBoardViewLayoutParams(mSwitch);
-
                 break;
             case R.id.but_im:
                 if (mLlMsg.getVisibility() == View.GONE) {
@@ -1284,7 +1282,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
-
     private void initTeaView(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
@@ -1329,7 +1326,28 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
     }
+    //客户端可能会和服务器失去连接，SDK会进行自动重连，自动重连成功后触发此回调方法
+    @Override
+    public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mRel_Tea != null && mRel_Stu != null && mTeaSurfaceV != null && mStuSurfView != null) {
+                    if (uid == mListBean.channelTeacherId || uid == Integer.parseInt(mUid)) {
+                        rtcEngine().muteLocalAudioStream(false);
+                        rtcEngine().enableLocalVideo(true);
+                        rtcEngine().muteLocalVideoStream(false);
+                        rtcEngine().muteRemoteVideoStream(mListBean.channelTeacherId, false);
+                        mRel_Tea.removeAllViews();
+                        mRel_Stu.removeAllViews();
+                        mRel_Stu.addView(mStuSurfView);
+                        mRel_Tea.addView(mTeaSurfaceV);
+                    }
+                }
 
+            }
+        });
+    }
 
     //其他用户加入当前频道回调
     @Override
@@ -1360,7 +1378,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
             }
         });
-        doRemoveRemoteUi(uid);
+        removeRemoteUi(uid);
     }
 
 
@@ -1439,7 +1457,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-    private void doRemoveRemoteUi(final int uid) {
+    private void removeRemoteUi(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1452,6 +1470,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId == uid) {
                     mRel_Tea.removeAllViews();
+                }
+                //将本地 音视频关闭 移除view
+                int i = rtcEngine().muteLocalVideoStream(true);
+                rtcEngine().muteLocalAudioStream(true);
+                int i1 = rtcEngine().enableLocalVideo(false);
+                if (i == 0 && i1 == 0) {
+                    mRel_Stu.removeAllViews();
                 }
             }
         });

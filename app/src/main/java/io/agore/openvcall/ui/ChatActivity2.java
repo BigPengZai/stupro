@@ -1083,6 +1083,10 @@ public abstract class ChatActivity2 extends BaseActivity2<ChatPresenter2> implem
         });
     }
 
+    @Override
+    public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
+
+    }
 
     //其他用户加入当前频道回调
     @Override
