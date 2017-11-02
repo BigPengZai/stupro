@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Home.activity;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -11,14 +12,19 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -33,6 +39,8 @@ import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.Model.event.NightModeEvent;
+import com.onlyhiedu.mobile.Netty.bean.LoginRequest;
+import com.onlyhiedu.mobile.Netty.bean.LoginResponse;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Emc.ChatActivity;
 import com.onlyhiedu.mobile.UI.Emc.Constant;
@@ -44,6 +52,7 @@ import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.SmallClassFragment;
 import com.onlyhiedu.mobile.UI.User.activity.LoginActivity;
 import com.onlyhiedu.mobile.Utils.SPUtil;
+import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Utils.UIUtils;
 import com.onlyhiedu.mobile.db.InviteMessgeDao;
 import com.onlyhiedu.mobile.runtimepermissions.PermissionsManager;
@@ -55,12 +64,21 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ConnectException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import butterknife.BindView;
 
 
 public class MainActivity extends VersionUpdateActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int CALL_REQUEST_CODE = 110;
@@ -79,6 +97,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @BindView(R.id.navigation)
     BottomNavigationView mNavigation;
     private boolean mHideSmall;
+    private String oldPhone; //上次登录的账号
+    private Gson mGson;
 
     @Override
     protected void initInject() {
@@ -95,9 +115,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        oldPhone = SPUtil.getPhone();
         EventBus.getDefault().register(this);
-
+        mGson = new Gson();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -125,69 +145,155 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
 
-//        if(!SPUtil.getGuest()){
-//            TcpClient client = new TcpClient();
-//            client.start();
-//        }
-//        new Thread() {
-//            public void run() {
-//                try {
-//                    Socket socket = new Socket("192.168.3.251", 30000);
-//                    //得到发送消息的对象
-//
-//                    LoginProto.Login msg = LoginProto.Login.newBuilder().setPhone(SPUtil.getPhone())
-//                            .setType(2).build();
-//                    // 向服务器发送信息
-//                    msg.writeDelimitedTo(socket.getOutputStream());
-//                    while (true) {
-//                        // 接受服务器的信息
-//                        InputStream input = socket.getInputStream();
-//                     DataInputStream dataInput=new DataInputStream();
-//                    byte[] by = smsobj.recvMsg(input);
-//                        byte[] by = recvMsg(input);
-//                        LoginProto.Login login = msg.parseFrom(by);
-//                        Log.d("xwc", login.getReply() + "");
-//                        input.close();
-//                        Thread.sleep(2000);
-//                    }
 
-//                    BufferedReader br = new BufferedReader(
-//                            new InputStreamReader(socket.getInputStream()));
-//                    String mstr = br.readLine();
-//                    if (!str .equals("")) {
-//                        text1.setText(str);
-//                    } else {
-//                        text1.setText("数据错误");
-//                    }
-//                    out.close();
-//                    br.close();
+        if (!SPUtil.getGuest()) {
+            checkHeartbeat();
+//            TcpClient tcpClient = new TcpClient();
+//            tcpClient.start();
+        }
 
-
-                    //smsobj.close();
-//                } catch (UnknownHostException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (Exception e) {
-//                    System.out.println(e.toString());
-//                }
-//            }
-//        }.start();
-//
-//
     }
-//
-//    public byte[] recvMsg(InputStream inStream) throws Exception {
-//        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-//        byte[] buffer = new byte[100];
-//        int len = -1;
-//        while ((len = inStream.read(buffer)) != -1) {
-//            outSteam.write(buffer, 0, len);
-//        }
-//        outSteam.close();
-//        inStream.close();
-//        return outSteam.toByteArray();
-//    }
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 3:
+                    try {
+                        mSocket.close();
+                        sendData = false;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(MainActivity.this, "您的账号以在别处登录", Toast.LENGTH_SHORT).show();
+                    UIUtils.startLoginActivity(MainActivity.this);
+                    break;
+                case 2:
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 心跳
+     */
+    private Socket mSocket;
+
+    private boolean noNetwork; //没有网络
+    private boolean sendData; //发送过数据
+
+    private void heartbeat(final boolean isConnect) {
+
+        new Thread() {
+
+            private OutputStream outputStream;
+
+            public void run() {
+                try {
+
+                    if (!isConnect) { //没有连接过
+                        mSocket = new Socket();
+                        mSocket.connect(new InetSocketAddress("192.168.3.251", 30000), 2000);
+
+                        outputStream = mSocket.getOutputStream();
+                        String s = mGson.toJson(new LoginRequest(oldPhone + "student", 2));
+                        outputStream.write(s.getBytes());
+                        outputStream.flush();
+                        sendData = true;
+                    }
+
+                    while (true) {
+                        if (!SystemUtil.isNetworkConnected()) {
+                            mSocket.isClosed();
+                            noNetwork = true;
+                        } else {
+                            if (noNetwork) {
+                                noNetwork = false;
+                                mSocket = new Socket();
+                                mSocket.connect(new InetSocketAddress("192.168.3.251", 30000), 2000);
+
+                                outputStream = mSocket.getOutputStream();
+                                String s = "";
+                                if (sendData) {
+                                    s = mGson.toJson(new LoginRequest(oldPhone + "student", 3));
+                                } else {
+                                    s = mGson.toJson(new LoginRequest(oldPhone + "student", 2));
+                                    sendData = true;
+                                }
+                                outputStream.write(s.getBytes());
+                                outputStream.flush();
+                            }
+                        }
+                        // 接受服务器的信息
+                        if (!mSocket.isClosed() && mSocket.isConnected()) {
+
+                            Log.d("socket", "进来了");
+                            InputStream input = mSocket.getInputStream();
+                            byte[] buffer = new byte[input.available()];
+                            input.read(buffer);
+                            String responseInfo = new String(buffer);
+                            LoginResponse json = mGson.fromJson(responseInfo, LoginResponse.class);
+
+                            if (json != null) {
+                                Message message = new Message();
+                                message.what = json.reply;
+                                handler.sendMessage(message);
+                                Log.d("socket_reply", json.reply + "");
+                            }
+                        }
+                        SystemClock.sleep(1000);
+                    }
+                } catch (UnknownHostException e) {
+                    Log.d("socket_Exception_Msg", e.getMessage());
+                    e.printStackTrace();
+                    SystemClock.sleep(2000);
+
+                } catch (IOException e) {
+                    Log.d("socket_Exception_Msg", e.getMessage());
+                    if (e instanceof SocketException) {
+                        SystemClock.sleep(2000);
+
+                        heartbeat(true);
+                    } else if (e instanceof ConnectException) {
+                        Log.d("socket_Exception_Msg", "网络异常");
+                        SystemClock.sleep(2000);
+                        heartbeat(true);
+                    }
+                }
+            }
+        }.start();
+    }
+
+    private void checkHeartbeat() {
+        if (mSocket == null || !mSocket.isConnected() || mSocket.isClosed()) { //还没有连接过socket，直接连接
+            Log.d("socket", "还没有连接过socket，直接连接");
+            heartbeat(false);
+            oldPhone = SPUtil.getPhone();
+            return;
+        }
+
+        if (!SPUtil.getPhone().equals(oldPhone)) { //换不同的账号需要重新连接
+            try {
+                oldPhone = SPUtil.getPhone();
+                if (!mSocket.isClosed()) {
+                    mSocket.close();
+                }
+                Log.d("socket", "换不同的账号重新连接");
+                heartbeat(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        if (SPUtil.getPhone().equals(oldPhone)) { //如果账号相等的话不需要重连
+            Log.d("socket", "和上次登录账号相同");
+            if (mSocket.isClosed()) {
+                heartbeat(false);
+            }
+        }
+    }
 
 
     @Override
@@ -399,6 +505,14 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 //    IM     }
 //    IM     unregisterBroadcastReceiver();
 
+        if (!mSocket.isClosed()) {
+            try {
+                mSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         UMShareAPI.get(this).release();
         EventBus.getDefault().unregister(this);
     }
@@ -429,6 +543,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         SPUtil.setGuest(false);
         mMeFragment.setTextStyle();
 
+        //连接心跳
+        checkHeartbeat();
+
+
         switch (event.tabPosition) {
             case 1:
                 showHideFragment(mClassFragment);
@@ -449,6 +567,14 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain2(MainActivityShowGuest event) {
+        sendData = false;
+        if (!mSocket.isClosed()) {
+            try {
+                mSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if (event.isGuest) {
             mMeFragment.showGuestUI();
         }

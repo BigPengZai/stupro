@@ -87,7 +87,7 @@ public class UIUtils {
     }
 
     public static void startLoginActivity(Context context) {
-        SPUtil.removeKey(Constants.TOKEN);
+        SPUtil.removeKey(Constants.IsGuest);
         AppManager.getAppManager().AppExit();
         context.startActivity(new Intent(context, OpenIDActivity.class).putExtra(OpenIDActivity.AccountEdgeOut, true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }

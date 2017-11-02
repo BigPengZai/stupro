@@ -13,6 +13,7 @@
 //
 //    @Override
 //    protected void messageReceived(ChannelHandlerContext ctx, LoginProto.Login msg) throws Exception {
-//        Log.d("xwc", msg.getReply()+"");
+//        Log.d("socket", msg.getReply()+"");
+//
 //    }
 //}

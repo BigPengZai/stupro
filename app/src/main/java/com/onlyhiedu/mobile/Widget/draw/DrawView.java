@@ -514,6 +514,8 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
      * @return new paint parameters for initialize drawing
      */
     private Paint getNewPaintParams() {
+
+
         Paint paint = new Paint();
 
         if (mDrawingMode == DrawingMode.ERASER) {
@@ -533,7 +535,7 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
 //                paint.setStrokeWidth(3 * ChatPresenter.getScreenRate());
 //            } else {
 //
-//            }
+//            }77
 //        }
         paint.setStrokeWidth(mDrawWidth);
         paint.setAlpha(mDrawAlpha);
