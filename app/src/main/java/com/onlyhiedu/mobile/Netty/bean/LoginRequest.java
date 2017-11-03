@@ -7,9 +7,12 @@ package com.onlyhiedu.mobile.Netty.bean;
 public class LoginRequest {
     public String userMark;
     public int type;
+    private String token;
 
-    public LoginRequest(String userMark, int type) {
+
+    public LoginRequest(String userMark, int type, String token) {
         this.userMark = userMark;
         this.type = type;
+        this.token = token;
     }
 }

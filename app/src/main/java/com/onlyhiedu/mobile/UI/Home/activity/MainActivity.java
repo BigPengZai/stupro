@@ -197,7 +197,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                         mSocket.connect(new InetSocketAddress("192.168.3.251", 30000), 2000);
 
                         outputStream = mSocket.getOutputStream();
-                        String s = mGson.toJson(new LoginRequest(oldPhone + "student", 2));
+                        String s = mGson.toJson(new LoginRequest(oldPhone + "student", 2, SPUtil.getToken()));
                         outputStream.write(s.getBytes());
                         outputStream.flush();
                         sendData = true;
@@ -216,9 +216,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                                 outputStream = mSocket.getOutputStream();
                                 String s = "";
                                 if (sendData) {
-                                    s = mGson.toJson(new LoginRequest(oldPhone + "student", 3));
+                                    s = mGson.toJson(new LoginRequest(oldPhone + "student", 3, SPUtil.getToken()));
                                 } else {
-                                    s = mGson.toJson(new LoginRequest(oldPhone + "student", 2));
+                                    s = mGson.toJson(new LoginRequest(oldPhone + "student", 2, SPUtil.getToken()));
                                     sendData = true;
                                 }
                                 outputStream.write(s.getBytes());
