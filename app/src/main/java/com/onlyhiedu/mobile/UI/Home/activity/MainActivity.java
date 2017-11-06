@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -195,7 +196,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                     if (!isConnect) { //没有连接过
                         mSocket = new Socket();
                         mSocket.connect(new InetSocketAddress("192.168.3.251", 30000), 2000);
-
                         outputStream = mSocket.getOutputStream();
                         String s = mGson.toJson(new LoginRequest(oldPhone + "student", 2, SPUtil.getToken()));
                         outputStream.write(s.getBytes());
@@ -233,8 +233,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                             byte[] buffer = new byte[input.available()];
                             input.read(buffer);
                             String responseInfo = new String(buffer);
-                            LoginResponse json = mGson.fromJson(responseInfo, LoginResponse.class);
-
+                            LoginResponse json = null;
+                            if (!TextUtils.isEmpty(responseInfo)) {
+                                json = mGson.fromJson(responseInfo, LoginResponse.class);
+                            }
                             if (json != null) {
                                 Message message = new Message();
                                 message.what = json.reply;
@@ -508,6 +510,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         if (!mSocket.isClosed()) {
             try {
                 mSocket.close();
+                sendData = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
