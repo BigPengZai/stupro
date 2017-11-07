@@ -1,17 +1,31 @@
 package io.agore.openvcall.ui;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,6 +34,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -38,21 +53,26 @@ import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.Model.bean.board.LineBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
+import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Utils.JsonUtil;
+import com.onlyhiedu.mobile.Utils.PhotoUtil;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
+import com.onlyhiedu.mobile.Widget.TakePhotoPopWin;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
+import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
@@ -143,6 +163,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //提示
     @BindView(R.id.tv_point)
     TextView mTv_Point;
+    //拍照上传
+    @BindView(R.id.but_upload)
+    Button mBut_Upload;
+    //
+    @BindView(R.id.constraint)
+    ConstraintLayout mConstraintLayout;
+
     private CountDownTimer timer;
     private final long INTERVAL = 1000L;
     private Timer mTimer = null;
@@ -180,10 +207,22 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private SurfaceView mStuSurfView;
     private SurfaceView mTeaSurfaceV;
 
+    private final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 2;
+
+    // 拍照路径
+    public static String SAVED_IMAGE_DIR_PATH = Environment.getExternalStorageDirectory()
+            + "/Onlyhi/camera/";
+    private String // 指定相机拍摄照片保存地址
+            cameraPath = SAVED_IMAGE_DIR_PATH +
+            System.currentTimeMillis() + ".png";
+    private TakePhotoPopWin mTakePhotoPopWin;
+    public final static int ALBUM_REQUEST_CODE = 1;
+    public final static int CAMERA_REQUEST_CODE = 3;
+
+    private File mFileOut;
 
     @Override
     protected void initInject() {
-
         getActivityComponent().inject(this);
     }
 
@@ -869,7 +908,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute})
+    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute,R.id.but_upload})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -927,7 +966,131 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 //远端音频
                 initMuteAudio();
                 break;
+
+            case R.id.but_upload:
+                //拍照上传
+                upLoadHomeWork();
+                break;
         }
+    }
+
+    private void upLoadHomeWork() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE2);
+
+        } else {
+            uploadHeadPhoto();
+        }
+
+    }
+
+    private void uploadHeadPhoto() {
+        mTakePhotoPopWin = new TakePhotoPopWin(this, onClickListener);
+        //showAtLocation(View parent, int gravity, int x, int y)
+        mTakePhotoPopWin.showAtLocation(mConstraintLayout, Gravity.CENTER, 0, 0);
+    }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.btn_take_photo:
+                    rtcEngine().enableLocalVideo(false);
+                    rtcEngine().muteLocalVideoStream(true);
+                    //从拍照
+                    String state = Environment.getExternalStorageState();
+                    if (state.equals(Environment.MEDIA_MOUNTED)) {
+                        Intent intent = new Intent();
+                        // 指定开启系统相机的Action
+                        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                        String out_file_path = SAVED_IMAGE_DIR_PATH;
+                        File dir = new File(out_file_path);
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        }
+                        // 把文件地址转换成Uri格式
+//                        Uri uri = Uri.fromFile(new File(cameraPath));
+                        Uri uri;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                            uri = FileProvider.getUriForFile(ChatActivity.this,
+                                    "com.onlyhiedu.mobile.fileprovider",
+                                    new File(cameraPath));
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } else {
+                            uri = Uri.fromFile(new File(cameraPath));
+                        }
+                        // 设置系统相机拍摄照片完成后图片文件的存放地址
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ChatActivity.this, "请确认已经插入SD卡",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    mTakePhotoPopWin.dismiss();
+                    break;
+                case R.id.btn_pick_photo:
+                    //从系统相册
+                    Intent intent = new Intent(Intent.ACTION_PICK, null);
+                    intent.setDataAndType(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent, ALBUM_REQUEST_CODE);
+                    mTakePhotoPopWin.dismiss();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE2:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    uploadHeadPhoto();
+                } else {
+                    // Permission Denied
+                    DialogUtil.showPresimissFialDialog(this, "SD卡存储");
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CAMERA_REQUEST_CODE:
+                rtcEngine().enableLocalVideo(true);
+                rtcEngine().muteLocalVideoStream(false);
+                Log.d(TAG, "1111");
+//                Drawable fromPath = BitmapDrawable.createFromPath(cameraPath);
+//                mImageCourseWare.setImageDrawable(fromPath);
+
+                break;
+            case ALBUM_REQUEST_CODE:
+                Log.d(TAG, "2222");
+                try {
+                    Uri uri = data.getData();
+                    String absolutePath =
+                            PhotoUtil.getAbsolutePath(this, uri);
+                    Log.d(TAG, "path=" + absolutePath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
+
     }
 
     private void initMuteAudio() {

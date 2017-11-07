@@ -195,7 +195,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
                     if (!isConnect) { //没有连接过
                         mSocket = new Socket();
-                        mSocket.connect(new InetSocketAddress("192.168.3.251", 30000), 2000);
+                        mSocket.connect(new InetSocketAddress("client.haiketang.net", 30000), 2000);
                         outputStream = mSocket.getOutputStream();
                         String s = mGson.toJson(new LoginRequest(oldPhone + "student", 2, SPUtil.getToken()));
                         outputStream.write(s.getBytes());
@@ -211,7 +211,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                             if (noNetwork) {
                                 noNetwork = false;
                                 mSocket = new Socket();
-                                mSocket.connect(new InetSocketAddress("192.168.3.251", 30000), 2000);
+                                //101.132.116.184
+                                mSocket.connect(new InetSocketAddress("client.haiketang.net", 30000), 2000);
 
                                 outputStream = mSocket.getOutputStream();
                                 String s = "";
@@ -313,20 +314,22 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            if (mHideSmall) {
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
+           /* if (mHideSmall) {
                 BottomNavigationViewHelper.hideItemView(mNavigation, 3);
-                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
+                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment);
             } else {
-                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
-            }
+                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment, mSmallClassFragment);
+            }*/
             App.getInstance().isTag = false;
         } else {
-            if (mHideSmall) {
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
+           /* if (mHideSmall) {
                 BottomNavigationViewHelper.hideItemView(mNavigation, 3);
-                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment);
+                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment);
             } else {
-                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
-            }
+                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment, mSmallClassFragment);
+            }*/
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -368,9 +371,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
-        if (item.getItemId() == R.id.four && mHideSmall) {
+       /* if (item.getItemId() == R.id.four && mHideSmall) {
             showHideFragment(mSmallClassFragment);
-        }
+        }*/
 
 
         return true;
