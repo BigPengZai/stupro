@@ -53,6 +53,13 @@
         app:layout_constraintGuide_percent="0.5"
     />
     <android.support.constraint.Guideline
+        android:id="@+id/guideline_h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"
+    />
+    <android.support.constraint.Guideline
         android:id="@+id/guideline_h1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,18 +86,19 @@
     </RelativeLayout>
     <TextView
         android:id="@+id/tv_point"
-        app:layout_goneMarginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="提示：老师与学生都在时，才会显示视频"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
+        app:layout_goneMarginTop="5dp"/>
     <TextView
         android:id="@+id/tv_video_mute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="视频关闭"
         android:textSize="17sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h"/>
     <TextView
         android:id="@+id/tv_audio_mute"
@@ -99,6 +107,7 @@
         android:layout_marginLeft="5dp"
         android:text="音频关闭"
         android:textSize="17sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h"
         app:layout_constraintLeft_toRightOf="@+id/tv_video_mute"/>
     <!--stu-->
@@ -127,6 +136,7 @@
         android:layout_height="wrap_content"
         android:text="视频关闭"
         android:textSize="17sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"/>
     <TextView
         android:id="@+id/tv_audio_local"
@@ -135,6 +145,7 @@
         android:layout_marginLeft="5dp"
         android:text="音频关闭"
         android:textSize="17sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintLeft_toRightOf="@+id/tv_video_local"/>
     <!--白版  比例 横 5-->
@@ -189,12 +200,12 @@
         android:src="@mipmap/ic_full_screen"
         app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
-    <!--Toolbar    app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"   -->
+    <!--Toolbar     -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="50dp"
-
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h0"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -205,11 +216,11 @@
             android:orientation="horizontal"
         >
             <TextView
-                android:text="00:00:00"
                 android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
+                android:text="00:00:00"
                 android:textColor="@color/c_F42440"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -251,7 +262,7 @@
                     android:text="聊天"
                     android:textColor="@color/im_text_color2"
                     android:textSize="@dimen/size_16"
-                    android:visibility="invisible"/>
+                />
                 <View
                     android:id="@+id/im_point"
                     android:layout_width="10dp"
@@ -260,26 +271,34 @@
                     android:background="@drawable/im_oval"
                     android:visibility="gone"/>
             </RelativeLayout>
-            <Switch android:id="@+id/switch_btn" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="画笔"/>
+            <Switch
+                android:id="@+id/switch_btn"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="画笔"
+                android:visibility="gone"/>
             <Button
-                android:text="拍照上传"
                 android:id="@+id/but_upload"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="拍照上传"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </RelativeLayout>
-    <!-- IM   比例 横 4-->
+    <!-- IM   比例 横 4    android:background="#80000000"-->
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_msg"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="3dp"
         android:background="#80000000"
         android:orientation="vertical"
-        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h2"
     >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"
