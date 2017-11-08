@@ -1518,6 +1518,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     isTeacherJoined = true;
 //                    mDrawView.restartDrawing();
 //                    mImageCourseWare.setImageResource(R.drawable.transparent);
+                    int i = rtcEngine().muteLocalVideoStream(false);
+                    rtcEngine().muteLocalAudioStream(false);
+                    int i1 = rtcEngine().enableLocalVideo(true);
+                    if (mRel_Stu!=null&&mStuSurfView != null) {
+                        mRel_Stu.removeAllViews();
+                        mRel_Stu.addView(mStuSurfView);
+                    }
                 }
             }
         });
