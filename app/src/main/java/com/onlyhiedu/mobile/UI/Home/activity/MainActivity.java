@@ -161,12 +161,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 3:
-                    try {
-                        mSocket.close();
-                        sendData = false;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     Toast.makeText(MainActivity.this, "您的账号以在别处登录", Toast.LENGTH_SHORT).show();
                     UIUtils.startLoginActivity(MainActivity.this);
                     break;
@@ -222,6 +216,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                                     s = mGson.toJson(new LoginRequest(oldPhone + "student", 2, SPUtil.getToken()));
                                     sendData = true;
                                 }
+                                Log.d("socket", s);
                                 outputStream.write(s.getBytes());
                                 outputStream.flush();
                             }
@@ -243,6 +238,12 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                                 message.what = json.reply;
                                 handler.sendMessage(message);
                                 Log.d("socket_reply", json.reply + "");
+                                if (json.reply == 3) {
+                                    mSocket.close();
+                                    sendData = false;
+                                    return;
+                                }
+
                             }
                         }
                         SystemClock.sleep(1000);
@@ -256,7 +257,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                     Log.d("socket_Exception_Msg", e.getMessage());
                     if (e instanceof SocketException) {
                         SystemClock.sleep(2000);
-
                         heartbeat(true);
                     } else if (e instanceof ConnectException) {
                         Log.d("socket_Exception_Msg", "网络异常");
