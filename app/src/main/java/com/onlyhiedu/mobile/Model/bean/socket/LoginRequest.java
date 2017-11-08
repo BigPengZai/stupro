@@ -1,4 +1,4 @@
-package com.onlyhiedu.mobile.Netty.bean;
+package com.onlyhiedu.mobile.Model.bean.socket;
 
 /**
  * Created by Administrator on 2017/11/2.
