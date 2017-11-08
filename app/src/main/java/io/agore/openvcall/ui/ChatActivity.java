@@ -1,14 +1,11 @@
 package io.agore.openvcall.ui;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -53,7 +50,6 @@ import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.Model.bean.board.LineBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
-import com.onlyhiedu.mobile.UI.Home.fragment.MeFragment;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
@@ -66,7 +62,6 @@ import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.TakePhotoPopWin;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
-import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -680,7 +675,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mPresenter.initBoard(boardBean.methodparam, mDrawView, ChatActivity.this);
                                 break;
                             case "IM":
-                                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(Integer.valueOf(boardBean.scaling), boardBean.scaling), boardBean.methodparam));
+                                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(mListBean.channelTeacherId, boardBean.scaling), boardBean.methodparam));
                                 break;
                         }
                     }
