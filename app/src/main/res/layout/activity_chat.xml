@@ -200,7 +200,7 @@
         android:src="@mipmap/ic_full_screen"
         app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
-    <!--Toolbar     -->
+    <!--Toolbar   -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -215,6 +215,7 @@
             android:gravity="center"
             android:orientation="horizontal"
         >
+
             <TextView
                 android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
@@ -285,16 +286,24 @@
                 android:visibility="gone"/>
 
         </LinearLayout>
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:padding="11dp"
+            android:src="@mipmap/back"
+        />
     </RelativeLayout>
     <!-- IM   比例 横 4    android:background="#80000000"-->
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/ll_msg"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="3dp"
         android:background="#80000000"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v1"

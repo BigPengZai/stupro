@@ -59,6 +59,7 @@ import com.onlyhiedu.mobile.Utils.PhotoUtil;
 import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.ScreenUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
+import com.onlyhiedu.mobile.Utils.SystemUtil;
 import com.onlyhiedu.mobile.Widget.MyScrollView;
 import com.onlyhiedu.mobile.Widget.TakePhotoPopWin;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
@@ -118,6 +119,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @BindView(R.id.toolbar)
     RelativeLayout mToolbar;
+    @BindView(R.id.img_back)
+    ImageView mImg_Back;
     @BindView(R.id.tv_total_room)
     TextView mTv_Total_Room;
     @BindView(R.id.image_full_screen)
@@ -467,11 +470,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsBack) {
-                    finishClassRoom();
-                } else {
-                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
 
@@ -903,7 +902,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute,R.id.but_upload})
+    @OnClick({R.id.img_back,R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute,R.id.but_upload})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -965,6 +964,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             case R.id.but_upload:
                 //拍照上传
                 upLoadHomeWork();
+                break;
+            case R.id.img_back:
+                if (mIsBack) {
+                    finishClassRoom();
+                } else {
+                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -1169,6 +1175,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void hindIMLayout() {
         mLlMsg.setVisibility(View.VISIBLE);
         mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
+        SystemUtil.hideKeyboard(mTvIM,this);
         mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
         TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
         animation.setDuration(300);
