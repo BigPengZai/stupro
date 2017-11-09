@@ -138,7 +138,6 @@ public class App extends Application {
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
-//        DemoHelper.getInstance().init(this);
         //bugly
 
 //        CrashReport.initCrashReport(getApplicationContext(), "8f4d5d918c", true);

@@ -14,13 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.hyphenate.EMCallBack;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
 import com.onlyhiedu.mobile.Listener.MyDialogListener;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.NightModeEvent;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Emc.DemoHelper;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.SPUtil;
@@ -146,34 +144,6 @@ public class SettingActivity extends SimpleActivity implements CompoundButton.On
         });
     }
 
-    private void logoutApp() {
-        DemoHelper.getInstance().logout(false, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        // show login screen
-                        UIUtils.startLoginActivity(SettingActivity.this);
-                    }
-                });
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(SettingActivity.this, "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-    }
 
 
     private void cleanAppCache() {

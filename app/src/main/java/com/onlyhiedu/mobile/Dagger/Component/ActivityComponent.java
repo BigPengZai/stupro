@@ -7,9 +7,6 @@ import com.onlyhiedu.mobile.Dagger.Modul.ActivityModule;
 import com.onlyhiedu.mobile.UI.Consumption.activity.ConsumeActivity;
 import com.onlyhiedu.mobile.UI.Course.activity.CoursePayActivity;
 import com.onlyhiedu.mobile.UI.Course.activity.EvaluateActivity;
-import com.onlyhiedu.mobile.UI.Emc.AddContactActivity;
-import com.onlyhiedu.mobile.UI.Emc.NewFriendsMsgActivity;
-import com.onlyhiedu.mobile.UI.Emc.UserProfileActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Info.activity.MyInfoActivity;
 import com.onlyhiedu.mobile.UI.Setting.activity.AboutActivity;
@@ -58,15 +55,9 @@ public interface ActivityComponent {
 
     void inject(BindActivity bindActivity);
 
-    void inject(NewFriendsMsgActivity newFriendsMsgActivity);
-
-    void inject(UserProfileActivity userProfileActivity);
-
     void inject(OpenIDActivity openIDActivity);
 
     void inject(RegActivity activity);
-
-    void inject(AddContactActivity activity);
 
     void inject(CoursePayActivity coursePayActivity);
 

@@ -42,7 +42,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         mActivity = (Activity) context;
         mContext = context;
         super.onAttach(context);
-
     }
 
     protected FragmentComponent getFragmentComponent() {

@@ -3,7 +3,6 @@ package com.onlyhiedu.mobile.Model.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.onlyhiedu.mobile.Utils.IMUserInfoUtil;
 
 /**
  * Created by Administrator on 2017/7/12.
@@ -34,7 +33,7 @@ public class IMUserInfo {
     protected String initialLetter;
     public String getInitialLetter() {
         if(initialLetter == null){
-            IMUserInfoUtil.setUserInitialLetter(this);
+//            IMUserInfoUtil.setUserInitialLetter(this);
         }
         return initialLetter;
     }

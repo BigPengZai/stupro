@@ -238,10 +238,7 @@ public static final ** CREATOR;
 -keep class com.tencent.mm.sdk.** {
    *;
 }
-#环信
--keep class com.hyphenate.** {*;}
--dontwarn  com.hyphenate.**
--keep class com.superrtc.** {*;}
+
 -keep class android.support.design.internal.BottomNavigationMenuView {
     *;
 }

@@ -1,1 +1,1 @@
-include ':app', ':PushSDK', ':easeui', ':lib:pingpp'
+include ':app', ':PushSDK', ':lib:pingpp'
