@@ -72,9 +72,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
         mEditNumber.setButton(mButton);
 
-//        mEditNumber.getEditTextView().setText("18900000027");
-//        mEditPwd.getEditTextView().setText("123456");
-//        mEditNumber.getEditTextView().setText(SPUtil.getPhone());
+        mEditNumber.getEditTextView().setText(SPUtil.getPhone());
         UIUtils.initCursor(mEditNumber.getEditTextView());
         mPd = new ProgressDialog(LoginActivity.this);
         mPd.setCanceledOnTouchOutside(false);

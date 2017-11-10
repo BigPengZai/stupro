@@ -54,7 +54,6 @@
         android:layout_width="fill_parent"
         android:layout_height="38dp"
         android:layout_alignParentBottom="true"
-
         android:visibility="visible" >
 
         <CheckBox
@@ -63,7 +62,6 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-
             android:checked="true" />
 
         <TextView
