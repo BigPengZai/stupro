@@ -37,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -167,6 +168,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //
     @BindView(R.id.constraint)
     ConstraintLayout mConstraintLayout;
+    @BindView(R.id.switch_btn)
+    Switch mDrawSwitch;
 
     private CountDownTimer timer;
     private final long INTERVAL = 1000L;
@@ -675,6 +678,16 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 break;
                             case "IM":
                                 notifyMessageChanged(new io.agore.openvcall.model.Message(new User(mListBean.channelTeacherId, boardBean.scaling), boardBean.methodparam));
+                                break;
+                            case "15":
+                                mScrollView.setIntercept(true);
+                                Toast.makeText(ChatActivity.this, "老师允许了画板操作", Toast.LENGTH_SHORT).show();
+                                mDrawSwitch.setVisibility(View.VISIBLE);
+                                break;
+                            case "16":
+                                mScrollView.setIntercept(false);
+                                Toast.makeText(ChatActivity.this, "老师静止了画板操作", Toast.LENGTH_SHORT).show();
+                                mDrawSwitch.setVisibility(View.GONE);
                                 break;
                         }
                     }

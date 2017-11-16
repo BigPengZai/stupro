@@ -247,7 +247,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
         view.eventActionDown(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
         view.eventActionMove(parseFloat(xyAxle[0]) * rate, parseFloat(xyAxle[1]) * rate);
-        view.eventActionUp(parseFloat(xyAxle[2]) * rate, parseFloat(xyAxle[3]) * rate);
+        view.eventActionUp(parseFloat(xyAxle[3]) * rate, parseFloat(xyAxle[4]) * rate);
     }
 
 
@@ -257,7 +257,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
         view.eventActionDown(parseFloat(xyAxle[0]) * getScreenRate(), parseFloat(xyAxle[1]) * getScreenRate());
         view.eventActionMove(parseFloat(xyAxle[0]) * getScreenRate(), parseFloat(xyAxle[1]) * getScreenRate());
-        view.eventActionUp(parseFloat(xyAxle[2]) * getScreenRate(), parseFloat(xyAxle[3]) * getScreenRate());
+        view.eventActionUp(parseFloat(xyAxle[3]) * getScreenRate(), parseFloat(xyAxle[4]) * getScreenRate());
 
         view.refreshLastText(text);
     }

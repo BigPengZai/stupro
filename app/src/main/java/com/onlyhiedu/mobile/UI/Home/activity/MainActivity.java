@@ -26,6 +26,7 @@ import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.Model.event.NightModeEvent;
+import com.onlyhiedu.mobile.Model.http.onlyApis;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.mobile.UI.Home.fragment.HomeFragment;
@@ -131,7 +132,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
                     if (!isConnect) { //没有连接过
                         mSocket = new Socket();
-                        mSocket.connect(new InetSocketAddress("client.haiketang.net", 30000), 2000);
+                        mSocket.connect(new InetSocketAddress(onlyApis.IP, 30000), 2000);
                         outputStream = mSocket.getOutputStream();
                         String s = mGson.toJson(new LoginRequest(oldPhone + "student", 2, SPUtil.getToken()));
                         outputStream.write(s.getBytes());
@@ -148,7 +149,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                                 noNetwork = false;
                                 mSocket = new Socket();
                                 //101.132.116.184
-                                mSocket.connect(new InetSocketAddress("client.haiketang.net", 30000), 2000);
+                                mSocket.connect(new InetSocketAddress(onlyApis.IP, 30000), 2000);
 
                                 outputStream = mSocket.getOutputStream();
                                 String s = "";
@@ -374,16 +375,16 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (!mSocket.isClosed()) {
-            try {
-                mSocket.close();
-                sendData = false;
-            } catch (IOException e) {
-                e.printStackTrace();
+        if(mSocket != null){
+            if (!mSocket.isClosed()) {
+                try {
+                    mSocket.close();
+                    sendData = false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
         UMShareAPI.get(this).release();
         EventBus.getDefault().unregister(this);
     }
