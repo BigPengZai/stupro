@@ -16,6 +16,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -197,7 +200,16 @@ public class DrawView extends FrameLayout implements View.OnTouchListener {
                     break;
                 case TEXT:
                     if (drawMove.getText() != null && !drawMove.getText().equals("")) {
-                        mContentCanvas.drawText(drawMove.getText(), drawMove.getStartX(), drawMove.getStartY(), drawMove.getPaint());
+                        TextPaint textPaint = new TextPaint();
+                        textPaint.setColor(drawMove.getPaint().getColor());
+                        textPaint.setTextSize(drawMove.getPaint().getTextSize());
+                        textPaint.setAntiAlias(true);
+                        StaticLayout layout = new StaticLayout(drawMove.getText(), textPaint, 10000, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                        mContentCanvas.save();
+                        mContentCanvas.translate(drawMove.getStartX(), drawMove.getStartY());//从100，100开始画
+                        layout.draw(mContentCanvas);
+                        mContentCanvas.restore();//别忘了restore
+//                        mContentCanvas.drawText(drawMove.getText(), drawMove.getStartX(), drawMove.getStartY(), drawMove.getPaint());
                     }
                     break;
                 case ERASER:

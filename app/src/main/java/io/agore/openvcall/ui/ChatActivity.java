@@ -680,12 +680,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 notifyMessageChanged(new io.agore.openvcall.model.Message(new User(mListBean.channelTeacherId, boardBean.scaling), boardBean.methodparam));
                                 break;
                             case "15":
-                                mScrollView.setIntercept(true);
+                                mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+                                visableTag = 1;
                                 Toast.makeText(ChatActivity.this, "老师允许了画板操作", Toast.LENGTH_SHORT).show();
                                 mDrawSwitch.setVisibility(View.VISIBLE);
                                 break;
                             case "16":
-                                mScrollView.setIntercept(false);
+                                mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+                                visableTag = 1;
                                 Toast.makeText(ChatActivity.this, "老师静止了画板操作", Toast.LENGTH_SHORT).show();
                                 mDrawSwitch.setVisibility(View.GONE);
                                 break;

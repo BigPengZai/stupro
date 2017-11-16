@@ -125,24 +125,35 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
             setDrawingMode(view, myBoardData.type);
             switch (myBoardData.type) {
                 case PEN:
-                    view.setDrawWidth(myBoardData.lineWidth);
+                    view.setDrawWidth(myBoardData.lineWidth * getScreenRate());
                     view.setDrawColor(myBoardData.color);
                     drawLine(view, myBoardData, getScreenRate());
                     break;
                 case Eraser:
+                    view.setEraserSize(myBoardData.lineWidth * getScreenRate());
                     drawLine(view, myBoardData, getScreenRate());
                     break;
                 case Rectangle:
+                    view.setDrawWidth(myBoardData.lineWidth * getScreenRate());
                     view.setDrawColor(myBoardData.color);
                     drawRectangle(view, myBoardData.XYData, getScreenRate());
                     break;
                 case Oval:
+                    view.setDrawWidth(myBoardData.lineWidth * getScreenRate());
                     view.setDrawColor(myBoardData.color);
                     drawOval(view, myBoardData.XYData, getScreenRate());
                     break;
                 case Line:
+                    view.setDrawWidth(myBoardData.lineWidth * getScreenRate());
                     view.setDrawColor(myBoardData.color);
                     drawLine(view, myBoardData, getScreenRate());
+                    break;
+                case Text:
+                    view.setDrawColor(myBoardData.color);
+                    view.setDrawWidth(1);
+                    int fontSize = (int) (myBoardData.lineWidth * getScreenRate() + 0.5);
+                    view.setFontSize(fontSize);
+                    drawText(view, myBoardData.XYData, myBoardData.text);
                     break;
             }
         }
@@ -374,32 +385,37 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         setDrawingMode(view, drawMode);
 
 
-        if (PEN.equals(drawMode)) { //画线
-            drawLine(view, points);
-        }
-        if (Line.equals(drawMode)) { //直线
-            drawLine(view, points);
-        }
-        if (Rectangle.equals(drawMode)) { //框
-            drawRectangle(view, points, getScreenRate());
-        }
-        if (Oval.equals(drawMode)) { //画圆
-            drawOval(view, points, getScreenRate());
-        }
-        if (Text.equals(drawMode)) {
-            String text = jsonObject.getString("text");
-            view.setDrawWidth(1);
-            view.setFontSize(20);
-            drawText(view, points, text);
-        }
-        if (Eraser.equals(drawMode)) { //橡皮檫
-            drawEraser(view, points);
-        }
+        switch (drawMode) {
+            case PEN: //画线
+                drawLine(view, points);
+                break;
+            case Line: //直线
+                drawLine(view, points);
+                break;
+            case Rectangle: //框
+                drawRectangle(view, points, getScreenRate());
+                break;
+            case Oval: //画圆
+                drawOval(view, points, getScreenRate());
+                break;
+            case Text:
+                String text = jsonObject.getString("text");
+                view.setDrawWidth(1);
+                int size = jsonObject.getInt("size");
+                int fontSize = (int) ((float) size * getScreenRate() + 0.5);
+                view.setFontSize(fontSize);
+                drawText(view, points, text);
+                break;
+            case Eraser:
+                view.setEraserSize(Float.valueOf(lineWidth) * getScreenRate());
+                drawEraser(view, points);
+                break;
 
+        }
         if (Text.equals(drawMode)) {
-            add(drawMode, points, view.getDrawColor(), view.getDrawWidth(), jsonObject.getString("text"));
+            add(drawMode, points, view.getDrawColor(), jsonObject.getInt("size"), jsonObject.getString("text"));
         } else {
-            add(drawMode, points, view.getDrawColor(), view.getDrawWidth(), null);
+            add(drawMode, points, view.getDrawColor(), Float.valueOf(lineWidth), null);
         }
     }
 
