@@ -688,7 +688,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             case "16":
                                 mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
                                 visableTag = 1;
-                                Toast.makeText(ChatActivity.this, "老师静止了画板操作", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ChatActivity.this, "老师禁止了画板操作", Toast.LENGTH_SHORT).show();
+                                mDrawSwitch.setChecked(false);
+                                mScrollView.setIntercept(false);
                                 mDrawSwitch.setVisibility(View.GONE);
                                 break;
                         }
@@ -797,7 +799,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onChannelUserJoined(String account, int uid) {
                 if (account.equals(String.valueOf(mListBean.channelTeacherId))) {
-                    Log.d(TAG, "信令频道其他用户加入："+account);
+                    Log.d(TAG, "信令频道其他用户加入：" + account);
                     initRoom();
                 }
             }
@@ -813,7 +815,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 super.onChannelUserList(accounts, uids);
                 List<String> strings = Arrays.asList(accounts);
                 if (strings.contains(String.valueOf(mListBean.channelTeacherId))) {
-                    Log.d(TAG, "信令频道有老师加入:"+mListBean.channelTeacherId);
+                    Log.d(TAG, "信令频道有老师加入:" + mListBean.channelTeacherId);
                     initRoom();
                 }
             }
@@ -917,7 +919,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.img_back,R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute,R.id.but_upload})
+    @OnClick({R.id.img_back, R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute, R.id.but_upload})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -1190,7 +1192,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void hindIMLayout() {
         mLlMsg.setVisibility(View.VISIBLE);
         mTvIM.setBackgroundResource(R.drawable.im_text_bg2);
-        SystemUtil.hideKeyboard(mTvIM,this);
+        SystemUtil.hideKeyboard(mTvIM, this);
         mTvIM.setTextColor(getResources().getColor(R.color.im_text_color2));
         TranslateAnimation animation = new TranslateAnimation(0, -mLlMsg.getWidth(), 1, 1);
         animation.setDuration(300);
@@ -1506,6 +1508,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
     }
+
     //客户端可能会和服务器失去连接，SDK会进行自动重连，自动重连成功后触发此回调方法
     @Override
     public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
@@ -1543,7 +1546,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     int i = rtcEngine().muteLocalVideoStream(false);
                     rtcEngine().muteLocalAudioStream(false);
                     int i1 = rtcEngine().enableLocalVideo(true);
-                    if (mRel_Stu!=null&&mStuSurfView != null) {
+                    if (mRel_Stu != null && mStuSurfView != null) {
                         mRel_Stu.removeAllViews();
                         mRel_Stu.addView(mStuSurfView);
                     }
