@@ -688,7 +688,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             case "16":
                                 mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
                                 visableTag = 1;
-                                Toast.makeText(ChatActivity.this, "老师禁止了画板操作", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(
+                                        ChatActivity.this, "老师禁止了画板操作", Toast.LENGTH_SHORT).show();
                                 mDrawSwitch.setChecked(false);
                                 mScrollView.setIntercept(false);
                                 mDrawSwitch.setVisibility(View.GONE);

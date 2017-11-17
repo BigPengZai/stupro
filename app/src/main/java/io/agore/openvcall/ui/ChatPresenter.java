@@ -399,9 +399,6 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 drawOval(view, points, getScreenRate());
                 break;
             case Text:
-                String color2 = jsonObject.getString("textColor");
-                String[] split2 = color2.substring(1, color2.length() - 1).split(",");
-                view.setDrawColor(Color.argb(0, Integer.valueOf(split2[0]), Integer.valueOf(split2[1]), Integer.valueOf(split2[2])));
                 String text = jsonObject.getString("text");
                 view.setDrawWidth(1);
                 int size = jsonObject.getInt("size");
