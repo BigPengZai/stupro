@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.SimpleActivity;
@@ -50,7 +52,7 @@ public class MineOrdersActivity extends SimpleActivity {
     @Override
     protected void initEventAndData() {
         setToolBar("我的订单");
-
+        setToolbar();
         mMOrderSucessIntent = getIntent().getBooleanExtra("mOrderSucessIntent", false);
 
         mPendingPay = getIntent().getBooleanExtra("pendingPay", false);
@@ -100,4 +102,16 @@ public class MineOrdersActivity extends SimpleActivity {
         finish();
     }
 
+
+    public void setToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressedSupport();
+            }
+        });
+    }
 }

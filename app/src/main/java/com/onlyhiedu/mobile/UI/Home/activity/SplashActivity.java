@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.UI.Home.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -21,6 +22,8 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        //竖屏锁定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         new Thread(new Runnable() {
             public void run() {
                 if (/*DemoHelper.getInstance().isLoggedIn()&&*/!TextUtils.isEmpty(SPUtil.getToken())) {
