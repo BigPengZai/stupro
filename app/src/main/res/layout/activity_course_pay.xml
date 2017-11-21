@@ -192,7 +192,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="小计: "
+                android:text="合计: "
                 android:textSize="21sp"/>
             <TextView
                 android:id="@+id/tv_total"
@@ -212,6 +212,6 @@
             android:padding="11dp"
             android:text="确认支付"
             android:textColor="@color/white"
-            android:textSize="21sp"/>
+            android:textSize="19sp"/>
     </RelativeLayout>
 </LinearLayout>

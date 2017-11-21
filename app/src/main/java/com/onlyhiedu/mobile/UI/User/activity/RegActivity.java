@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -93,6 +94,10 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     @Override
     protected void initView() {
         setToolBar("注册");
+        if (mToolbar != null) {
+            mToolbar.setNavigationIcon(R.mipmap.back);
+            mToolbar.setBackgroundColor(Color.parseColor("#F42440"));
+        }
         mEditPwd.setPassword(true);
         mEditConfirmPwd.setPassword(true);
 

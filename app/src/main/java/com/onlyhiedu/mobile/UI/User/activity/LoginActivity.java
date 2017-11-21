@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.UI.User.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +67,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     protected void initView() {
 
         setToolBar("手机号登录");
+        if (mToolbar != null) {
+            mToolbar.setNavigationIcon(R.mipmap.back);
+            mToolbar.setBackgroundColor(Color.parseColor("#F42440"));
+        }
+
 
         mShowHomePosition = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
         mAccountEdgeOut = getIntent().getBooleanExtra(OpenIDActivity.AccountEdgeOut, false);

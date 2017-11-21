@@ -133,7 +133,7 @@
             android:padding="@dimen/size_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="官方"
+            android:text="官网"
             android:textColor="@color/c_F42440"/>
 
         <View
@@ -147,7 +147,7 @@
             android:padding="@dimen/size_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="版权信息"
+            android:text="服务条款"
             android:textColor="@color/c_F42440"/>
     </LinearLayout>
 </RelativeLayout>

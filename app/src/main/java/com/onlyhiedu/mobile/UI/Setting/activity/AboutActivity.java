@@ -68,7 +68,7 @@ public class AboutActivity extends VersionUpdateActivity {
                 }
                 break;
             case R.id.tv_official:
-                UIUtils.startHomeNewsWebViewAct(mContext, "http://www.onlyhi.cn/", "官网");
+                UIUtils.startHomeNewsWebViewAct(mContext, "http://www.haiketang.net/", "官网");
                 break;
             case R.id.tv_information:
                 startActivity(new Intent(mContext, TermServiceActivity.class));

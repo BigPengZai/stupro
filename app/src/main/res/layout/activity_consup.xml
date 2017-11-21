@@ -17,7 +17,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/c_242424"
-            android:text="课程包"
+            android:text="科目"
             android:textSize="@dimen/sp_17"/>
         <TextView
             android:layout_width="0dp"

@@ -1,5 +1,6 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -91,7 +92,8 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
             public void afterTextChanged(Editable s) {
                 boolean isEmpty = TextUtils.isEmpty(s.toString());
                 mBt_Finish.setEnabled(!isEmpty);
-                mBt_Finish.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
+                // #F74D64    <color name="c_D2D0D0">#D2D0D0</color>
+                mBt_Finish.setTextColor(isEmpty ? Color.parseColor("#D2D0D0"): Color.parseColor("#F74D64"));
             }
         });
     }

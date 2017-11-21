@@ -133,7 +133,7 @@ public class SettingActivity extends SimpleActivity implements CompoundButton.On
     }
 
     private void outApp() {
-        DialogUtil.showOnlyAlert(this, "", "确定要退出登录", "确定", "取消", true, true, new MyDialogListener() {
+        DialogUtil.showOnlyAlert(this, "", "确定要退出登录?", "确定", "取消", true, true, new MyDialogListener() {
             @Override
             public void onPositive(DialogInterface dialog) {
 //                App.bIsGuestLogin = true;

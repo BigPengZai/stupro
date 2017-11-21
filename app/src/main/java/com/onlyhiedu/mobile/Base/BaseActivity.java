@@ -39,6 +39,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends SwipeBackAct
     //String name = BaseActivity.class.getSimpleName();
     private String mPageName = this.getClass().getSimpleName();
     protected InputMethodManager inputMethodManager;
+    public Toolbar mToolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +76,13 @@ public abstract class BaseActivity<T extends BasePresenter> extends SwipeBackAct
 
 
     protected void setToolBar(String title) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView tvTitle = (TextView) toolbar.findViewById(R.id.title);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView tvTitle = (TextView) mToolbar.findViewById(R.id.title);
         tvTitle.setText(title);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.back);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressedSupport();

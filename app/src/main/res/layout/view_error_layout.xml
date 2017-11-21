@@ -83,7 +83,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:layout_marginTop="3dp"
-                android:background="@color/c_F42440"
+                android:background="@drawable/shape_reg_btn_radius_refresh"
                 android:textColor="@color/white"
                 android:layout_width="70dp"
                 android:layout_height="30dp"/>

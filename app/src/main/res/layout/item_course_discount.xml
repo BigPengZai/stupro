@@ -92,7 +92,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
-                    android:background="@color/c_f6f6f6"/>
+                    android:background="@color/c_b1b1b1"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

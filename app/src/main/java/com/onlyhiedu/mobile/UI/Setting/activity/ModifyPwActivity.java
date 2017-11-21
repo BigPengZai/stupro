@@ -51,7 +51,7 @@ public class ModifyPwActivity extends BaseActivity<ModifyPwPresenter> implements
 
     @Override
     protected void initView() {
-        setToolBar("设置");
+        setToolBar("修改密码");
 
         mEdit_Old_Number.getEditTextView().addTextChangedListener(mTextWatcher);
         mEdit_New_Pw.getEditTextView().addTextChangedListener(mTextWatcher2);
