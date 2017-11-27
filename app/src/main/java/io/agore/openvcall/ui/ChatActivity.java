@@ -1364,10 +1364,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (flag) {
             mRel_Stu.setVisibility(View.VISIBLE);
             mRel_Tea.setVisibility(View.VISIBLE);
-            mTv_Video_Local.setVisibility(View.VISIBLE);
+          /*  mTv_Video_Local.setVisibility(View.VISIBLE);
             mTv_Video_Mute.setVisibility(View.VISIBLE);
             mTv_Audio_Local.setVisibility(View.VISIBLE);
-            mTv_Audio_Mute.setVisibility(View.VISIBLE);
+            mTv_Audio_Mute.setVisibility(View.VISIBLE);*/
   /*    app:layout_constraintLeft_toLeftOf="@+id/guideline_v1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
@@ -1660,7 +1660,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void run() {
                 //当有其他用户退出
                 if (uid == mListBean.channelTeacherId) {
-//                    isTeacherJoined = false;
+                    isTeacherJoined = false;
                     SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                 }
             }
