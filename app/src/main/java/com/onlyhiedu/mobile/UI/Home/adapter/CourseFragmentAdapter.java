@@ -36,6 +36,14 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, CourseList.ListBean item, int position) {
         ViewHolder h = (ViewHolder) holder;
         h.mTvCourse.setText("科目: "+item.subject);
+        if ( item.courseType == 0) {
+            h.mTvCourseType.setText("测评课");
+            h.mTvCourseType.setBackgroundResource(R.drawable.shape_reg_btn_course_type_0);
+        }
+        if ( item.courseType == 2) {
+            h.mTvCourseType.setText("调试课");
+            h.mTvCourseType.setBackgroundResource(R.drawable.shape_reg_btn_course_type_2);
+        }
         h.mTvAuth.setText("讲师: "+item.teacherName);
         h.mTvTime.setText("课程时间: "+
                 item.getCourseDate()+
@@ -115,6 +123,9 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
         TextView mTv_In;
         @BindView(R.id.iv_class)
         ImageView mIv_Class;
+
+        @BindView(R.id.tv_course_type)
+        TextView mTvCourseType;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

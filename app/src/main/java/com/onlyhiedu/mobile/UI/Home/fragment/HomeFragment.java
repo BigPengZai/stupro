@@ -51,8 +51,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
 
     private HomeNewsAdapter mNewsAdapter;
 //    private String urls[] = {"http://www.onlyhi.cn/", "http://www.onlyhi.cn/", "http://www.onlyhi.cn/"};
-    private String urls[] = {"http://www.haiketang.net/", "http://www.haiketang.net/", "http://www.haiketang.net/"};
-    private String titles[] = {"首页", "暑期课程", "明星课程"};
+    private String urls[] = {"http://www.onlyhi.cn/mobile/test_sign.html", "http://www.haiketang.net/", "http://www.haiketang.net/"};
+    private String titles[] = {"学习力测评", "暑期课程", "明星课程"};
 
     @BindView(R.id.banner)
     Banner mBanner;

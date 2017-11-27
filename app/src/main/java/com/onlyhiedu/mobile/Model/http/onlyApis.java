@@ -46,13 +46,13 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://clienttest.haiketang.net ";
-//    String IP = "clienttest.haiketang.net";
+    String HOST = "http://clienttest.haiketang.net ";
+    String IP = "clienttest.haiketang.net";
 
 
-    //公网环境
-    String HOST = "http://client.onlyhi.cn/";
-    String IP = "client.onlyhi.cn";
+//    //公网环境
+//    String HOST = "http://client.onlyhi.cn/";
+//    String IP = "client.onlyhi.cn";
 
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";

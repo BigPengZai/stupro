@@ -65,7 +65,7 @@
                         android:id="@+id/tv_hear"
                         style="@style/home_text"
                         android:drawableTop="@mipmap/ic_headset"
-                        android:text="免费试听"
+                        android:text="学习力测评"
                         android:textSize="@dimen/sp_12"/>
                     <TextView
                         android:id="@+id/tv_information"

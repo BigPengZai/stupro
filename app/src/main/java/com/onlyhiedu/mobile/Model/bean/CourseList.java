@@ -40,6 +40,8 @@ public class CourseList {
         public String teacherName;
 
         public int channelTeacherId;
+//课程类型 0:测评课;1:正式课;2:调试课
+        public int courseType;
         //增加字段 是否点击
         public boolean isClickAble=false;
 

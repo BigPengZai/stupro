@@ -21,6 +21,7 @@
             android:textSize="@dimen/sp_16"/>
 
         <TextView
+            android:text="222"
             android:id="@+id/tv_total"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
             android:textSize="@dimen/sp_16"/>
 
         <TextView
+            android:text="222"
             android:id="@+id/tv_remaing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
