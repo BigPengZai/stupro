@@ -51,7 +51,9 @@
         android:layout_marginTop="@dimen/size_15"
         ecdemo:item_InputType="password"
         ecdemo:item_close_icon="@mipmap/ic_pwd_hide"
-        ecdemo:item_hint_text="密码"/>
+        ecdemo:item_hint_text="密码"
+
+    />
 
 
     <Button

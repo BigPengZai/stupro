@@ -46,13 +46,13 @@ public interface onlyApis {
 
 
     //测试环境
-    String HOST = "http://clienttest.haiketang.net ";
-    String IP = "clienttest.haiketang.net";
+//    String HOST = "http://clienttest.haiketang.net ";
+//    String IP = "clienttest.haiketang.net";
 
 
     //公网环境
-//    String HOST = "http://client.haiketang.net/";
-//    String IP = "client.haiketang.net";
+    String HOST = "http://client.onlyhi.cn/";
+    String IP = "client.onlyhi.cn";
 
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
@@ -154,6 +154,10 @@ public interface onlyApis {
     //课程记录 已经完成
     @GET("client/student/getCourseRecordV1List")
     Flowable<onlyHttpResponse<CourseList>> getEndCourseList(@Query("pageNo") int page);
+
+    //下课接口
+    @POST("client/course/updateEndTime")
+    Flowable<onlyHttpResponse> getUpdateEndTime(@Query("courseUuid") String courseUuid);
 
     /**
      * 一对多课程记录 已经完成

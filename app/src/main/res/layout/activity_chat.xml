@@ -199,7 +199,7 @@
         android:src="@mipmap/ic_full_screen"
         app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v2"/>
-    <!--Toolbar   -->
+    <!--Toolbar    -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -243,7 +243,7 @@
                 android:paddingLeft="@dimen/size_18"
                 android:paddingRight="@dimen/size_18"
                 android:paddingTop="@dimen/size_7"
-                android:text="我要下课"
+                android:text="退出教室"
                 android:textColor="@color/select_log_out"
                 android:textSize="@dimen/size_16"/>
             <RelativeLayout
@@ -286,6 +286,7 @@
 
         </LinearLayout>
         <ImageView
+            android:visibility="gone"
             android:id="@+id/img_back"
             android:layout_width="50dp"
             android:layout_height="50dp"

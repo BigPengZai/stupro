@@ -221,6 +221,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public final static int CAMERA_REQUEST_CODE = 3;
 
     private File mFileOut;
+    private Date mRoom_start;
+    //标记 超过20分钟 一个人 调下课接口
+    private boolean mUpdateEndTime;
 
     @Override
     protected void initInject() {
@@ -356,9 +359,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         String startTime = mListBean.getStartTime() + ":00";
         String courseDate = mListBean.getCourseDate();
         String endTime_start = mListBean.getEndTime() + ":00";
-//        String startTime = "17:40:00";
-//        String courseDate = "2017-10-26";
-//        String endTime_start = "17:59:00";
+//        String startTime = "19:41:00";
+//        String courseDate = "2017-11-23";
+//        String endTime_start = "19:51:00";
         mTime = DateUtil.getTime(courseDate + " " + startTime);
         mEndtime1 = DateUtil.getTime(courseDate + " " + endTime_start);
         mRoomStartTime = DateUtil.getStrTime(mTime);
@@ -366,12 +369,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         String nowTime = DateUtil.formatDate(new Date(System.currentTimeMillis()), DateUtil.yyyyMMddHHmmss);
         DateFormat df = new SimpleDateFormat(DateUtil.yyyyMMddHHmmss);
         try {
-            Date room_start = df.parse(mRoomStartTime);
+            mRoom_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
-            mRoomDix = room_end.getTime() - room_start.getTime();
+            mRoomDix = room_end.getTime() - mRoom_start.getTime();
             DateUtil.updateTimeFormat(mTv_Total_Room, (int) mRoomDix);
             Date now = df.parse(nowTime);
-            long diff = room_start.getTime() - now.getTime();
+            long diff = mRoom_start.getTime() - now.getTime();
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
             //没到开始时间
             if (diff > 0) {
@@ -413,6 +416,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private void startCountTime(long diff) {
         mIsBack = false;
         isStartTime = true;
+        mButDismiss.setText("我要下课");
         timer = new CountDownTimer(diff + 1050L, INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -423,6 +427,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if ("00:03:00".equals(mTv_Count.getText().toString())) {
                     initSoonDialog();
                 }
+                initAfterClass();
               /*  if ("00:00:10".equals(mTv_Count.getText().toString())) {
                     initSoonDialog();
                 }*/
@@ -430,13 +435,38 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
             @Override
             public void onFinish() {
-                // TODO Auto-generated method stub
                 Log.d(TAG, "停止计时");
                 isStartTime = false;
                 finishRoom();
             }
 
         }.start();
+    }
+
+    private void initAfterClass() {
+        // 20分钟  课程开始后，只有一个人在教室内：
+//                1.<20分钟：点击左下角下课按钮仅退出教室，还可以再次进入；
+//                2.>=20分钟，点击左下角下课按钮，调下课接口，结束该次课程并退出教室。
+//                3.=20分钟，弹窗提示：“老师繁忙，未能及时赶到，请联系您的班主任。”，点击【确定】按钮关闭弹窗。 一个人退出教室调接口 20*60
+        if (!isTeacherJoined) {
+            //课程时间开始 秒值
+            //标记20分钟
+            Long mTag = mRoom_start.getTime() / 1000 +/*20*60*/+20;
+            if (System.currentTimeMillis() / 1000 >= mTag) {
+                Log.d(TAG, "迟到超过20秒钟");
+                mUpdateEndTime = true;
+            }
+            if (System.currentTimeMillis() / 1000 == mTag) {
+                Log.d(TAG, "刚好迟到20秒钟");
+                showRemindTeaDialog();
+            }
+            if (System.currentTimeMillis() / 1000 <mTag){
+                //老师没有进来 小于20分钟
+                Log.d(TAG, "老师没有进来 小于20秒");
+                mButDismiss.setText("退出教室");
+            }
+
+        }
     }
 
     private void initSoonDialog() {
@@ -456,6 +486,25 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
         );
     }
+
+    private void showRemindTeaDialog() {
+        DialogUtil.showOnlyAlert(this,
+                "提示"
+                , "老师繁忙，未能及时赶到，请联系您的班主任。"
+                , "知道了"
+                , ""
+                , true, true, new DialogListener() {
+                    @Override
+                    public void onPositive(DialogInterface dialog) {
+                    }
+
+                    @Override
+                    public void onNegative(DialogInterface dialog) {
+                    }
+                }
+        );
+    }
+
 
     private void finishRoom() {
         if (m_agoraAPI != null) {
@@ -913,6 +962,14 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         }
     }
 
+    @Override
+    public void showUpdateEndTime(String msg) {
+        if ("成功".equals(msg)) {
+            Log.d(TAG, "下课接口 拉取成功");
+            finishClassRoom();
+        }
+    }
+
     private FrameLayout.LayoutParams mDrawViewP;
 
     private FrameLayout.LayoutParams mDrawViewFullP;
@@ -984,13 +1041,19 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 upLoadHomeWork();
                 break;
             case R.id.img_back:
-                if (mIsBack) {
-                    finishClassRoom();
+            /*    if (mUpdateEndTime) {
+                    initUpdateEndTime();
+                    mPresenter.getUpdateEndTime(mListBean.courseUuid);
                 } else {
-                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
-                }
+                    finishClassRoom();
+//                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
+                }*/
                 break;
         }
+    }
+
+    private void initUpdateEndTime() {
+
     }
 
     private void upLoadHomeWork() {
@@ -1179,14 +1242,46 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
     private void canFinshClass() {
-        if (isStartTime && isTeacherJoined && (mIsBack == false)) {
+//        mPresenter.getUpdateEndTime();
+        if ("我要下课".equals(mButDismiss.getText().toString()) && isTeacherJoined) {
+            requestFinishClass();
+        } else {
+            showUpdateEndTimeDialog(mButDismiss.getText().toString());
+        }
+      /*  if (isStartTime && isTeacherJoined && (mIsBack == false)) {
             //学生点击我要下课
             requestFinishClass();
         } else {
             //没有开始上课计时      老师没有进入教室         当文案现实 退出教室时
             //isStartTime ==false isTeacherJoined==false mIsBack=true
             initFinishClassDialog();
+        }*/
+    }
+
+    private void showUpdateEndTimeDialog(String msg) {
+        if (msg.equals("我要下课")) {
+            msg = "确定结束本次课程并离开教室？";
+        } else {
+            msg = "确定离开教室？";
         }
+        DialogUtil.showOnlyAlert(this,
+                "提示"
+                , msg
+                , "确认"
+                , ""
+                , true, true, new DialogListener() {
+                    @Override
+                    public void onPositive(DialogInterface dialog) {
+                        Log.d(TAG, "拉取下课接口");
+                         mPresenter.getUpdateEndTime(mListBean.courseUuid);
+                    }
+
+                    @Override
+                    public void onNegative(DialogInterface dialog) {
+                        Log.d(TAG, "onNegative:");
+                    }
+                }
+        );
     }
 
 
@@ -1542,6 +1637,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             public void run() {
                 if (uid == mListBean.channelTeacherId) {
                     isTeacherJoined = true;
+                    mButDismiss.setText("我要下课");
 //                    mDrawView.restartDrawing();
 //                    mImageCourseWare.setImageResource(R.drawable.transparent);
                     int i = rtcEngine().muteLocalVideoStream(false);
@@ -1562,9 +1658,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                isTeacherJoined = false;
                 //当有其他用户退出
                 if (uid == mListBean.channelTeacherId) {
+//                    isTeacherJoined = false;
                     SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
                 }
             }

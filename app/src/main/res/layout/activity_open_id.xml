@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:background="@mipmap/background"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/size_20"
+    android:paddingRight="@dimen/size_20"
     tools:context="com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/size_20"
-        android:paddingRight="@dimen/size_20">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/tv_cancel"
@@ -33,33 +33,26 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/mobile_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/size_20"
-        android:paddingRight="@dimen/size_20">
-        <TextView
-            android:id="@+id/mobile_login"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_45"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/shape_storke_white_1px"
-            android:gravity="center"
-            android:text="手机号登录"
-            android:textColor="@color/white"/>
+        android:layout_height="@dimen/size_45"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/shape_storke_white_1px"
+        android:gravity="center"
+        android:text="手机号登录"
+        android:textColor="@color/white"/>
 
-        <TextView
-            android:id="@+id/register"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_45"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/shape_storke_white_1px"
-            android:gravity="center"
-            android:text="注册"
-            android:textColor="@color/white"/>
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_45"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_storke_white_1px"
+        android:gravity="center"
+        android:text="注册"
+        android:textColor="@color/white"/>
 
     <!--    <TextView android:id="@+id/guest" android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -69,17 +62,17 @@
                   android:text="游客使用"
                   android:textColor="@color/white"/>-->
     <LinearLayout
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="vertical">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/size_20"
-            android:paddingRight="@dimen/size_20">
+            android:layout_marginBottom="@dimen/size_20"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -103,41 +96,34 @@
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/line2"/>
         </LinearLayout>
+
         <LinearLayout
-           android:layout_marginTop="-60dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="70dp">
-            <ImageView
-                android:layout_marginLeft="-13dp"
-                android:id="@+id/btn_openid_wx"
-                android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_login_bg"
-                android:padding="30dp"
-                android:src="@mipmap/logo_wechat"/>
+            android:layout_marginBottom="@dimen/size_30"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/btn_openid_qq"
                 android:layout_width="0dp"
-                android:layout_height="90dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_login_bg"
-                android:padding="30dp"
                 android:src="@mipmap/logo_qq"/>
+            <ImageView
+                android:id="@+id/btn_openid_wx"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:src="@mipmap/logo_wechat"/>
 
             <ImageView
-                android:layout_marginRight="-13dp"
                 android:id="@+id/btn_openid_sina"
                 android:layout_width="0dp"
-                android:layout_height="90dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_login_bg"
-                android:padding="30dp"
                 android:src="@mipmap/logo_weibo"/>
 
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

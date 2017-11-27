@@ -65,7 +65,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void initView() {
-
+        mEditPwd.setPassword(true);
+        mEditPwd.setShowIcon(true);
         setToolBar("手机号登录");
         if (mToolbar != null) {
             mToolbar.setNavigationIcon(R.mipmap.back);

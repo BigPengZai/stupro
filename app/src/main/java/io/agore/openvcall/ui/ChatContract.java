@@ -20,6 +20,9 @@ public interface ChatContract {
         void showFlowStatistics();
 
         void showCourseWareImageList(List<CourseWareImageList> data, int pageNum, boolean restart);
+
+        //下课
+        void showUpdateEndTime(String msg);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
@@ -27,7 +30,9 @@ public interface ChatContract {
         void uploadStatistics(String classTime, String courseUuid);
 
         //课件图片列表
-        void getCourseWareImageList(String wareId, int pageNum,boolean restart);
+        void getCourseWareImageList(String wareId, int pageNum, boolean restart);
 
+        //下课
+        void getUpdateEndTime(String courseUuid);
     }
 }

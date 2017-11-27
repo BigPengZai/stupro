@@ -51,7 +51,7 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         mImageClose.setOnClickListener(this);
     }
 
-    private void setShowIcon(boolean showIcon) {
+    public void setShowIcon(boolean showIcon) {
         if (showIcon) {
             mImageClose.setVisibility(VISIBLE);
         } else {
@@ -155,7 +155,7 @@ public class InputTextView extends RelativeLayout implements TextWatcher, View.O
         if (isPassword) {
             if (show) {
                 show = false;
-                pwdTextShow();
+                pwdTextShow(); 
             } else {
                 show = true;
                 pwdTextHint();

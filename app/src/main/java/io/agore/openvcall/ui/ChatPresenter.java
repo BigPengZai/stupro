@@ -115,6 +115,24 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
     }
 
+    @Override
+    public void getUpdateEndTime(String courseUuid) {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateEndTime(courseUuid);
+        MyResourceSubscriber<onlyHttpResponse> subscriber = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+                    if (!data.isHasError()) {
+                        getView().showUpdateEndTime(data.getMessage());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
+    }
+
 
     private LinkedList<MyBoardData> drawData = new LinkedList<>();
 

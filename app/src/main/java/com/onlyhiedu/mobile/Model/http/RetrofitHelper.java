@@ -260,6 +260,11 @@ public class RetrofitHelper {
         return sOnlyApis.getStatics(classTime, uuid);
     }
 
+    //下课
+    public Flowable<onlyHttpResponse> fetchUpdateEndTime(String courseUuid) {
+        return sOnlyApis.getUpdateEndTime(courseUuid);
+    }
+
     public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchIsBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country, String deviceId) {
 
         if (share_media == SHARE_MEDIA.WEIXIN) {
