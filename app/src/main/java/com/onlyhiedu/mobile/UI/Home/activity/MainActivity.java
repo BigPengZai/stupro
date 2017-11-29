@@ -22,7 +22,6 @@ import com.onlyhiedu.mobile.App.AppManager;
 import com.onlyhiedu.mobile.Base.VersionUpdateActivity;
 import com.onlyhiedu.mobile.Model.bean.socket.LoginRequest;
 import com.onlyhiedu.mobile.Model.bean.socket.LoginResponse;
-import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.mobile.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.mobile.Model.event.NightModeEvent;
@@ -392,7 +391,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEventMain(MainActivityTabSelectPos event) {
-        EventBus.getDefault().post(new CourseFragmentRefresh(true));
         SPUtil.setGuest(false);
         mMeFragment.setTextStyle();
 

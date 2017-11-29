@@ -25,6 +25,7 @@ import com.onlyhiedu.mobile.Model.bean.TypeListInfo;
 import com.onlyhiedu.mobile.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.mobile.Model.bean.UserDataBean;
 import com.onlyhiedu.mobile.Model.bean.UserIsRegister;
+import com.onlyhiedu.mobile.Utils.SPUtil;
 
 import java.io.File;
 import java.util.List;
@@ -46,14 +47,15 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://clienttest.haiketang.net ";
-//    String IP = "clienttest.haiketang.net";
+    String HOST = "http://clienttest.haiketang.net ";
+    String IP = "clienttest.haiketang.net";
+    String coursePlayback = "http://frontendtest.haiketang.net/static/play.html?token=" + SPUtil.getToken() + "&uuid=";
 
 
-//    //公网环境
-    String HOST = "http://client.onlyhi.cn/";
-    String IP = "client.onlyhi.cn";
-
+    //    //公网环境
+//    String HOST = "http://client.onlyhi.cn/";
+//    String IP = "client.onlyhi.cn";
+//    String coursePlayback =  "http://frontend.onlyhi.cn/static/play.html?token=\" + SPUtil.getToken() + \"&uuid=";
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
 
@@ -144,6 +146,7 @@ public interface onlyApis {
 
     /**
      * 获取学生课程列表1VN
+     *
      * @param page
      * @return
      */
@@ -161,11 +164,13 @@ public interface onlyApis {
 
     /**
      * 一对多课程记录 已经完成
+     *
      * @param page
      * @return
      */
     @GET("client/student/getCourseRecordList")
     Flowable<onlyHttpResponse<CourseList>> getCourseRecordList(@Query("pageNo") int page);
+
     /**
      * 获取教室信息
      *
@@ -474,14 +479,12 @@ public interface onlyApis {
     /**
      * 课时包 Ping++直接支付
      * 支付宝
+     *
      * @return
      */
     @FormUrlEncoded
     @POST("client/coursepay/directPingppPayment")
     Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> getPingPayAliPay(@Field("coursePriceUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
-
-
-
 
 
     /**
@@ -520,15 +523,12 @@ public interface onlyApis {
     Flowable<onlyHttpResponse<PingPaySucessInfo>> getOrderPingPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
 
 
-
     /**
      * 订单 Ping++支付 alipay
      */
     @FormUrlEncoded
     @POST("client/coursepay/orderPingppPay")
     Flowable<onlyHttpResponse<PingPaySucessInfoAliPay>> getOrderPingPayAliPay(@Field("orderUuid") String coursePriceUuid, @Field("channel") String channel, @Field("code") String code);
-
-
 
 
     /**

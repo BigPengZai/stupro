@@ -1,10 +1,14 @@
 package com.onlyhiedu.mobile.UI.Setting.activity;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -32,12 +36,15 @@ import java.io.InputStreamReader;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
 /**
  * Created by Administrator on 2017/10/25.
  */
 
 public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.Callback {
 
+    public int PMS_RECORD_AUDIO = 1;
+    public int PMS_CAMERA = 2;
 
     @BindView(R.id.btn_audio)
     Button mBtnAudio;
@@ -76,24 +83,32 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
     }
 
     private void initListener() {
+
         mBtnAudio.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        AudioRecordManager.getInstance(DeviceTestActivity.this).startRecord();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (isCancelled(v, event)) {
-                            AudioRecordManager.getInstance(DeviceTestActivity.this).willCancelRecord();
-                        } else {
-                            AudioRecordManager.getInstance(DeviceTestActivity.this).continueRecord();
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        AudioRecordManager.getInstance(DeviceTestActivity.this).stopRecord();
-                        AudioRecordManager.getInstance(DeviceTestActivity.this).destroyRecord();
-                        break;
+                if (ContextCompat.checkSelfPermission(DeviceTestActivity.this, Manifest.permission.RECORD_AUDIO)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //进入到这里代表没有权限.
+                    ActivityCompat.requestPermissions(DeviceTestActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, PMS_RECORD_AUDIO);
+                } else {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            AudioRecordManager.getInstance(DeviceTestActivity.this).startRecord();
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (isCancelled(v, event)) {
+                                AudioRecordManager.getInstance(DeviceTestActivity.this).willCancelRecord();
+                            } else {
+                                AudioRecordManager.getInstance(DeviceTestActivity.this).continueRecord();
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            AudioRecordManager.getInstance(DeviceTestActivity.this).stopRecord();
+                            AudioRecordManager.getInstance(DeviceTestActivity.this).destroyRecord();
+                            break;
+
+                    }
                 }
                 return false;
             }
@@ -193,9 +208,7 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
 
                         @Override
                         public void onStop(Uri var1) {
-
                         }
-
 
                         @Override
                         public void onComplete(Uri var1) {
@@ -203,7 +216,6 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
                         }
                     });
                 }
-
             }
 
             @Override
@@ -303,21 +315,26 @@ public class DeviceTestActivity extends SimpleActivity implements SurfaceHolder.
 
                 break;
             case R.id.btn_video:
-                final Dialog dialog = new Dialog(this, R.style.dialog);
-                View v = View.inflate(this, R.layout.layout_surfaceview, null);
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View arg0) {
-                        dialog.cancel();
-                    }
-                });
-                dialog.setContentView(v);
-                surface = (SurfaceView) v.findViewById(R.id.camera_surface);
-                holder = surface.getHolder();//获得句柄
-                holder.addCallback(this);//添加回调
-                holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);//surfaceview不维护自己的缓冲区，等待屏幕渲染引擎将内容推送到用户面前
-                dialog.show();
-                break;
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PMS_CAMERA);
+                } else {
+                    final Dialog dialog = new Dialog(this, R.style.dialog);
+                    View v = View.inflate(this, R.layout.layout_surfaceview, null);
+                    v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View arg0) {
+                            dialog.cancel();
+                        }
+                    });
+                    dialog.setContentView(v);
+                    surface = (SurfaceView) v.findViewById(R.id.camera_surface);
+                    holder = surface.getHolder();//获得句柄
+                    holder.addCallback(this);//添加回调
+                    holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);//surfaceview不维护自己的缓冲区，等待屏幕渲染引擎将内容推送到用户面前
+                    dialog.show();
+                    break;
+                }
         }
     }
 

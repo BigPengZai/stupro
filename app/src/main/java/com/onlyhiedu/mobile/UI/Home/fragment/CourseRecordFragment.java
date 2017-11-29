@@ -2,6 +2,7 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +13,8 @@ import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
-import com.onlyhiedu.mobile.Model.event.CourseFragmentRefresh;
 import com.onlyhiedu.mobile.R;
+import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
@@ -23,13 +24,11 @@ import com.onlyhiedu.mobile.Widget.ErrorLayout;
 import com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout;
 import com.umeng.analytics.MobclickAgent;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.onlyhiedu.mobile.Model.http.onlyApis.coursePlayback;
 
 /**
  * Created by xwc on 2017/3/1.
@@ -64,19 +63,15 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
-
 
     @Override
     protected void initView() {
-        mErrorLayout.setState(ErrorLayout.NETWORK_LOADING);
         mErrorLayout.setOnLayoutClickListener(this);
         mErrorLayout.setListenerPhone(phoneListener);
 
@@ -90,6 +85,11 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
     @Override
     protected void initData() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
@@ -97,13 +97,6 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
                 onRefreshing();
             }
         });
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEventMain(CourseFragmentRefresh event) {
-        if (event.isRefresh && mAdapter != null) {
-            onRefreshing();
-        }
     }
 
     @Override
@@ -161,7 +154,6 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
     }
 
-
     View.OnClickListener phoneListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -178,10 +170,10 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void onItemClick(int position, long itemId) {
-//        mActivity.startActivity(new Intent(mActivity, RoomActivity.class));
         MobclickAgent.onEvent(mContext, "item_finish_item");
+        String url = coursePlayback + mAdapter.getItem(position).courseUuid + "&xp=1";
+        startActivity(new Intent(mContext, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, url).putExtra(HomeNewsWebViewActivity.TITLE, "课程回放"));
     }
-
 
     @Override
     public void showError(String msg) {

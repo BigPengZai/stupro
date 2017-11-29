@@ -68,7 +68,6 @@ public class ProgressWebView2 extends WebView {
 
     public class WebChromeClient extends android.webkit.WebChromeClient {
 
-
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             if (newProgress == 100) {

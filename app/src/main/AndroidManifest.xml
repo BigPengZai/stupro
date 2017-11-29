@@ -194,7 +194,6 @@
         <activity android:name=".UI.Course.activity.EvaluateActivity"/>
         <activity android:name=".UI.Setting.activity.DeviceTestActivity"/>
 
-
         <!-- 广播注册 -->
         <receiver android:name=".receiver.InstallReceiver">
             <intent-filter android:priority="20">
