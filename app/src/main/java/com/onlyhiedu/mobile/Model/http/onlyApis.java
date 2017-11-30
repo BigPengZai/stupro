@@ -47,8 +47,8 @@ public interface onlyApis {
 
 
     //测试环境
-    String HOST = "http://clienttest.haiketang.net ";
-    String IP = "clienttest.haiketang.net";
+    String HOST = "http://clienttest.haiketang.net/";
+    String IP = "clienttest.haiketang.net/";
     String coursePlayback = "http://frontendtest.haiketang.net/static/play.html?token=" + SPUtil.getToken() + "&uuid=";
 
 

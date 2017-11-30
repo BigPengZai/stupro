@@ -1611,6 +1611,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 if (mRel_Tea != null && mRel_Stu != null && mTeaSurfaceV != null && mStuSurfView != null) {
                     if (uid == mListBean.channelTeacherId || uid == Integer.parseInt(mUid)) {
                         rtcEngine().muteLocalAudioStream(false);
