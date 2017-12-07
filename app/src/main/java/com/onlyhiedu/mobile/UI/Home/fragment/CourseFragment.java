@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
+import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
@@ -56,6 +57,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
     RecyclerRefreshLayout mSwipeRefresh;
     @BindView(R.id.error_layout)
     ErrorLayout mErrorLayout;
+    private AgoraUidBean mAgoraUidBean;
 
 
     @Override
@@ -189,7 +191,7 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         Log.d(TAG, "uuid:" + mItem.getUuid());
         if (mItem != null && mItem.isClickAble) {
             mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
-            mPresenter.getRoomInfoList(mItem.getUuid());
+            mPresenter.getMonitorAgoraUidList(mItem.courseUuid);
         } else {
             Toast.makeText(mContext, "课程还没有开始哦", Toast.LENGTH_SHORT).show();
         }
@@ -206,13 +208,13 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
     @Override
     public void showRoomInfoSucess(RoomInfo roomInfo) {
-        if (roomInfo != null && mItem != null) {
+        if (roomInfo != null && mItem != null && mAgoraUidBean!=null) {
             DialogUtil.dismiss(mDialog);
             mIntent = new Intent(mActivity, ChatActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("roomInfo", roomInfo);
             bundle.putSerializable("ListBean", mItem);
-            Log.d(TAG, "uuid:" + mItem.getUuid());
+            bundle.putSerializable("agoraUidBean",mAgoraUidBean);
             mIntent.putExtras(bundle);
             mActivity.startActivity(mIntent);
            /* DialogUtil.showOnlyAlert(mContext,
@@ -248,6 +250,12 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
 
 
         }
+    }
+
+    @Override
+    public void showMonitorAgoraUidList(AgoraUidBean data) {
+        mAgoraUidBean = data;
+        mPresenter.getRoomInfoList(mItem.getUuid());
     }
 
 

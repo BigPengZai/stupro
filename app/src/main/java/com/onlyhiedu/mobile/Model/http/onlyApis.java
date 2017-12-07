@@ -1,6 +1,7 @@
 package com.onlyhiedu.mobile.Model.http;
 
 
+import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
@@ -65,7 +66,7 @@ public interface onlyApis {
      * @param phone
      * @param password
      * @param deviceType
-     * @param userType
+     * @param
      * @return
      */
     @FormUrlEncoded
@@ -144,6 +145,17 @@ public interface onlyApis {
     @GET("client/student/noEndCourseV1List")
     Flowable<onlyHttpResponse<CourseList>> getNoStartCourseList(@Query("pageNo") int page);
 
+
+
+    /**
+     *获得监课的声网uid列表
+     *
+     * */
+    @GET("client/course/getAgoraUidList")
+    Flowable<onlyHttpResponse<AgoraUidBean>> getGetMonitorAgoraUidList(@Query("courseUuid") String courseUuid);
+
+
+
     /**
      * 获取学生课程列表1VN
      *
@@ -161,6 +173,11 @@ public interface onlyApis {
     //下课接口
     @POST("client/course/updateEndTime")
     Flowable<onlyHttpResponse> getUpdateEndTime(@Query("courseUuid") String courseUuid);
+
+    //停止录制
+    @POST("client/course/stopRecordByForm")
+    Flowable<onlyHttpResponse> getStopRecord(@Query("courseUuid") String courseUuid);
+
 
     /**
      * 一对多课程记录 已经完成
@@ -561,4 +578,5 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/course/saveAppraise")
     Flowable<onlyHttpResponse> saveAppraise(@Field("star") int num, @Field("classAppraiseStarUuids") String classAppraiseStarUuids, @Field("remark") String remark, @Field("courseUuid") String courseUuid);
+
 }

@@ -23,6 +23,9 @@ public interface ChatContract {
 
         //下课
         void showUpdateEndTime(String msg);
+
+        //停止录制
+        void showStopRecord(String msg);
     }
 
     interface Presenter extends BasePresenter<ChatContract.View> {
@@ -34,5 +37,8 @@ public interface ChatContract {
 
         //下课
         void getUpdateEndTime(String courseUuid);
+
+        //停止录制
+        void getStopRecord(String courseUuid);
     }
 }

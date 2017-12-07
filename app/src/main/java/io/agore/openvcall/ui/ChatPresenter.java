@@ -1,15 +1,18 @@
 package io.agore.openvcall.ui;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Base.RxPresenter;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.board.MyBoardData;
 import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
+import com.onlyhiedu.mobile.Utils.DialogUtil;
 import com.onlyhiedu.mobile.Utils.ImageLoader;
 import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
@@ -27,6 +30,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
+import static com.taobao.accs.ACCSManager.mContext;
 import static java.lang.Float.parseFloat;
 
 /**
@@ -115,6 +119,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
     }
 
+    //结束课时
     @Override
     public void getUpdateEndTime(String courseUuid) {
         Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchUpdateEndTime(courseUuid);
@@ -124,6 +129,25 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
                 if (getView() != null) {
                     if (!data.isHasError()) {
                         getView().showUpdateEndTime(data.getMessage());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+        addSubscription(mRetrofitHelper.startObservable(flowable, subscriber));
+    }
+//停止录制
+    @Override
+    public void getStopRecord(String courseUuid) {
+        //fetchStopRecord
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchStopRecord(courseUuid);
+        MyResourceSubscriber<onlyHttpResponse> subscriber = new MyResourceSubscriber<onlyHttpResponse>() {
+            @Override
+            public void onNextData(onlyHttpResponse data) {
+                if (getView() != null) {
+                    if (!data.isHasError()) {
+                        getView().showStopRecord(data.getMessage());
                     } else {
                         getView().showError(data.getMessage());
                     }
