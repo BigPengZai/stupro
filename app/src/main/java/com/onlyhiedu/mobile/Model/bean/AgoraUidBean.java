@@ -19,12 +19,12 @@ public class AgoraUidBean implements Serializable{
      * qcAgoraUidList : [447648724]
      */
 
-    private int teaAgoraUid;
-    private int stuAgoraUid;
-    private int ccAgoraUid;
-    private int crAgoraUid;
-    private List<Integer> tsAgoraUidList;
-    private List<Integer> qcAgoraUidList;
+    public int teaAgoraUid;
+    public int stuAgoraUid;
+    public int ccAgoraUid;
+    public int crAgoraUid;
+    public List<Integer> tsAgoraUidList;
+    public List<Integer> qcAgoraUidList;
 
     public int getTeaAgoraUid() {
         return teaAgoraUid;

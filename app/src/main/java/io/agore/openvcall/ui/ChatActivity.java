@@ -887,7 +887,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 super.onChannelUserList(accounts, uids);
                 Log.d(TAG, "查询的用户数量num:" + accounts.length);
                 List<String> strings = Arrays.asList(accounts);
-                if (strings.contains(String.valueOf(mListBean.channelTeacherId))||strings.contains(String.valueOf(mListBean.channelPatriarchId))) {
+                if (strings.contains(String.valueOf(mListBean.channelTeacherId))
+                        ||strings.contains(mAgoraUidBean.ccAgoraUid)
+                        ||strings.contains(mAgoraUidBean.crAgoraUid)) {
                     Log.d(TAG, "信令频道有老师加入:" + mListBean.channelTeacherId);
                     initRoom();
                 }
@@ -1564,7 +1566,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     //远端 限定 只显示老师
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-        if (uid == mListBean.channelTeacherId||uid == Integer.parseInt(mListBean.channelPatriarchId)) {
+        if (uid == mListBean.channelTeacherId
+                ||uid == mAgoraUidBean.getCcAgoraUid()
+                ||uid == mAgoraUidBean.getCrAgoraUid()
+                 ) {
             initTeaView(uid);
         }
         /*if (uid == Integer.parseInt(mListBean.channelPatriarchId)) {
@@ -1812,7 +1817,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (target == null) {
                     return;
                 }
-                if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId == uid || Integer.parseInt(mListBean.channelPatriarchId)==uid) {
+                if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId == uid
+                        || mAgoraUidBean.ccAgoraUid==uid
+                        || mAgoraUidBean.crAgoraUid==uid) {
                     mRel_Tea.removeAllViews();
                 }
                 //将本地 音视频关闭 移除view

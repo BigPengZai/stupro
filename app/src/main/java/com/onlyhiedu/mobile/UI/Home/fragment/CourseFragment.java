@@ -192,6 +192,8 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
         if (mItem != null && mItem.isClickAble) {
             mDialog = DialogUtil.showProgressDialog(mContext, "正在进入房间...", true, true);
             mPresenter.getMonitorAgoraUidList(mItem.courseUuid);
+        } else if (mItem != null && mItem.isFinish) {
+            Toast.makeText(mContext, "课程已经结束了哦", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(mContext, "课程还没有开始哦", Toast.LENGTH_SHORT).show();
         }

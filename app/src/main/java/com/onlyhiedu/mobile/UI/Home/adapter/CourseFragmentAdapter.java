@@ -1,11 +1,14 @@
 package com.onlyhiedu.mobile.UI.Home.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
@@ -89,14 +92,23 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
                 item.setClickAble(false);
                 break;
             case 1:
+                //上课中
                 h.mTv_In.setVisibility(View.VISIBLE);
                 h.mTv_Soon.setVisibility(View.GONE);
                 item.setClickAble(true);
                 break;
             case 2:
+                //即将开始
                 h.mTv_Soon.setVisibility(View.VISIBLE);
                 h.mTv_In.setVisibility(View.GONE);
                 item.setClickAble(true);
+                break;
+            case 3:
+                //已经结束
+                h.mTv_Soon.setVisibility(View.GONE);
+                h.mTv_In.setVisibility(View.GONE);
+                item.isFinish=true;
+                h.mLl_Bg.setBackgroundColor(Color.parseColor("#929292"));
                 break;
         }
 
@@ -111,6 +123,9 @@ public class CourseFragmentAdapter extends BaseRecyclerAdapter<CourseList.ListBe
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.ll_bg)
+        RelativeLayout mLl_Bg;
+
         @BindView(R.id.tv_course)
         TextView mTvCourse;
         @BindView(R.id.tv_auth)

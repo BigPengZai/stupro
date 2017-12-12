@@ -51,6 +51,10 @@ public class CourseList {
             return isClickAble;
         }
 
+        //增加字段 是否 结束
+        public boolean isFinish = false;
+
+
         public void setClickAble(boolean clickAble) {
             isClickAble = clickAble;
         }
