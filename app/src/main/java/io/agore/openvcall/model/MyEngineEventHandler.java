@@ -45,7 +45,6 @@ public class MyEngineEventHandler {
         @Override
         public void onFirstLocalVideoFrame(int width, int height, int elapsed) {
         }
-
         //其他用户加入当前频道回调 (onUserJoined)
         @Override
         public void onUserJoined(int uid, int elapsed) {
@@ -67,6 +66,10 @@ public class MyEngineEventHandler {
                 handler.onUserOffline(uid, reason);
             }
         }
+
+
+
+
 
         //其他用户 停止/重启视频回调
         @Override

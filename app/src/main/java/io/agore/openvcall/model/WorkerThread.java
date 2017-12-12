@@ -40,6 +40,8 @@ public class WorkerThread extends Thread {
     private static final int ACTION_WORKER_PREVIEW = 0X2014;
 
     public static final String TAG = "WorkerThread";
+    private String mChannelAppId;
+
     private static final class WorkerThreadHandler extends Handler {
 
         private WorkerThread mWorkerThread;
@@ -73,7 +75,7 @@ public class WorkerThread extends Thread {
                     break;
                 case ACTION_WORKER_CONFIG_ENGINE:
                     Object[] configData = (Object[]) msg.obj;
-                    mWorkerThread.configEngine((int) configData[0], (String) configData[1], (String) configData[2]);
+                    mWorkerThread.configEngine((int) configData[0],(int) configData[1]);
                     break;
                 case ACTION_WORKER_PREVIEW:
                     Object[] previewData = (Object[]) msg.obj;
@@ -134,7 +136,7 @@ public class WorkerThread extends Thread {
         ensureRtcEngineReadyLock();
 
 
-        String appId = mContext.getString(R.string.private_app_id);
+        mChannelAppId = mContext.getString(R.string.private_app_id);
         int tsWrong = (int)(new Date().getTime()/1000);
         int ts = (int) (System.currentTimeMillis()/1000);
 
@@ -142,17 +144,17 @@ public class WorkerThread extends Thread {
 //        long uid = my_uid;
         int expiredTs = 0;
 
-        Log.d(TAG, "appId:"+appId);
+        Log.d(TAG, "appId:"+ mChannelAppId);
         try {
-            appId = DynamicKey4.generateMediaChannelKey(appId, "a8e0dbb830d44c9f8e7e5a4e32c62c53", channel, ts, r, uid, expiredTs);
+            mChannelAppId = DynamicKey4.generateMediaChannelKey(mChannelAppId, "a8e0dbb830d44c9f8e7e5a4e32c62c53", channel, ts, r, uid, expiredTs);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        int openVCall = mRtcEngine.joinChannel(appId, channel, "OpenVCall", uid);
+        int openVCall = mRtcEngine.joinChannel(mChannelAppId, channel, "OpenVCall", uid);
         Log.d(TAG, "openVCall:"+openVCall);
-        Log.d(TAG, "appId:"+appId);
+        Log.d(TAG, "appId:"+ mChannelAppId);
         mEngineConfig.mChannel = channel;
 
         enablePreProcessor();
@@ -187,28 +189,21 @@ public class WorkerThread extends Thread {
 
     private final MyEngineEventHandler mEngineEventHandler;
 
-    public final void configEngine(int vProfile, String encryptionKey, String encryptionMode) {
+    public final void configEngine(int cRole,int vProfile) {
         if (Thread.currentThread() != this) {
-            Log.d(TAG,"configEngine() - worker thread asynchronously " + vProfile + " " + encryptionMode);
+            Log.d(TAG,"configEngine() - worker thread asynchronously " + vProfile );
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_CONFIG_ENGINE;
-            envelop.obj = new Object[]{vProfile, encryptionKey, encryptionMode};
+            envelop.obj = new Object[]{cRole,vProfile};
             mWorkerHandler.sendMessage(envelop);
             return;
         }
 
         ensureRtcEngineReadyLock();
         mEngineConfig.mVideoProfile = vProfile;
-
-        if (!TextUtils.isEmpty(encryptionKey)) {
-            mRtcEngine.setEncryptionMode(encryptionMode);
-
-            mRtcEngine.setEncryptionSecret(encryptionKey);
-        }
 //240P_4	24	424x240	15	220
         mRtcEngine.setVideoProfile(24, false);
-
-        Log.d(TAG,"configEngine " + mEngineConfig.mVideoProfile + " " + encryptionMode);
+        mRtcEngine.setClientRole(cRole, mChannelAppId);
     }
 
     public final void preview(boolean start, SurfaceView view, int uid) {
@@ -246,7 +241,9 @@ public class WorkerThread extends Thread {
                 mRtcEngine = RtcEngineEx.create(mContext, appId, mEngineEventHandler.mRtcEventHandler);
             } catch (Exception e) {
             }
-            mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
+            //CHANNEL_PROFILE_COMMUNICATION 通信模式
+            //CHANNEL_PROFILE_LIVE_BROADCASTING 直播模式
+            mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
             //
             mRtcEngine.enableVideo();
             mRtcEngine.setDefaultAudioRoutetoSpeakerphone(true);

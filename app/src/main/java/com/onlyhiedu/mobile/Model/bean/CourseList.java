@@ -38,6 +38,8 @@ public class CourseList {
         public String endTime;
         public String subject;
         public String teacherName;
+        //家长声网uid null：未绑定家长
+        public String channelPatriarchId;
 
         public int channelTeacherId;
 //课程类型 0:测评课;1:正式课;2:调试课

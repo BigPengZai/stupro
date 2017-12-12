@@ -3,6 +3,7 @@ package com.onlyhiedu.mobile.Model.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.BuildConfig;
+import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.mobile.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.mobile.Model.bean.Avatar;
@@ -183,6 +184,11 @@ public class RetrofitHelper {
         return sOnlyApis.getNoStartCourseList(page);
     }
 
+    //获得监课的声网 uid 列表
+    public Flowable<onlyHttpResponse<AgoraUidBean>> fetchGetMonitorAgoraUidList(String courseUuid) {
+        return sOnlyApis.getGetMonitorAgoraUidList(courseUuid);
+    }
+
     //1VN 未完成课程列表
     public Flowable<onlyHttpResponse<CourseList>> fetchGetNoEndCourseList(int page) {
         return sOnlyApis.getNoEndCourseList(page);
@@ -265,6 +271,11 @@ public class RetrofitHelper {
         return sOnlyApis.getUpdateEndTime(courseUuid);
     }
 
+
+    //停止录制
+    public Flowable<onlyHttpResponse> fetchStopRecord(String courseUuid) {
+        return sOnlyApis.getStopRecord(courseUuid);
+    }
     public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchIsBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country, String deviceId) {
 
         if (share_media == SHARE_MEDIA.WEIXIN) {

@@ -2,8 +2,10 @@ package com.onlyhiedu.mobile.UI.Home.presenter;
 
 import com.onlyhiedu.mobile.App.Constants;
 import com.onlyhiedu.mobile.Base.RxPresenter;
+import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
+import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
 import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
@@ -109,6 +111,7 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 
+    //进教室
     @Override
     public void getRoomInfoList(String uuid) {
         Flowable<onlyHttpResponse<RoomInfo>> flowable = mRetrofitHelper.fetchGetRoomInfoList(uuid);
@@ -139,6 +142,27 @@ public class CoursePresenter extends RxPresenter<CourseContract.View> implements
 
             }
         };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void getMonitorAgoraUidList(String courseUuid) {
+        Flowable<onlyHttpResponse<AgoraUidBean>> flowable = mRetrofitHelper.fetchGetMonitorAgoraUidList(courseUuid);
+
+        MyResourceSubscriber<onlyHttpResponse<AgoraUidBean>> observer = new MyResourceSubscriber<onlyHttpResponse<AgoraUidBean>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<AgoraUidBean> data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        //返回的数据
+                      getView().showMonitorAgoraUidList(data.getData());
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.onlyhiedu.mobile.Base.BaseFragment;
 import com.onlyhiedu.mobile.Base.BaseRecyclerAdapter;
+import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
@@ -163,6 +164,12 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     public void showRoomInfoSucess(RoomInfo roomInfo) {
 
     }
+
+    @Override
+    public void showMonitorAgoraUidList(AgoraUidBean data) {
+
+    }
+
 
     View.OnClickListener phoneListener = new View.OnClickListener() {
         @Override
