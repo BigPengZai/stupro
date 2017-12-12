@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -51,6 +50,7 @@ import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.Model.bean.board.LineBean;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
+import com.onlyhiedu.mobile.Utils.CountDownTimerUtil;
 import com.onlyhiedu.mobile.Utils.DateUtil;
 import com.onlyhiedu.mobile.Utils.DialogListener;
 import com.onlyhiedu.mobile.Utils.DialogUtil;
@@ -171,7 +171,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @BindView(R.id.switch_btn)
     Switch mDrawSwitch;
 
-    private CountDownTimer timer;
+    private CountDownTimerUtil timer;
     private final long INTERVAL = 1000L;
     private Timer mTimer = null;
     private TimerTask mTimerTask = null;
@@ -417,7 +417,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mIsBack = false;
         isStartTime = true;
         mButDismiss.setText("我要下课");
-        timer = new CountDownTimer(diff + 1050L, INTERVAL) {
+        timer = new CountDownTimerUtil(diff + 1050L, INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
@@ -465,7 +465,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "老师没有进来 小于20秒");
                 mButDismiss.setText("退出教室");
             }
-
         }
     }
 
@@ -977,7 +976,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.img_back, R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute, R.id.but_upload})
+    @OnClick({R.id.but_overtime,R.id.img_back, R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute, R.id.but_upload})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -1048,6 +1047,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     finishClassRoom();
 //                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
                 }*/
+                break;
+            case R.id.but_overtime:
+                timer.setCountdownInterval(INTERVAL);
+                timer.setMillisInFuture(10000 * 1000);
+                timer.start();
                 break;
         }
     }

@@ -69,10 +69,6 @@ public class SmallCourseRecordFragment extends BaseFragment<SmallCoursePresenter
 
     @Override
     protected void initData() {
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
@@ -80,6 +76,21 @@ public class SmallCourseRecordFragment extends BaseFragment<SmallCoursePresenter
                 onRefreshing();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mAdapter!=null){
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                    onRefreshing();
+                }
+            });
+        }
     }
 
     @Override

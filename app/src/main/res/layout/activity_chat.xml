@@ -14,57 +14,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.0"
-    />
+        app:layout_constraintGuide_percent="0.0"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_v1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.3"
-    />
+        app:layout_constraintGuide_percent="0.3"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_v3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"
-    />
+        app:layout_constraintGuide_percent="0.5"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_v2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="1.0"
-    />
+        app:layout_constraintGuide_percent="1.0"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_h0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.0"
-    />
+        app:layout_constraintGuide_percent="0.0"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5"
-    />
+        app:layout_constraintGuide_percent="0.5"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_h2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2"
-    />
+        app:layout_constraintGuide_percent="0.2"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline_h1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="1.0"
-    />
+        app:layout_constraintGuide_percent="1.0"/>
     <!--tea-->
     <RelativeLayout
         android:id="@+id/rel_tea"
@@ -246,6 +238,20 @@
                 android:text="退出教室"
                 android:textColor="@color/select_log_out"
                 android:textSize="@dimen/size_16"/>
+
+            <TextView
+                android:id="@+id/but_overtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_log_out"
+                android:paddingBottom="@dimen/size_7"
+                android:paddingLeft="@dimen/size_18"
+                android:paddingRight="@dimen/size_18"
+                android:paddingTop="@dimen/size_7"
+                android:text="延长时间"
+                android:textColor="@color/select_log_out"
+                android:textSize="@dimen/size_16"/>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
