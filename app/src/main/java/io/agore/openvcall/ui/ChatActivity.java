@@ -44,13 +44,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
-import com.onlyhiedu.mobile.App.App;
 import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
 import com.onlyhiedu.mobile.Model.bean.board.LineBean;
+import com.onlyhiedu.mobile.Model.bean.board.SendIMMsg;
 import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.Service.NetworkStateService;
 import com.onlyhiedu.mobile.Utils.CountDownTimerUtil;
@@ -71,6 +71,8 @@ import com.onlyhiedu.mobile.Widget.draw.DrawView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
@@ -260,7 +262,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         setToolBar();
         event().addEventHandler(this);
         //cRole: 1 主播 2 观众（默认）
-        worker().configEngine(1,24);
+        worker().configEngine(1, 24);
         initRoomData();
         //登录信令系统成功后  登录通信频道
         initSignalling();
@@ -371,7 +373,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             mRoom_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             mRoomDix = room_end.getTime() - mRoom_start.getTime();
-            DateUtil.updateTimeFormat(mTv_Total_Room, (int) mRoomDix);
+            DateUtil.updateTimeFormat(mTv_Total_Room, mRoomDix);
             Date now = df.parse(nowTime);
             long diff = mRoom_start.getTime() - now.getTime();
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
@@ -450,7 +452,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (!isTeacherJoined) {
             //课程时间开始 秒值
             //标记20分钟
-            Long mTag = mRoom_start.getTime() / 1000 +20*60;
+            Long mTag = mRoom_start.getTime() / 1000 + 20 * 60;
             if (System.currentTimeMillis() / 1000 >= mTag) {
                 Log.d(TAG, "迟到超过20");
                 mUpdateEndTime = true;
@@ -459,7 +461,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "刚好迟到20");
                 showRemindTeaDialog();
             }
-            if (System.currentTimeMillis() / 1000 <mTag){
+            if (System.currentTimeMillis() / 1000 < mTag) {
                 //老师没有进来 小于20分钟
                 Log.d(TAG, "老师没有进来 小于20");
                 mButDismiss.setText("退出教室");
@@ -724,7 +726,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mPresenter.initBoard(boardBean.methodparam, mDrawView, ChatActivity.this);
                                 break;
                             case "IM":
-                                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(mListBean.channelTeacherId, boardBean.scaling), boardBean.methodparam));
+                                try {
+                                    JSONObject object = new JSONObject(boardBean.methodparam);
+                                    String objectString = object.getString("msg");
+                                    notifyMessageChanged(new io.agore.openvcall.model.Message(object.getInt("role"), new User(mListBean.channelTeacherId, boardBean.scaling), objectString));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case "15":
                                 mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
@@ -741,6 +749,22 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mScrollView.setIntercept(false);
                                 mDrawSwitch.setVisibility(View.GONE);
                                 break;
+                            case "22":
+                                int delayTime = 0;
+                                try {
+                                    delayTime = new JSONObject(boardBean.methodparam).getInt("delayTime");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                String s = mTv_Count.getText().toString();
+                                String[] split = s.split(":");
+                                long i = Long.valueOf(split[0]) * 3600000 + Long.valueOf(split[1]) * 60000 + Long.valueOf(split[1]) * 1000 + (delayTime * 60000);
+                                timer.setCountdownInterval(INTERVAL);
+                                timer.setMillisInFuture(i);
+                                timer.start();
+                                DateUtil.updateTimeFormat(mTv_Total_Room, mRoomDix +=delayTime * 60000);
+                                break;
+
                         }
                     }
                 });
@@ -760,7 +784,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                             Toast.makeText(mContext, "同意老师下课，退出教室了。", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    if (mFinshDialog==null) {
+                    if (mFinshDialog == null) {
                         mFinshDialog = DialogUtil.showProgressDialog(ChatActivity.this, "正在退出房间...", true, true);
                     }
                     mPresenter.getStopRecord(mListBean.courseUuid);
@@ -821,7 +845,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     , false, false, new DialogListener() {
                                         @Override
                                         public void onPositive(DialogInterface dialog) {
-                                            if (mFinshDialog==null) {
+                                            if (mFinshDialog == null) {
                                                 mFinshDialog = DialogUtil.showProgressDialog(ChatActivity.this, "正在退出房间...", true, true);
                                             }
                                             mPresenter.getStopRecord(mListBean.courseUuid);
@@ -841,13 +865,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onReconnecting(int nretry) {
                 super.onReconnecting(nretry);
-                Log.d(TAG, "onReconnecting"+nretry);
+                Log.d(TAG, "onReconnecting" + nretry);
             }
 
             @Override
             public void onReconnected(int fd) {
                 super.onReconnected(fd);
-                Log.d(TAG, "onReconnected"+fd);
+                Log.d(TAG, "onReconnected" + fd);
             }
 
             //加入频道后 回调
@@ -871,7 +895,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
 
                 if (account.equals(String.valueOf(mListBean.channelPatriarchId))) {
-                    isPatriarchId=true;
+                    isPatriarchId = true;
                 }
 
             }
@@ -888,8 +912,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "查询的用户数量num:" + accounts.length);
                 List<String> strings = Arrays.asList(accounts);
                 if (strings.contains(String.valueOf(mListBean.channelTeacherId))
-                        ||strings.contains(mAgoraUidBean.ccAgoraUid)
-                        ||strings.contains(mAgoraUidBean.crAgoraUid)) {
+                        || strings.contains(mAgoraUidBean.ccAgoraUid)
+                        || strings.contains(mAgoraUidBean.crAgoraUid)) {
                     Log.d(TAG, "信令频道有老师加入:" + mListBean.channelTeacherId);
                     initRoom();
                 }
@@ -942,7 +966,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 , true, true, new DialogListener() {
                     @Override
                     public void onPositive(DialogInterface dialog) {
-                        if (mFinshDialog==null) {
+                        if (mFinshDialog == null) {
                             mFinshDialog = DialogUtil.showProgressDialog(ChatActivity.this, "正在退出房间...", true, true);
                         }
                         mPresenter.getStopRecord(mListBean.courseUuid);
@@ -994,7 +1018,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     public void showUpdateEndTime(String msg) {
         if ("成功".equals(msg)) {
             Log.d(TAG, "下课接口 拉取成功");
-            if (mFinshDialog==null) {
+            if (mFinshDialog == null) {
                 mFinshDialog = DialogUtil.showProgressDialog(this, "正在退出房间...", true, true);
             }
             mPresenter.getStopRecord(mListBean.courseUuid);
@@ -1003,7 +1027,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     public void showStopRecord(String msg) {
-        if (mFinshDialog!=null) {
+        if (mFinshDialog != null) {
             DialogUtil.dismiss(mFinshDialog);
         }
         if ("成功".equals(msg)) {
@@ -1018,7 +1042,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private float rate;      //缩放比例
     private boolean mSwitch; //全屏半屏  true 全屏，false半屏
 
-    @OnClick({R.id.but_overtime,R.id.img_back, R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute, R.id.but_upload})
+    @OnClick({R.id.img_back, R.id.but_dismiss, R.id.image_full_screen, R.id.but_im, R.id.switch_btn, R.id.tv_send, R.id.tv_video_local, R.id.tv_video_mute, R.id.tv_audio_local, R.id.tv_audio_mute, R.id.but_upload})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_dismiss:
@@ -1090,14 +1114,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //                    Toast.makeText(mContext, "课程还未结束,可点击我要下课", Toast.LENGTH_SHORT).show();
                 }*/
                 break;
-            case R.id.but_overtime:
-                timer.setCountdownInterval(INTERVAL);
-                timer.setMillisInFuture(10000 * 1000);
-                timer.start();
-                break;
+
         }
     }
-
 
 
     private void upLoadHomeWork() {
@@ -1111,7 +1130,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         } else {
             uploadHeadPhoto();
         }
-
     }
 
     private void uploadHeadPhoto() {
@@ -1319,7 +1337,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 //                         mPresenter.getUpdateEndTime(mListBean.courseUuid);
 
                         //测试用的接口
-                        if (mFinshDialog==null) {
+                        if (mFinshDialog == null) {
                             mFinshDialog = DialogUtil.showProgressDialog(ChatActivity.this, "正在退出房间...", true, true);
                         }
                         mPresenter.getStopRecord(mListBean.courseUuid);
@@ -1371,14 +1389,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
 
     private void sendChannelMsg(String msgStr) {
-
         BoardBean boardBean = new BoardBean();
         boardBean.methodtype = "IM";
-        boardBean.methodparam = msgStr;
         boardBean.scaling = mUid;
         if (mGson == null) {
             mGson = new Gson();
         }
+        boardBean.methodparam = mGson.toJson(new SendIMMsg(msgStr, 1, System.currentTimeMillis()));
         m_agoraAPI.messageChannelSend(mRoomInfo.getSignallingChannelId(), mGson.toJson(boardBean), "sendIM");
     }
 
@@ -1399,8 +1416,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mMsgAdapter.notifyDataSetChanged();
 
         if (mLlMsg.getVisibility() == View.GONE) {
+            mIMPoint.setVisibility(View.VISIBLE);
+            mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+            visableTag = 1;
         }
-
     }
 
     /**
@@ -1567,9 +1586,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
         if (uid == mListBean.channelTeacherId
-                ||uid == mAgoraUidBean.getCcAgoraUid()
-                ||uid == mAgoraUidBean.getCrAgoraUid()
-                 ) {
+                || uid == mAgoraUidBean.getCcAgoraUid()
+                || uid == mAgoraUidBean.getCrAgoraUid()
+                ) {
             initTeaView(uid);
         }
         /*if (uid == Integer.parseInt(mListBean.channelPatriarchId)) {
@@ -1725,8 +1744,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         });
         removeRemoteUi(uid);
-        if (uid==Integer.parseInt(mListBean.channelPatriarchId)) {
-            isPatriarchId=false;
+        if (uid == Integer.parseInt(mListBean.channelPatriarchId)) {
+            isPatriarchId = false;
         }
     }
 
@@ -1818,8 +1837,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     return;
                 }
                 if (mRel_Tea != null && mRoomInfo != null && mListBean.channelTeacherId == uid
-                        || mAgoraUidBean.ccAgoraUid==uid
-                        || mAgoraUidBean.crAgoraUid==uid) {
+                        || mAgoraUidBean.ccAgoraUid == uid
+                        || mAgoraUidBean.crAgoraUid == uid) {
                     mRel_Tea.removeAllViews();
                 }
                 //将本地 音视频关闭 移除view

@@ -64,11 +64,11 @@ public class DateUtil {
 
 
     // 格式化时间，并显示textView上
-    public static void updateTimeFormat(TextView tv, int millisecond) {
-        int s = millisecond / 1000;
-        int hour = s / 3600;
-        int minute = s % 3600 / 60;
-        int second = s % 60;
+    public static void updateTimeFormat(TextView tv, long millisecond) {
+        long s = millisecond / 1000;
+        long hour = s / 3600;
+        long minute = s % 3600 / 60;
+        long second = s % 60;
         tv.setText(String.format(Locale.CHINA, "%02d:%02d:%02d", hour, minute, second));
     }
 
@@ -255,8 +255,8 @@ public class DateUtil {
 
     //获得当前系统时间值
     public static String getNowTime() {
-        SimpleDateFormat   sDateFormat   =   new   SimpleDateFormat("yyyy-MM-dd");
-        String   date   =   sDateFormat.format(new   java.util.Date());
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sDateFormat.format(new java.util.Date());
         return date;
     }
 }

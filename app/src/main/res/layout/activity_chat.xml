@@ -239,19 +239,6 @@
                 android:textColor="@color/select_log_out"
                 android:textSize="@dimen/size_16"/>
 
-            <TextView
-                android:id="@+id/but_overtime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/select_log_out"
-                android:paddingBottom="@dimen/size_7"
-                android:paddingLeft="@dimen/size_18"
-                android:paddingRight="@dimen/size_18"
-                android:paddingTop="@dimen/size_7"
-                android:text="延长时间"
-                android:textColor="@color/select_log_out"
-                android:textSize="@dimen/size_16"/>
-
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

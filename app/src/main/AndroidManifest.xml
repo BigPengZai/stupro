@@ -141,9 +141,7 @@
         <activity android:name=".UI.Info.activity.MyInfoActivity"/>
         <activity android:name=".UI.Consumption.activity.ConsumeActivity"/>
         <activity android:name=".UI.User.activity.TermServiceActivity"/>
-        <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity">
-
-        </activity>
+        <activity android:name=".UI.Home.activity.HomeNewsWebViewActivity"/>
         <activity android:name=".UI.Course.activity.CourseDiscountActivity"/>
         <activity
             android:name=".UI.Home.activity.MineOrdersActivity"/>

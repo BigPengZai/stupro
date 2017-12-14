@@ -29,9 +29,9 @@ public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        if(mMsglist.get(position).getType()==1){
+        if (mMsglist.get(position).getType() == 1) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -51,6 +51,7 @@ public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message msg = mMsglist.get(position);
+
         switch (holder.getItemViewType()) {
             case 1:
                 MessageHolder myHolder = (MessageHolder) holder;
@@ -59,6 +60,21 @@ public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerVi
             case 0:
                 MessageHolder2 myHolder2 = (MessageHolder2) holder;
                 myHolder2.msgContent.setText(msg.getContent());
+                switch (msg.getType()) {
+                    case 0:
+                        myHolder2.identity.setText("老师");
+                        break;
+                    case 2:
+                        myHolder2.identity.setText("教学兼课");
+                        break;
+                    case 3:
+                        myHolder2.identity.setText("课程顾问");
+                        break;
+                    case 4:
+                        myHolder2.identity.setText("班主任");
+                        break;
+                }
+
                 break;
         }
     }
@@ -84,10 +100,12 @@ public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class MessageHolder2 extends RecyclerView.ViewHolder {
         public TextView msgContent;
+        public TextView identity;
 
         public MessageHolder2(View v) {
             super(v);
             msgContent = (TextView) v.findViewById(R.id.msg_content);
+            identity = (TextView) v.findViewById(R.id.identity);
         }
     }
 

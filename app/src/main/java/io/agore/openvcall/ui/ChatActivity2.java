@@ -45,6 +45,9 @@ import com.onlyhiedu.mobile.Utils.SPUtil;
 import com.onlyhiedu.mobile.Utils.SnackBarUtils;
 import com.onlyhiedu.mobile.Widget.MyWhiteBoardView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
@@ -298,7 +301,7 @@ public abstract class ChatActivity2 extends BaseActivity2<ChatPresenter2> implem
             Date room_start = df.parse(mRoomStartTime);
             Date room_end = df.parse(mRoomEndTime);
             mRoomDix = room_end.getTime() - room_start.getTime();
-            DateUtil.updateTimeFormat(mTv_Total_Room, (int) mRoomDix);
+            DateUtil.updateTimeFormat(mTv_Total_Room,   mRoomDix);
             Date now = df.parse(nowTime);
             long diff = room_start.getTime() - now.getTime();
             Log.d(TAG, "diffs:" + diff / (1000 * 60));
@@ -655,7 +658,13 @@ public abstract class ChatActivity2 extends BaseActivity2<ChatPresenter2> implem
                         }
                         switch (boardBean.methodtype) {
                             case "IM":
-                                notifyMessageChanged(new io.agore.openvcall.model.Message(new User(Integer.valueOf(boardBean.scaling), boardBean.scaling), boardBean.methodparam));
+                                try {
+                                    JSONObject object = new JSONObject(boardBean.methodparam);
+                                    String objectString = object.getString("msg");
+                                    notifyMessageChanged(new io.agore.openvcall.model.Message(object.getInt("role"), new User(mListBean.channelTeacherId, boardBean.scaling), objectString));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         }
                     }
@@ -961,6 +970,9 @@ public abstract class ChatActivity2 extends BaseActivity2<ChatPresenter2> implem
         mMsgAdapter.notifyDataSetChanged();
 
         if (mLlMsg.getVisibility() == View.GONE) {
+            mIMPoint.setVisibility(View.VISIBLE);
+            mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+            visableTag = 1;
         }
 
     }
