@@ -71,7 +71,7 @@ public class UserUtil {
                 return 1;
             }
             //即将开始
-            if (now.getTime() < room_start.getTime() && now.getTime() > (room_start.getTime() - 10 * 60 * 1000)) {
+            if (now.getTime() < room_start.getTime() && now.getTime() > (room_start.getTime() - 20 * 60 * 1000)) {
                 return 2;
             }
             //已经结束
