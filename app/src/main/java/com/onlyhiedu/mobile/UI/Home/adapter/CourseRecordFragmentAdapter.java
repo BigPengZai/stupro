@@ -72,6 +72,7 @@ public class CourseRecordFragmentAdapter extends BaseRecyclerAdapter<CourseList.
                 break;
         }
         int state = UserUtil.isClassIn(item);
+        //已经完成列表
         switch (state){
             case 0:
                 h.mTv_Soon.setVisibility(View.GONE);
@@ -79,12 +80,12 @@ public class CourseRecordFragmentAdapter extends BaseRecyclerAdapter<CourseList.
                 item.setClickAble(false);
                 break;
             case 1:
-                h.mTv_In.setVisibility(View.VISIBLE);
+                h.mTv_In.setVisibility(View.GONE);
                 h.mTv_Soon.setVisibility(View.GONE);
                 item.setClickAble(true);
                 break;
             case 2:
-                h.mTv_Soon.setVisibility(View.VISIBLE);
+                h.mTv_Soon.setVisibility(View.GONE);
                 h.mTv_In.setVisibility(View.GONE);
                 item.setClickAble(true);
                 break;

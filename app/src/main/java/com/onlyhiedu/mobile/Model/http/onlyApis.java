@@ -174,9 +174,7 @@ public interface onlyApis {
     @POST("client/course/updateEndTime")
     Flowable<onlyHttpResponse> getUpdateEndTime(@Query("courseUuid") String courseUuid);
 
-    //停止录制
-    @POST("client/course/stopRecordByForm")
-    Flowable<onlyHttpResponse> getStopRecord(@Query("courseUuid") String courseUuid);
+
 
 
     /**

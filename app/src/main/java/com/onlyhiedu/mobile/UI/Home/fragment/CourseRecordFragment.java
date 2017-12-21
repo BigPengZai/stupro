@@ -18,6 +18,7 @@ import com.onlyhiedu.mobile.R;
 import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
+import com.onlyhiedu.mobile.UI.Home.adapter.CourseRecordFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
 import com.onlyhiedu.mobile.Utils.UIUtils;
@@ -42,7 +43,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
         CourseContract.View,
         RecyclerRefreshLayout.SuperRefreshLayoutListener {
 
-    private CourseFragmentAdapter mAdapter;
+    private CourseRecordFragmentAdapter mAdapter;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -78,7 +79,7 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
 
         mSwipeRefresh.setSuperRefreshLayoutListener(this);
 
-        mAdapter = new CourseFragmentAdapter(mContext);
+        mAdapter = new CourseRecordFragmentAdapter(mContext);
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         UIUtils.setRecycleAdapter(mContext, mRecyclerView, mAdapter);
         mAdapter.setOnItemClickListener(this);

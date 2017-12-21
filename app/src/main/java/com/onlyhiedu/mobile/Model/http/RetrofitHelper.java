@@ -272,10 +272,7 @@ public class RetrofitHelper {
     }
 
 
-    //停止录制
-    public Flowable<onlyHttpResponse> fetchStopRecord(String courseUuid) {
-        return sOnlyApis.getStopRecord(courseUuid);
-    }
+
     public Flowable<onlyHttpResponse<AuthUserDataBean>> fetchIsBindUser(SHARE_MEDIA share_media, String uid, String openid, String name, String gender, String iconurl, String city, String province, String country, String deviceId) {
 
         if (share_media == SHARE_MEDIA.WEIXIN) {

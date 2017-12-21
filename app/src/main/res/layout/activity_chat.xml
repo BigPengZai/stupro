@@ -227,6 +227,7 @@
                 android:layout_marginRight="@dimen/size_7"
                 android:text="01:00:00"/>
             <TextView
+                android:visibility="invisible"
                 android:id="@+id/but_dismiss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -279,7 +280,6 @@
 
         </LinearLayout>
         <ImageView
-            android:visibility="gone"
             android:id="@+id/img_back"
             android:layout_width="50dp"
             android:layout_height="50dp"
