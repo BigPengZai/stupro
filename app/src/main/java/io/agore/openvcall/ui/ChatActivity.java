@@ -199,7 +199,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     private long mRoomDix;
     private long mLong;
     private boolean mIsBack; //返回键是否可点击
+
+
     private boolean isStartTag;
+
     private boolean isTeacherJoined;
     private boolean isCrJoined;
     private boolean isCcJoined;
@@ -510,16 +513,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-    private void finishRoom() {
-        if (m_agoraAPI != null) {
-            m_agoraAPI.logout();
-            Log.d(TAG, "信令退出");
-        }
-        if (mUidsList != null) {
-            mUidsList.clear();
-        }
-        quitCall();
-    }
+
 
     private void setToolBar() {
         mToolbar.setBackgroundResource(R.color.c33);
@@ -641,13 +635,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     break;
                                 case "ok":
                                     //老师同意下课
-                                    if (m_agoraAPI != null) {
+                                   /* if (m_agoraAPI != null) {
                                         m_agoraAPI.logout();
                                         Log.d(TAG, "信令退出");
                                     }
                                     if (mUidsList != null) {
                                         mUidsList.clear();
-                                    }
+                                    }*/
 
                                     DialogUtil.showOnlyAlert(ChatActivity.this,
                                             "提示"
@@ -657,7 +651,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                             , false, false, new DialogListener() {
                                                 @Override
                                                 public void onPositive(DialogInterface dialog) {
-                                                    quitCall();
+                                                    mPresenter.getUpdateEndTime(mListBean.courseUuid);
                                                 }
 
                                                 @Override
@@ -941,7 +935,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     public void onPositive(DialogInterface dialog) {
                         if (mRoomInfo != null) {
                             //call  的对象 假数据即老师信令的id
-                            String peer = mListBean.channelTeacherId + "";
+                            String peer = firstRemote + "";
                             m_agoraAPI.messageInstantSend(peer, 0, "ok", "stu_ok");
                         }
                     }
@@ -951,7 +945,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         //取消
                         Log.d(TAG, "取消");
                         if (mRoomInfo != null) {
-                            String peer = mListBean.channelTeacherId + "";
+                            String peer = firstRemote+ "";
                             m_agoraAPI.messageInstantSend(peer, 0, "no", "stu_no");
                         }
                     }
