@@ -441,7 +441,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void onFinish() {
                 Log.d(TAG, "停止计时");
-                finishRoom();
+//                finishRoom();
             }
 
         }.start();
