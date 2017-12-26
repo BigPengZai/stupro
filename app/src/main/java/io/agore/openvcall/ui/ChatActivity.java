@@ -1,7 +1,6 @@
 package io.agore.openvcall.ui;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -513,8 +512,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
     }
 
 
-
-
     private void setToolBar() {
         mToolbar.setBackgroundResource(R.color.c33);
         mToolbar.setOnClickListener(new View.OnClickListener() {
@@ -747,7 +744,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mScrollView.setIntercept(false);
                                 mDrawSwitch.setVisibility(View.GONE);
                                 break;
-                            case "22":
+                            case "21":
                                 int delayTime = 0;
                                 try {
                                     delayTime = new JSONObject(boardBean.methodparam).getInt("delayTime");
@@ -760,7 +757,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 timer.setCountdownInterval(INTERVAL);
                                 timer.setMillisInFuture(i);
                                 timer.start();
-                                DateUtil.updateTimeFormat(mTv_Total_Room, mRoomDix +=delayTime * 60000);
+                                DateUtil.updateTimeFormat(mTv_Total_Room, mRoomDix += delayTime * 60000);
+                                mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
+                                visableTag = 1;
+                                Toast.makeText(ChatActivity.this, "课堂延时" + delayTime + "分钟", Toast.LENGTH_SHORT).show();
                                 break;
 
                         }
@@ -945,7 +945,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         //取消
                         Log.d(TAG, "取消");
                         if (mRoomInfo != null) {
-                            String peer = firstRemote+ "";
+                            String peer = firstRemote + "";
                             m_agoraAPI.messageInstantSend(peer, 0, "no", "stu_no");
                         }
                     }
@@ -1087,7 +1087,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 break;
             case R.id.img_back:
                 //主讲人 未进来
-                if (!isTeacherJoined&&!isCrJoined&&!isCcJoined) {
+                if (!isTeacherJoined && !isCrJoined && !isCcJoined) {
                     //超过20分钟
                     if (mUpdateEndTime) {
                         mPresenter.getUpdateEndTime(mListBean.courseUuid);
@@ -1284,7 +1284,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             }
         }
     }
-
 
 
     private void showUpdateEndTimeDialog(String msg) {
@@ -1567,10 +1566,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             initTeaView(uid);
         }
         if (uid == mListBean.channelTeacherId) {
-             firstRemote = uid;
+            firstRemote = uid;
         } else if (uid == mAgoraUidBean.getCcAgoraUid()) {
             firstRemote = uid;
-        } else if (uid == mAgoraUidBean.getCcAgoraUid()){
+        } else if (uid == mAgoraUidBean.getCcAgoraUid()) {
             firstRemote = uid;
         }
         /*if (uid == Integer.parseInt(mListBean.channelPatriarchId)) {
@@ -1709,10 +1708,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                     initTeaView(uid);
                 }
                 if (uid == mAgoraUidBean.getCrAgoraUid()) {
-                    isCrJoined=true;
+                    isCrJoined = true;
                 }
                 if (uid == mAgoraUidBean.getCcAgoraUid()) {
-                    isCcJoined=true;
+                    isCcJoined = true;
                 }
             }
         });
@@ -1736,10 +1735,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             isPatriarchId = false;
         }
         if (uid == mAgoraUidBean.getCrAgoraUid()) {
-            isCrJoined=false;
+            isCrJoined = false;
         }
         if (uid == mAgoraUidBean.getCcAgoraUid()) {
-            isCcJoined=false;
+            isCcJoined = false;
         }
     }
 
