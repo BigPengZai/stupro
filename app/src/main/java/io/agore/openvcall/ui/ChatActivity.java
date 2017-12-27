@@ -642,7 +642,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
                                     DialogUtil.showOnlyAlert(ChatActivity.this,
                                             "提示"
-                                            , "老师同意了您的下课请求"
+                                            , "对方同意了您的下课请求"
                                             , "离开教室"
                                             , ""
                                             , false, false, new DialogListener() {
@@ -660,7 +660,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 case "no":
                                     DialogUtil.showOnlyAlert(ChatActivity.this,
                                             "提示"
-                                            , "老师拒绝了您的下课请求"
+                                            , "对方拒绝了您的下课请求"
                                             , "知道了"
                                             , ""
                                             , false, false, new DialogListener() {
@@ -844,7 +844,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     , false, false, new DialogListener() {
                                         @Override
                                         public void onPositive(DialogInterface dialog) {
-
+                                                finishClassRoom();
                                         }
 
                                         @Override
@@ -1724,9 +1724,12 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 //当有其他用户退出
-                if (uid == mListBean.channelTeacherId) {
+                if (      uid == mListBean.channelTeacherId
+                        ||uid==mAgoraUidBean.getCcAgoraUid()
+                        ||uid==mAgoraUidBean.getCrAgoraUid())
+                {
                     isTeacherJoined = false;
-                    SnackBarUtils.show(mDrawView, "老师已退出课堂", Color.GREEN);
+                    SnackBarUtils.show(mDrawView, "对方已退出课堂", Color.GREEN);
                 }
             }
         });
