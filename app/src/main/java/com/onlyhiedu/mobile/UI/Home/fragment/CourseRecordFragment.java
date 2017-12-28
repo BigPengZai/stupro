@@ -2,7 +2,6 @@ package com.onlyhiedu.mobile.UI.Home.fragment;
 
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +14,7 @@ import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
 import com.onlyhiedu.mobile.Model.bean.CourseList;
 import com.onlyhiedu.mobile.Model.bean.RoomInfo;
 import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity;
 import com.onlyhiedu.mobile.UI.Home.activity.MainActivity;
-import com.onlyhiedu.mobile.UI.Home.adapter.CourseFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.adapter.CourseRecordFragmentAdapter;
 import com.onlyhiedu.mobile.UI.Home.presenter.CoursePresenter;
 import com.onlyhiedu.mobile.UI.Home.presenter.contract.CourseContract;
@@ -29,8 +26,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import butterknife.BindView;
-
-import static com.onlyhiedu.mobile.Model.http.onlyApis.coursePlayback;
 
 /**
  * Created by xwc on 2017/3/1.
@@ -189,8 +184,8 @@ public class CourseRecordFragment extends BaseFragment<CoursePresenter>
     @Override
     public void onItemClick(int position, long itemId) {
         MobclickAgent.onEvent(mContext, "item_finish_item");
-        String url = coursePlayback + mAdapter.getItem(position).courseUuid + "&xp=1";
-        startActivity(new Intent(mContext, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, url).putExtra(HomeNewsWebViewActivity.TITLE, "课程回放"));
+//        String url = coursePlayback + mAdapter.getItem(position).courseUuid + "&xp=1";
+//        startActivity(new Intent(mContext, HomeNewsWebViewActivity.class).putExtra(HomeNewsWebViewActivity.URL, url).putExtra(HomeNewsWebViewActivity.TITLE, "课程回放"));
     }
 
     @Override

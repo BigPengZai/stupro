@@ -300,8 +300,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_h2"
-    >
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h0" >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"
             android:layout_width="match_parent"
