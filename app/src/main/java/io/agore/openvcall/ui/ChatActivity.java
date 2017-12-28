@@ -253,7 +253,6 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
 
     @Override
     protected void initUIandEvent() {
-        mDrawView.setMySchoolTime(System.currentTimeMillis());
 
         EventBus.getDefault().register(this);
 
@@ -783,6 +782,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 visableTag = 1;
                                 Toast.makeText(ChatActivity.this, "课堂延时" + delayTime + "分钟", Toast.LENGTH_SHORT).show();
                                 break;
+                            case "23":
+                                mDrawView.setMySchoolTime(System.currentTimeMillis());
+                                break;
 
                         }
                     }
@@ -867,7 +869,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     , false, false, new DialogListener() {
                                         @Override
                                         public void onPositive(DialogInterface dialog) {
-                                                finishClassRoom();
+                                            finishClassRoom();
                                         }
 
                                         @Override
@@ -908,7 +910,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             //当有用户加入频道触发此回调。
             @Override
             public void onChannelUserJoined(String account, int uid) {
-                if (account.equals(String.valueOf(mListBean.channelTeacherId))) {
+                if (account.equals(String.valueOf(mListBean.channelTeacherId)) || account.contains(mAgoraUidBean.ccAgoraUid + "")
+                        || account.contains(mAgoraUidBean.crAgoraUid + "")) {
                     Log.d(TAG, "信令频道其他用户加入：" + account);
                     initRoom();
                 }
@@ -934,7 +937,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         || strings.contains(mAgoraUidBean.ccAgoraUid)
                         || strings.contains(mAgoraUidBean.crAgoraUid)) {
                     Log.d(TAG, "信令频道有老师加入:" + mListBean.channelTeacherId);
+                    mDrawView.setMySchoolTime(System.currentTimeMillis());
                     initRoom();
+
                 }
             }
         });
@@ -1747,10 +1752,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             @Override
             public void run() {
                 //当有其他用户退出
-                if (      uid == mListBean.channelTeacherId
-                        ||uid==mAgoraUidBean.getCcAgoraUid()
-                        ||uid==mAgoraUidBean.getCrAgoraUid())
-                {
+                if (uid == mListBean.channelTeacherId
+                        || uid == mAgoraUidBean.getCcAgoraUid()
+                        || uid == mAgoraUidBean.getCrAgoraUid()) {
                     isTeacherJoined = false;
                     SnackBarUtils.show(mDrawView, "对方已退出课堂", Color.GREEN);
                 }
