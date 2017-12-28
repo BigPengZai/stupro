@@ -639,23 +639,44 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     if (mUidsList != null) {
                                         mUidsList.clear();
                                     }*/
+                                    if (!isCcJoined || !isCrJoined) {
+                                        DialogUtil.showOnlyAlert(ChatActivity.this,
+                                                "提示"
+                                                , "对方同意了您的下课请求"
+                                                , "离开教室"
+                                                , ""
+                                                , false, false, new DialogListener() {
+                                                    @Override
+                                                    public void onPositive(DialogInterface dialog) {
 
-                                    DialogUtil.showOnlyAlert(ChatActivity.this,
-                                            "提示"
-                                            , "对方同意了您的下课请求"
-                                            , "离开教室"
-                                            , ""
-                                            , false, false, new DialogListener() {
-                                                @Override
-                                                public void onPositive(DialogInterface dialog) {
-                                                    mPresenter.getUpdateEndTime(mListBean.courseUuid);
-                                                }
+                                                        mPresenter.getUpdateEndTime(mListBean.courseUuid);
+                                                    }
 
-                                                @Override
-                                                public void onNegative(DialogInterface dialog) {
+                                                    @Override
+                                                    public void onNegative(DialogInterface dialog) {
+                                                    }
                                                 }
-                                            }
-                                    );
+                                        );
+                                    } else {
+                                        DialogUtil.showOnlyAlert(ChatActivity.this,
+                                                "提示"
+                                                , "对方同意了您的下课请求"
+                                                , "知道了"
+                                                , ""
+                                                , false, false, new DialogListener() {
+                                                    @Override
+                                                    public void onPositive(DialogInterface dialog) {
+
+
+                                                    }
+
+                                                    @Override
+                                                    public void onNegative(DialogInterface dialog) {
+                                                    }
+                                                }
+                                        );
+                                    }
+
                                     break;
                                 case "no":
                                     DialogUtil.showOnlyAlert(ChatActivity.this,
@@ -786,7 +807,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 if (messageID.equals("stu_ok")) {
                     Log.d(TAG, "学生同意下课");
-                    sendStopRecordMsg();
+                    if (!isCcJoined || !isCrJoined) {
+                        sendStopRecordMsg();
+                    }
                 }
                 if (messageID.equals("stu_no")) {
                     Log.d(TAG, "学生拒绝下课");
