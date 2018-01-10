@@ -64,6 +64,7 @@ public class App extends Application {
 
 
 
+
     private static App instance;
     private PushAgent mPushAgent;
 //    public AgoraAPIOnlySignal mAgoraSocket;
