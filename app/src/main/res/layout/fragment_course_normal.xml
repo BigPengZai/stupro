@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <com.onlyhiedu.mobile.Widget.LabelsView
+        <com.onlyhiedu.pro.Widget.LabelsView
             android:id="@+id/labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             app:selectType="SINGLE"
             app:wordMargin="10dp"
         >
-        </com.onlyhiedu.mobile.Widget.LabelsView>
+        </com.onlyhiedu.pro.Widget.LabelsView>
 
 
         <android.support.v7.widget.RecyclerView
@@ -40,7 +40,7 @@
         />
     </LinearLayout>
 
-    <com.onlyhiedu.mobile.Widget.ErrorLayout
+    <com.onlyhiedu.pro.Widget.ErrorLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

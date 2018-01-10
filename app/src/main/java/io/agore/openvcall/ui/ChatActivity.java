@@ -43,29 +43,29 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
-import com.onlyhiedu.mobile.Model.bean.AgoraUidBean;
-import com.onlyhiedu.mobile.Model.bean.CourseList;
-import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
-import com.onlyhiedu.mobile.Model.bean.RoomInfo;
-import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
-import com.onlyhiedu.mobile.Model.bean.board.LineBean;
-import com.onlyhiedu.mobile.Model.bean.board.SendIMMsg;
-import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.Service.NetworkStateService;
-import com.onlyhiedu.mobile.Utils.CountDownTimerUtil;
-import com.onlyhiedu.mobile.Utils.DateUtil;
-import com.onlyhiedu.mobile.Utils.DialogListener;
-import com.onlyhiedu.mobile.Utils.DialogUtil;
-import com.onlyhiedu.mobile.Utils.ImageLoader;
-import com.onlyhiedu.mobile.Utils.JsonUtil;
-import com.onlyhiedu.mobile.Utils.PhotoUtil;
-import com.onlyhiedu.mobile.Utils.SPUtil;
-import com.onlyhiedu.mobile.Utils.ScreenUtil;
-import com.onlyhiedu.mobile.Utils.SnackBarUtils;
-import com.onlyhiedu.mobile.Utils.SystemUtil;
-import com.onlyhiedu.mobile.Widget.MyScrollView;
-import com.onlyhiedu.mobile.Widget.TakePhotoPopWin;
-import com.onlyhiedu.mobile.Widget.draw.DrawView;
+import com.onlyhiedu.pro.Model.bean.AgoraUidBean;
+import com.onlyhiedu.pro.Model.bean.CourseList;
+import com.onlyhiedu.pro.Model.bean.CourseWareImageList;
+import com.onlyhiedu.pro.Model.bean.RoomInfo;
+import com.onlyhiedu.pro.Model.bean.board.BoardBean;
+import com.onlyhiedu.pro.Model.bean.board.LineBean;
+import com.onlyhiedu.pro.Model.bean.board.SendIMMsg;
+import com.onlyhiedu.pro.R;
+import com.onlyhiedu.pro.Service.NetworkStateService;
+import com.onlyhiedu.pro.Utils.CountDownTimerUtil;
+import com.onlyhiedu.pro.Utils.DateUtil;
+import com.onlyhiedu.pro.Utils.DialogListener;
+import com.onlyhiedu.pro.Utils.DialogUtil;
+import com.onlyhiedu.pro.Utils.ImageLoader;
+import com.onlyhiedu.pro.Utils.JsonUtil;
+import com.onlyhiedu.pro.Utils.PhotoUtil;
+import com.onlyhiedu.pro.Utils.SPUtil;
+import com.onlyhiedu.pro.Utils.ScreenUtil;
+import com.onlyhiedu.pro.Utils.SnackBarUtils;
+import com.onlyhiedu.pro.Utils.SystemUtil;
+import com.onlyhiedu.pro.Widget.MyScrollView;
+import com.onlyhiedu.pro.Widget.TakePhotoPopWin;
+import com.onlyhiedu.pro.Widget.draw.DrawView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -99,7 +99,7 @@ import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
 import io.agore.openvcall.model.User;
 
-import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
+import static com.onlyhiedu.pro.Utils.Encrypt.md5hex;
 import static io.agore.openvcall.ui.ChatPresenter.AfterJoin;
 import static io.agore.openvcall.ui.ChatPresenter.PEN;
 
@@ -348,6 +348,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         mRoomInfo = (RoomInfo) getIntent().getSerializableExtra("roomInfo");
         mListBean = (CourseList.ListBean) getIntent().getSerializableExtra("ListBean");
         mAgoraUidBean = (AgoraUidBean) getIntent().getSerializableExtra("agoraUidBean");
+        Log.d(TAG, ""+mAgoraUidBean.getCcAgoraUid()+mAgoraUidBean.getCrAgoraUid());
         if (mListBean != null) {
             mUuid = mListBean.getUuid();
             //计时
@@ -624,7 +625,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mListBean.channelTeacherId == Integer.parseInt(account)) {
+                        if (mListBean.channelTeacherId == Integer.parseInt(account)
+                                ||mAgoraUidBean.getCrAgoraUid()==Integer.parseInt(account)
+                                ||mAgoraUidBean.getCcAgoraUid()==Integer.parseInt(account)) {
                             switch (msg) {
                                 case "00":
                                     initDismissDialog();
@@ -638,7 +641,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                     if (mUidsList != null) {
                                         mUidsList.clear();
                                     }*/
-                                    if (!isCcJoined || !isCrJoined) {
+                                    if (!isCcJoined || !isCrJoined||!isTeacherJoined) {
                                         DialogUtil.showOnlyAlert(ChatActivity.this,
                                                 "提示"
                                                 , "对方同意了您的下课请求"
@@ -709,9 +712,9 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mListBean.channelTeacherId != Integer.parseInt(account)) {
+                      /*  if (mListBean.channelTeacherId != Integer.parseInt(account)) {
                             return;
-                        }
+                        }*/
 
                         BoardBean boardBean = JsonUtil.parseJson(msg, BoardBean.class);
                         if (boardBean == null) {
@@ -753,7 +756,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                                 mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
                                 visableTag = 1;
                                 Toast.makeText(ChatActivity.this, "老师允许了画板操作", Toast.LENGTH_SHORT).show();
-                                mDrawSwitch.setVisibility(View.VISIBLE);
+                                mDrawSwitch.setVisibility(View.GONE);
                                 break;
                             case "16":
                                 mToolbar.animate().translationY(mToolbar.getHeight()).setInterpolator(new DecelerateInterpolator(2));
@@ -809,7 +812,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 if (messageID.equals("stu_ok")) {
                     Log.d(TAG, "学生同意下课");
-                    if (!isCcJoined || !isCrJoined) {
+                    if (!isTeacherJoined && !isCrJoined&&!isCcJoined) {
                         sendStopRecordMsg();
                     }
                 }
@@ -934,8 +937,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 Log.d(TAG, "查询的用户数量num:" + accounts.length);
                 List<String> strings = Arrays.asList(accounts);
                 if (strings.contains(String.valueOf(mListBean.channelTeacherId))
-                        || strings.contains(mAgoraUidBean.ccAgoraUid)
-                        || strings.contains(mAgoraUidBean.crAgoraUid)) {
+                        || strings.contains(mAgoraUidBean.ccAgoraUid+"")
+                        || strings.contains(mAgoraUidBean.crAgoraUid+"")) {
                     Log.d(TAG, "信令频道有老师加入:" + mListBean.channelTeacherId);
                     mDrawView.setMySchoolTime(System.currentTimeMillis());
                     initRoom();
@@ -1029,7 +1032,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
             if (restart) {
                 mDrawView.restartDrawing();
             }
-            ImageLoader.loadImage(mRequestManager, mImageCourseWare, data.get(pageNum).imageUrl);
+            ImageLoader.loadImage(this,mRequestManager, mImageCourseWare, data.get(pageNum).imageUrl);
         } else {
             Toast.makeText(this, "课件加载失败", Toast.LENGTH_SHORT).show();
         }
@@ -1593,13 +1596,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 ) {
             initTeaView(uid);
         }
-        if (uid == mListBean.channelTeacherId) {
-            firstRemote = uid;
-        } else if (uid == mAgoraUidBean.getCcAgoraUid()) {
-            firstRemote = uid;
-        } else if (uid == mAgoraUidBean.getCcAgoraUid()) {
-            firstRemote = uid;
-        }
+        firstRemote = uid;
         /*if (uid == Integer.parseInt(mListBean.channelPatriarchId)) {
             initTeaView(uid);
         }*/
@@ -1650,9 +1647,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (isFinishing()) {
                     return;
                 }
-                if (mUidsList.containsKey(uid)) {
-                    return;
-                }
+
                 mTeaSurfaceV = RtcEngine.CreateRendererView(getApplicationContext());
                 mUidsList.put(uid, new SoftReference<>(mTeaSurfaceV));
                 Log.d(TAG, "远端下 集合长度：" + mUidsList.size());
@@ -1660,6 +1655,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 mTeaSurfaceV.setZOrderMediaOverlay(false);
                 //设置远端视频显示属性 (setupRemoteVideo)
                 rtcEngine().setupRemoteVideo(new VideoCanvas(mTeaSurfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+                mRel_Tea.removeAllViews();
                 mRel_Tea.addView(mTeaSurfaceV);
             }
         });
@@ -1737,9 +1733,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 }
                 if (uid == mAgoraUidBean.getCrAgoraUid()) {
                     isCrJoined = true;
+                    initTeaView(uid);
                 }
                 if (uid == mAgoraUidBean.getCcAgoraUid()) {
                     isCcJoined = true;
+                    initTeaView(uid);
                 }
             }
         });
@@ -1755,12 +1753,10 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (uid == mListBean.channelTeacherId
                         || uid == mAgoraUidBean.getCcAgoraUid()
                         || uid == mAgoraUidBean.getCrAgoraUid()) {
-                    isTeacherJoined = false;
                     SnackBarUtils.show(mDrawView, "对方已退出课堂", Color.GREEN);
                 }
             }
         });
-        removeRemoteUi(uid);
         if (uid == Integer.parseInt(mListBean.channelPatriarchId)) {
             isPatriarchId = false;
         }
@@ -1770,6 +1766,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
         if (uid == mAgoraUidBean.getCcAgoraUid()) {
             isCcJoined = false;
         }
+        if (uid==mListBean.channelTeacherId) {
+            isTeacherJoined = false;
+        }
+        removeRemoteUi(uid);
+
     }
 
 
@@ -1863,7 +1864,19 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                         || mAgoraUidBean.ccAgoraUid == uid
                         || mAgoraUidBean.crAgoraUid == uid) {
                     mRel_Tea.removeAllViews();
+
                 }
+                /*if (mListBean.channelTeacherId == uid&&!isTeacherJoined) {
+                    mRel_Tea.removeAllViews();
+                }
+
+                if (mAgoraUidBean.ccAgoraUid == uid&&!isCcJoined) {
+                    mRel_Tea.removeAllViews();
+                }
+
+                if (mAgoraUidBean.crAgoraUid == uid&&!isCcJoined) {
+                    mRel_Tea.removeAllViews();
+                }*/
                 //将本地 音视频关闭 移除view
                /* int i = rtcEngine().muteLocalVideoStream(true);
                 rtcEngine().muteLocalAudioStream(true);
@@ -1871,6 +1884,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements AGEvent
                 if (i == 0 && i1 == 0) {
                     mRel_Stu.removeAllViews();
                 }*/
+
             }
         });
     }

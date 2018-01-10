@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
-                <com.onlyhiedu.mobile.Widget.SettingItemView
+                <com.onlyhiedu.pro.Widget.SettingItemView
                     android:id="@+id/setting_grade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,13 +168,13 @@
                     ecdemo:item_titleText="年级"/>
 
 
-                <com.onlyhiedu.mobile.Widget.SettingItemView
+                <com.onlyhiedu.pro.Widget.SettingItemView
                     android:id="@+id/setting_subject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     ecdemo:item_titleText="科目"/>
             </LinearLayout>
-            <com.onlyhiedu.mobile.Widget.PayItemView
+            <com.onlyhiedu.pro.Widget.PayItemView
                 android:id="@+id/pay_item_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

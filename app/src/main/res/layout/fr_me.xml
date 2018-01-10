@@ -47,7 +47,7 @@
     </RelativeLayout>
 
     <!--info-->
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="我的信息"/>
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_consumption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         ecdemo:item_titleText="课时消耗"/>
 
     <!--我的订单-->
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_orders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="我的订单"/>
     <!--使用帮助  -->
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_know"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="你可能想知道"/>
     <!--分享嗨课堂-->
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

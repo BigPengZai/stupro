@@ -1,8 +1,8 @@
 package io.agore.openvcall.ui;
 
-import com.onlyhiedu.mobile.Base.BasePresenter;
-import com.onlyhiedu.mobile.Base.BaseView;
-import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
+import com.onlyhiedu.pro.Base.BasePresenter;
+import com.onlyhiedu.pro.Base.BaseView;
+import com.onlyhiedu.pro.Model.bean.CourseWareImageList;
 
 import java.util.List;
 

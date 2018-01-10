@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.onlyhiedu.mobile.UI.Course.activity.BaiduWalletWebViewActivity">
+    tools:context="com.onlyhiedu.pro.UI.Course.activity.BaiduWalletWebViewActivity">
 
 
     <include layout="@layout/layout_toolbar"/>
 
 
-    <com.onlyhiedu.mobile.Widget.ProgressWebView2
+    <com.onlyhiedu.pro.Widget.ProgressWebView2
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

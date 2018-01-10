@@ -1,1 +1,1 @@
-include ':app', ':PushSDK', ':lib:pingpp'
+include ':app', ':PushSDK', ':lib:pingpp', ':uikit', ':faceunity'

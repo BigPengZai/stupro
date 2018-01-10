@@ -1,22 +1,19 @@
 package io.agore.openvcall.ui;
 
-import android.app.Dialog;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.onlyhiedu.mobile.App.App;
-import com.onlyhiedu.mobile.Base.RxPresenter;
-import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
-import com.onlyhiedu.mobile.Model.bean.board.MyBoardData;
-import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
-import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
-import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
-import com.onlyhiedu.mobile.Utils.DialogUtil;
-import com.onlyhiedu.mobile.Utils.ImageLoader;
-import com.onlyhiedu.mobile.Widget.draw.DrawView;
-import com.onlyhiedu.mobile.Widget.draw.DrawingMode;
-import com.onlyhiedu.mobile.Widget.draw.DrawingTool;
+import com.onlyhiedu.pro.Base.RxPresenter;
+import com.onlyhiedu.pro.Model.bean.CourseWareImageList;
+import com.onlyhiedu.pro.Model.bean.board.MyBoardData;
+import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
+import com.onlyhiedu.pro.Model.http.RetrofitHelper;
+import com.onlyhiedu.pro.Model.http.onlyHttpResponse;
+import com.onlyhiedu.pro.Utils.ImageLoader;
+import com.onlyhiedu.pro.Widget.draw.DrawView;
+import com.onlyhiedu.pro.Widget.draw.DrawingMode;
+import com.onlyhiedu.pro.Widget.draw.DrawingTool;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +27,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
-import static com.taobao.accs.ACCSManager.mContext;
 import static java.lang.Float.parseFloat;
 
 /**
@@ -206,7 +202,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
         try {
             JSONObject jsonObject = new JSONObject(data);
             int pageNum = jsonObject.optInt("pageNum");
-            ImageLoader.loadImage(activity.mRequestManager, imageView, activity.mCourseWareImageLists.get(pageNum).imageUrl);
+            ImageLoader.loadImage(activity,activity.mRequestManager, imageView, activity.mCourseWareImageLists.get(pageNum).imageUrl);
             drawPoints(jsonObject, view);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,7 +1,7 @@
 package io.agore.openvcall.ui;
 
-import com.onlyhiedu.mobile.Base.BasePresenter;
-import com.onlyhiedu.mobile.Base.BaseView;
+import com.onlyhiedu.pro.Base.BasePresenter;
+import com.onlyhiedu.pro.Base.BaseView;
 
 /**
  * Created by Administrator on 2017/3/25.

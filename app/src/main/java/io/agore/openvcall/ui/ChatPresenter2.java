@@ -2,10 +2,10 @@ package io.agore.openvcall.ui;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.onlyhiedu.mobile.Base.RxPresenter;
-import com.onlyhiedu.mobile.Model.http.MyResourceSubscriber;
-import com.onlyhiedu.mobile.Model.http.RetrofitHelper;
-import com.onlyhiedu.mobile.Model.http.onlyHttpResponse;
+import com.onlyhiedu.pro.Base.RxPresenter;
+import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
+import com.onlyhiedu.pro.Model.http.RetrofitHelper;
+import com.onlyhiedu.pro.Model.http.onlyHttpResponse;
 
 import java.lang.reflect.Type;
 

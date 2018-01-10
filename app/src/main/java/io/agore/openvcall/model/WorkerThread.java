@@ -12,8 +12,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceView;
 
-import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.Utils.DynamicKey4;
+import com.onlyhiedu.pro.R;
+import com.onlyhiedu.pro.Utils.DynamicKey4;
 
 import java.io.File;
 import java.util.Date;

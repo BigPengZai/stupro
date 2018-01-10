@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.onlyhiedu.mobile.UI.Home.activity.HomeNewsWebViewActivity">
+    tools:context="com.onlyhiedu.pro.UI.Home.activity.HomeNewsWebViewActivity">
 
 
     <include layout="@layout/layout_toolbar"/>
 
 
-    <com.onlyhiedu.mobile.Widget.ProgressWebView
+    <com.onlyhiedu.pro.Widget.ProgressWebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

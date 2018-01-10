@@ -31,19 +31,19 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
-import com.onlyhiedu.mobile.Model.bean.CourseList;
-import com.onlyhiedu.mobile.Model.bean.CourseWareImageList;
-import com.onlyhiedu.mobile.Model.bean.RoomInfo;
-import com.onlyhiedu.mobile.Model.bean.board.BoardBean;
-import com.onlyhiedu.mobile.R;
-import com.onlyhiedu.mobile.Service.NetworkStateService;
-import com.onlyhiedu.mobile.Utils.DateUtil;
-import com.onlyhiedu.mobile.Utils.DialogListener;
-import com.onlyhiedu.mobile.Utils.DialogUtil;
-import com.onlyhiedu.mobile.Utils.JsonUtil;
-import com.onlyhiedu.mobile.Utils.SPUtil;
-import com.onlyhiedu.mobile.Utils.SnackBarUtils;
-import com.onlyhiedu.mobile.Widget.MyWhiteBoardView;
+import com.onlyhiedu.pro.Model.bean.CourseList;
+import com.onlyhiedu.pro.Model.bean.CourseWareImageList;
+import com.onlyhiedu.pro.Model.bean.RoomInfo;
+import com.onlyhiedu.pro.Model.bean.board.BoardBean;
+import com.onlyhiedu.pro.R;
+import com.onlyhiedu.pro.Service.NetworkStateService;
+import com.onlyhiedu.pro.Utils.DateUtil;
+import com.onlyhiedu.pro.Utils.DialogListener;
+import com.onlyhiedu.pro.Utils.DialogUtil;
+import com.onlyhiedu.pro.Utils.JsonUtil;
+import com.onlyhiedu.pro.Utils.SPUtil;
+import com.onlyhiedu.pro.Utils.SnackBarUtils;
+import com.onlyhiedu.pro.Widget.MyWhiteBoardView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,9 +75,9 @@ import io.agore.openvcall.model.AGEventHandler;
 import io.agore.openvcall.model.ConstantApp;
 import io.agore.openvcall.model.User;
 
-import static com.onlyhiedu.mobile.R.id.ll_video;
-import static com.onlyhiedu.mobile.R.id.whiteBoardView;
-import static com.onlyhiedu.mobile.Utils.Encrypt.md5hex;
+import static com.onlyhiedu.pro.R.id.ll_video;
+import static com.onlyhiedu.pro.R.id.whiteBoardView;
+import static com.onlyhiedu.pro.Utils.Encrypt.md5hex;
 
 public abstract class ChatActivity2 extends BaseActivity2<ChatPresenter2> implements AGEventHandler, ChatContract2.View, Chronometer.OnChronometerTickListener, WhiteBoardView.WhiteBoardInterface {
 

@@ -29,7 +29,7 @@
         android:layout_height="110dp"
         android:orientation="vertical"
         app:layout_behavior="com.onlyhiedu.mobile.Widget.HideHeadBehavior">
-        <com.onlyhiedu.mobile.Widget.LabelsView
+        <com.onlyhiedu.pro.Widget.LabelsView
             android:id="@+id/labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             app:selectType="SINGLE"
             app:wordMargin="10dp"
         >
-        </com.onlyhiedu.mobile.Widget.LabelsView>
+        </com.onlyhiedu.pro.Widget.LabelsView>
         <View
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"

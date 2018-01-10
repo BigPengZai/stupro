@@ -8,7 +8,7 @@
     <include layout="@layout/layout_toolbar"/>
 
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         ecdemo:item_titleText="修改密码"/>
 
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_device_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="设备测试"/>
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             style="@style/horizontal_line"/>
     </LinearLayout>
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

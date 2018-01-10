@@ -26,7 +26,7 @@
 
     </LinearLayout>
 
-    <com.onlyhiedu.mobile.Widget.VpSwipeRefreshLayout
+    <com.onlyhiedu.pro.Widget.VpSwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -162,7 +162,7 @@
             </LinearLayout>
         </ScrollView>
 
-    </com.onlyhiedu.mobile.Widget.VpSwipeRefreshLayout>
+    </com.onlyhiedu.pro.Widget.VpSwipeRefreshLayout>
 </LinearLayout>
 
 

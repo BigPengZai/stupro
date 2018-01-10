@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/c_F9F9F9">
 
-    <com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout
+    <com.onlyhiedu.pro.Widget.RecyclerRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    </com.onlyhiedu.mobile.Widget.RecyclerRefreshLayout>
+    </com.onlyhiedu.pro.Widget.RecyclerRefreshLayout>
 
 
-    <com.onlyhiedu.mobile.Widget.ErrorLayout
+    <com.onlyhiedu.pro.Widget.ErrorLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

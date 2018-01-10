@@ -45,7 +45,7 @@
             android:layout_marginRight="@dimen/size_20"
             android:orientation="vertical">
 
-            <com.onlyhiedu.mobile.Widget.InputTextView
+            <com.onlyhiedu.pro.Widget.InputTextView
                 android:id="@+id/edit_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
             <View
                 style="@style/horizontal_line"/>
 
-            <com.onlyhiedu.mobile.Widget.InputTextView
+            <com.onlyhiedu.pro.Widget.InputTextView
                 android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
             android:visibility="gone">
 
 
-            <com.onlyhiedu.mobile.Widget.InputTextView
+            <com.onlyhiedu.pro.Widget.InputTextView
                 android:id="@+id/edit_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                 ecdemo:item_hint_text="设置密码"/>
 
 
-            <com.onlyhiedu.mobile.Widget.InputTextView
+            <com.onlyhiedu.pro.Widget.InputTextView
                 android:id="@+id/edit_confirm_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

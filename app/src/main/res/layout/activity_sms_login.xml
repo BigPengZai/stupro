@@ -7,7 +7,7 @@
     android:background="@mipmap/background"
     android:orientation="vertical"
     android:padding="@dimen/login_padding"
-    tools:context="com.onlyhiedu.mobile.UI.User.activity.SmsLoginActivity">
+    tools:context="com.onlyhiedu.pro.UI.User.activity.SmsLoginActivity">
 
     <ImageView
         android:id="@+id/ic_delete"

@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/size_20"
     android:paddingRight="@dimen/size_20"
-    tools:context="com.onlyhiedu.mobile.UI.User.activity.OpenIDActivity">
+    tools:context="com.onlyhiedu.pro.UI.User.activity.OpenIDActivity">
 
 
     <RelativeLayout

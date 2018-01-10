@@ -5,34 +5,34 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <include layout="@layout/layout_toolbar"/>
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="姓名"/>
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_sex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="性別"/>
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_grade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="年级"/>
 
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ecdemo:item_showDivider="true"
         ecdemo:item_titleText="科目"/>
-    <com.onlyhiedu.mobile.Widget.SettingItemView
+    <com.onlyhiedu.pro.Widget.SettingItemView
         android:id="@+id/setting_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.onlyhiedu.mobile.UI.User.activity.RegActivity">
+    tools:context="com.onlyhiedu.pro.UI.User.activity.RegActivity">
 
     <include layout="@layout/layout_toolbar"/>
 
@@ -16,7 +16,7 @@
         android:layout_height="1px"
         android:background="@color/c_eeeeee"/>
 
-    <com.onlyhiedu.mobile.Widget.InputTextView
+    <com.onlyhiedu.pro.Widget.InputTextView
         android:id="@+id/edit_old_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         ecdemo:item_close_icon="@mipmap/close_text"
         ecdemo:item_hint_text="原密码"/>
 
-    <com.onlyhiedu.mobile.Widget.InputTextView
+    <com.onlyhiedu.pro.Widget.InputTextView
         android:id="@+id/edit_new_pw"
         ecdemo:item_InputType="password"
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
         ecdemo:item_close_icon="@mipmap/close_text"
         ecdemo:item_hint_text="新密码"/>
 
-    <com.onlyhiedu.mobile.Widget.InputTextView
+    <com.onlyhiedu.pro.Widget.InputTextView
         android:id="@+id/edit_confirm_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

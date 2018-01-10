@@ -151,7 +151,7 @@
         app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
     >
         <!--白版-->
-        <com.onlyhiedu.mobile.Widget.MyScrollView
+        <com.onlyhiedu.pro.Widget.MyScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"/>
-                <com.onlyhiedu.mobile.Widget.draw.DrawView
+                <com.onlyhiedu.pro.Widget.draw.DrawView
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/draw_view"
                     android:layout_width="match_parent"
@@ -181,7 +181,7 @@
                     app:dv_draw_tool="pen"
                     app:dv_draw_width="5"/>
             </FrameLayout>
-        </com.onlyhiedu.mobile.Widget.MyScrollView>
+        </com.onlyhiedu.pro.Widget.MyScrollView>
     </LinearLayout>
     <ImageView
         android:id="@+id/image_full_screen"
@@ -300,7 +300,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_v"
         app:layout_constraintRight_toLeftOf="@+id/guideline_v1"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_h0" >
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h0"
+    >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/msg_list"
             android:layout_width="match_parent"

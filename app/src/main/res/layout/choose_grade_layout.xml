@@ -38,7 +38,7 @@
         android:background="@color/c3"
         android:orientation="horizontal">
 
-        <com.onlyhiedu.mobile.Widget.wheelview.MyWheelView
+        <com.onlyhiedu.pro.Widget.wheelview.MyWheelView
             android:id="@+id/province_wheel"
             android:layout_width="0dp"
             android:layout_height="match_parent"

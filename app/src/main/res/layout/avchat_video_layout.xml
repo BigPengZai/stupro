@@ -34,15 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/avchat_video_bottom_control"/>
 
-    <include
-        android:id="@+id/avchat_record_layout"
-        layout="@layout/avchat_record_layout"
-        android:layout_above="@+id/avchat_video_bottom_control"
-        android:layout_marginBottom="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible" />
+
 
     <include
         android:id="@+id/avchat_video_permission_control"

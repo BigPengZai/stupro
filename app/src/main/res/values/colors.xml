@@ -13,7 +13,7 @@
     <color name="list_divider_color">#fff2f2f2</color>
     <color name="list_divider">#ECEAEA</color>
     <color name="text_color_hint">#C9C8C8</color>
-
+    <color name="grey_white_has_alpha">#66FAFAFA</color>
     <color name="c_F42440">#F42440</color>
     <color name="c_E61B36">#E61B36</color>
     <color name="c_929292">#929292</color>
@@ -65,5 +65,6 @@
     <color name="dark_gray">#FF55585A</color>
 
 
+    <color name="action_bar_tittle_color_555555">#555555</color>
 
 </resources>

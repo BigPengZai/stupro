@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.onlyhiedu.mobile.UI.Course.activity.EvaluateActivity">
+    tools:context="com.onlyhiedu.pro.UI.Course.activity.EvaluateActivity">
 
 
     <RatingBar android:id="@+id/ratingBar" android:layout_width="wrap_content"
