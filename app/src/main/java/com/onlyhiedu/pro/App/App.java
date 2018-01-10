@@ -62,6 +62,7 @@ import io.agore.openvcall.model.WorkerThread;
  */
 public class App extends Application {
 
+
     private static App instance;
     private PushAgent mPushAgent;
 //    public AgoraAPIOnlySignal mAgoraSocket;
