@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\Mobile_IM\android-client\faceunity\libs"><file name="arm64-v8a/libnama.so" path="D:\Mobile_IM\android-client\faceunity\libs\arm64-v8a\libnama.so"/><file name="armeabi-v7a/libnama.so" path="D:\Mobile_IM\android-client\faceunity\libs\armeabi-v7a\libnama.so"/><file name="nama.jar" path="D:\Mobile_IM\android-client\faceunity\libs\nama.jar"/></source></dataSet><dataSet config="debug"><source path="D:\Mobile_IM\android-client\faceunity\src\debug\jniLibs"/></dataSet></merger>
