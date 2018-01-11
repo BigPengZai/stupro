@@ -74,7 +74,7 @@ public class MineOrdersActivity extends SimpleActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new MainActivityTabSelectPos(2));
+                EventBus.getDefault().post(new MainActivityTabSelectPos(4));
                 AppManager.getAppManager().finishActivity(MineOrdersActivity.class);
             }
         });
@@ -91,7 +91,7 @@ public class MineOrdersActivity extends SimpleActivity {
     @Override
     public void onBackPressedSupport() {
 //        super.onBackPressedSupport();
-        EventBus.getDefault().post(new MainActivityTabSelectPos(2));
+        EventBus.getDefault().post(new MainActivityTabSelectPos(4));
         finish();
     }
 

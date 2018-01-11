@@ -276,6 +276,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     }
 
+
     @Override
     protected void initData() {
         super.initData();
