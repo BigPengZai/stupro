@@ -54,6 +54,20 @@ public class SessionListFragment extends SimpleFragment {
 
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.nim_session_list;
+    }
+
+    @Override
+    public void initEventAndData() {
+        findViews();
+        registerObservers(true);
+
+        addRecentContactsFragment();
+    }
+
+
+    @Override
     public void onDestroy() {
         registerObservers(false);
         super.onDestroy();
@@ -162,12 +176,12 @@ public class SessionListFragment extends SimpleFragment {
     // 将最近联系人列表fragment动态集成进来。 开发者也可以使用在xml中配置的方式静态集成。
     private void addRecentContactsFragment() {
         fragment = new RecentContactsFragment();
-        fragment.setContainerId(R.id.messages_fragment);
+//        fragment.setContainerId(R.id.messages_fragment);
 
         final MainActivity activity = (MainActivity) getActivity();
 
         // 如果是activity从堆栈恢复，FM中已经存在恢复而来的fragment，此时会使用恢复来的，而new出来这个会被丢弃掉
-        fragment = (RecentContactsFragment) activity.addFragment(fragment);
+//        fragment = (RecentContactsFragment) activity.addFragment(fragment);
 
         fragment.setCallback(new RecentContactsCallback() {
             @Override
@@ -236,16 +250,5 @@ public class SessionListFragment extends SimpleFragment {
         });
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.nim_session_list;
-    }
 
-    @Override
-    protected void initEventAndData() {
-        findViews();
-        registerObservers(true);
-
-        addRecentContactsFragment();
-    }
 }

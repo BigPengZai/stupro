@@ -1,10 +1,7 @@
-package com.netease.nim.uikit.business.contact;
+package com.onlyhiedu.pro.IM.fragment;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -27,9 +24,10 @@ import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
 import com.netease.nim.uikit.business.contact.core.model.ContactGroupStrategy;
 import com.netease.nim.uikit.business.contact.core.provider.ContactDataProvider;
 import com.netease.nim.uikit.business.contact.core.query.IContactDataProvider;
+import com.netease.nim.uikit.business.contact.core.viewholder.AbsContactViewHolder;
 import com.netease.nim.uikit.business.contact.core.viewholder.LabelHolder;
 import com.netease.nim.uikit.business.contact.core.viewholder.OnlineStateContactHolder;
-import com.netease.nim.uikit.common.fragment.TFragment;
+import com.netease.nim.uikit.common.fragment.SimpleFragment;
 import com.netease.nim.uikit.common.ui.liv.LetterIndexView;
 import com.netease.nim.uikit.common.ui.liv.LivIndex;
 import com.netease.nim.uikit.common.util.log.LogUtil;
@@ -49,7 +47,7 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
  * <p/>
  * Created by huangjun on 2015/9/7.
  */
-public class ContactsFragment extends TFragment {
+public class ContactsFragment extends SimpleFragment {
 
     private ContactDataAdapter adapter;
 
@@ -76,20 +74,18 @@ public class ContactsFragment extends TFragment {
         }
     }
 
-    /**
-     * ***************************************** 生命周期 *****************************************
-     */
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.nim_contacts, container, false);
+    protected int getLayoutId() {
+        return R.layout.nim_contacts;
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void initEventAndData() {
 
         // 界面初始化
+        initCustomization();
         initAdapter();
         findViews();
         buildLitterIdx(getView());
@@ -99,7 +95,10 @@ public class ContactsFragment extends TFragment {
         registerOnlineStateChangeListener(true);
         // 加载本地数据
         reload(false);
+
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -108,6 +107,27 @@ public class ContactsFragment extends TFragment {
         registerObserver(false);
         registerOnlineStateChangeListener(false);
     }
+
+    private void initCustomization() {
+        setContactsCustomization(new ContactsCustomization() {
+            @Override
+            public Class<? extends AbsContactViewHolder<? extends AbsContactItem>> onGetFuncViewHolderClass() {
+                return ContactListFragment.FuncItem.FuncViewHolder.class;
+            }
+
+            @Override
+            public List<AbsContactItem> onGetFuncItems() {
+                return ContactListFragment.FuncItem.provide();
+            }
+
+            @Override
+            public void onFuncItemClick(AbsContactItem item) {
+                ContactListFragment.FuncItem.handle(getActivity(), item);
+            }
+        });
+    }
+
+
 
     private void initAdapter() {
         IContactDataProvider dataProvider = new ContactDataProvider(ItemTypes.FRIEND);
@@ -146,7 +166,7 @@ public class ContactsFragment extends TFragment {
 
     private void findViews() {
         // loading
-        loadingFrame = findView(R.id.contact_loading_frame);
+        loadingFrame =  getView().findViewById(R.id.contact_loading_frame);
 
         // count
         View countLayout = View.inflate(getView().getContext(), R.layout.nim_contacts_count_item, null);
@@ -154,7 +174,7 @@ public class ContactsFragment extends TFragment {
         countText = (TextView) countLayout.findViewById(R.id.contactCountText);
 
         // ListView
-        listView = findView(R.id.contact_list_view);
+        listView = (ListView) getView().findViewById(R.id.contact_list_view);
         listView.addFooterView(countLayout); // 注意：addFooter要放在setAdapter之前，否则旧版本手机可能会add不上
         listView.setAdapter(adapter);
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {

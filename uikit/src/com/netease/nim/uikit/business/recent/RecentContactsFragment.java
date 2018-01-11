@@ -1,12 +1,9 @@
 package com.netease.nim.uikit.business.recent;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +17,7 @@ import com.netease.nim.uikit.api.model.user.UserInfoObserver;
 import com.netease.nim.uikit.business.recent.adapter.RecentContactAdapter;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.badger.Badger;
-import com.netease.nim.uikit.common.fragment.TFragment;
+import com.netease.nim.uikit.common.fragment.SimpleFragment;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.ui.drop.DropCover;
 import com.netease.nim.uikit.common.ui.drop.DropManager;
@@ -59,7 +56,7 @@ import static com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog.onSeparat
  * <p/>
  * Created by huangjun on 2015/2/1.
  */
-public class RecentContactsFragment extends TFragment {
+public class RecentContactsFragment extends SimpleFragment {
 
     // 置顶功能可直接使用，也可作为思路，供开发者充分利用RecentContact的tag字段
     public static final long RECENT_TAG_STICKY = 1; // 联系人置顶tag
@@ -84,21 +81,20 @@ public class RecentContactsFragment extends TFragment {
 
     private UserInfoObserver userInfoObserver;
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.nim_recent_contacts;
+    }
+
+    @Override
+    protected void initEventAndData() {
         findViews();
         initMessageList();
         requestMessages(true);
         registerObservers(true);
         registerDropCompletedListener(true);
         registerOnlineStateChangeListener(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.nim_recent_contacts, container, false);
     }
 
     private void notifyDataSetChanged() {
@@ -120,9 +116,9 @@ public class RecentContactsFragment extends TFragment {
      * 查找页面控件
      */
     private void findViews() {
-        recyclerView = findView(R.id.recycler_view);
-        emptyBg = findView(R.id.emptyBg);
-        emptyHint = findView(R.id.message_list_empty_hint);
+        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        emptyBg = getView().findViewById(R.id.emptyBg);
+        emptyHint = (TextView) getView().findViewById(R.id.message_list_empty_hint);
     }
 
     /**

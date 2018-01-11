@@ -8,7 +8,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.api.model.contact.ContactsCustomization;
-import com.netease.nim.uikit.business.contact.ContactsFragment;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ItemTypes;
 import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
@@ -159,19 +158,19 @@ public class ContactListFragment extends SimpleFragment {
 
 
     @Override
-    protected void initEventAndData() {
+    public void initEventAndData() {
         addContactFragment();  // 集成通讯录页面
     }
 
     // 将通讯录列表fragment动态集成进来。 开发者也可以使用在xml中配置的方式静态集成。
     private void addContactFragment() {
         fragment = new ContactsFragment();
-        fragment.setContainerId(R.id.contact_fragment);
+//        fragment.setContainerId(R.id.contact_fragment);
 
         MainActivity activity = (MainActivity) getActivity();
 
         // 如果是activity从堆栈恢复，FM中已经存在恢复而来的fragment，此时会使用恢复来的，而new出来这个会被丢弃掉
-        fragment = (ContactsFragment) activity.addFragment(fragment);
+//        fragment = (ContactsFragment) activity.addFragment(fragment);
 
         // 功能项定制
         fragment.setContactsCustomization(new ContactsCustomization() {

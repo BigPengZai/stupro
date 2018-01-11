@@ -11,7 +11,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
     defaultConfig {
-        applicationId "com.onlyhiedu.mobile"
+        applicationId "com.onlyhiedu.pro"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 30
@@ -184,7 +184,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.github.yalantis:ucrop:2.2.1'
     compile 'com.j256.ormlite:ormlite-android:5.0'
-    compile 'me.yokeyword:fragmentation:1.0.9'
+
 //    compile 'com.github.bumptech.glide:glide:3.8.0'
 
 //    compile 'com.github.bumptech.glide:glide:4.2.0'

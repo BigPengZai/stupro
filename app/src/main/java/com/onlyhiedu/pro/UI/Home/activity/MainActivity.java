@@ -19,12 +19,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.onlyhiedu.pro.IM.fragment.ContactsFragment;
+import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 import com.netease.nim.uikit.common.fragment.TFragment;
 import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.AppManager;
 import com.onlyhiedu.pro.Base.VersionUpdateActivity;
-import com.onlyhiedu.pro.IM.fragment.ContactListFragment;
-import com.onlyhiedu.pro.IM.fragment.SessionListFragment;
 import com.onlyhiedu.pro.Model.bean.socket.LoginRequest;
 import com.onlyhiedu.pro.Model.bean.socket.LoginResponse;
 import com.onlyhiedu.pro.Model.event.MainActivityShowGuest;
@@ -69,8 +69,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     private HomeFragment mHomeFragment;
     private MeFragment mMeFragment;
     //    private SmallClassFragment mSmallClassFragment;
-    private SessionListFragment mSessionListFragment;
-    private ContactListFragment mContactListFragment;
+    private RecentContactsFragment mSessionListFragment;
+    private ContactsFragment mContactListFragment;
 
 
     public boolean isConflict = false;
@@ -257,8 +257,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mMeFragment = new MeFragment();
         mHomeFragment = new HomeFragment();
 //        mSmallClassFragment = new SmallClassFragment();
-        mSessionListFragment = new SessionListFragment();
-        mContactListFragment = new ContactListFragment();
+        mSessionListFragment = new RecentContactsFragment();
+        mContactListFragment = new ContactsFragment();
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
 
         //不隐藏首页
