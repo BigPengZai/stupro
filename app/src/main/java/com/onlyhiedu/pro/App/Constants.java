@@ -37,4 +37,6 @@ public class Constants {
     public static final String UpdateApkId = "UpdateApkId"; //下载完成后bao的id
     public static final String AGORAUID = "AGORAUID"; //信令角色uid
     public static final String NightModeState = "NightModeState";
+    public static final String NETEASEACCID = "NETEASEACCID";
+    public static final String NETEASETOKEN = "NETEASETOKEN";
 }

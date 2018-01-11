@@ -29,6 +29,8 @@ public class NimSDKOptionConfig {
         // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
         initStatusBarNotificationConfig(options);
 
+
+        options.appKey = "14ac70ac3193a29dae3f70a35084ccad";
         // 配置 APP 保存图片/语音/文件/log等数据的目录
         options.sdkStorageRootPath = getAppCacheDir(context) + "/nim"; // 可以不设置，那么将采用默认路径
 

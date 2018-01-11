@@ -116,7 +116,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String pwd = mEditPwd.getEditText();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
 //            mPd.show();
-            mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
+          mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
+
             Log.d(TAG, ":" + StringUtils.getDeviceId(this));
         }
 
@@ -134,17 +135,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showUser() {
-        addUTag();
+//        addUTag();
         SPUtil.setGuest(false);
-        if (mAccountEdgeOut) {
-            startActivity(new Intent(this, MainActivity.class));
-        } else {
-            EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
-        }
-
-        mPd.dismiss();
-        finish();
-        AppManager.getAppManager().finishActivity(OpenIDActivity.class);
+      mPresenter.registerUikit();
     }
 
 
@@ -167,6 +160,19 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void setPush() {
 //        Toast.makeText(this, "" + PushAgent.getInstance(this).getRegistrationId(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getUikitDate() {
+        if (mAccountEdgeOut) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+        }
+
+        mPd.dismiss();
+        finish();
+        AppManager.getAppManager().finishActivity(OpenIDActivity.class);
     }
 
     @Override

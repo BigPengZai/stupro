@@ -2,8 +2,10 @@ package com.onlyhiedu.pro.UI.User.presenter;
 
 import android.util.Log;
 
+import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.Constants;
 import com.onlyhiedu.pro.Base.RxPresenter;
+import com.onlyhiedu.pro.Model.bean.UikitDate;
 import com.onlyhiedu.pro.Model.bean.UserDataBean;
 import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.pro.Model.http.RetrofitHelper;
@@ -11,6 +13,7 @@ import com.onlyhiedu.pro.Model.http.onlyHttpResponse;
 import com.onlyhiedu.pro.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.pro.Utils.Encrypt;
 import com.onlyhiedu.pro.Utils.SPUtil;
+import com.onlyhiedu.pro.Utils.StringUtils;
 import com.onlyhiedu.pro.Utils.UIUtils;
 
 import javax.inject.Inject;
@@ -48,7 +51,6 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         Log.d(Constants.TAG, "Token : " + data.getData().token);
                         SPUtil.setUserInfo(emcRegName, data.getData().token, data.getData().phone, data.getData().userName, data.getData().avatarUrl,data.getData().agoraUid);
                         getView().showUser();
-
 //                        if (!data.getData().registerIMFlag) {
 //                            emcRegister(mRetrofitHelper, getView());
 //                        } else {
@@ -62,6 +64,30 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
         };
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void registerUikit() {
+        Flowable<onlyHttpResponse<UikitDate>> flowable = mRetrofitHelper.fetchregisterUikit();
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<UikitDate>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<UikitDate> data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        SPUtil.setUikitAccid(data.getData().getNeteaseAccid());
+                        SPUtil.setUikitToken(data.getData().getNeteaseToken());
+                       getView().getUikitDate();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+
+
+
     }
 
 

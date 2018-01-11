@@ -25,6 +25,7 @@ import com.onlyhiedu.pro.Model.bean.RoomInfo;
 import com.onlyhiedu.pro.Model.bean.StarContentList;
 import com.onlyhiedu.pro.Model.bean.StudentInfo;
 import com.onlyhiedu.pro.Model.bean.TypeListInfo;
+import com.onlyhiedu.pro.Model.bean.UikitDate;
 import com.onlyhiedu.pro.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.pro.Model.bean.UserDataBean;
 import com.onlyhiedu.pro.Model.bean.UserIsRegister;
@@ -136,7 +137,7 @@ public class RetrofitHelper {
         sOkHttpClient = builder.build();
     }
 
-    private static onlyApis getOnlyApiService() {
+    public static onlyApis getOnlyApiService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(sOnlyApis.HOST)
                 .client(sOkHttpClient)
@@ -414,6 +415,10 @@ public class RetrofitHelper {
 
     public Flowable<onlyHttpResponse> fetchSaveAppraise(int num, String classAppraiseStarUuids, String remark, String courseUuid) {
         return sOnlyApis.saveAppraise(num, classAppraiseStarUuids, remark, courseUuid);
+    }
+
+    public Flowable<onlyHttpResponse<UikitDate>> fetchregisterUikit() {
+        return sOnlyApis.registerUikit();
     }
 
 }

@@ -23,9 +23,11 @@ import com.onlyhiedu.pro.Model.bean.RoomInfo;
 import com.onlyhiedu.pro.Model.bean.StarContentList;
 import com.onlyhiedu.pro.Model.bean.StudentInfo;
 import com.onlyhiedu.pro.Model.bean.TypeListInfo;
+import com.onlyhiedu.pro.Model.bean.UikitDate;
 import com.onlyhiedu.pro.Model.bean.UpdateVersionInfo;
 import com.onlyhiedu.pro.Model.bean.UserDataBean;
 import com.onlyhiedu.pro.Model.bean.UserIsRegister;
+import com.onlyhiedu.pro.Utils.SPUtil;
 
 import java.io.File;
 import java.util.List;
@@ -47,15 +49,15 @@ public interface onlyApis {
 
 
     //测试环境
-//    String HOST = "http://clienttest.haiketang.net/";
-//    String IP = "clienttest.haiketang.net/";
-//    String coursePlayback = "http://frontendtest.haiketang.net/static/play.html?token=" + SPUtil.getToken() + "&uuid=";
+    String HOST = "http://clienttest.haiketang.net/";
+    String IP = "clienttest.haiketang.net/";
+    String coursePlayback = "http://frontendtest.haiketang.net/static/play.html?token=" + SPUtil.getToken() + "&uuid=";
 
 
     //    //公网环境
-    String HOST = "http://client.onlyhi.cn/";
-    String IP = "client.onlyhi.cn";
-    String coursePlayback =  "http://frontend.onlyhi.cn/static/play.html?token=\" + SPUtil.getToken() + \"&uuid=";
+//    String HOST = "http://client.onlyhi.cn/";
+//    String IP = "client.onlyhi.cn";
+//    String coursePlayback =  "http://frontend.onlyhi.cn/static/play.html?token=\" + SPUtil.getToken() + \"&uuid=";
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
 
@@ -575,5 +577,17 @@ public interface onlyApis {
     @FormUrlEncoded
     @POST("client/course/saveAppraise")
     Flowable<onlyHttpResponse> saveAppraise(@Field("star") int num, @Field("classAppraiseStarUuids") String classAppraiseStarUuids, @Field("remark") String remark, @Field("courseUuid") String courseUuid);
+
+
+    /**
+     *
+     * 用户注册云信
+     *
+     * */
+    @FormUrlEncoded
+    @POST("client/netease/register")
+    Flowable<onlyHttpResponse<UikitDate>> registerUikit();
+
+
 
 }

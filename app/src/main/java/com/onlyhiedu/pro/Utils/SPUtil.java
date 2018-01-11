@@ -110,4 +110,20 @@ public class SPUtil {
     }
 
 
+
+    public static void setUikitAccid(String accid) {
+        getAppSp().edit().putString(Constants.NETEASEACCID,accid).apply();
+    }
+    public static String getUikitAccid() {
+        return getAppSp().getString(Constants.NETEASEACCID,"");
+    }
+
+    public static void setUikitToken(String uikitToken) {
+        getAppSp().edit().putString(Constants.NETEASETOKEN,uikitToken).apply();
+    }
+    public static String getUikitToken() {
+        return getAppSp().getString(Constants.NETEASETOKEN,"");
+    }
+
+
 }

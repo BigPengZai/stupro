@@ -33,6 +33,7 @@ import com.onlyhiedu.pro.IM.session.NimDemoLocationProvider;
 import com.onlyhiedu.pro.IM.session.SessionHelper;
 import com.onlyhiedu.pro.UI.Home.activity.MainActivity;
 import com.onlyhiedu.pro.Utils.DaoUtil;
+import com.onlyhiedu.pro.Utils.SPUtil;
 import com.pingplusplus.android.Pingpp;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
@@ -167,9 +168,9 @@ public class App extends Application {
         //IM
         DemoCache.setContext(this);
         // 注册小米推送，参数：小米推送证书名称（需要在云信管理后台配置）、appID 、appKey，该逻辑放在 NIMClient init 之前
-        NIMPushClient.registerMiPush(this, "DEMO_MI_PUSH", "2882303761517502883", "5671750254883");
-        // 注册华为推送，参数：华为推送证书名称（需要在云信管理后台配置）
-        NIMPushClient.registerHWPush(this, "DEMO_HW_PUSH");
+//        NIMPushClient.registerMiPush(this, "DEMO_MI_PUSH", "2882303761517502883", "5671750254883");
+//        // 注册华为推送，参数：华为推送证书名称（需要在云信管理后台配置）
+//        NIMPushClient.registerHWPush(this, "DEMO_HW_PUSH");
 
         // 注册自定义推送消息处理，这个是可选项
 //        NIMPushClient.registerMixPushMessageHandler(new DemoMixPushMessageHandler());
@@ -197,8 +198,8 @@ public class App extends Application {
     }
 
     private LoginInfo getLoginInfo() {
-        String account = Preferences.getUserAccount();
-        String token = Preferences.getUserToken();
+        String account = SPUtil.getUikitAccid();
+        String token = SPUtil.getUikitToken();
 
         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
             DemoCache.setAccount(account.toLowerCase());
