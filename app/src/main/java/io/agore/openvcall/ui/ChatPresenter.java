@@ -98,7 +98,7 @@ public class ChatPresenter extends RxPresenter<ChatContract.View> implements Cha
 
 
     @Override
-    public void getCourseWareImageList(String wareId, int pageNum, boolean restart) {
+    public void getCourseWareImageList(String wareId, final int pageNum, final boolean restart) {
         Flowable<onlyHttpResponse<List<CourseWareImageList>>> flowable = mRetrofitHelper.fetchGetCourseWareImageList(wareId);
 
         MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>> subscriber = new MyResourceSubscriber<onlyHttpResponse<List<CourseWareImageList>>>() {
