@@ -8,8 +8,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.baidu.wallet.base.datamodel.UserData;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
+import com.netease.nim.uikit.common.util.log.LogUtil;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.onlyhiedu.pro.App.AppManager;
 import com.onlyhiedu.pro.Base.BaseActivity;
+import com.onlyhiedu.pro.IM.DemoCache;
+import com.onlyhiedu.pro.IM.config.preference.Preferences;
+import com.onlyhiedu.pro.IM.config.preference.UserPreferences;
 import com.onlyhiedu.pro.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.pro.R;
 import com.onlyhiedu.pro.UI.Home.activity.MainActivity;
@@ -51,7 +63,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private int mShowHomePosition;
     private ProgressDialog mPd;
     private boolean mAccountEdgeOut;
-
+    private AbortableFuture<LoginInfo> loginRequest;
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -164,17 +176,71 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void getUikitDate() {
-        if (mAccountEdgeOut) {
-            startActivity(new Intent(this, MainActivity.class));
-        } else {
-            EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
-        }
+        // 登录
+        loginRequest = NimUIKit.login(new LoginInfo(SPUtil.getUikitAccid(), SPUtil.getUikitToken()), new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+                Log.d(TAG, "login success");
 
-        mPd.dismiss();
-        finish();
-        AppManager.getAppManager().finishActivity(OpenIDActivity.class);
+                onLoginDone();
+
+                DemoCache.setAccount(SPUtil.getUikitAccid());
+                saveLoginInfo(SPUtil.getUikitAccid(), SPUtil.getUikitToken());
+
+                // 初始化消息提醒配置
+                initNotificationConfig();
+
+                // 进入主界面
+                if (mAccountEdgeOut) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                } else {
+                    EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+                }
+
+                mPd.dismiss();
+                finish();
+                AppManager.getAppManager().finishActivity(OpenIDActivity.class);
+            }
+
+            @Override
+            public void onFailed(int code) {
+                onLoginDone();
+                if (code == 302 || code == 404) {
+                    Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "登录失败: " + code, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                Toast.makeText(LoginActivity.this, R.string.login_exception, Toast.LENGTH_LONG).show();
+                onLoginDone();
+            }
+        });
+
     }
 
+    private void onLoginDone() {
+        loginRequest = null;
+    }
+    private void saveLoginInfo(final String account, final String token) {
+        Preferences.saveUserAccount(account);
+        Preferences.saveUserToken(token);
+    }
+    private void initNotificationConfig() {
+        // 初始化消息提醒
+        NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+        // 加载状态栏配置
+        StatusBarNotificationConfig statusBarNotificationConfig = UserPreferences.getStatusConfig();
+        if (statusBarNotificationConfig == null) {
+            statusBarNotificationConfig = DemoCache.getNotificationConfig();
+            UserPreferences.setStatusConfig(statusBarNotificationConfig);
+        }
+        // 更新配置
+        NIMClient.updateStatusBarNotificationConfig(statusBarNotificationConfig);
+    }
     @Override
     public void showError(String msg) {
         if (mPd.isShowing()) {

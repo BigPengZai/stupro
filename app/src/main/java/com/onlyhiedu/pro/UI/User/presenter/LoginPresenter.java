@@ -10,6 +10,7 @@ import com.onlyhiedu.pro.Model.bean.UserDataBean;
 import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.pro.Model.http.RetrofitHelper;
 import com.onlyhiedu.pro.Model.http.onlyHttpResponse;
+import com.onlyhiedu.pro.Model.http.registerUikit;
 import com.onlyhiedu.pro.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.pro.Utils.Encrypt;
 import com.onlyhiedu.pro.Utils.SPUtil;
@@ -19,6 +20,11 @@ import com.onlyhiedu.pro.Utils.UIUtils;
 import javax.inject.Inject;
 
 import io.reactivex.Flowable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2017/3/17.
@@ -86,8 +92,24 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
 
+/*
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://clienttest.haiketang.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        registerUikit registerUikit = retrofit.create(registerUikit.class);
+        Call<UikitDate> uikitDateCall = registerUikit.registerUikit(SPUtil.getToken());
+        uikitDateCall.enqueue(new Callback<UikitDate>() {
+            @Override
+            public void onResponse(Call<UikitDate> call, Response<UikitDate> response) {
 
+            }
 
+            @Override
+            public void onFailure(Call<UikitDate> call, Throwable t) {
+//                Log.d()
+            }
+        });*/
     }
 
 

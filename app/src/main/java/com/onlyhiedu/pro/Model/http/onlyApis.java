@@ -584,7 +584,6 @@ public interface onlyApis {
      * 用户注册云信
      *
      * */
-    @FormUrlEncoded
     @POST("client/netease/register")
     Flowable<onlyHttpResponse<UikitDate>> registerUikit();
 
