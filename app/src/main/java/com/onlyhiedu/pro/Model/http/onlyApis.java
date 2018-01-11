@@ -57,7 +57,7 @@ public interface onlyApis {
     //    //公网环境
 //    String HOST = "http://client.onlyhi.cn/";
 //    String IP = "client.onlyhi.cn";
-//    String coursePlayback =  "http://frontend.onlyhi.cn/static/play.html?token=\" + SPUtil.getToken() + \"&uuid=";
+//    String coursePlayback =  "http://frontend.onlyhi.cn/static/play.html?token=" + SPUtil.getToken() + "&uuid=";
 
     String IM_USER_INFO_URL = HOST + "client/chat/getIMUserInfo";
 
@@ -586,7 +586,5 @@ public interface onlyApis {
      * */
     @POST("client/netease/register")
     Flowable<onlyHttpResponse<UikitDate>> registerUikit();
-
-
 
 }

@@ -2,7 +2,6 @@ package com.onlyhiedu.pro.UI.User.presenter;
 
 import android.util.Log;
 
-import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.Constants;
 import com.onlyhiedu.pro.Base.RxPresenter;
 import com.onlyhiedu.pro.Model.bean.UikitDate;
@@ -10,21 +9,14 @@ import com.onlyhiedu.pro.Model.bean.UserDataBean;
 import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.pro.Model.http.RetrofitHelper;
 import com.onlyhiedu.pro.Model.http.onlyHttpResponse;
-import com.onlyhiedu.pro.Model.http.registerUikit;
 import com.onlyhiedu.pro.UI.User.presenter.contract.LoginContract;
 import com.onlyhiedu.pro.Utils.Encrypt;
 import com.onlyhiedu.pro.Utils.SPUtil;
-import com.onlyhiedu.pro.Utils.StringUtils;
 import com.onlyhiedu.pro.Utils.UIUtils;
 
 import javax.inject.Inject;
 
 import io.reactivex.Flowable;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2017/3/17.

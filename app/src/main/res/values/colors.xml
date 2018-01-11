@@ -67,4 +67,10 @@
 
     <color name="action_bar_tittle_color_555555">#555555</color>
 
+    <!--网易云信-->
+    <color name="color_black_333333">#333333</color>
+    <color name="color_grey_999999">#999999</color>
+    <color name="color_grey_888888">#888888</color>
+    <color name="color_grey_666666">#666666</color>
+
 </resources>

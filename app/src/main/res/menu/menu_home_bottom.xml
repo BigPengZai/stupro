@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/one"
         android:icon="@drawable/main_radio_button"
-        android:title="首页"/>
+        android:title="会话"/>
     <item
         android:id="@+id/tow"
+        android:icon="@drawable/main_radio_button1"
+        android:title="通讯录"/>
+
+
+    <item
+        android:id="@+id/thr"
+        android:icon="@drawable/main_radio_button"
+        android:title="首页"/>
+
+    <item
+        android:id="@+id/four"
         android:icon="@drawable/main_radio_button1"
         android:title="上课"/>
 
     <item
-        android:id="@+id/thr"
+        android:id="@+id/five"
         android:icon="@drawable/main_radio_button3"
         android:title="我的"/>
 
 
-
-  <!--  <item
-        android:id="@+id/one"
-        android:icon="@drawable/main_radio_button"
-        android:title="首页"/>
-    <item
-        android:id="@+id/tow"
-        android:icon="@drawable/main_radio_button1"
-        android:title="上课"/>
-    <item
-        android:id="@+id/thr"
-        android:icon="@drawable/main_radio_button2"
-        android:title="会话"/>
-    <item
-        android:id="@+id/fou"
-        android:icon="@drawable/main_radio_button3"
-        android:title="我的"/>-->
+    <!--  <item
+          android:id="@+id/one"
+          android:icon="@drawable/main_radio_button"
+          android:title="首页"/>
+      <item
+          android:id="@+id/tow"
+          android:icon="@drawable/main_radio_button1"
+          android:title="上课"/>
+      <item
+          android:id="@+id/thr"
+          android:icon="@drawable/main_radio_button2"
+          android:title="会话"/>
+      <item
+          android:id="@+id/fou"
+          android:icon="@drawable/main_radio_button3"
+          android:title="我的"/>-->
 </menu>

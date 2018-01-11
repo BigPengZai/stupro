@@ -11,15 +11,20 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.netease.nim.uikit.common.fragment.TFragment;
 import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.AppManager;
 import com.onlyhiedu.pro.Base.VersionUpdateActivity;
+import com.onlyhiedu.pro.IM.fragment.ContactListFragment;
+import com.onlyhiedu.pro.IM.fragment.SessionListFragment;
 import com.onlyhiedu.pro.Model.bean.socket.LoginRequest;
 import com.onlyhiedu.pro.Model.bean.socket.LoginResponse;
 import com.onlyhiedu.pro.Model.event.MainActivityShowGuest;
@@ -30,7 +35,6 @@ import com.onlyhiedu.pro.R;
 import com.onlyhiedu.pro.UI.Home.fragment.ClassFragment;
 import com.onlyhiedu.pro.UI.Home.fragment.HomeFragment;
 import com.onlyhiedu.pro.UI.Home.fragment.MeFragment;
-import com.onlyhiedu.pro.UI.Home.fragment.SmallClassFragment;
 import com.onlyhiedu.pro.Utils.SPUtil;
 import com.onlyhiedu.pro.Utils.SystemUtil;
 import com.onlyhiedu.pro.Utils.UIUtils;
@@ -49,6 +53,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -62,7 +68,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     private ClassFragment mClassFragment;
     private HomeFragment mHomeFragment;
     private MeFragment mMeFragment;
-    private SmallClassFragment mSmallClassFragment;
+    //    private SmallClassFragment mSmallClassFragment;
+    private SessionListFragment mSessionListFragment;
+    private ContactListFragment mContactListFragment;
+
+
     public boolean isConflict = false;
     private boolean isCurrentAccountRemoved = false;
     private long mExitTime = 0;
@@ -246,28 +256,20 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mClassFragment = new ClassFragment();
         mMeFragment = new MeFragment();
         mHomeFragment = new HomeFragment();
-        mSmallClassFragment = new SmallClassFragment();
+//        mSmallClassFragment = new SmallClassFragment();
+        mSessionListFragment = new SessionListFragment();
+        mContactListFragment = new ContactListFragment();
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
 
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
-           /* if (mHideSmall) {
-                BottomNavigationViewHelper.hideItemView(mNavigation, 3);
-                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment);
-            } else {
-                loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment, mSmallClassFragment);
-            }*/
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mSessionListFragment, mContactListFragment, mHomeFragment, mClassFragment, mMeFragment);
+
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment/*, conversationListFragment*/, mMeFragment, mSmallClassFragment);
-           /* if (mHideSmall) {
-                BottomNavigationViewHelper.hideItemView(mNavigation, 3);
-                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment);
-            } else {
-                loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mClassFragment*//*, conversationListFragment*//*, mMeFragment, mSmallClassFragment);
-            }*/
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mSessionListFragment, mContactListFragment, mHomeFragment, mClassFragment, mMeFragment);
+
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
@@ -282,35 +284,30 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        //不隐藏首页
         if (item.getItemId() == R.id.one) {
+            showHideFragment(mSessionListFragment);
+        }
+
+        if (item.getItemId() == R.id.tow) {
+            showHideFragment(mContactListFragment);
+        }
+
+        if (item.getItemId() == R.id.thr) {
             showHideFragment(mHomeFragment);
         }
-        if (item.getItemId() == R.id.tow) {
+
+        if (item.getItemId() == R.id.four) {
             if (SPUtil.getGuest()) {
                 UIUtils.startGuestLoginActivity(this, 1);
 
                 return false;
             } else showHideFragment(mClassFragment);
-
         }
 
-       /* if (item.getItemId() == R.id.thr) {
-            if (App.bIsGuestLogin) {
-                UIUtils.startGuestLoginActivity(this, 2);
-                return false;
-            } else showHideFragment(conversationListFragment);
-
-
-        }*/
-        if (item.getItemId() == R.id.thr) {
+        if (item.getItemId() == R.id.five) {
             showHideFragment(mMeFragment);
             MobclickAgent.onEvent(this, "me_me");
         }
-       /* if (item.getItemId() == R.id.four && mHideSmall) {
-            showHideFragment(mSmallClassFragment);
-        }*/
-
 
         return true;
     }
@@ -374,7 +371,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mSocket != null){
+        if (mSocket != null) {
             if (!mSocket.isClosed()) {
                 try {
                     mSocket.close();
@@ -399,17 +396,18 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
 
         switch (event.tabPosition) {
-            case 1:
+
+            case 3:
                 showHideFragment(mClassFragment);
-                mNavigation.setSelectedItemId(R.id.tow);
+                mNavigation.setSelectedItemId(R.id.four);
                 break;
-            case 2:
-                mNavigation.setSelectedItemId(R.id.thr);
+            case 4:
+                mNavigation.setSelectedItemId(R.id.five);
                 showHideFragment(mMeFragment);
 //                mNavigation.setSelectedItemId(R.id.thr);
 //                showHideFragment(conversationListFragment);
                 break;
-            case 3:
+            case 5:
 //                mNavigation.setSelectedItemId(R.id.fou);
 //                showHideFragment(mMeFragment);
                 break;
@@ -437,4 +435,50 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     }
 
 
+    /**
+     * fragment management
+     */
+    public TFragment addFragment(TFragment fragment) {
+        List<TFragment> fragments = new ArrayList<TFragment>(1);
+        fragments.add(fragment);
+
+        List<TFragment> fragments2 = addFragments(fragments);
+        return fragments2.get(0);
+    }
+
+
+    public List<TFragment> addFragments(List<TFragment> fragments) {
+        List<TFragment> fragments2 = new ArrayList<TFragment>(fragments.size());
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+
+        boolean commit = false;
+        for (int i = 0; i < fragments.size(); i++) {
+            // install
+            TFragment fragment = fragments.get(i);
+            int id = fragment.getContainerId();
+
+            // exists
+            TFragment fragment2 = (TFragment) fm.findFragmentById(id);
+
+            if (fragment2 == null) {
+                fragment2 = fragment;
+                transaction.add(id, fragment);
+                commit = true;
+            }
+
+            fragments2.add(i, fragment2);
+        }
+
+        if (commit) {
+            try {
+                transaction.commitAllowingStateLoss();
+            } catch (Exception e) {
+
+            }
+        }
+
+        return fragments2;
+    }
 }

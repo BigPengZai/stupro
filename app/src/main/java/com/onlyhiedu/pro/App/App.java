@@ -115,7 +115,6 @@ public class App extends Application {
         super.onCreate();
         instance = this;
 
-//        initGlide();
         DaoUtil.getInstance(this);
         initWorkerThread();
         MobclickAgent.openActivityDurationTrack(false);

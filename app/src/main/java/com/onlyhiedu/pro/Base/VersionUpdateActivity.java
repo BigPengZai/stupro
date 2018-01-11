@@ -43,7 +43,7 @@ public abstract class VersionUpdateActivity extends BaseActivity<UpdatePresenter
     public Call mCall;
 
     @Override
-    public void showUpdateSuccess(UpdateVersionInfo versionInfo) {
+    public void showUpdateSuccess(final UpdateVersionInfo versionInfo) {
         if (versionInfo != null && !versionInfo.getVersion().equals(AppUtil.getVerName(this))) {
             DialogUtil.showOnlyAlert(this, "版本更新", "有了新版本" + versionInfo.getVersion(), "更新", "取消", true, true, new DialogListener() {
                 @Override
