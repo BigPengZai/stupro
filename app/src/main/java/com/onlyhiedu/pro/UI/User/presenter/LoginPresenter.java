@@ -83,25 +83,6 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
         };
 
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
-
-/*
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://clienttest.haiketang.net/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        registerUikit registerUikit = retrofit.create(registerUikit.class);
-        Call<UikitDate> uikitDateCall = registerUikit.registerUikit(SPUtil.getToken());
-        uikitDateCall.enqueue(new Callback<UikitDate>() {
-            @Override
-            public void onResponse(Call<UikitDate> call, Response<UikitDate> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<UikitDate> call, Throwable t) {
-//                Log.d()
-            }
-        });*/
     }
 
 

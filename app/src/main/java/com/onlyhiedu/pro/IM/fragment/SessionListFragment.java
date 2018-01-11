@@ -1,5 +1,7 @@
 package com.onlyhiedu.pro.IM.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by zhoujianghua on 2015/8/17.
+ * Created by  on 2015/8/17.
+ *
  */
 public class SessionListFragment extends SimpleFragment {
 

@@ -14,7 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.common.ui.drop.DropManager;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.onlyhiedu.pro.Base.SimpleActivity;
+import com.onlyhiedu.pro.IM.DemoCache;
+import com.onlyhiedu.pro.IM.config.preference.Preferences;
 import com.onlyhiedu.pro.Listener.MyDialogListener;
 import com.onlyhiedu.pro.Model.event.MainActivityShowGuest;
 import com.onlyhiedu.pro.Model.event.NightModeEvent;
@@ -137,8 +143,16 @@ public class SettingActivity extends SimpleActivity implements CompoundButton.On
             @Override
             public void onPositive(DialogInterface dialog) {
 //                App.bIsGuestLogin = true;
+
+                Preferences.saveUserToken("");
+                // 清理缓存&注销监听
+                // 清理缓存&注销监听&清除状态
+                NimUIKit.logout();
+                DemoCache.clear();
+                DropManager.getInstance().destroy();
                 SPUtil.setGuest(true);
                 EventBus.getDefault().post(new MainActivityShowGuest(true));
+                NIMClient.getService(AuthService.class).logout();
                 finish();
             }
         });
