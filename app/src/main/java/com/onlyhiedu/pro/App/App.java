@@ -25,7 +25,6 @@ import com.onlyhiedu.pro.IM.NIMInitManager;
 import com.onlyhiedu.pro.IM.NimSDKOptionConfig;
 import com.onlyhiedu.pro.IM.chatroom.ChatRoomSessionHelper;
 import com.onlyhiedu.pro.IM.common.util.crash.AppCrashHandler;
-import com.onlyhiedu.pro.IM.config.preference.Preferences;
 import com.onlyhiedu.pro.IM.config.preference.UserPreferences;
 import com.onlyhiedu.pro.IM.contact.ContactHelper;
 import com.onlyhiedu.pro.IM.event.DemoOnlineStateContentProvider;
@@ -167,9 +166,9 @@ public class App extends Application {
         //IM
         DemoCache.setContext(this);
         // 注册小米推送，参数：小米推送证书名称（需要在云信管理后台配置）、appID 、appKey，该逻辑放在 NIMClient init 之前
-//        NIMPushClient.registerMiPush(this, "DEMO_MI_PUSH", "2882303761517502883", "5671750254883");
+        NIMPushClient.registerMiPush(this, "DEMO_MI_PUSH", "2882303761517502883", "5671750254883");
 //        // 注册华为推送，参数：华为推送证书名称（需要在云信管理后台配置）
-//        NIMPushClient.registerHWPush(this, "DEMO_HW_PUSH");
+        NIMPushClient.registerHWPush(this, "DEMO_HW_PUSH");
 
         // 注册自定义推送消息处理，这个是可选项
 //        NIMPushClient.registerMixPushMessageHandler(new DemoMixPushMessageHandler());
