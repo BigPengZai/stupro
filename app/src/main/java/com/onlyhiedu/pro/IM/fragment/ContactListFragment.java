@@ -13,6 +13,9 @@ import com.netease.nim.uikit.business.contact.core.item.ItemTypes;
 import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
 import com.netease.nim.uikit.business.contact.core.viewholder.AbsContactViewHolder;
 import com.onlyhiedu.pro.Base.SimpleFragment;
+import com.onlyhiedu.pro.IM.SystemMessageActivity;
+import com.onlyhiedu.pro.IM.TeamListActivity;
+import com.onlyhiedu.pro.IM.contact.activity.BlackListActivity;
 import com.onlyhiedu.pro.IM.helper.SystemMessageUnreadManager;
 import com.onlyhiedu.pro.IM.reminder.ReminderId;
 import com.onlyhiedu.pro.IM.reminder.ReminderItem;
@@ -140,19 +143,15 @@ public class ContactListFragment extends SimpleFragment {
         }
 
         static void handle(Context context, AbsContactItem item) {
-//            if (item == VERIFY) {
-//                SystemMessageActivity.start(context);
-//            } else if (item == ROBOT) {
-//                RobotListActivity.start(context);
-//            } else if (item == NORMAL_TEAM) {
-//                TeamListActivity.start(context, ItemTypes.TEAMS.NORMAL_TEAM);
-//            } else if (item == ADVANCED_TEAM) {
-//                TeamListActivity.start(context, ItemTypes.TEAMS.ADVANCED_TEAM);
-//            } else if (item == MY_COMPUTER) {
-//                SessionHelper.startP2PSession(context, DemoCache.getAccount());
-//            } else if (item == BLACK_LIST) {
-//                BlackListActivity.start(context);
-//            }
+            if (item == VERIFY) {
+                SystemMessageActivity.start(context);
+            }  else if (item == NORMAL_TEAM) {
+                TeamListActivity.start(context, ItemTypes.TEAMS.NORMAL_TEAM);
+            } else if (item == ADVANCED_TEAM) {
+                TeamListActivity.start(context, ItemTypes.TEAMS.ADVANCED_TEAM);
+            } else if (item == BLACK_LIST) {
+                BlackListActivity.start(context);
+            }
         }
     }
 

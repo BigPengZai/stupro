@@ -163,19 +163,19 @@ public class SettingsActivity extends UI implements SettingsAdapter.SwitchChange
         items.add(SettingTemplate.addLine());
         items.add(new SettingTemplate(TAG_RING, getString(R.string.ring), SettingType.TYPE_TOGGLE,
                 UserPreferences.getRingToggle()));
-        items.add(new SettingTemplate(TAG_LED, getString(R.string.led), SettingType.TYPE_TOGGLE,
-                UserPreferences.getLedToggle()));
+//        items.add(new SettingTemplate(TAG_LED, getString(R.string.led), SettingType.TYPE_TOGGLE,
+//                UserPreferences.getLedToggle()));
         items.add(SettingTemplate.addLine());
-        items.add(new SettingTemplate(TAG_NOTICE_CONTENT, getString(R.string.notice_content), SettingType.TYPE_TOGGLE,
-                UserPreferences.getNoticeContentToggle()));
+//        items.add(new SettingTemplate(TAG_NOTICE_CONTENT, getString(R.string.notice_content), SettingType.TYPE_TOGGLE,
+//                UserPreferences.getNoticeContentToggle()));
 //        items.add(new SettingTemplate(TAG_NOTIFICATION_STYLE, getString(R.string.notification_folded), SettingType.TYPE_TOGGLE,
 //                UserPreferences.getNotificationFoldedToggle()));
         items.add(SettingTemplate.addLine());
         disturbItem = new SettingTemplate(TAG_NO_DISTURBE, getString(R.string.no_disturb), noDisturbTime);
         items.add(disturbItem);
         items.add(SettingTemplate.addLine());
-        items.add(new SettingTemplate(TAG_MULTIPORT_PUSH, getString(R.string.multiport_push), SettingType.TYPE_TOGGLE,
-                !NIMClient.getService(SettingsService.class).isMultiportPushOpen()));
+//        items.add(new SettingTemplate(TAG_MULTIPORT_PUSH, getString(R.string.multiport_push), SettingType.TYPE_TOGGLE,
+//                !NIMClient.getService(SettingsService.class).isMultiportPushOpen()));
 
         items.add(SettingTemplate.makeSeperator());
 

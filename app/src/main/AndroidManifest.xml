@@ -389,7 +389,20 @@
 
         />
 
+        <activity android:name=".IM.TeamListActivity"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:windowSoftInputMode="stateHidden|adjustPan"
+        />
 
+        <activity android:name=".IM.SystemMessageActivity"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:windowSoftInputMode="stateHidden|adjustResize"
+
+        />
 
     </application>
 
