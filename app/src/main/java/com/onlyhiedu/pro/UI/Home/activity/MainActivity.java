@@ -560,17 +560,13 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     public void onUnreadNumChanged(ReminderItem item) {
         //消息数量大于0
-        if(item.getUnread() >0){
-            if(mNavigation.getSelectedItemId() == R.id.tow){
-//                mNavigation.getMenu().getItem(1).setIcon()
-            }else{
-
+        if(item.getId() == 0){
+            if ( item.getUnread() > 0) {
+                mNavigation.getMenu().getItem(1).setIcon(R.drawable.main_radio_button3);
+            } else {
+                mNavigation.getMenu().getItem(1).setIcon(R.drawable.main_radio_button1);
             }
-        }else{
-
         }
-
-
 
     }
 }
