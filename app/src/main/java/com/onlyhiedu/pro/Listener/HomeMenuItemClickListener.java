@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.MenuItem;
 
 import com.netease.nim.uikit.R;
+import com.onlyhiedu.pro.IM.SettingsActivity;
 import com.onlyhiedu.pro.IM.contact.activity.AddFriendActivity;
 
 /**
@@ -22,6 +23,9 @@ public class HomeMenuItemClickListener implements android.support.v7.widget.Popu
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.add_contact) {
             AddFriendActivity.start(mContext);
+        }
+        if (item.getItemId()==R.id.uikit_setting) {
+            SettingsActivity.start(mContext);
         }
         return false;
     }

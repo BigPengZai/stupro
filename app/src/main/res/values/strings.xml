@@ -402,4 +402,18 @@
     <string name="kickout_notify">下线通知</string>
     <string name="kickout_content">你的帐号被%1$s踢出下线，请确定帐号信息安全</string>
 
+
+    <!-- about -->
+    <string name="about_clear_msg_history">清空所有聊天记录</string>
+    <string name="clear_msg_history_success">聊天记录已清空</string>
+
+    <!-- 自定义通知 -->
+    <string name="custom_notification">自定义通知</string>
+    <string name="select_custom_notification_target">选择发送对象</string>
+    <string name="send_custom_notification_tip">请输入要发送的内容</string>
+    <string name="send_custom_notification_success">自定义通知发送成功</string>
+    <string name="send_custom_notification_failed">自定义通知发送失败</string>
+    <string name="send_custom_notification_to_buddy">发送给好友</string>
+    <string name="send_custom_notification_to_team">发送给群组</string>
+
 </resources>

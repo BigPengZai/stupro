@@ -2,6 +2,7 @@ package com.onlyhiedu.pro.UI.Home.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,11 +10,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -23,7 +26,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.business.session.actions.PickImageAction;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
+import com.netease.nim.uikit.common.util.log.LogUtil;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
+import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.nos.NosService;
+import com.netease.nimlib.sdk.nos.model.NosThumbParam;
+import com.netease.nimlib.sdk.nos.util.NosThumbImageUtil;
+import com.netease.nimlib.sdk.uinfo.constant.GenderEnum;
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import com.onlyhiedu.pro.Base.BaseFragment;
+import com.onlyhiedu.pro.IM.contact.helper.UserUpdateHelper;
 import com.onlyhiedu.pro.Model.bean.Avatar;
 import com.onlyhiedu.pro.Model.bean.StudentInfo;
 import com.onlyhiedu.pro.R;
@@ -95,6 +117,11 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
             cameraPath = SAVED_IMAGE_DIR_PATH +
             System.currentTimeMillis() + ".png";
     private TakePhotoPopWin mTakePhotoPopWin;
+
+
+    // data
+    AbortableFuture<String> uploadAvatarFuture;
+    private NimUserInfo userInfo;
 
     @Override
     protected void initInject() {
@@ -413,7 +440,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     public void saveAvatarSucess() {
         dialog.dismiss();
         if (mFileOut != null) {
-            ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+            initUikitAvatar();
             Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_success),
                     Toast.LENGTH_SHORT).show();
         } else {
@@ -425,9 +452,49 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     @Override
     public void getInfoSucess(StudentInfo info) {
         if (info != null && info.iconurl != null && !"".equals(info.iconurl)) {
-            ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+            initUikitAvatar();
         }
     }
 
+    private void initUikitAvatar() {
+        UserUpdateHelper.update(UserInfoFieldEnum.AVATAR, SPUtil.getAvatarUrl(), new RequestCallbackWrapper<Void>() {
+            @Override
+            public void onResult(int code, Void result, Throwable exception) {
+                if (code == ResponseCode.RES_SUCCESS) {
+                    ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+                    onUpdateDone();
+                } else {
+                    Toast.makeText(getActivity(), R.string.head_update_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
+    private void onUpdateDone() {
+        uploadAvatarFuture = null;
+        getUserInfo();
+    }
+    private void getUserInfo() {
+        userInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(SPUtil.getUikitAccid());
+        if (userInfo == null) {
+            NimUIKit.getUserInfoProvider().getUserInfoAsync(SPUtil.getUikitAccid(), new SimpleCallback<NimUserInfo>() {
+
+                @Override
+                public void onResult(boolean success, NimUserInfo result, int code) {
+                    if (success) {
+                        userInfo = result;
+                        updateUI();
+                    } else {
+                        Toast.makeText(getActivity(), "getUserInfoFromRemote failed:" + code, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
+        NimUIKit.getUserInfoProvider().getUserInfo(SPUtil.getUikitAccid());
+    }
 }

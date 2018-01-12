@@ -381,6 +381,13 @@
                   android:windowSoftInputMode="adjustUnspecified|stateHidden"
         />
 
+        <activity android:name=".IM.SettingsActivity"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:windowSoftInputMode="stateAlwaysHidden"
+
+        />
 
 
 
