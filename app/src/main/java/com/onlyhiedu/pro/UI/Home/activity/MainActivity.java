@@ -264,11 +264,11 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         //不隐藏首页
         if (App.getInstance().isTag) {
             mNavigation.setSelectedItemId(R.id.tow);
-            loadMultipleRootFragment(R.id.fl_main_content, 1, mSessionListFragment, mContactListFragment, mHomeFragment, mClassFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mSessionListFragment, mContactListFragment, mClassFragment, mMeFragment);
 
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mSessionListFragment, mContactListFragment, mHomeFragment, mClassFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment,  mSessionListFragment, mContactListFragment, mClassFragment, mMeFragment);
 
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
@@ -286,15 +286,21 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.one) {
-            showHideFragment(mSessionListFragment);
-        }
-
-        if (item.getItemId() == R.id.tow) {
-            showHideFragment(mContactListFragment);
-        }
-
-        if (item.getItemId() == R.id.thr) {
             showHideFragment(mHomeFragment);
+        }
+        if (item.getItemId() == R.id.tow) {
+            if (SPUtil.getGuest()) {
+                UIUtils.startGuestLoginActivity(this, 1);
+
+                return false;
+            } else showHideFragment(mSessionListFragment);
+        }
+        if (item.getItemId() == R.id.thr) {
+            if (SPUtil.getGuest()) {
+                UIUtils.startGuestLoginActivity(this, 1);
+
+                return false;
+            } else  showHideFragment(mContactListFragment);
         }
 
         if (item.getItemId() == R.id.four) {
