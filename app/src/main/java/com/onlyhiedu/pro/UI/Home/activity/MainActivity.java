@@ -19,13 +19,23 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 import com.netease.nim.uikit.common.fragment.TFragment;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.AppManager;
 import com.onlyhiedu.pro.Base.VersionUpdateActivity;
 import com.onlyhiedu.pro.IM.fragment.ContactsFragment;
+import com.onlyhiedu.pro.IM.helper.SystemMessageUnreadManager;
+import com.onlyhiedu.pro.IM.reminder.ReminderItem;
+import com.onlyhiedu.pro.IM.reminder.ReminderManager;
+import com.onlyhiedu.pro.IM.team.TeamCreateHelper;
 import com.onlyhiedu.pro.Listener.HomeMenuItemClickListener;
+import com.onlyhiedu.pro.Listener.MyRecentContactsCallback;
 import com.onlyhiedu.pro.Model.bean.socket.LoginRequest;
 import com.onlyhiedu.pro.Model.bean.socket.LoginResponse;
 import com.onlyhiedu.pro.Model.event.MainActivityShowGuest;
@@ -60,7 +70,7 @@ import java.util.List;
 import butterknife.BindView;
 
 
-public class MainActivity extends VersionUpdateActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends VersionUpdateActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ReminderManager.UnreadNumChangedCallback {
 
 
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -106,6 +116,10 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             checkHeartbeat();
         }
 
+        registerMsgUnreadInfoObserver(true);
+        registerSystemMessageObservers(true);
+        requestSystemMessageUnreadCount();
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -122,6 +136,34 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             }
         }
     };
+
+
+    private void registerMsgUnreadInfoObserver(boolean register) {
+        if (register) {
+            ReminderManager.getInstance().registerUnreadNumChangedCallback(this);
+        } else {
+            ReminderManager.getInstance().unregisterUnreadNumChangedCallback(this);
+        }
+    }
+
+    private void registerSystemMessageObservers(boolean register) {
+        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver,
+                register);
+    }
+
+    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
+        @Override
+        public void onEvent(Integer unreadCount) {
+            SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unreadCount);
+            ReminderManager.getInstance().updateContactUnreadNum(unreadCount);
+        }
+    };
+
+    private void requestSystemMessageUnreadCount() {
+        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
+        SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
+        ReminderManager.getInstance().updateContactUnreadNum(unread);
+    }
 
     /**
      * 心跳
@@ -259,9 +301,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mHomeFragment = new HomeFragment();
 //        mSmallClassFragment = new SmallClassFragment();
         mSessionListFragment = new RecentContactsFragment();
-        mSessionListFragment.setOnMenuItemClickListener(new HomeMenuItemClickListener(this));
         mContactListFragment = new ContactsFragment();
-        mContactListFragment.setOnMenuItemClickListener(new HomeMenuItemClickListener(this));
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
 
         //不隐藏首页
@@ -277,6 +317,14 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mNavigation.setOnNavigationItemSelectedListener(this);
         mNavigation.setItemIconTintList(null);
 
+        initListener();
+    }
+
+
+    private void initListener() {
+        mSessionListFragment.setOnMenuItemClickListener(new HomeMenuItemClickListener(this));
+        mContactListFragment.setOnMenuItemClickListener(new HomeMenuItemClickListener(this));
+        mSessionListFragment.setCallback(new MyRecentContactsCallback(this));
     }
 
 
@@ -370,12 +418,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         MobclickAgent.onPause(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -392,6 +434,8 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         }
         UMShareAPI.get(this).release();
         EventBus.getDefault().unregister(this);
+        registerMsgUnreadInfoObserver(false);
+        registerSystemMessageObservers(false);
     }
 
 
@@ -490,6 +534,43 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         return fragments2;
     }
 
+    public static final int REQUEST_CODE_NORMAL = 1;
+    public static final int REQUEST_CODE_ADVANCED = 2;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_NORMAL) {
+                final ArrayList<String> selected = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
+                if (selected != null && !selected.isEmpty()) {
+                    TeamCreateHelper.createNormalTeam(MainActivity.this, selected, false, null);
+                } else {
+                    Toast.makeText(MainActivity.this, "请选择至少一个联系人！", Toast.LENGTH_SHORT).show();
+                }
+            } else if (requestCode == REQUEST_CODE_ADVANCED) {
+                final ArrayList<String> selected = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
+                TeamCreateHelper.createAdvancedTeam(MainActivity.this, selected);
+            }
+        }
+    }
 
 
+    @Override
+    public void onUnreadNumChanged(ReminderItem item) {
+        //消息数量大于0
+        if(item.getUnread() >0){
+            if(mNavigation.getSelectedItemId() == R.id.tow){
+//                mNavigation.getMenu().getItem(1).setIcon()
+            }else{
+
+            }
+        }else{
+
+        }
+
+
+
+    }
 }

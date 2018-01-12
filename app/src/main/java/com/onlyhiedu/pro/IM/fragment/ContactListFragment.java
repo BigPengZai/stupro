@@ -130,11 +130,11 @@ public class ContactListFragment extends SimpleFragment {
         static List<AbsContactItem> provide() {
             List<AbsContactItem> items = new ArrayList<AbsContactItem>();
             items.add(VERIFY);
-            items.add(ROBOT);
+          /*  items.add(ROBOT);*/
             items.add(NORMAL_TEAM);
             items.add(ADVANCED_TEAM);
             items.add(BLACK_LIST);
-            items.add(MY_COMPUTER);
+      /*      items.add(MY_COMPUTER);*/
 
             return items;
         }

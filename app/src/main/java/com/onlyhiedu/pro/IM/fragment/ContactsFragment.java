@@ -37,7 +37,6 @@ import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nim.uikit.impl.cache.UIKitLogTag;
 import com.netease.nimlib.sdk.Observer;
-import com.onlyhiedu.pro.IM.contact.activity.AddFriendActivity;
 import com.onlyhiedu.pro.Listener.HomeMenuItemClickListener;
 
 import java.util.ArrayList;

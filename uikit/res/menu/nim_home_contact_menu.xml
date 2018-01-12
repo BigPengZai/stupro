@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/add_contact"
         android:title="添加好友"/>
 
+    <item
+        android:id="@+id/create_discussion"
+        android:title="创建讨论组"/>
+
+    <item
+        android:id="@+id/create_group"
+        android:title="创建高级群"/>
+
+    <item
+        android:id="@+id/search_group"
+        android:title="搜索高级群"/>
+
+    <item
+        android:id="@+id/uikit_setting"
+        android:title="设置"/>
 </menu>
