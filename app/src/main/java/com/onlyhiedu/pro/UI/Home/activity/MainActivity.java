@@ -263,7 +263,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
         //不隐藏首页
         if (App.getInstance().isTag) {
-            mNavigation.setSelectedItemId(R.id.tow);
+            mNavigation.setSelectedItemId(R.id.four);
             loadMultipleRootFragment(R.id.fl_main_content, 1, mHomeFragment, mSessionListFragment, mContactListFragment, mClassFragment, mMeFragment);
 
             App.getInstance().isTag = false;
@@ -306,7 +306,6 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         if (item.getItemId() == R.id.four) {
             if (SPUtil.getGuest()) {
                 UIUtils.startGuestLoginActivity(this, 1);
-
                 return false;
             } else showHideFragment(mClassFragment);
         }

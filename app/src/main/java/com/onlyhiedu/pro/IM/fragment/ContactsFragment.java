@@ -1,6 +1,8 @@
 package com.onlyhiedu.pro.IM.fragment;
 
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -63,6 +65,9 @@ public class ContactsFragment extends SimpleFragment {
 
     private ReloadFrequencyControl reloadControl = new ReloadFrequencyControl();
 
+    PopupMenu popupMenu;
+    Menu menu;
+
     public void setContactsCustomization(ContactsCustomization customization) {
         this.customization = customization;
     }
@@ -85,6 +90,7 @@ public class ContactsFragment extends SimpleFragment {
     protected void initEventAndData() {
 
         // 界面初始化
+
         initCustomization();
         initAdapter();
         findViews();

@@ -1,9 +1,13 @@
 package com.netease.nim.uikit.business.recent;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,7 @@ import com.netease.nim.uikit.business.recent.adapter.RecentContactAdapter;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.badger.Badger;
 import com.netease.nim.uikit.common.fragment.SimpleFragment;
+import com.netease.nim.uikit.common.listener.HomeMenuItemClickListener;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.ui.drop.DropCover;
 import com.netease.nim.uikit.common.ui.drop.DropManager;
@@ -68,6 +73,8 @@ public class RecentContactsFragment extends SimpleFragment {
 
     private TextView emptyHint;
 
+    private ImageView mRightImage;
+
     // data
     private List<RecentContact> items;
 
@@ -81,6 +88,8 @@ public class RecentContactsFragment extends SimpleFragment {
 
     private UserInfoObserver userInfoObserver;
 
+    private PopupMenu popupMenu;
+    private Menu menu;
 
     @Override
     protected int getLayoutId() {
@@ -91,10 +100,19 @@ public class RecentContactsFragment extends SimpleFragment {
     protected void initEventAndData() {
         findViews();
         initMessageList();
+        initToolBar();
         requestMessages(true);
         registerObservers(true);
         registerDropCompletedListener(true);
         registerOnlineStateChangeListener(true);
+    }
+
+    private void initToolBar() {
+        popupMenu = new PopupMenu(getActivity(), getView().findViewById(R.id.image_right));
+        menu = popupMenu.getMenu();
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.nim_home_contact_menu, menu);
+        popupMenu.setOnMenuItemClickListener(new HomeMenuItemClickListener());
     }
 
     private void notifyDataSetChanged() {
@@ -119,6 +137,13 @@ public class RecentContactsFragment extends SimpleFragment {
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         emptyBg = getView().findViewById(R.id.emptyBg);
         emptyHint = (TextView) getView().findViewById(R.id.message_list_empty_hint);
+        mRightImage = (ImageView) getView().findViewById(R.id.image_right);
+        mRightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupMenu.show();
+            }
+        });
     }
 
     /**
