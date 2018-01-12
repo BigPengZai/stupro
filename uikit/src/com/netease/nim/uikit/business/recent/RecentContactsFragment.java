@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import com.netease.nim.uikit.business.recent.adapter.RecentContactAdapter;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.badger.Badger;
 import com.netease.nim.uikit.common.fragment.SimpleFragment;
-import com.netease.nim.uikit.common.listener.HomeMenuItemClickListener;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.ui.drop.DropCover;
 import com.netease.nim.uikit.common.ui.drop.DropManager;
@@ -73,8 +71,6 @@ public class RecentContactsFragment extends SimpleFragment {
 
     private TextView emptyHint;
 
-    private ImageView mRightImage;
-
     // data
     private List<RecentContact> items;
 
@@ -90,6 +86,12 @@ public class RecentContactsFragment extends SimpleFragment {
 
     private PopupMenu popupMenu;
     private Menu menu;
+
+    PopupMenu.OnMenuItemClickListener mOnMenuItemClickListener;
+
+    public void setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener onMenuItemClickListener) {
+        mOnMenuItemClickListener = onMenuItemClickListener;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -112,7 +114,7 @@ public class RecentContactsFragment extends SimpleFragment {
         menu = popupMenu.getMenu();
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.nim_home_contact_menu, menu);
-        popupMenu.setOnMenuItemClickListener(new HomeMenuItemClickListener(getActivity()));
+        popupMenu.setOnMenuItemClickListener(mOnMenuItemClickListener);
     }
 
     private void notifyDataSetChanged() {
@@ -137,8 +139,7 @@ public class RecentContactsFragment extends SimpleFragment {
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         emptyBg = getView().findViewById(R.id.emptyBg);
         emptyHint = (TextView) getView().findViewById(R.id.message_list_empty_hint);
-        mRightImage = (ImageView) getView().findViewById(R.id.image_right);
-        mRightImage.setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.image_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupMenu.show();

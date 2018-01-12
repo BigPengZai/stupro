@@ -3,6 +3,7 @@ package com.onlyhiedu.pro.IM.fragment;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -36,6 +37,8 @@ import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nim.uikit.impl.cache.UIKitLogTag;
 import com.netease.nimlib.sdk.Observer;
+import com.onlyhiedu.pro.IM.contact.activity.AddFriendActivity;
+import com.onlyhiedu.pro.Listener.HomeMenuItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +70,14 @@ public class ContactsFragment extends SimpleFragment {
 
     PopupMenu popupMenu;
     Menu menu;
+    private HomeMenuItemClickListener mOnMenuItemClickListener;
 
     public void setContactsCustomization(ContactsCustomization customization) {
         this.customization = customization;
+    }
+
+    public void setOnMenuItemClickListener(HomeMenuItemClickListener onMenuItemClickListener) {
+        mOnMenuItemClickListener = onMenuItemClickListener;
     }
 
     private static final class ContactsGroupStrategy extends ContactGroupStrategy {
@@ -95,7 +103,7 @@ public class ContactsFragment extends SimpleFragment {
         initAdapter();
         findViews();
         buildLitterIdx(getView());
-
+        initToolBar();
         // 注册观察者
         registerObserver(true);
         registerOnlineStateChangeListener(true);
@@ -132,7 +140,13 @@ public class ContactsFragment extends SimpleFragment {
             }
         });
     }
-
+    private void initToolBar() {
+        popupMenu = new PopupMenu(getActivity(), getView().findViewById(R.id.image_right));
+        menu = popupMenu.getMenu();
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.nim_home_contact_menu, menu);
+        popupMenu.setOnMenuItemClickListener(mOnMenuItemClickListener);
+    }
 
 
     private void initAdapter() {
@@ -173,6 +187,12 @@ public class ContactsFragment extends SimpleFragment {
     private void findViews() {
         // loading
         loadingFrame =  getView().findViewById(R.id.contact_loading_frame);
+        getView().findViewById(R.id.image_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupMenu.show();
+            }
+        });
 
         // count
         View countLayout = View.inflate(getView().getContext(), R.layout.nim_contacts_count_item, null);

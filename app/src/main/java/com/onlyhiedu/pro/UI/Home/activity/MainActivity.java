@@ -19,12 +19,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.onlyhiedu.pro.IM.fragment.ContactsFragment;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 import com.netease.nim.uikit.common.fragment.TFragment;
 import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.AppManager;
 import com.onlyhiedu.pro.Base.VersionUpdateActivity;
+import com.onlyhiedu.pro.IM.fragment.ContactsFragment;
+import com.onlyhiedu.pro.Listener.HomeMenuItemClickListener;
 import com.onlyhiedu.pro.Model.bean.socket.LoginRequest;
 import com.onlyhiedu.pro.Model.bean.socket.LoginResponse;
 import com.onlyhiedu.pro.Model.event.MainActivityShowGuest;
@@ -258,7 +259,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
         mHomeFragment = new HomeFragment();
 //        mSmallClassFragment = new SmallClassFragment();
         mSessionListFragment = new RecentContactsFragment();
+        mSessionListFragment.setOnMenuItemClickListener(new HomeMenuItemClickListener(this));
         mContactListFragment = new ContactsFragment();
+        mContactListFragment.setOnMenuItemClickListener(new HomeMenuItemClickListener(this));
         BottomNavigationViewHelper.disableShiftMode(mNavigation);
 
         //不隐藏首页
@@ -268,7 +271,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
             App.getInstance().isTag = false;
         } else {
-            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment,  mSessionListFragment, mContactListFragment, mClassFragment, mMeFragment);
+            loadMultipleRootFragment(R.id.fl_main_content, 0, mHomeFragment, mSessionListFragment, mContactListFragment, mClassFragment, mMeFragment);
 
         }
         mNavigation.setOnNavigationItemSelectedListener(this);
@@ -300,7 +303,7 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
                 UIUtils.startGuestLoginActivity(this, 1);
 
                 return false;
-            } else  showHideFragment(mContactListFragment);
+            } else showHideFragment(mContactListFragment);
         }
 
         if (item.getItemId() == R.id.four) {
@@ -484,7 +487,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
 
             }
         }
-
         return fragments2;
     }
+
+
+
 }
