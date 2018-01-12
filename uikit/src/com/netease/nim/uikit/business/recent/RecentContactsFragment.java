@@ -112,7 +112,7 @@ public class RecentContactsFragment extends SimpleFragment {
         menu = popupMenu.getMenu();
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.nim_home_contact_menu, menu);
-        popupMenu.setOnMenuItemClickListener(new HomeMenuItemClickListener());
+        popupMenu.setOnMenuItemClickListener(new HomeMenuItemClickListener(getActivity()));
     }
 
     private void notifyDataSetChanged() {
