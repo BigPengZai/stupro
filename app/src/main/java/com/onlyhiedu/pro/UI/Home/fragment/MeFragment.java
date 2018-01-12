@@ -45,6 +45,7 @@ import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import com.onlyhiedu.pro.Base.BaseFragment;
+import com.onlyhiedu.pro.IM.contact.activity.UserProfileSettingActivity;
 import com.onlyhiedu.pro.IM.contact.helper.UserUpdateHelper;
 import com.onlyhiedu.pro.Model.bean.Avatar;
 import com.onlyhiedu.pro.Model.bean.StudentInfo;
@@ -441,8 +442,7 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
         dialog.dismiss();
         if (mFileOut != null) {
             initUikitAvatar();
-            Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_success),
-                    Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_fail),
                     Toast.LENGTH_SHORT).show();
@@ -457,6 +457,42 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
     }
 
     private void initUikitAvatar() {
+//mFileOut
+        if (mFileOut == null) {
+            return;
+        }
+        LogUtil.i(TAG, "start upload avatar, local file path=" + mFileOut.getAbsolutePath());
+        new Handler().postDelayed(outimeTask, 3000);
+        uploadAvatarFuture = NIMClient.getService(NosService.class).upload(mFileOut, PickImageAction.MIME_JPEG);
+        uploadAvatarFuture.setCallback(new RequestCallbackWrapper<String>() {
+            @Override
+            public void onResult(int code, String url, Throwable exception) {
+                if (code == ResponseCode.RES_SUCCESS && !TextUtils.isEmpty(url)) {
+                    LogUtil.i(TAG, "upload avatar success, url =" + url);
+
+                    UserUpdateHelper.update(UserInfoFieldEnum.AVATAR, url, new RequestCallbackWrapper<Void>() {
+                        @Override
+                        public void onResult(int code, Void result, Throwable exception) {
+                            if (code == ResponseCode.RES_SUCCESS) {
+                                ImageLoader.loadCircleImage(getActivity(), mAvatar, SPUtil.getAvatarUrl());
+                                onUpdateDone();
+                                Toast.makeText(getActivity(), getString(R.string.toast_updatephoto_success),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), R.string.head_update_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }); // 更新资料
+                } else {
+                    Toast.makeText(getActivity(), R.string.user_info_update_failed, Toast
+                            .LENGTH_SHORT).show();
+                    onUpdateDone();
+                }
+            }
+        });
+
+
+/*
         UserUpdateHelper.update(UserInfoFieldEnum.AVATAR, SPUtil.getAvatarUrl(), new RequestCallbackWrapper<Void>() {
             @Override
             public void onResult(int code, Void result, Throwable exception) {
@@ -467,9 +503,22 @@ public class MeFragment extends BaseFragment<UploadAvatarPresenter> implements U
                     Toast.makeText(getActivity(), R.string.head_update_failed, Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
     }
+    private Runnable outimeTask = new Runnable() {
+        @Override
+        public void run() {
+            cancelUpload(R.string.user_info_update_failed);
+        }
+    };
 
+    private void cancelUpload(int resId) {
+        if (uploadAvatarFuture != null) {
+            uploadAvatarFuture.abort();
+            Toast.makeText(getActivity(), resId, Toast.LENGTH_SHORT).show();
+            onUpdateDone();
+        }
+    }
     private void onUpdateDone() {
         uploadAvatarFuture = null;
         getUserInfo();
