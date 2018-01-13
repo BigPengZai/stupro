@@ -147,10 +147,6 @@ public class CourseFragment extends BaseFragment<CoursePresenter>
                 mAdapter.clear();
                 mAdapter.addAll(data);
             }
-
-
-
-
         } else {//加载更多
             mAdapter.addAll(data);
             if (data.size() < 10) {

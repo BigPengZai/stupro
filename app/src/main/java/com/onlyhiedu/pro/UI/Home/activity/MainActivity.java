@@ -568,9 +568,9 @@ public class MainActivity extends VersionUpdateActivity implements BottomNavigat
             }
         } else if (item.getId() == 1) {
             if (item.getUnread() > 0) {
-                mNavigation.getMenu().getItem(1).setIcon(R.drawable.main_radio_button3);
+                mNavigation.getMenu().getItem(2).setIcon(R.drawable.main_radio_button3);
             } else {
-                mNavigation.getMenu().getItem(1).setIcon(R.drawable.main_radio_button);
+                mNavigation.getMenu().getItem(2).setIcon(R.drawable.main_radio_button);
             }
         }
 
