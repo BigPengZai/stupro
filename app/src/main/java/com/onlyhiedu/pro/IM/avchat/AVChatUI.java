@@ -54,7 +54,7 @@ public class AVChatUI implements AVChatUIListener {
     private String receiverId;
     private AVChatAudio avChatAudio;
     private AVChatVideo avChatVideo;
-//    private AVChatSurfaceView avChatSurface;
+    private AVChatSurface avChatSurface;
     private AVChatParameters avChatParameters;
     private String videoAccount; // 发送视频请求，onUserJoin回调的user account
 
@@ -234,19 +234,19 @@ public class AVChatUI implements AVChatUIListener {
      * ******************************初始化******************************
      */
 
-  /*  *//**
+    /**
      * 初始化，包含初始化音频管理器， 视频管理器和视频界面绘制管理器。
      *
      * @return boolean
-     *//*
-    public boolean init(AVChatSurfaceView.TouchZoneCallback cb) {
+     */
+    public boolean init(AVChatSurface.TouchZoneCallback cb) {
         AVChatProfile.getInstance().setAVChatting(true);
         avChatAudio = new AVChatAudio(context, root.findViewById(R.id.avchat_audio_layout), this, this);
         avChatVideo = new AVChatVideo(context, root.findViewById(R.id.avchat_video_layout), this, this);
-        avChatSurface = new AVChatSurfaceView(context, this, root.findViewById(R.id.avchat_surface_layout), cb);
+        avChatSurface = new AVChatSurface(context, this, root.findViewById(R.id.avchat_surface_layout), cb);
 
         return true;
-    }*/
+    }
 
     /**
      * ******************************拨打和接听***************************
@@ -369,9 +369,9 @@ public class AVChatUI implements AVChatUIListener {
      */
     public void onCallStateChange(CallStateEnum stateEnum) {
         callingState = stateEnum;
-//        avChatSurface.onCallStateChange(stateEnum);
-//        avChatAudio.onCallStateChange(stateEnum);
-//        avChatVideo.onCallStateChange(stateEnum);
+        avChatSurface.onCallStateChange(stateEnum);
+        avChatAudio.onCallStateChange(stateEnum);
+        avChatVideo.onCallStateChange(stateEnum);
     }
 
     /**
@@ -425,10 +425,10 @@ public class AVChatUI implements AVChatUIListener {
             avChatVideo.closeSession(exitCode);
             avChatVideo = null;
         }
-      /*  if (avChatSurface != null) {
+        if (avChatSurface != null) {
             avChatSurface.closeSession(exitCode);
             avChatSurface = null;
-        }*/
+        }
         showQuitToast(exitCode);
         isCallEstablish.set(false);
         canSwitchCamera = false;
@@ -833,12 +833,12 @@ public class AVChatUI implements AVChatUIListener {
             // 关闭摄像头
             AVChatManager.getInstance().muteLocalVideo(true);
             isClosedCamera = true;
-//            avChatSurface.localVideoOff();
+            avChatSurface.localVideoOff();
         } else {
             // 打开摄像头
             AVChatManager.getInstance().muteLocalVideo(false);
             isClosedCamera = false;
-//            avChatSurface.localVideoOn();
+            avChatSurface.localVideoOn();
         }
 
     }
@@ -884,16 +884,16 @@ public class AVChatUI implements AVChatUIListener {
      * @param largeAccount 对方的帐号
      */
     public void initAllSurfaceView(String largeAccount) {
-//        avChatSurface.initLargeSurfaceView(largeAccount);
-//        avChatSurface.initSmallSurfaceView(DemoCache.getAccount());
+        avChatSurface.initLargeSurfaceView(largeAccount);
+        avChatSurface.initSmallSurfaceView(DemoCache.getAccount());
     }
 
     public void initLargeSurfaceView(String account) {
-//        avChatSurface.initLargeSurfaceView(account);
+        avChatSurface.initLargeSurfaceView(account);
     }
 
     public void initSmallSurfaceView() {
-//        avChatSurface.initSmallSurfaceView(DemoCache.getAccount());
+        avChatSurface.initSmallSurfaceView(DemoCache.getAccount());
     }
 
     /**
@@ -911,7 +911,7 @@ public class AVChatUI implements AVChatUIListener {
         // 是否在发送视频 即摄像头是否开启
         if (AVChatManager.getInstance().isLocalVideoMuted()) {
             AVChatManager.getInstance().muteLocalVideo(false);
-//            avChatSurface.localVideoOn();
+            avChatSurface.localVideoOn();
             isClosedCamera = false;
         }
     }
@@ -932,11 +932,11 @@ public class AVChatUI implements AVChatUIListener {
     }
 
     public void peerVideoOff() {
-//        avChatSurface.peerVideoOff();
+        avChatSurface.peerVideoOff();
     }
 
     public void peerVideoOn() {
-//        avChatSurface.peerVideoOn();
+        avChatSurface.peerVideoOn();
     }
 
 

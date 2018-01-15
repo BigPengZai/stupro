@@ -43,6 +43,7 @@ import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.robot.model.RobotAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.onlyhiedu.pro.IM.DemoCache;
+import com.onlyhiedu.pro.IM.contact.activity.UserProfileActivity;
 import com.onlyhiedu.pro.IM.session.action.AVChatAction;
 import com.onlyhiedu.pro.IM.session.action.FileAction;
 import com.onlyhiedu.pro.IM.session.action.TeamAVChatAction;
@@ -465,8 +466,8 @@ public class SessionHelper {
                         RobotProfileActivity.start(context, attachment.getFromRobotAccount());
                         return;
                     }
-                }
-                UserProfileActivity.start(context, message.getFromAccount());*/
+                }*/
+                UserProfileActivity.start(context, message.getFromAccount());
             }
 
             @Override

@@ -39,11 +39,11 @@ import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.onlyhiedu.pro.IM.avchat.AVChatNotification;
 import com.onlyhiedu.pro.IM.avchat.AVChatProfile;
 import com.onlyhiedu.pro.IM.avchat.AVChatSoundPlayer;
-//import com.onlyhiedu.mobile.IM.avchat.AVChatSurfaceView;
 import com.onlyhiedu.pro.IM.avchat.AVChatTimeoutObserver;
 import com.onlyhiedu.pro.IM.avchat.AVChatUI;
 import com.onlyhiedu.pro.IM.avchat.constant.CallStateEnum;
 import com.onlyhiedu.pro.IM.avchat.receiver.PhoneCallStateObserver;
+import com.onlyhiedu.pro.IM.avchat.AVChatSurface;
 import com.onlyhiedu.pro.R;
 
 import java.util.Map;
@@ -52,7 +52,7 @@ import java.util.Map;
  * 音视频界面
  * Created by hzxuwen on 2015/4/21.
  */
-public class AVChatActivity extends UI implements AVChatUI.AVChatListener, AVChatStateObserver/*, AVChatSurfaceView.TouchZoneCallback*/ {
+public class AVChatActivity extends UI implements AVChatUI.AVChatListener, AVChatStateObserver, AVChatSurface.TouchZoneCallback {
     // constant
     private static final String TAG = "AVChatActivity";
     private static final String KEY_IN_CALLING = "KEY_IN_CALLING";
@@ -145,10 +145,10 @@ public class AVChatActivity extends UI implements AVChatUI.AVChatListener, AVCha
 
         mIsInComingCall = getIntent().getBooleanExtra(KEY_IN_CALLING, false);
         avChatUI = new AVChatUI(this, root, this);
-       /* if (!avChatUI.init(this)) {
+        if (!avChatUI.init(this)) {
             this.finish();
             return;
-        }*/
+        }
 
         registerNetCallObserver(true);
         if (mIsInComingCall) {
@@ -741,13 +741,13 @@ public class AVChatActivity extends UI implements AVChatUI.AVChatListener, AVCha
         }
     }
 
-  /*  @Override
+    @Override
     public void onTouch() {
         if (faceU == null) {
             return;
         }
 
         faceU.showOrHideLayout();
-    }*/
+    }
 }
 

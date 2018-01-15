@@ -404,6 +404,16 @@
 
         />
 
+        <!--文件-->
+
+        <activity android:name=".IM.file.browser.FileBrowserActivity"
+                  android:configChanges="orientation"
+                  android:label="@string/file_browser"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:windowSoftInputMode="adjustUnspecified|stateHidden"
+
+        />
     </application>
 
 </manifest>
