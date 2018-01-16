@@ -43,8 +43,16 @@ dependencies {
     compile "me.leolin:ShortcutBadger:1.1.17@aar"
 //
 
+// 基础功能 (必需)
+    compile 'com.netease.nimlib:basesdk:4.5.1'
 
+    // 音视频需要
+    compile 'com.netease.nimlib:avchat:4.5.1'
 
+// 聊天室需要
+    compile 'com.netease.nimlib:chatroom:4.5.1'
+    // 全文检索服务需要
+    compile 'com.netease.nimlib:lucene:4.5.1'
         compile 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile 'com.github.bumptech.glide:okhttp3-integration:4.3.1'
