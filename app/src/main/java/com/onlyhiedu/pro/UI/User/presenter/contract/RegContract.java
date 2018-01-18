@@ -12,12 +12,8 @@ public interface RegContract {
     interface View extends IMBaseView {
 
         void showSecond(int second);
-
-
-        void showAuthSuccess(int authCode);
-
+        void showAuthSuccess();
         void showRegState(boolean isReg);
-
 
         void IMLoginFailure(String s);
         void showUser();

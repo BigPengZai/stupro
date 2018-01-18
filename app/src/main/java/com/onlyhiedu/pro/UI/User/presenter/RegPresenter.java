@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.App.Constants;
 import com.onlyhiedu.pro.Base.RxPresenter;
-import com.onlyhiedu.pro.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.pro.Model.bean.UserDataBean;
 import com.onlyhiedu.pro.Model.bean.UserIsRegister;
 import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
@@ -75,13 +74,13 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
 
     @Override
     public void getAuthCode(String phone) {
-        Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
-        MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchAuthCode(phone);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
-            public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
+            public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showAuthSuccess(data.getData().getAuthCode());
+                        getView().showAuthSuccess();
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -92,17 +91,13 @@ public class RegPresenter extends RxPresenter<RegContract.View> implements RegCo
     }
 
 
-    public boolean confirmThird(String code, String name, int serviceCode) {
+    public boolean confirmThird(String code, String name) {
         if (TextUtils.isEmpty(code)) {
             Toast.makeText(App.getInstance().getApplicationContext(), "请填写验证码信息", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(App.getInstance().getApplicationContext(), "请填写姓名", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!code.equals(serviceCode + "")) {
-            Toast.makeText(App.getInstance().getApplicationContext(), "验证码信息错误", Toast.LENGTH_SHORT).show();
             return false;
         }
         return StringUtils.checkAccountMark(name);

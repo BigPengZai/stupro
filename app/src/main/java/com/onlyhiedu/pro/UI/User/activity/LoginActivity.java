@@ -8,10 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.baidu.wallet.base.datamodel.UserData;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
-import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -64,6 +61,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private ProgressDialog mPd;
     private boolean mAccountEdgeOut;
     private AbortableFuture<LoginInfo> loginRequest;
+
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
@@ -95,7 +93,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         UIUtils.initCursor(mEditNumber.getEditTextView());
         mPd = new ProgressDialog(LoginActivity.this);
         mPd.setCanceledOnTouchOutside(false);
-//        mPd.setMessage(getString(R.string.Is_landing));
+        mPd.setMessage("正在登录...");
     }
 
 
@@ -104,7 +102,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         switch (view.getId()) {
             case tv_sms_sign:
                 //短信验证码登录
-                startActivity(new Intent(this, SmsLoginActivity.class));
+                startActivity(new Intent(this, SmsLoginActivity.class).putExtra(MainActivity.showPagePosition, mShowHomePosition));
                 MobclickAgent.onEvent(this, "login_sms_login");
                 break;
             case tv_find_pwd:
@@ -127,8 +125,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String number = mEditNumber.getEditText();
         String pwd = mEditPwd.getEditText();
         if (StringUtils.isMobile(number) && StringUtils.checkPassword(pwd)) {
-//            mPd.show();
-          mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
+            mPd.show();
+            mPresenter.getUser(number, pwd, StringUtils.getDeviceId(this));
 
             Log.d(TAG, ":" + StringUtils.getDeviceId(this));
         }
@@ -148,8 +146,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showUser() {
 //        addUTag();
-        SPUtil.setGuest(false);
-      mPresenter.registerUikit();
+        mPresenter.registerUikit();
     }
 
 
@@ -181,7 +178,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             @Override
             public void onSuccess(LoginInfo param) {
                 Log.d(TAG, "login success");
-
+                SPUtil.setGuest(false);
                 onLoginDone();
 
                 DemoCache.setAccount(SPUtil.getUikitAccid());
@@ -197,7 +194,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                     EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
                 }
 
-                mPd.dismiss();
                 finish();
                 AppManager.getAppManager().finishActivity(OpenIDActivity.class);
             }
@@ -223,11 +219,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     private void onLoginDone() {
         loginRequest = null;
+        mPd.dismiss();
     }
+
     private void saveLoginInfo(final String account, final String token) {
         Preferences.saveUserAccount(account);
         Preferences.saveUserToken(token);
     }
+
     private void initNotificationConfig() {
         // 初始化消息提醒
         NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
@@ -241,6 +240,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         // 更新配置
         NIMClient.updateStatusBarNotificationConfig(statusBarNotificationConfig);
     }
+
     @Override
     public void showError(String msg) {
         if (mPd.isShowing()) {

@@ -34,7 +34,7 @@
         android:name="com.onlyhiedu.pro.permission.RECEIVE_MSG"
         android:protectionLevel="signature"/>
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
-    <uses-permission android:name="com.onlyhiedu.mobile.permission.RECEIVE_MSG"/>
+    <uses-permission android:name="com.onlyhiedu.pro.permission.RECEIVE_MSG"/>
 
     <!-- 手机状态 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -63,7 +63,7 @@
         <!-- 网络状态 -->
         <service android:name=".Service.NetworkStateService">
             <intent-filter android:priority="1000">
-                <action android:name="com.onlyhiedu.mobile.Service.NetworkStateService"/>
+                <action android:name="com.onlyhiedu.pro.Service.NetworkStateService"/>
             </intent-filter>
         </service>
 

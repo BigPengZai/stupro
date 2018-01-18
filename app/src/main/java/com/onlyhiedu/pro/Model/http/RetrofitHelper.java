@@ -4,7 +4,6 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.onlyhiedu.pro.App.Constants;
 import com.onlyhiedu.pro.BuildConfig;
 import com.onlyhiedu.pro.Model.bean.AgoraUidBean;
-import com.onlyhiedu.pro.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.pro.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.pro.Model.bean.Avatar;
 import com.onlyhiedu.pro.Model.bean.ConsumptionData;
@@ -233,7 +232,7 @@ public class RetrofitHelper {
     }
 
     //验证码
-    public Flowable<onlyHttpResponse<AuthCodeInfo>> fetchAuthCode(String phone) {
+    public Flowable<onlyHttpResponse> fetchAuthCode(String phone) {
         return sOnlyApis.getAuthCode(phone);
     }
 

@@ -1,6 +1,5 @@
 package com.onlyhiedu.pro.UI.User.activity;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +36,6 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
 
     public static final String TAG = FindPwdActivity.class.getSimpleName();
 
-    private AuthCodeInfo mCodeInfo;
 
     @Override
     protected void initInject() {
@@ -53,9 +51,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
     @Override
     protected void initView() {
         setToolBar("找回密码", R.mipmap.close);
-
         mEditPwd.setPassword(true);
-        mCodeInfo = new AuthCodeInfo();
         mEditNumber.setButton(mBtnSignIn);
     }
 
@@ -71,11 +67,7 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
     }
 
     @Override
-    public void showAuthSuccess(AuthCodeInfo info) {
-        if (info != null) {
-            Log.d(TAG, "验证码：" + info.getAuthCode());
-            mCodeInfo.setAuthCode(info.getAuthCode());
-        }
+    public void showAuthSuccess() {
     }
 
 
@@ -99,22 +91,15 @@ public class FindPwdActivity extends BaseActivity<FindPwdPresenter> implements F
                     mPresenter.readSecond();
                     MobclickAgent.onEvent(this, "forgot_identifying_code");
                 }
-
                 break;
             case R.id.btn_sign_in:
                 String phone2 = mEditNumber.getEditText();
                 String pwd = mEditPwd.getEditText();
                 String authCode = mEditCode.getText().toString();
                 if (StringUtils.isMobile(phone2) && StringUtils.checkPassword(pwd)) {
-                    String s = "" + mCodeInfo.getAuthCode();
-                    if (mCodeInfo != null && !s.equals(authCode)) {
-                        Toast.makeText(mContext, "验证码不正确", Toast.LENGTH_SHORT).show();
-                    } else {
-                        mPresenter.retrievePwd(phone2, UIUtils.sha512(phone2, pwd), authCode);
-                        MobclickAgent.onEvent(this, "forgot_register");
-                    }
+                    mPresenter.retrievePwd(phone2, UIUtils.sha512(phone2, pwd), authCode);
+                    MobclickAgent.onEvent(this, "forgot_register");
                 }
-
                 break;
         }
     }

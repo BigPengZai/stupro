@@ -14,7 +14,7 @@ public interface BindContract {
 
         void showUser();
 
-        void getAuthCodeSuccess(int data);
+        void getAuthCodeSuccess();
 
         void showSecond(int i);
 

@@ -18,7 +18,6 @@ import com.onlyhiedu.pro.Model.bean.HomeBannerBean;
 import com.onlyhiedu.pro.Model.bean.HomeTeacher;
 import com.onlyhiedu.pro.Model.bean.TypeListInfo;
 import com.onlyhiedu.pro.R;
-import com.onlyhiedu.pro.UI.Consumption.activity.ConsumeActivity;
 import com.onlyhiedu.pro.UI.Course.activity.CourseDiscountActivity;
 import com.onlyhiedu.pro.UI.Home.activity.MainActivity;
 import com.onlyhiedu.pro.UI.Home.adapter.HomeNewsAdapter;
@@ -185,11 +184,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements SwipeRe
                 UIUtils.startHomeNewsWebViewAct(mContext, urls[0], titles[0]);
                 break;
             case R.id.tv_consume:
-                if (!SPUtil.getGuest()) {
-                    startActivity(new Intent(mContext, ConsumeActivity.class));
-                } else {
-                    UIUtils.startGuestLoginActivity(mContext,0);
-                }
+                UIUtils.startHomeNewsWebViewAct(mContext, urls[1],"首页");
+//                if (!SPUtil.getGuest()) {
+//                    startActivity(new Intent(mContext, ConsumeActivity.class));
+//                } else {
+//                    UIUtils.startGuestLoginActivity(mContext,0);
+//                }
                 break;
             case R.id.tv_service:
                 if (UIUtils.requestPermission(mActivity, MainActivity.CALL_REQUEST_CODE, new String[]{Manifest.permission.CALL_PHONE})) {

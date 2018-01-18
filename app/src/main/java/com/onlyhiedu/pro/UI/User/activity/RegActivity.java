@@ -73,7 +73,6 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
     @BindView(R.id.cb_check)
     CheckBox mCb_Check;
     public static final String TAG = RegActivity.class.getSimpleName();
-    private int mAuthCode;
     private ProgressDialog mProgressDialog;
 
 
@@ -117,10 +116,8 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
                 }
                 break;
             case R.id.btn_next_name:
-                if (mAuthCode != 0) {
-                    if (mPresenter.confirmThird(mEditCode.getText().toString(), mEditName.getEditText(), mAuthCode)) {
-                        nextCodeAndName();
-                    }
+                if (mPresenter.confirmThird(mEditCode.getText().toString(), mEditName.getEditText())) {
+                    nextCodeAndName();
                 }
                 break;
             case R.id.btn_register:
@@ -203,9 +200,7 @@ public class RegActivity extends BaseActivity<RegPresenter> implements RegContra
 
 
     @Override
-    public void showAuthSuccess(int authCode) {
-        Log.d(TAG, "验证码：" + authCode);
-        mAuthCode = authCode;
+    public void showAuthSuccess() {
 
         mTvCode.setEnabled(false);
         mPresenter.readSecond();

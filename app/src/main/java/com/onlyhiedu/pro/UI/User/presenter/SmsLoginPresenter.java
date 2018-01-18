@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.onlyhiedu.pro.App.Constants;
 import com.onlyhiedu.pro.Base.RxPresenter;
-import com.onlyhiedu.pro.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.pro.Model.bean.AuthUserDataBean;
+import com.onlyhiedu.pro.Model.bean.UikitDate;
 import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.pro.Model.http.RetrofitHelper;
 import com.onlyhiedu.pro.Model.http.onlyHttpResponse;
@@ -50,13 +50,13 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
     @Override
     public void getAuthCode(String phone) {
 
-        Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
-        MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchAuthCode(phone);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
-            public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
+            public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().showAuthSuccess(data.getData().getAuthCode());
+                        getView().showAuthSuccess();
                     } else {
                         getView().showError(data.getMessage());
                     }
@@ -92,6 +92,27 @@ public class SmsLoginPresenter extends RxPresenter<SmsLoginContract.View> implem
                 }
             }
         };
+        addSubscription(mRetrofitHelper.startObservable(flowable, observer));
+    }
+
+    @Override
+    public void registerUikit() {
+        Flowable<onlyHttpResponse<UikitDate>> flowable = mRetrofitHelper.fetchregisterUikit();
+        MyResourceSubscriber observer = new MyResourceSubscriber<onlyHttpResponse<UikitDate>>() {
+            @Override
+            public void onNextData(onlyHttpResponse<UikitDate> data) {
+                if (getView() != null && data != null) {
+                    if (!data.isHasError()) {
+                        SPUtil.setUikitAccid(data.getData().getNeteaseAccid());
+                        SPUtil.setUikitToken(data.getData().getNeteaseToken());
+                        getView().getUikitDate();
+                    } else {
+                        getView().showError(data.getMessage());
+                    }
+                }
+            }
+        };
+
         addSubscription(mRetrofitHelper.startObservable(flowable, observer));
     }
 

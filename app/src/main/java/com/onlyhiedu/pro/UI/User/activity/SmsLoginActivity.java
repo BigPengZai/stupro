@@ -1,5 +1,6 @@
 package com.onlyhiedu.pro.UI.User.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.text.Editable;
@@ -12,19 +13,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.onlyhiedu.pro.App.AppManager;
 import com.onlyhiedu.pro.Base.BaseActivity;
-import com.onlyhiedu.pro.Model.bean.AuthUserDataBean;
+import com.onlyhiedu.pro.IM.DemoCache;
+import com.onlyhiedu.pro.IM.config.preference.Preferences;
+import com.onlyhiedu.pro.IM.config.preference.UserPreferences;
+import com.onlyhiedu.pro.Model.event.MainActivityTabSelectPos;
 import com.onlyhiedu.pro.R;
 import com.onlyhiedu.pro.UI.Home.activity.MainActivity;
 import com.onlyhiedu.pro.UI.User.presenter.SmsLoginPresenter;
 import com.onlyhiedu.pro.UI.User.presenter.contract.SmsLoginContract;
 import com.onlyhiedu.pro.Utils.Encrypt;
+import com.onlyhiedu.pro.Utils.SPUtil;
 import com.onlyhiedu.pro.Utils.StringUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.inter.ITagManager;
 import com.umeng.message.tag.TagManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,8 +55,10 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     @BindView(R.id.btn_sign)
     Button mBtnSign;
 
-
-    private int mAuthCode;
+    private int mShowHomePosition;
+    private AbortableFuture<LoginInfo> loginRequest;
+    private boolean mAccountEdgeOut;
+    private ProgressDialog mPd;
 
     @Override
     protected void initInject() {
@@ -62,6 +77,11 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        mShowHomePosition = getIntent().getIntExtra(MainActivity.showPagePosition, 0);
+
+        mPd = new ProgressDialog(SmsLoginActivity.this);
+        mPd.setCanceledOnTouchOutside(false);
+        mPd.setMessage("正在登录...");
     }
 
     @Override
@@ -80,26 +100,83 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     }
 
     @Override
-    public void showAuthSuccess(int authCode) {
-        mAuthCode = authCode;
-        Log.d(TAG, "验证码：" + mAuthCode);
+    public void showAuthSuccess() {
     }
 
-    @Override
-    public void showAuthLoginSuccess(AuthUserDataBean info) {
-        if (info != null) {
-            Log.d(TAG, "" + info.getDeviceId());
-            addUTag();
-            startActivity(new Intent(this, MainActivity.class));
-            AppManager.getAppManager().finishActivity(LoginActivity.class);
-            AppManager.getAppManager().finishActivity(OpenIDActivity.class);
-            finish();
-        }
-    }
 
     @Override
     public void setPush() {
 
+    }
+
+    @Override
+    public void getUikitDate() {
+        // 登录
+        loginRequest = NimUIKit.login(new LoginInfo(SPUtil.getUikitAccid(), SPUtil.getUikitToken()), new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+                Log.d(TAG, "login success");
+                SPUtil.setGuest(false);
+                onLoginDone();
+
+                DemoCache.setAccount(SPUtil.getUikitAccid());
+                saveLoginInfo(SPUtil.getUikitAccid(), SPUtil.getUikitToken());
+
+                // 初始化消息提醒配置
+                initNotificationConfig();
+
+                // 进入主界面
+                if (mAccountEdgeOut) {
+                    startActivity(new Intent(SmsLoginActivity.this, MainActivity.class));
+                } else {
+                    EventBus.getDefault().post(new MainActivityTabSelectPos(mShowHomePosition));
+                }
+
+                finish();
+                AppManager.getAppManager().finishActivity(OpenIDActivity.class);
+                AppManager.getAppManager().finishActivity(LoginActivity.class);
+            }
+
+            @Override
+            public void onFailed(int code) {
+                onLoginDone();
+                if (code == 302 || code == 404) {
+                    Toast.makeText(SmsLoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SmsLoginActivity.this, "登录失败: " + code, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                Toast.makeText(SmsLoginActivity.this, R.string.login_exception, Toast.LENGTH_LONG).show();
+                onLoginDone();
+            }
+        });
+    }
+
+    private void onLoginDone() {
+        loginRequest = null;
+        mPd.dismiss();
+    }
+
+    private void saveLoginInfo(final String account, final String token) {
+        Preferences.saveUserAccount(account);
+        Preferences.saveUserToken(token);
+    }
+
+    private void initNotificationConfig() {
+        // 初始化消息提醒
+        NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+        // 加载状态栏配置
+        StatusBarNotificationConfig statusBarNotificationConfig = UserPreferences.getStatusConfig();
+        if (statusBarNotificationConfig == null) {
+            statusBarNotificationConfig = DemoCache.getNotificationConfig();
+            UserPreferences.setStatusConfig(statusBarNotificationConfig);
+        }
+        // 更新配置
+        NIMClient.updateStatusBarNotificationConfig(statusBarNotificationConfig);
     }
 
     private void addUTag() {
@@ -150,12 +227,9 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
     private void toLogin() {
         String number = mEditNumber.getText().toString();
         String code = mEditCode.getText().toString();
-        if (!code.equals(mAuthCode + "")) {
-            Toast.makeText(mContext, "验证码信息错误", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if (StringUtils.isMobile(number)) {
+            mPd.show();
             mPresenter.authLogin(code, number, StringUtils.getDeviceId(this));
             Log.d(TAG, "StringUtils.getDeviceId():" + StringUtils.getDeviceId(this));
         }
@@ -195,10 +269,7 @@ public class SmsLoginActivity extends BaseActivity<SmsLoginPresenter> implements
 
     @Override
     public void showUser() {
-        addUTag();
-        startActivity(new Intent(this, MainActivity.class));
-        AppManager.getAppManager().finishActivity(LoginActivity.class);
-        finish();
+        mPresenter.registerUikit();
     }
 
     @Override

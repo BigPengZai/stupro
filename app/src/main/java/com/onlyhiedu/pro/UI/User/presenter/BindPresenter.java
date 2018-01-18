@@ -2,7 +2,6 @@ package com.onlyhiedu.pro.UI.User.presenter;
 
 import com.onlyhiedu.pro.App.App;
 import com.onlyhiedu.pro.Base.RxPresenter;
-import com.onlyhiedu.pro.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.pro.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.pro.Model.http.MyResourceSubscriber;
 import com.onlyhiedu.pro.Model.http.RetrofitHelper;
@@ -51,13 +50,13 @@ public class BindPresenter extends RxPresenter<BindContract.View> implements Bin
 
     @Override
     public void getAuthCode(String phone) {
-        Flowable<onlyHttpResponse<AuthCodeInfo>> flowable = mRetrofitHelper.fetchAuthCode(phone);
-        MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>> observer = new MyResourceSubscriber<onlyHttpResponse<AuthCodeInfo>>() {
+        Flowable<onlyHttpResponse> flowable = mRetrofitHelper.fetchAuthCode(phone);
+        MyResourceSubscriber<onlyHttpResponse> observer = new MyResourceSubscriber<onlyHttpResponse>() {
             @Override
-            public void onNextData(onlyHttpResponse<AuthCodeInfo> data) {
+            public void onNextData(onlyHttpResponse data) {
                 if (getView() != null && data != null) {
                     if (!data.isHasError()) {
-                        getView().getAuthCodeSuccess(data.getData().getAuthCode());
+                        getView().getAuthCodeSuccess();
                     } else {
                         getView().showError(data.getMessage());
                     }

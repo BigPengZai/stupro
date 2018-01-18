@@ -13,7 +13,7 @@ public interface FindPwdContract {
     interface View extends BaseView {
 
         void showSecond(int second);
-        void showAuthSuccess(AuthCodeInfo info);
+        void showAuthSuccess();
 
     }
 

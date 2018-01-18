@@ -2,7 +2,6 @@ package com.onlyhiedu.pro.Model.http;
 
 
 import com.onlyhiedu.pro.Model.bean.AgoraUidBean;
-import com.onlyhiedu.pro.Model.bean.AuthCodeInfo;
 import com.onlyhiedu.pro.Model.bean.AuthUserDataBean;
 import com.onlyhiedu.pro.Model.bean.Avatar;
 import com.onlyhiedu.pro.Model.bean.ConsumptionData;
@@ -241,7 +240,7 @@ public interface onlyApis {
      */
     @FormUrlEncoded
     @POST("client/user/getAuthCode")
-    Flowable<onlyHttpResponse<AuthCodeInfo>> getAuthCode(@Field("phone") String phone);
+    Flowable<onlyHttpResponse> getAuthCode(@Field("phone") String phone);
 
     /**
      * 找回密码

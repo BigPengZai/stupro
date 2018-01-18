@@ -24,6 +24,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static android.R.attr.data;
+
 
 public class BindActivity extends BaseActivity<BindPresenter> implements BindContract.View {
 
@@ -42,10 +44,8 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
     @BindView(R.id.btn_bind)
     Button mBtnBind;
 
-
     private SHARE_MEDIA mBindType;   //三方登录类型
     private String uid;//第三方登录之后返回uid；
-    private int mServeCode;  //服务端发过来的验证码
 
     @Override
     protected void initView() {
@@ -89,9 +89,7 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
     }
 
     @Override
-    public void getAuthCodeSuccess(int data) {
-        Log.d(Constants.Async, "验证码 : " + data);
-        mServeCode = data;
+    public void getAuthCodeSuccess() {
     }
 
 
@@ -138,9 +136,7 @@ public class BindActivity extends BaseActivity<BindPresenter> implements BindCon
                     mEditName.getEditTextView().setError("姓名不能为空");
                     return;
                 }
-                if (Integer.valueOf(code) != mServeCode) {
-                    Toast.makeText(this, "验证码不正确", Toast.LENGTH_SHORT).show();
-                }
+
                 mPresenter.bindUser(mBindType, uid, phone2, name, code);
                 break;
         }
